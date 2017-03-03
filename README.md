@@ -1,7 +1,7 @@
 D3 Node Editor
 ====
 #### JavaScript library
-![node editor](https://github.com/Ni55aN/D3-Node-editor/demo/screenshot.png)
+![node editor](https://github.com/Ni55aN/D3-Node-editor/blob/master/demo/screenshot.png?raw=true)
 
 ### Dependencies
   - [D3.js](https://github.com/d3/d3)
