@@ -50,7 +50,7 @@ And create NodeEditor
              				[shapebuilder,texturebuilder],
                             new Events());
 ```
-For detail see [demo](https://github.com/Ni55aN/D3-Node-editor/demo)
+For detail see [demo](https://github.com/Ni55aN/D3-Node-editor/tree/master/demo)
 
 
 License
