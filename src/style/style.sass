@@ -1,0 +1,47 @@
+$node-color: #6e88ff
+
+html,body
+  margin: 0
+  height: 100%
+
+.node-editor
+  .node
+    fill: $node-color
+    stroke: #4e58bf
+    stroke-width: 2
+    cursor: pointer
+    &:hover
+      fill: lighten($node-color,4%)
+    &.active
+      fill: #ffd92c
+      stroke: #e3c000
+    
+  .edge
+    fill: none
+    stroke: steelblue
+    stroke-width: 5px
+    cursor: pointer
+    &.active
+      stroke: #e3c000
+      
+  .input,.output
+    cursor: pointer
+    stroke: white
+    stroke-width: 1px
+    &:hover
+      stroke-width: 4px
+ 
+.context-menu
+  position: absolute
+  left: 0
+  top: 0
+  border-radius: 7px
+  overflow: hidden
+  & > .item
+    padding: 4px
+    border: 1px solid darken($node-color,8%)
+    color: #fff
+    background-color: $node-color
+    cursor: pointer
+    &:hover
+      background-color: lighten($node-color,4%)

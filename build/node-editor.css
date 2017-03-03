@@ -1,0 +1,44 @@
+html, body {
+  margin: 0;
+  height: 100%; }
+
+.node-editor .node {
+  fill: #6e88ff;
+  stroke: #4e58bf;
+  stroke-width: 2;
+  cursor: pointer; }
+  .node-editor .node:hover {
+    fill: #8299ff; }
+  .node-editor .node.active {
+    fill: #ffd92c;
+    stroke: #e3c000; }
+
+.node-editor .edge {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 5px;
+  cursor: pointer; }
+  .node-editor .edge.active {
+    stroke: #e3c000; }
+
+.node-editor .input, .node-editor .output {
+  cursor: pointer;
+  stroke: white;
+  stroke-width: 1px; }
+  .node-editor .input:hover, .node-editor .output:hover {
+    stroke-width: 4px; }
+
+.context-menu {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 7px;
+  overflow: hidden; }
+  .context-menu > .item {
+    padding: 4px;
+    border: 1px solid #4567ff;
+    color: #fff;
+    background-color: #6e88ff;
+    cursor: pointer; }
+    .context-menu > .item:hover {
+      background-color: #8299ff; }
