@@ -27,7 +27,9 @@
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-preset-es2015": "^6.22.0",
-    "npm-sass": "^2.0.0"
+    "babel-preset-stage-2": "^6.22.0",
+    "npm-sass": "^2.0.0",
+    "uglifyjs": "^2.4.10"
   },
   "dependencies": {
     "d3": "^4.7.0",
