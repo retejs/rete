@@ -1,4 +1,6 @@
-class NodeBuilder {
+import {Node} from './node';
+
+export class NodeBuilder {
   constructor (name, initializer) {
     this.name = name
     this.initializer = initializer

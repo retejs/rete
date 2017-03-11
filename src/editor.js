@@ -1,4 +1,8 @@
-class NodeEditor{
+import {Connection} from './connection';
+import {Node} from './node';
+import {ContextMenu} from './contextmenu';
+
+export class NodeEditor{
 
     constructor(id, nodes, builders, event) {
 

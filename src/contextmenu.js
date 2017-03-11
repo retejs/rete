@@ -1,9 +1,10 @@
-class ContextMenu{
+export class ContextMenu{
    
-   visible = false;
+   
 
    constructor(items, onselect) {
 
+	  this.visible = false;
       this.menu = d3.select('body')
       .append('div')
       .classed('context-menu', true)

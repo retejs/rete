@@ -1,6 +1,6 @@
   window.onload = function() {
 
-         var events = new Events();
+         var events = new D3NE.Events();
 
          events.nodeCreated = function(i) {
             console.log('nodeCreated');
@@ -27,33 +27,33 @@
          };
 
         
-		 var numSocket = new Socket('number', 'Number value', 'hint');
-         var imageSocket = new Socket('image', 'Image', 'hint');
-         var arraySocket = new Socket('array', 'Array', 'hint');
+		 var numSocket = new D3NE.Socket('number', 'Number value', 'hint');
+         var imageSocket = new D3NE.Socket('image', 'Image', 'hint');
+         var arraySocket = new D3NE.Socket('array', 'Array', 'hint');
 
 		
-         var shapebuilder = new NodeBuilder("Shape",function(){
+         var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
             
-            var input1 = new Input("Texture",imageSocket);
-            var input2 = new Input("Value",numSocket);
-            var out1 = new Output("Array",arraySocket);
-            return new Node("Shape")
+            var input1 = new D3NE.Input("Texture",imageSocket);
+            var input2 = new D3NE.Input("Value",numSocket);
+            var out1 = new D3NE.Output("Array",arraySocket);
+            return new D3NE.Node("Shape")
             					.addInput(input1)
             					.addInput(input2)
          						.addOutput(out1);			
          });
          
-         var texturebuilder = new NodeBuilder("Texture",function(){
+         var texturebuilder = new D3NE.NodeBuilder("Texture",function(){
             
-            var out = new Output("Texture",imageSocket);
-            return new Node("Texture")
+            var out = new D3NE.Output("Texture",imageSocket);
+            return new D3NE.Node("Texture")
          						.addOutput(out);
          });
          
-         var valbuilder = new NodeBuilder("Value",function(){
+         var valbuilder = new D3NE.NodeBuilder("Value",function(){
             
-            var out = new Output("Number",numSocket);
-            return new Node("Value")
+            var out = new D3NE.Output("Number",numSocket);
+            return new D3NE.Node("Value")
          						.addOutput(out);
          });
          
@@ -68,7 +68,7 @@
 		tnode.outputs[0].connectTo(snode.inputs[0]);
 		vnode.outputs[0].connectTo(snode.inputs[1]);
 		
-        var nodeEditor = new NodeEditor('nodeEditor', 
+        var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
              				[tnode,snode,vnode],
              				[shapebuilder,texturebuilder,valbuilder],
                                          events);

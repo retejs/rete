@@ -1,4 +1,7 @@
-class Output{
+import {Input} from './input';
+import {Connection} from './connection';
+
+export class Output{
   
    constructor(title, socket) {
 	    this.node = null;

@@ -1,4 +1,4 @@
-class Connection{
+export class Connection{
    
    constructor(output, input) {
       this.output = output;

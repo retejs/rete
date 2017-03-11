@@ -1,9 +1,10 @@
-class Input{
+export class Input{
    
-   node = null;
-   connection = null;
+  
    
    constructor(title, socket) {
+	  this.node = null;
+      this.connection = null;
       this.title = title;
       this.socket = socket;
    }

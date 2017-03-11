@@ -1,4 +1,7 @@
-class Node {
+import {Input} from './input';
+import {Output} from './output';
+
+export class Node {
    
    constructor(title, width){
 		this.inputs = [];

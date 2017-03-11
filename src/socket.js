@@ -1,4 +1,4 @@
-class Socket {
+export class Socket {
 
    
 

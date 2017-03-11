@@ -29,26 +29,26 @@ Define them styles
 ```
 Create some NodeBuilder's
 ```js
-var texturebuilder = new NodeBuilder("Texture",function(){
-            var out = new Output("Texture",imageSocket);
-            return new Node("Texture")
+var texturebuilder = new D3NE.NodeBuilder("Texture",function(){
+            var out = new D3NE.Output("Texture",imageSocket);
+            return new D3NE.Node("Texture")
          					.addOutput(out);
          });
          
-var shapebuilder = new NodeBuilder("Shape",function(){
-            var input = new Input("Texture",imageSocket);
-            var out = new Output("Value",numSocket);
-            return new Node("Shape")
+var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
+            var input = new D3NE.Input("Texture",imageSocket);
+            var out = new D3NE.Output("Value",numSocket);
+            return new D3NE.Node("Shape")
             	    	.addInput(input)
          		    	.addOutput(out);			
             });
 ```
 And create NodeEditor
 ```js
- var nodeEditor = new NodeEditor('nodeEditor', 
+ var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
              				[],
              				[shapebuilder,texturebuilder],
-                            new Events());
+                            new D3NE.Events());
 ```
 For detail see [demo](https://github.com/Ni55aN/D3-Node-editor/tree/master/demo)
 
