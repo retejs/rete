@@ -1,12 +1,33 @@
-"use strict";
+(function (exports) {
+'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var classCallCheck = function (instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+};
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+var createClass = function () {
+  function defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor) descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+
+  return function (Constructor, protoProps, staticProps) {
+    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+    if (staticProps) defineProperties(Constructor, staticProps);
+    return Constructor;
+  };
+}();
 
 var Connection = function () {
    function Connection(output, input) {
-      _classCallCheck(this, Connection);
+      classCallCheck(this, Connection);
 
       this.output = output;
       this.input = input;
@@ -14,31 +35,24 @@ var Connection = function () {
       this.input.setConnection(this);
    }
 
-   _createClass(Connection, [{
+   createClass(Connection, [{
       key: "remove",
       value: function remove() {
          this.input.setConnection(null);
          this.output.removeConnection(this, false);
       }
    }]);
-
    return Connection;
 }();
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ContextMenu = function () {
    function ContextMenu(items, onselect) {
       var _this = this;
 
-      _classCallCheck(this, ContextMenu);
+      classCallCheck(this, ContextMenu);
+
 
       this.visible = false;
-
-
       this.menu = d3.select('body').append('div').classed('context-menu', true).style('display', 'none');
 
       this.item = this.menu.selectAll('div.item').data(items).enter().append('div').classed("item", true).text(function (d) {
@@ -49,7 +63,7 @@ var ContextMenu = function () {
       });
    }
 
-   _createClass(ContextMenu, [{
+   createClass(ContextMenu, [{
       key: 'isVisible',
       value: function isVisible() {
          return this.visible;
@@ -67,57 +81,28 @@ var ContextMenu = function () {
          this.menu.style('display', 'none');
       }
    }]);
-
    return ContextMenu;
 }();
-"use strict";
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Control = /// TODO
 
 function Control() {
-   _classCallCheck(this, Control);
+   classCallCheck(this, Control);
 
    this.margin = 0.01;
 };
-"use strict";
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Events = function Events() {
-   _classCallCheck(this, Events);
-
-   this.nodeCreated = function (node) {};
-
-   this.connectionCreated = function (connection) {};
-
-   this.nodeSelected = function (node) {};
-
-   this.connectionSelected = function (connection) {};
-
-   this.nodeRemoved = function (node) {};
-
-   this.connectionRemoved = function (connection) {};
-};
-"use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Input = function () {
    function Input(title, socket) {
-      _classCallCheck(this, Input);
+      classCallCheck(this, Input);
 
       this.node = null;
       this.connection = null;
-
       this.title = title;
       this.socket = socket;
    }
 
-   _createClass(Input, [{
+   createClass(Input, [{
       key: "hasConnection",
       value: function hasConnection() {
          return this.connection !== null;
@@ -144,18 +129,149 @@ var Input = function () {
          return node.position[1] + node.headerHeight() + node.inputs.indexOf(this) * this.socket.height() + node.outputsHeight();
       }
    }]);
-
    return Input;
 }();
-"use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var Output = function () {
+   function Output(title, socket) {
+      classCallCheck(this, Output);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+      this.node = null;
+      this.connections = [];
+
+      this.title = title;
+      this.socket = socket;
+   }
+
+   createClass(Output, [{
+      key: 'connectTo',
+      value: function connectTo(input) {
+         if (!(input instanceof Input)) throw new Error("Invalid input");
+         if (this.socket !== input.socket) throw new Error("Sockets not compatible");
+         if (input.hasConnection()) throw new Error("Input already has one connection");
+
+         this.connections.push(new Connection(this, input));
+      }
+   }, {
+      key: 'connectedTo',
+      value: function connectedTo(input) {
+         return this.connections.some(function (item) {
+            return item.input === input;
+         });
+      }
+   }, {
+      key: 'removeConnection',
+      value: function removeConnection(connection) {
+         var propagate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+         this.connections.splice(this.connections.indexOf(connection), 1);
+         if (propagate) connection.remove();
+      }
+   }, {
+      key: 'removeConnections',
+      value: function removeConnections() {
+         this.connections.forEach(function (connection) {
+            connection.remove();
+         });
+      }
+   }, {
+      key: 'positionX',
+      value: function positionX() {
+         return this.node.position[0] + this.node.width;
+      }
+   }, {
+      key: 'positionY',
+      value: function positionY() {
+         var node = this.node;
+         return node.position[1] + node.headerHeight() + node.outputs.indexOf(this) * this.socket.height();
+      }
+   }]);
+   return Output;
+}();
+
+var Node = function () {
+   function Node(title, width) {
+      classCallCheck(this, Node);
+
+      this.inputs = [];
+      this.outputs = [];
+
+      this.position = [0, 0];
+      this.title = {
+         margin: 0.004,
+         size: 0.009,
+         color: 'white',
+         text: ''
+      };
+      this.title.text = title;
+      this.width = width || 0.1;
+      this.height = 0.05;
+   }
+
+   createClass(Node, [{
+      key: 'update',
+      value: function update() {
+         this.height = this.headerHeight() + this.outputsHeight() + this.inputsHeight();
+      }
+   }, {
+      key: 'headerHeight',
+      value: function headerHeight() {
+         return 4 * this.title.margin + this.title.size;
+      }
+   }, {
+      key: 'outputsHeight',
+      value: function outputsHeight() {
+         return this.outputs.reduce(function (a, b) {
+            return a + b.socket.height();
+         }, 0);
+      }
+   }, {
+      key: 'inputsHeight',
+      value: function inputsHeight() {
+         return this.inputs.reduce(function (a, b) {
+            return a + b.socket.height();
+         }, 0);
+      }
+   }, {
+      key: 'addInput',
+      value: function addInput(input) {
+         if (!(input instanceof Input)) throw new Error("Invalid instance");
+         if (input.node !== null) throw new Error("Input has already been added to the node");
+         input.node = this;
+         this.inputs.push(input);
+
+         this.update();
+         return this;
+      }
+   }, {
+      key: 'addOutput',
+      value: function addOutput(output) {
+         if (!(output instanceof Output)) throw new Error("Invalid instance");
+         if (output.node !== null) throw new Error("Output has already been added to the node");
+         output.node = this;
+         this.outputs.push(output);
+
+         this.update();
+         return this;
+      }
+   }, {
+      key: 'remove',
+      value: function remove() {
+         this.inputs.forEach(function (input) {
+            input.removeConnection();
+         });
+         this.outputs.forEach(function (output) {
+            output.removeConnections();
+         });
+      }
+   }]);
+   return Node;
+}();
 
 var NodeEditor = function () {
     function NodeEditor(id, nodes, builders, event) {
-        _classCallCheck(this, NodeEditor);
+        classCallCheck(this, NodeEditor);
+
 
         var self = this;
 
@@ -199,8 +315,8 @@ var NodeEditor = function () {
         this.resize();
     }
 
-    _createClass(NodeEditor, [{
-        key: "getConnectionData",
+    createClass(NodeEditor, [{
+        key: 'getConnectionData',
         value: function getConnectionData(c) {
             var distanceX = Math.abs(c.input.positionX() - c.output.positionX());
             var distanceY = c.input.positionY() - c.output.positionY();
@@ -216,7 +332,7 @@ var NodeEditor = function () {
             return points;
         }
     }, {
-        key: "resize",
+        key: 'resize',
         value: function resize() {
             var width = this.dom.parentElement.clientWidth;
             var height = this.dom.parentElement.clientHeight;
@@ -233,7 +349,7 @@ var NodeEditor = function () {
             this.zoom.translateExtent([[-size, -size / 2], [size * 2, size]]);
         }
     }, {
-        key: "updateNodes",
+        key: 'updateNodes',
         value: function updateNodes() {
             var self = this;
 
@@ -283,7 +399,7 @@ var NodeEditor = function () {
             });
         }
     }, {
-        key: "updateConnections",
+        key: 'updateConnections',
         value: function updateConnections() {
 
             var self = this;
@@ -320,7 +436,7 @@ var NodeEditor = function () {
             });
         }
     }, {
-        key: "updateSockets",
+        key: 'updateSockets',
         value: function updateSockets() {
             var self = this;
 
@@ -387,19 +503,19 @@ var NodeEditor = function () {
             });
         }
     }, {
-        key: "update",
+        key: 'update',
         value: function update() {
             this.updateConnections();
             this.updateNodes();
             this.updateSockets();
         }
     }, {
-        key: "areaClick",
+        key: 'areaClick',
         value: function areaClick() {
             if (this.contextMenu.isVisible()) this.contextMenu.hide();else this.contextMenu.show(d3.event.clientX, d3.event.clientY);
         }
     }, {
-        key: "addNode",
+        key: 'addNode',
         value: function addNode(builderName) {
             var builder = this.builders.find(function (builder) {
                 return builder.name == builderName;
@@ -415,7 +531,7 @@ var NodeEditor = function () {
             this.selectNode(node);
         }
     }, {
-        key: "keyDown",
+        key: 'keyDown',
         value: function keyDown() {
             if (this.dom !== document.activeElement) return;
 
@@ -431,7 +547,7 @@ var NodeEditor = function () {
             }
         }
     }, {
-        key: "removeNode",
+        key: 'removeNode',
         value: function removeNode(node) {
             var index = this.nodes.indexOf(node);
             this.nodes.splice(index, 1);
@@ -442,14 +558,14 @@ var NodeEditor = function () {
             this.update();
         }
     }, {
-        key: "removeConnection",
+        key: 'removeConnection',
         value: function removeConnection(connection) {
             connection.remove();
             this.event.connectionRemoved(connection);
             this.selectNode(this.nodes[0]);
         }
     }, {
-        key: "selectNode",
+        key: 'selectNode',
         value: function selectNode(node) {
             if (this.nodes.indexOf(node) === -1) throw new Error("Node not exist in list");
 
@@ -458,7 +574,7 @@ var NodeEditor = function () {
             this.update();
         }
     }, {
-        key: "selectConnection",
+        key: 'selectConnection',
         value: function selectConnection(connection) {
             if (!(connection instanceof Connection)) throw new Error("Invalid instance");
 
@@ -467,116 +583,34 @@ var NodeEditor = function () {
             this.update();
         }
     }, {
-        key: "remove",
+        key: 'remove',
         value: function remove() {
             this.dom.remove();
         }
     }]);
-
     return NodeEditor;
 }();
-'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var Events = function Events() {
+			classCallCheck(this, Events);
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Node = function () {
-   function Node(title, width) {
-      _classCallCheck(this, Node);
-
-      this.inputs = [];
-      this.outputs = [];
-
-      this.position = [0, 0];
-      this.title = {
-         margin: 0.004,
-         size: 0.009,
-         color: 'white',
-         text: ''
-      };
-      this.title.text = title;
-      this.width = width || 0.1;
-      this.height = 0.05;
-   }
-
-   _createClass(Node, [{
-      key: 'update',
-      value: function update() {
-         this.height = this.headerHeight() + this.outputsHeight() + this.inputsHeight();
-      }
-   }, {
-      key: 'headerHeight',
-      value: function headerHeight() {
-         return 4 * this.title.margin + this.title.size;
-      }
-   }, {
-      key: 'outputsHeight',
-      value: function outputsHeight() {
-         return this.outputs.reduce(function (a, b) {
-            return a + b.socket.height();
-         }, 0);
-      }
-   }, {
-      key: 'inputsHeight',
-      value: function inputsHeight() {
-         return this.inputs.reduce(function (a, b) {
-            return a + b.socket.height();
-         }, 0);
-      }
-   }, {
-      key: 'addInput',
-      value: function addInput(input) {
-         if (!(input instanceof Input)) throw new Error("Invalid instance");
-         if (input.node !== null) throw new Error("Input has already been added to the node");
-         input.node = this;
-         this.inputs.push(input);
-
-         this.update();
-         return this;
-      }
-   }, {
-      key: 'addOutput',
-      value: function addOutput(output) {
-         if (!(output instanceof Output)) throw new Error("Invalid instance");
-         if (output.node !== null) throw new Error("Output has already been added to the node");
-         output.node = this;
-         this.outputs.push(output);
-
-         this.update();
-         return this;
-      }
-   }, {
-      key: 'remove',
-      value: function remove() {
-         this.inputs.forEach(function (input) {
-            input.removeConnection();
-         });
-         this.outputs.forEach(function (output) {
-            output.removeConnections();
-         });
-      }
-   }]);
-
-   return Node;
-}();
-
-;
-'use strict';
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+			this.nodeCreated = function (node) {};
+			this.connectionCreated = function (connection) {};
+			this.nodeSelected = function (node) {};
+			this.connectionSelected = function (connection) {};
+			this.nodeRemoved = function (node) {};
+			this.connectionRemoved = function (connection) {};
+};
 
 var NodeBuilder = function () {
   function NodeBuilder(name, initializer) {
-    _classCallCheck(this, NodeBuilder);
+    classCallCheck(this, NodeBuilder);
 
     this.name = name;
     this.initializer = initializer;
   }
 
-  _createClass(NodeBuilder, [{
+  createClass(NodeBuilder, [{
     key: 'build',
     value: function build() {
       var node = this.initializer();
@@ -586,81 +620,12 @@ var NodeBuilder = function () {
       return node;
     }
   }]);
-
   return NodeBuilder;
 }();
-"use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Output = function () {
-   function Output(title, socket) {
-      _classCallCheck(this, Output);
-
-      this.node = null;
-      this.connections = [];
-
-      this.title = title;
-      this.socket = socket;
-   }
-
-   _createClass(Output, [{
-      key: "connectTo",
-      value: function connectTo(input) {
-         if (!(input instanceof Input)) throw new Error("Invalid input");
-         if (this.socket !== input.socket) throw new Error("Sockets not compatible");
-         if (input.hasConnection()) throw new Error("Input already has one connection");
-
-         this.connections.push(new Connection(this, input));
-      }
-   }, {
-      key: "connectedTo",
-      value: function connectedTo(input) {
-         return this.connections.some(function (item) {
-            return item.input === input;
-         });
-      }
-   }, {
-      key: "removeConnection",
-      value: function removeConnection(connection) {
-         var propagate = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
-
-         this.connections.splice(this.connections.indexOf(connection), 1);
-         if (propagate) connection.remove();
-      }
-   }, {
-      key: "removeConnections",
-      value: function removeConnections() {
-         this.connections.forEach(function (connection) {
-            connection.remove();
-         });
-      }
-   }, {
-      key: "positionX",
-      value: function positionX() {
-         return this.node.position[0] + this.node.width;
-      }
-   }, {
-      key: "positionY",
-      value: function positionY() {
-         var node = this.node;
-         return node.position[1] + node.headerHeight() + node.outputs.indexOf(this) * this.socket.height();
-      }
-   }]);
-
-   return Output;
-}();
-"use strict";
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Socket = function () {
    function Socket(id, name, hint) {
-      _classCallCheck(this, Socket);
+      classCallCheck(this, Socket);
 
       this.id = id;
       this.name = name;
@@ -670,12 +635,24 @@ var Socket = function () {
       this.margin = 0.004;
    }
 
-   _createClass(Socket, [{
+   createClass(Socket, [{
       key: "height",
       value: function height() {
          return this.radius * 2 + this.margin;
       }
    }]);
-
    return Socket;
 }();
+
+exports.Connection = Connection;
+exports.ContextMenu = ContextMenu;
+exports.Control = Control;
+exports.NodeEditor = NodeEditor;
+exports.Events = Events;
+exports.Input = Input;
+exports.Node = Node;
+exports.NodeBuilder = NodeBuilder;
+exports.Output = Output;
+exports.Socket = Socket;
+
+}((this.D3NE = this.D3NE || {})));
