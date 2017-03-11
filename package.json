@@ -1,10 +1,11 @@
 {
   "name": "d3-node-editor",
   "version": "0.1.0",
-  "description": "",
+  "description": " JavaScript library",
   "main": "build/node-editor.js",
   "scripts": {
-    "build": "babel --presets es2015,stage-2 src/*.js -o build/node-editor.js | npm-sass src/style/style.sass > build/node-editor.css",
+	"lint": "eslint src",
+    "build": "babel --presets es2015,stage-2 ./src -d .dist | npm-sass src/style/style.sass > build/node-editor.css",
     "minify-build": "uglifyjs build/node-editor.js --support-ie8  --compress --output build/node-editor.min.js"
   },
   "repository": {
@@ -26,8 +27,10 @@
   "devDependencies": {
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
+    "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-stage-2": "^6.22.0",
+    "eslint": "^3.17.1",
     "npm-sass": "^2.0.0",
     "uglifyjs": "^2.4.10"
   },
