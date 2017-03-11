@@ -15,8 +15,8 @@ Download the library and styles. Include it in your html.
 ```
 Create needed sockets
 ```js
-var numSocket = new Socket('number', 'Number value', 'hint');
-var imageSocket = new Socket('image', 'Image', 'hint');
+var numSocket = new D3NE.Socket('number', 'Number value', 'hint');
+var imageSocket = new D3NE.Socket('image', 'Image', 'hint');
 ```
 Define them styles
 ```css
