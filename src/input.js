@@ -1,7 +1,7 @@
 export class Input {
    
     constructor(title, socket) {
-	  this.node = null;
+	    this.node = null;
         this.connection = null;
         this.title = title;
         this.socket = socket;
@@ -28,8 +28,12 @@ export class Input {
         var node = this.node;
 
         return node.position[1] +
-         node.headerHeight() +
-         node.inputs.indexOf(this) * this.socket.height() +
-         node.outputsHeight();
+            node.headerHeight() +
+            node.outputsHeight() +
+            node.controlsHeight() +
+            this.socket.margin +
+            this.socket.radius +   
+            node.inputs.indexOf(this) * this.socket.height()
+            + this.socket.margin;
     }
 }

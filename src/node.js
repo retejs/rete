@@ -1,3 +1,4 @@
+import {Control} from './control';
 import {Input} from './input';
 import {Output} from './output';
 
@@ -6,25 +7,35 @@ export class Node {
     constructor(title, width) {
         this.inputs = [];
         this.outputs = [];
+        this.controls = [];
 
         this.position = [0, 0];
         this.title = {
-            margin: 0.004,
-            size: 0.009,
+            size: 0.01,
             color: 'white',
-            text: ''
+            text: title
         };
-        this.title.text = title;
+        this.margin = 0.005;
         this.width = width || 0.1;
         this.height = 0.05;
     }
 
     update() {
-        this.height = this.headerHeight() + this.outputsHeight() + this.inputsHeight();
+        this.height = this.headerHeight()
+            + this.outputsHeight()
+            + this.inputsHeight() 
+            + this.controlsHeight()
+            + this.margin;
     }
 
     headerHeight() {
-        return 4 * this.title.margin + this.title.size;
+        return 2 * this.margin + this.title.size;
+    }
+
+    controlsHeight() {
+        return this.controls.reduce(function (a, b) {
+            return a + b.height;
+        }, 0);
     }
 
     outputsHeight() {
@@ -37,6 +48,14 @@ export class Node {
         return this.inputs.reduce(function(a, b) {
             return a + b.socket.height();
         }, 0);
+    }
+
+    addControl(control) {
+        if (!(control instanceof Control)) throw new Error('Invalid instance');
+        this.controls.push(control);
+
+        this.update();
+        return this;
     }
 
     addInput(input) {

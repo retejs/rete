@@ -45,7 +45,9 @@ export class Output {
         var node = this.node;
 
         return node.position[1] +
-         node.headerHeight() +
-         node.outputs.indexOf(this) * this.socket.height();
+            node.headerHeight() +
+            this.socket.margin +
+            this.socket.radius +   
+            node.outputs.indexOf(this) * this.socket.height();
     }
 }

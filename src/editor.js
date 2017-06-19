@@ -1,12 +1,6 @@
-import {
-    Connection
-} from './connection';
-import {
-    ContextMenu
-} from './contextmenu';
-import {
-    Node
-} from './node';
+import {Connection} from './connection';
+import {ContextMenu} from './contextmenu';
+import {Node} from './node';
 
 export class NodeEditor {
 
@@ -157,10 +151,10 @@ export class NodeEditor {
 
         this.view.selectAll('text.title')
             .attr('x', function (d) {
-                return self.x(d.position[0] + d.title.margin);
+                return self.x(d.position[0] + d.margin);
             })
             .attr('y', function (d) {
-                return self.y(d.position[1] + d.title.margin + d.title.size);
+                return self.y(d.position[1] + d.margin + d.title.size);
             })
             .text(function (d) {
                 return d.title.text;
@@ -311,10 +305,70 @@ export class NodeEditor {
 
     }
 
+    updateControls() {
+        var self = this;
+
+        var groups = this.view
+            .selectAll('g.controls')
+            .data(this.nodes);    
+        
+        var newGroups = groups
+            .enter()
+            .append('g')
+            .classed('controls', true);
+
+        groups.exit().remove();
+
+        groups = newGroups.merge(groups);
+
+        var controls = groups.selectAll('foreignObject.control')
+            .data(function (d) {
+                return d.controls.map(function (control) {
+                    return { control: control, node: d };
+                });
+            });
+
+        controls.exit().remove();
+
+        var newControls = controls.enter()
+            .append('foreignObject').html(function (d) {
+                return d.control.html;
+            });
+        
+        controls = newControls.merge(controls);
+        
+        controls.attr('class', 'control');
+        
+        this.view.selectAll('foreignObject.control')
+            .attr('x', function (d) {
+                return self.x(d.control.margin + d.node.position[0]);
+            })
+            .attr('y', function (d) {
+
+                var prevControlsHeight = 0;
+                var l = d.node.controls.indexOf(d.control);
+
+                for (var i = 0; i < l; i++)
+                    prevControlsHeight += d.node.controls[i].height;
+
+                return self.y(d.node.headerHeight() +
+                    + d.node.outputsHeight()
+                    + prevControlsHeight
+                    + d.node.position[1]);
+            })
+            .attr('width', function (d) {
+                return self.x(d.node.width - 2 * d.control.margin)
+            })
+            .attr('height', function (d) {
+                return self.y(d.control.height);
+            })
+    }
+
     update() {
         this.updateConnections();
         this.updateNodes();
         this.updateSockets();
+        this.updateControls();
     }
 
     areaClick() {

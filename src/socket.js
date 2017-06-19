@@ -10,6 +10,6 @@ export class Socket {
     }
 
     height() {
-        return this.radius * 2 + this.margin;
+        return 2 * this.radius + 2 * this.margin;
     }
 }
