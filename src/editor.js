@@ -159,12 +159,8 @@ export class NodeEditor {
             .text(function (d) {
                 return d.title.text;
             })
-            .attr('font-family', 'sans-serif')
             .attr('font-size', function (d) {
                 return self.x(d.title.size) + 'px';
-            })
-            .attr('fill', function (d) {
-                return d.title.color;
             });
 
     }
@@ -225,13 +221,13 @@ export class NodeEditor {
             .selectAll('g.gg')
             .data(this.nodes);
 
-        var new_groups = groups.enter()
+        var newGroups = groups.enter()
             .append('g')
             .classed('gg', true)
 
         groups.exit().remove();
 
-        groups = new_groups.merge(groups);
+        groups = newGroups.merge(groups);
 
         var inputs = groups.selectAll('circle.input')
             .data(function (d) {
@@ -239,10 +235,10 @@ export class NodeEditor {
             });
 
         inputs.exit().remove();
-        var new_inputs = inputs.enter()
+        var newInputs = inputs.enter()
             .append('circle');
 
-        inputs = new_inputs.merge(inputs);
+        inputs = newInputs.merge(inputs);
 
         inputs.attr('class', function (d) {
             return 'socket input ' + d.socket.id;
@@ -254,10 +250,10 @@ export class NodeEditor {
             });
 
         outputs.exit().remove();
-        var new_outputs = outputs.enter()
+        var newOutputs = outputs.enter()
             .append('circle');
 
-        outputs = new_outputs.merge(outputs);
+        outputs = newOutputs.merge(outputs);
 
         outputs.attr('class', function (d) {
             return 'socket output ' + d.socket.id;
@@ -276,7 +272,7 @@ export class NodeEditor {
                 return self.x(d.socket.radius);
             })
             .append('title').text(function (d) {
-                return d.socket.hint
+                return d.socket.name+'\n'+d.socket.hint
             });
 
         inputs.on('click', function (input) {
@@ -300,9 +296,55 @@ export class NodeEditor {
                 return self.x(d.socket.radius);
             })
             .append('title').text(function (d) {
-                return d.socket.hint
+                return d.socket.name+'\n'+d.socket.hint
             });
 
+        var inputTitles = groups.selectAll('text.input-title')
+            .data(function (d) {
+                return d.inputs;
+            });
+
+        inputTitles.exit().remove();
+
+        var newInputTitles = inputTitles.enter()
+            .append('text')
+            .classed('input-title', true)
+            .classed('title', true)
+            .attr('alignment-baseline', 'after-edge')
+            .text(function (d) { return d.title });
+
+        inputTitles = newInputTitles.merge(inputTitles);
+        
+        inputTitles.attr('x', function (d) {
+            return self.x(d.positionX() + d.socket.radius + d.socket.margin);
+        })
+            .attr('y', function (d) {
+                return self.y(d.positionY() + d.socket.margin);
+            });
+        
+        var outputTitles = groups.selectAll('text.output-title')
+            .data(function (d) {
+                return d.outputs;
+            });
+
+        outputTitles.exit().remove();
+
+        var newOutputTitles = outputTitles.enter()
+            .append('text')
+            .classed('output-title', true)
+            .classed('title', true)
+            .attr('text-anchor', 'end')
+            .attr('alignment-baseline', 'after-edge')
+            .text(function (d) { return d.title });
+
+        outputTitles = newOutputTitles.merge(outputTitles);
+        
+        outputTitles.attr('x', function (d) {
+            return self.x(d.positionX() - d.socket.radius - d.socket.margin);
+        })
+            .attr('y', function (d) {
+                return self.y(d.positionY() + d.socket.margin);
+            });
     }
 
     updateControls() {

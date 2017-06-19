@@ -12,7 +12,6 @@ export class Node {
         this.position = [0, 0];
         this.title = {
             size: 0.01,
-            color: 'white',
             text: title
         };
         this.margin = 0.005;
