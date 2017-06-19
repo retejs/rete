@@ -1,8 +1,14 @@
-import {Connection} from './connection';
-import {Node} from './node';
-import {ContextMenu} from './contextmenu';
+import {
+    Connection
+} from './connection';
+import {
+    ContextMenu
+} from './contextmenu';
+import {
+    Node
+} from './node';
 
-export class NodeEditor{
+export class NodeEditor {
 
     constructor(id, nodes, builders, event) {
 
@@ -19,15 +25,16 @@ export class NodeEditor{
         this.dom = document.getElementById(id);
         this.dom.tabIndex = 1;
 
-        var nodeNames = builders.map(function(e) {
+        var nodeNames = builders.map(function (e) {
             return e.name;
         });
+
         this.contextMenu = new ContextMenu(nodeNames, this.addNode.bind(this));
         this.svg = d3.select(this.dom);
 
-        this.clickable = this.svg.append("rect")
-            .attr("fill", "transparent")
-            .on("click", this.areaClick.bind(this));
+        this.clickable = this.svg.append('rect')
+            .attr('fill', 'transparent')
+            .on('click', this.areaClick.bind(this));
 
         this.x = d3.scaleLinear();
         this.y = d3.scaleLinear();
@@ -36,8 +43,8 @@ export class NodeEditor{
 
         this.zoom = d3.zoom()
             .scaleExtent([0.2, 1.5])
-            .on("zoom", function() {
-                self.view.attr("transform", d3.event.transform);
+            .on('zoom', function () {
+                self.view.attr('transform', d3.event.transform);
             });
 
         this.svg.call(this.zoom);
@@ -46,8 +53,8 @@ export class NodeEditor{
             .curve(d3.curveBasis);
 
         d3.select(window)
-            .on("keydown." + id, self.keyDown.bind(this))
-            .on("resize." + id, function() {
+            .on('keydown.' + id, self.keyDown.bind(this))
+            .on('resize.' + id, function () {
                 self.resize();
                 self.update();
             });
@@ -66,6 +73,7 @@ export class NodeEditor{
         var p3 = [p4[0] - 0.01 - 0.4 * distanceX, p4[1] - 0.2 * distanceY];
 
         var points = [p1, p2, p3, p4];
+
         points.connection = c;
         return points;
     }
@@ -74,12 +82,12 @@ export class NodeEditor{
         var width = this.dom.parentElement.clientWidth;
         var height = this.dom.parentElement.clientHeight;
 
-        this.svg.style("width", width + 'px')
-            .style("height", height + 'px');
+        this.svg.style('width', width + 'px')
+            .style('height', height + 'px');
 
         this.clickable
-            .attr("width", width + 20)
-            .attr("height", height + 20);
+            .attr('width', width + 20)
+            .attr('height', height + 20);
 
         var size = (width + height); // Math.max(width,height);
 
@@ -96,72 +104,72 @@ export class NodeEditor{
         var self = this;
 
         var rects = this.view
-            .selectAll("rect.node")
+            .selectAll('rect.node')
             .data(this.nodes);
 
         rects.enter()
-            .append("rect")
+            .append('rect')
             .attr('class', 'node')
-            .on('click', function(d) {
+            .on('click', function (d) {
                 self.selectNode(d);
             })
-            .call(d3.drag().on("drag", function(d) {
+            .call(d3.drag().on('drag', function (d) {
                 d3.select(this)
-                    .attr("cx", d.position[0] += self.x.invert(d3.event.dx))
-                    .attr("cy", d.position[1] += self.y.invert(d3.event.dy));
+                    .attr('cx', d.position[0] += self.x.invert(d3.event.dx))
+                    .attr('cy', d.position[1] += self.y.invert(d3.event.dy));
                 self.update();
             }))
-            .attr('rx', function() {
+            .attr('rx', function () {
                 return 8;
             })
-            .attr('ry', function() {
+            .attr('ry', function () {
                 return 8;
             });
 
         rects.exit().remove();
 
-        this.view.selectAll("rect.node")
-            .attr("x", function(d) {
+        this.view.selectAll('rect.node')
+            .attr('x', function (d) {
                 return self.x(d.position[0]);
             })
-            .attr("y", function(d) {
+            .attr('y', function (d) {
                 return self.y(d.position[1]);
             })
-            .attr('width', function(d) {
+            .attr('width', function (d) {
                 return self.x(d.width);
             })
-            .attr('height', function(d) {
+            .attr('height', function (d) {
                 return self.y(d.height);
             })
-            .attr("class", function(d) {
-                return self.active === d ? "node active" : "node";
+            .attr('class', function (d) {
+                return self.active === d ? 'node active' : 'node';
             });
 
         var titles = this.view
-            .selectAll("text.title")
+            .selectAll('text.title')
             .data(this.nodes);
 
         titles.enter()
-            .append("text")
+            .append('text')
             .classed('title', true);
 
         titles.exit().remove();
 
-        this.view.selectAll("text.title")
-            .attr("x", function(d) {
+        this.view.selectAll('text.title')
+            .attr('x', function (d) {
                 return self.x(d.position[0] + d.title.margin);
             })
-            .attr("y", function(d) {
+            .attr('y', function (d) {
                 return self.y(d.position[1] + d.title.margin + d.title.size);
             })
-            .text(function(d) {
+            .text(function (d) {
                 return d.title.text;
             })
-            .attr("font-family", "sans-serif")
-            .attr("font-size", function(d) {
-                return self.x(d.title.size) + "px";
+            .attr('font-family', 'sans-serif')
+            .attr('font-size', function (d) {
+                return self.x(d.title.size) + 'px';
             })
-            .attr("fill", function(d) {
+            .attr('fill', function (d) {
                 return d.title.color;
             });
 
@@ -170,44 +178,49 @@ export class NodeEditor{
     updateConnections() {
 
         var self = this;
+
         this.valueline
-            .x(function(d) {
+            .x(function (d) {
                 return self.x(d[0]);
             })
-            .y(function(d) {
+            .y(function (d) {
                 return self.y(d[1]);
             });
 
         var pathData = [];
+
         for (var i in this.nodes) {
             var outputs = this.nodes[i].outputs;
+
             for (var j in outputs) {
                 var cons = outputs[j].connections;
+
                 for (var k in cons)
                     pathData.push(this.getConnectionData(cons[k]));
             }
         }
 
-        var path = this.view.selectAll("path")
+        var path = this.view.selectAll('path')
             .data(pathData);
 
         path.exit().remove();
 
         var new_path = path.enter()
-            .append("path")
-            .on('click', function(d) {
+            .append('path')
+            .on('click', function (d) {
                 self.selectConnection(d.connection);
             })
-            .each(function() {
+            .each(function () {
                 d3.select(this).moveToBack();
             });
 
-        this.view.selectAll("path")
+        this.view.selectAll('path')
             .attr('d', this.valueline)
-            .classed("edge", true)
-            .attr("class", function(d) {
+            .classed('edge', true)
+            .attr('class', function (d) {
                 var index = pathData.indexOf(d);
-                return self.active === d.connection ? "edge active" : "edge";
+
+                return self.active === d.connection ? 'edge active' : 'edge';
             });
     }
 
@@ -215,80 +228,84 @@ export class NodeEditor{
         var self = this;
 
         var groups = this.view
-            .selectAll("g.gg")
+            .selectAll('g.gg')
             .data(this.nodes);
 
         var new_groups = groups.enter()
-            .append("g")
+            .append('g')
             .classed('gg', true)
 
         groups.exit().remove();
 
         groups = new_groups.merge(groups);
 
-        var inputs = groups.selectAll("circle.input")
-            .data(function(d) {
+        var inputs = groups.selectAll('circle.input')
+            .data(function (d) {
                 return d.inputs;
             });
+
         inputs.exit().remove();
         var new_inputs = inputs.enter()
-            .append("circle");
+            .append('circle');
+
         inputs = new_inputs.merge(inputs);
 
-        inputs.attr("class", function(d) {
+        inputs.attr('class', function (d) {
             return 'socket input ' + d.socket.id;
         });
 
-        var outputs = groups.selectAll("circle.output")
-            .data(function(d) {
+        var outputs = groups.selectAll('circle.output')
+            .data(function (d) {
                 return d.outputs;
             });
+
         outputs.exit().remove();
         var new_outputs = outputs.enter()
-            .append("circle");
+            .append('circle');
+
         outputs = new_outputs.merge(outputs);
 
-        outputs.attr("class", function(d) {
+        outputs.attr('class', function (d) {
             return 'socket output ' + d.socket.id;
         });
 
-        outputs.on('click', function(d) {
-                self.pickedOutput = d;
+        outputs.on('click', function (d) {
+            self.pickedOutput = d;
 
-            }).attr("cx", function(d) {
-                return self.x(d.positionX());
-            })
-            .attr("cy", function(d) {
+        }).attr('cx', function (d) {
+            return self.x(d.positionX());
+        })
+            .attr('cy', function (d) {
                 return self.y(d.positionY());
             })
-            .attr("r", function(d) {
+            .attr('r', function (d) {
                 return self.x(d.socket.radius);
             })
-            .append('title').text(function(d) {
+            .append('title').text(function (d) {
                 return d.socket.hint
             });
 
-        inputs.on('click', function(input) {
-                if (self.pickedOutput === null) return;
+        inputs.on('click', function (input) {
+            if (self.pickedOutput === null) return;
 
-                try {
-                    self.pickedOutput.connectTo(input);
-                } catch (e) {
-                    alert(e.message);
-                }
-                self.pickedOutput = null;
-                self.update();
+            try {
+                self.pickedOutput.connectTo(input);
+            } catch (e) {
+                alert(e.message);
+            }
+            self.pickedOutput = null;
+            self.update();
 
-            }).attr("cx", function(d) {
-                return self.x(d.positionX());
-            })
-            .attr("cy", function(d) {
+        }).attr('cx', function (d) {
+            return self.x(d.positionX());
+        })
+            .attr('cy', function (d) {
                 return self.y(d.positionY());
             })
-            .attr("r", function(d) {
+            .attr('r', function (d) {
                 return self.x(d.socket.radius);
             })
-            .append('title').text(function(d) {
+            .append('title').text(function (d) {
                 return d.socket.hint
             });
 
@@ -308,12 +325,13 @@ export class NodeEditor{
     }
 
     addNode(builderName) {
-        var builder = this.builders.find(function(builder) {
+        var builder = this.builders.find(function (builder) {
             return builder.name == builderName;
         });
 
         var pos = d3.mouse(this.view.node());
         var node = builder.build();
+
         node.position = [this.x.invert(pos[0]), this.y.invert(pos[1])];
 
         this.nodes.push(node);
@@ -327,22 +345,23 @@ export class NodeEditor{
             return;
 
         switch (d3.event.keyCode) {
-            case 46:
-                if (this.active instanceof Node)
-                    this.removeNode(this.active);
-                else if (this.active instanceof Connection)
-                    this.removeConnection(this.active);
+        case 46:
+            if (this.active instanceof Node)
+                this.removeNode(this.active);
+            else if (this.active instanceof Connection)
+                this.removeConnection(this.active);
 
-                this.update();
-                break;
-            case 27:
+            this.update();
+            break;
+        case 27:
 
-                break;
+            break;
         }
     }
 
     removeNode(node) {
         var index = this.nodes.indexOf(node);
+
         this.nodes.splice(index, 1);
         node.remove();
         this.event.nodeRemoved(node);
@@ -359,7 +378,7 @@ export class NodeEditor{
     }
 
     selectNode(node) {
-        if (this.nodes.indexOf(node) === -1) throw new Error("Node not exist in list");
+        if (this.nodes.indexOf(node) === -1) throw new Error('Node not exist in list');
 
         this.active = node;
         this.event.nodeSelected(node);
@@ -367,7 +386,7 @@ export class NodeEditor{
     }
 
     selectConnection(connection) {
-        if (!(connection instanceof Connection)) throw new Error("Invalid instance");
+        if (!(connection instanceof Connection)) throw new Error('Invalid instance');
 
         this.active = connection;
         this.event.connectionSelected(connection);

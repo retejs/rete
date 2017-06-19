@@ -1,6 +1,6 @@
 export class Control { /// TODO
 
-   constructor(){
-      this.margin = 0.01;
-   }
+    constructor() {
+        this.margin = 0.01;
+    }
 }

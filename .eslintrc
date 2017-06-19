@@ -1,10 +1,15 @@
 {
   "parser": "babel-eslint",
+  "ecmaFeatures": {
+    "modules": true
+  },
   "rules": {
-    "comma-dangle": [1,"never"],
+    "comma-dangle": [1, "never"],
     "no-cond-assign": 1,
     "no-console": 1,
     "no-constant-condition": 1,
+    "sort-imports": "warn",
+    "no-duplicate-imports": "warn",
     "no-control-regex": 1,
     "no-dupe-args": 2,
     "no-dupe-keys": 2,
@@ -39,21 +44,31 @@
     "no-undefined": 2,
     "no-unused-vars": 1,
     "no-use-before-define": 1,
-    "camelcase": [1,{"properties":"always"}],
-    "comma-spacing": [1,{"before":false,"after":true}],
-    "indent": [1,"tab"],
-    "new-cap": [1,{"newIsCap":true}],
-    "newline-after-var": [1,"always"],
-    "no-mixed-spaces-and-tabs": [1,"smart-tabs"],
-    "no-multiple-empty-lines": [1,{"max":2}],
-    "quotes": [1,"single","avoid-escape"],
-    "space-after-keywords": [1,"always"],
-    "space-before-blocks": [1,"always"],
-    "space-in-parens": [1,"never"],
-    "space-return-throw-case": 1,
-    "max-depth": [1,4],
-    "max-len": [1,80,4,{"ignoreComments":true}],
-    "max-params": [1,6],
-    "max-statements": [1,8]
+    "camelcase": [1, {
+      "properties": "always"
+    }],
+    "comma-spacing": [1, {
+      "before": false,
+      "after": true
+    }],
+    "indent": ["error", 4],
+    "new-cap": [1, {
+      "newIsCap": true
+    }],
+    "newline-after-var": [1, "always"],
+    "no-mixed-spaces-and-tabs": [1, "smart-tabs"],
+    "no-multiple-empty-lines": [1, {
+      "max": 1
+    }],
+    "quotes": [1, "single", "avoid-escape"],
+    "space-before-blocks": [1, "always"],
+    "space-in-parens": [1, "never"],
+    "keyword-spacing": 1,
+    "max-depth": [1, 4],
+    "max-len": [1, 80, 4, {
+      "ignoreComments": true
+    }],
+    "max-params": [1, 6],
+    "max-statements": [1, 8]
   }
 }
