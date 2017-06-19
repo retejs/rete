@@ -35,7 +35,7 @@
     "npm-sass": "^2.0.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.7.1",
-    "uglifyjs": "^2.4.10"
+    "uglify-js": "^2.8.29"
   },
   "dependencies": {
     "d3": "^4.9.1",
