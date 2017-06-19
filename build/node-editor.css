@@ -28,6 +28,10 @@ html, body {
   .node-editor .input:hover, .node-editor .output:hover {
     stroke-width: 4px; }
 
+.node-editor .title {
+  fill: white;
+  font-family: sans-serif; }
+
 .node-editor select, .node-editor input {
   width: 100%;
   height: 90%;
