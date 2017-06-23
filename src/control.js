@@ -4,6 +4,7 @@ export class Control { /// TODO
         this.margin = 0.01;
         this.height = height;
         this.html = html;
+        this.parent = null;
     }
 
 }

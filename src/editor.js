@@ -7,7 +7,7 @@ export class NodeEditor {
     constructor(id, nodes, builders, event) {
 
         var self = this;
-
+                
         this.event = event;
         this.active = nodes[0];
         this.nodes = nodes;
@@ -99,7 +99,7 @@ export class NodeEditor {
 
         var rects = this.view
             .selectAll('rect.node')
-            .data(this.nodes);
+            .data(this.nodes, function (d) { return d.id; });
 
         rects.enter()
             .append('rect')
@@ -141,7 +141,7 @@ export class NodeEditor {
 
         var titles = this.view
             .selectAll('text.title')
-            .data(this.nodes);
+            .data(this.nodes, function (d) { return d.id; });
 
         titles.enter()
             .append('text')
@@ -219,7 +219,7 @@ export class NodeEditor {
 
         var groups = this.view
             .selectAll('g.gg')
-            .data(this.nodes);
+            .data(this.nodes, function (d) { return d.id; });
 
         var newGroups = groups.enter()
             .append('g')
@@ -228,7 +228,7 @@ export class NodeEditor {
         groups.exit().remove();
 
         groups = newGroups.merge(groups);
-
+        
         var inputs = groups.selectAll('circle.input')
             .data(function (d) {
                 return d.inputs;
@@ -342,9 +342,9 @@ export class NodeEditor {
         outputTitles.attr('x', function (d) {
             return self.x(d.positionX() - d.socket.radius - d.socket.margin);
         })
-            .attr('y', function (d) {
-                return self.y(d.positionY() + d.socket.margin);
-            });
+        .attr('y', function (d) {
+            return self.y(d.positionY() + d.socket.margin);
+        });
     }
 
     updateControls() {
@@ -352,7 +352,7 @@ export class NodeEditor {
 
         var groups = this.view
             .selectAll('g.controls')
-            .data(this.nodes);    
+            .data(this.nodes, function (d) { return d.id; });    
         
         var newGroups = groups
             .enter()
@@ -361,83 +361,71 @@ export class NodeEditor {
 
         groups.exit().remove();
 
-        groups = newGroups.merge(groups);
-
-        var controls = groups.selectAll('foreignObject.control')
+        var controls = newGroups.merge(groups).selectAll('foreignObject.control')
             .data(function (d) {
-                return d.controls.map(function (control) {
-                    return { control: control, node: d };
-                });
+                return d.controls;
             });
-
+        
         controls.exit().remove();
 
         var newControls = controls.enter()
-            .append('foreignObject').html(function (d) {
-                return d.control.html;
-            });
+            .append('foreignObject')
+            .html(function (d) {
+                return d.html;
+            })
+            .classed('control', true);
         
-        controls = newControls.merge(controls);
-        
-        controls.attr('class', 'control');
-        
-        this.view.selectAll('foreignObject.control')
+        newControls.merge(controls)
             .attr('x', function (d) {
-                return self.x(d.control.margin + d.node.position[0]);
+                return self.x(d.margin + d.parent.position[0]);
             })
             .attr('y', function (d) {
 
                 var prevControlsHeight = 0;
-                var l = d.node.controls.indexOf(d.control);
+                var l = d.parent.controls.indexOf(d);
 
                 for (var i = 0; i < l; i++)
-                    prevControlsHeight += d.node.controls[i].height;
+                    prevControlsHeight += d.parent.controls[i].height;
 
-                return self.y(d.node.headerHeight() +
-                    + d.node.outputsHeight()
+                return self.y(d.parent.headerHeight() +
+                    + d.parent.outputsHeight()
                     + prevControlsHeight
-                    + d.node.position[1]);
+                    + d.parent.position[1]);
             })
+            .attr('width', function (d) {
+                return self.x(d.parent.width - 2 * d.margin)
+            })
+            .attr('height', function (d) {
+                return self.y(d.height);
+            });
+
+        var inputControls = newGroups.merge(groups).selectAll('foreignObject.input-control')
+            .data(function (d) {
+                return d.inputs.filter(function (input) { return input.showControl();});
+            });
+
+        var newInputControls = inputControls.enter()
+            .append('foreignObject')
+            .html(function (d) {
+                return d.control.html;
+            })
+            .classed('input-control', true);
+        
+        inputControls.exit().remove();
+
+        newInputControls.merge(inputControls)
             .attr('width', function (d) {
                 return self.x(d.node.width - 2 * d.control.margin)
             })
             .attr('height', function (d) {
                 return self.y(d.control.height);
-            });
-        
-        var inputControls = groups.selectAll('foreignObject.control.input-control')
-            .data(function (d) {
-                return d.inputs.filter(function (input) {
-                    return input.showControl();
-                }).map(function (input) {
-                    return { input: input, node: d };
-                });
-            });
-
-        inputControls.exit().remove();
-
-        var newInputControls = inputControls.enter()
-            .append('foreignObject')
-            .classed('control', true)
-            .classed('input-control', true)
-            .html(function (d) { return d.input.control.html });
-
-        inputControls = newInputControls.merge(inputControls);
-        
-        inputControls
-            .attr('width', function (d) {
-                return self.x(d.node.width - 2 * d.input.control.margin)
-            })
-            .attr('height', function (d) {
-                return self.y(d.input.control.height);
             })    
             .attr('x', function (d) {
-                return self.x(d.input.positionX() + d.input.socket.radius + d.input.socket.margin);
+                return self.x(d.positionX() + d.socket.radius + d.socket.margin);
             })
             .attr('y', function (d) {
-                return self.y(d.input.positionY() - d.input.socket.radius - d.input.socket.margin);
+                return self.y(d.positionY() - d.socket.radius - d.socket.margin);
             });
-
     }
 
     update() {

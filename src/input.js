@@ -23,6 +23,7 @@ export class Input {
 
     addControl(control) {
         this.control = control;
+        control.parent = this;
     }
 
     showControl() {

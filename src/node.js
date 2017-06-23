@@ -5,10 +5,11 @@ import {Output} from './output';
 export class Node {
    
     constructor(title, width) {
+        this.id = Node.incrementId();
         this.inputs = [];
         this.outputs = [];
         this.controls = [];
-
+        
         this.position = [0, 0];
         this.title = {
             size: 0.01,
@@ -17,6 +18,14 @@ export class Node {
         this.margin = 0.005;
         this.width = width || 0.1;
         this.height = 0.05;
+    }
+
+    static incrementId() {
+        if (!this.latestId)
+            this.latestId = 1
+        else
+            this.latestId++
+        return this.latestId
     }
 
     update() {
@@ -52,7 +61,7 @@ export class Node {
     addControl(control) {
         if (!(control instanceof Control)) throw new Error('Invalid instance');
         this.controls.push(control);
-
+        control.parent = this;
         this.update();
         return this;
     }
