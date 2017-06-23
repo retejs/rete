@@ -5,6 +5,7 @@ export class Input {
         this.connection = null;
         this.title = title;
         this.socket = socket;
+        this.control = null;
     }
 
     hasConnection() {
@@ -18,6 +19,14 @@ export class Input {
     removeConnection() {
         if (this.connection)
             this.connection.remove();
+    }
+
+    addControl(control) {
+        this.control = control;
+    }
+
+    showControl() {
+        return this.connection === null && this.control !== null;
     }
 
     positionX() {

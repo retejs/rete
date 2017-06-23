@@ -301,7 +301,9 @@ export class NodeEditor {
 
         var inputTitles = groups.selectAll('text.input-title')
             .data(function (d) {
-                return d.inputs;
+                return d.inputs.filter(function (input) {
+                    return !input.showControl();
+                });
             });
 
         inputTitles.exit().remove();
@@ -403,7 +405,41 @@ export class NodeEditor {
             })
             .attr('height', function (d) {
                 return self.y(d.control.height);
+            });
+        
+        var inputControls = groups.selectAll('foreignObject.control.input-control')
+            .data(function (d) {
+                return d.inputs.filter(function (input) {
+                    return input.showControl();
+                }).map(function (input) {
+                    return { input: input, node: d };
+                });
+            });
+
+        inputControls.exit().remove();
+
+        var newInputControls = inputControls.enter()
+            .append('foreignObject')
+            .classed('control', true)
+            .classed('input-control', true)
+            .html(function (d) { return d.input.control.html });
+
+        inputControls = newInputControls.merge(inputControls);
+        
+        inputControls
+            .attr('width', function (d) {
+                return self.x(d.node.width - 2 * d.input.control.margin)
             })
+            .attr('height', function (d) {
+                return self.y(d.input.control.height);
+            })    
+            .attr('x', function (d) {
+                return self.x(d.input.positionX() + d.input.socket.radius + d.input.socket.margin);
+            })
+            .attr('y', function (d) {
+                return self.y(d.input.positionY() - d.input.socket.radius - d.input.socket.margin);
+            });
+
     }
 
     update() {
