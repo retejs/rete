@@ -311,7 +311,6 @@ export class NodeEditor {
         var newInputTitles = inputTitles.enter()
             .append('text')
             .classed('input-title', true)
-            .classed('title', true)
             .attr('alignment-baseline', 'after-edge')
             .text(function (d) { return d.title });
 
@@ -334,7 +333,6 @@ export class NodeEditor {
         var newOutputTitles = outputTitles.enter()
             .append('text')
             .classed('output-title', true)
-            .classed('title', true)
             .attr('text-anchor', 'end')
             .attr('alignment-baseline', 'after-edge')
             .text(function (d) { return d.title });
