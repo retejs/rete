@@ -54,6 +54,10 @@
           var out = new D3NE.Output('Texture', imageSocket);
           var inp = new D3NE.Input('Texture', imageSocket);
           
+          var numControl = new D3NE.Control('<input type="number">');
+
+          inp.addControl(numControl);
+
           return new D3NE.Node('Texture')
          						.addInput(inp)
          						.addOutput(out);
@@ -70,18 +74,23 @@
       var tnode = texturebuilder.build();
 
       tnode.position = [0.2, 0.1];
+
+      var tnode2 = texturebuilder.build();
+
+      tnode2.position = [0.08, 0.1];
+
       var snode = shapebuilder.build();
 
       snode.position = [0.4, 0.2];
       var vnode = valbuilder.build();
 
-      vnode.position = [0.3, 0.3];
+      vnode.position = [0.25, 0.3];
 		
       tnode.outputs[0].connectTo(snode.inputs[0]);
       vnode.outputs[0].connectTo(snode.inputs[1]);
 		
       var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
-             				[tnode, snode, vnode],
+             				[tnode2, tnode, snode, vnode],
              				[shapebuilder, texturebuilder, valbuilder],
                                          events);
 	

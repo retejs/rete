@@ -28,7 +28,7 @@ html, body {
   .node-editor .input:hover, .node-editor .output:hover {
     stroke-width: 4px; }
 
-.node-editor .title {
+.node-editor .title, .node-editor .input-title, .node-editor .output-title {
   fill: white;
   font-family: sans-serif; }
 

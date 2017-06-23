@@ -86,12 +86,13 @@ var ContextMenu = function () {
 var Control = /// TODO
 
 function Control(html) {
-    var height = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.016;
+    var height = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0.02;
     classCallCheck(this, Control);
 
     this.margin = 0.01;
     this.height = height;
     this.html = html;
+    this.parent = null;
 };
 
 var Events = function Events() {
@@ -113,6 +114,7 @@ var Input = function () {
         this.connection = null;
         this.title = title;
         this.socket = socket;
+        this.control = null;
     }
 
     createClass(Input, [{
@@ -129,6 +131,17 @@ var Input = function () {
         key: "removeConnection",
         value: function removeConnection() {
             if (this.connection) this.connection.remove();
+        }
+    }, {
+        key: "addControl",
+        value: function addControl(control) {
+            this.control = control;
+            control.parent = this;
+        }
+    }, {
+        key: "showControl",
+        value: function showControl() {
+            return this.connection === null && this.control !== null;
         }
     }, {
         key: "positionX",
@@ -208,10 +221,11 @@ var Node = function () {
     function Node(title, width) {
         classCallCheck(this, Node);
 
+        this.id = Node.incrementId();
         this.inputs = [];
         this.outputs = [];
         this.controls = [];
-
+        console.log(this.id);
         this.position = [0, 0];
         this.title = {
             size: 0.01,
@@ -258,7 +272,7 @@ var Node = function () {
         value: function addControl(control) {
             if (!(control instanceof Control)) throw new Error('Invalid instance');
             this.controls.push(control);
-
+            control.parent = this;
             this.update();
             return this;
         }
@@ -293,6 +307,12 @@ var Node = function () {
             this.outputs.forEach(function (output) {
                 output.removeConnections();
             });
+        }
+    }], [{
+        key: 'incrementId',
+        value: function incrementId() {
+            if (!this.latestId) this.latestId = 1;else this.latestId++;
+            return this.latestId;
         }
     }]);
     return Node;
@@ -407,7 +427,9 @@ var NodeEditor = function () {
         value: function updateNodes() {
             var self = this;
 
-            var rects = this.view.selectAll('rect.node').data(this.nodes);
+            var rects = this.view.selectAll('rect.node').data(this.nodes, function (d) {
+                return d.id;
+            });
 
             rects.enter().append('rect').attr('class', 'node').on('click', function (d) {
                 self.selectNode(d);
@@ -434,7 +456,9 @@ var NodeEditor = function () {
                 return self.active === d ? 'node active' : 'node';
             });
 
-            var titles = this.view.selectAll('text.title').data(this.nodes);
+            var titles = this.view.selectAll('text.title').data(this.nodes, function (d) {
+                return d.id;
+            });
 
             titles.enter().append('text').classed('title', true);
 
@@ -497,7 +521,9 @@ var NodeEditor = function () {
         value: function updateSockets() {
             var self = this;
 
-            var groups = this.view.selectAll('g.gg').data(this.nodes);
+            var groups = this.view.selectAll('g.gg').data(this.nodes, function (d) {
+                return d.id;
+            });
 
             var newGroups = groups.enter().append('g').classed('gg', true);
 
@@ -564,14 +590,14 @@ var NodeEditor = function () {
             });
 
             var inputTitles = groups.selectAll('text.input-title').data(function (d) {
-                return d.inputs;
+                return d.inputs.filter(function (input) {
+                    return !input.showControl();
+                });
             });
 
             inputTitles.exit().remove();
 
-            var newInputTitles = inputTitles.enter().append('text').classed('input-title', true).classed('title', true).attr('alignment-baseline', 'after-edge').text(function (d) {
-                return d.title;
-            });
+            var newInputTitles = inputTitles.enter().append('text').classed('input-title', true).attr('alignment-baseline', 'after-edge');
 
             inputTitles = newInputTitles.merge(inputTitles);
 
@@ -579,6 +605,8 @@ var NodeEditor = function () {
                 return self.x(d.positionX() + d.socket.radius + d.socket.margin);
             }).attr('y', function (d) {
                 return self.y(d.positionY() + d.socket.margin);
+            }).text(function (d) {
+                return d.title;
             });
 
             var outputTitles = groups.selectAll('text.output-title').data(function (d) {
@@ -587,9 +615,7 @@ var NodeEditor = function () {
 
             outputTitles.exit().remove();
 
-            var newOutputTitles = outputTitles.enter().append('text').classed('output-title', true).classed('title', true).attr('text-anchor', 'end').attr('alignment-baseline', 'after-edge').text(function (d) {
-                return d.title;
-            });
+            var newOutputTitles = outputTitles.enter().append('text').classed('output-title', true).attr('text-anchor', 'end').attr('alignment-baseline', 'after-edge');
 
             outputTitles = newOutputTitles.merge(outputTitles);
 
@@ -597,6 +623,8 @@ var NodeEditor = function () {
                 return self.x(d.positionX() - d.socket.radius - d.socket.margin);
             }).attr('y', function (d) {
                 return self.y(d.positionY() + d.socket.margin);
+            }).text(function (d) {
+                return d.title;
             });
         }
     }, {
@@ -604,44 +632,60 @@ var NodeEditor = function () {
         value: function updateControls() {
             var self = this;
 
-            var groups = this.view.selectAll('g.controls').data(this.nodes);
+            var groups = this.view.selectAll('g.controls').data(this.nodes, function (d) {
+                return d.id;
+            });
 
             var newGroups = groups.enter().append('g').classed('controls', true);
 
             groups.exit().remove();
 
-            groups = newGroups.merge(groups);
-
-            var controls = groups.selectAll('foreignObject.control').data(function (d) {
-                return d.controls.map(function (control) {
-                    return { control: control, node: d };
-                });
+            var controls = newGroups.merge(groups).selectAll('foreignObject.control').data(function (d) {
+                return d.controls;
             });
 
             controls.exit().remove();
 
             var newControls = controls.enter().append('foreignObject').html(function (d) {
-                return d.control.html;
-            });
+                return d.html;
+            }).classed('control', true);
 
-            controls = newControls.merge(controls);
-
-            controls.attr('class', 'control');
-
-            this.view.selectAll('foreignObject.control').attr('x', function (d) {
-                return self.x(d.control.margin + d.node.position[0]);
+            newControls.merge(controls).attr('x', function (d) {
+                return self.x(d.margin + d.parent.position[0]);
             }).attr('y', function (d) {
 
                 var prevControlsHeight = 0;
-                var l = d.node.controls.indexOf(d.control);
+                var l = d.parent.controls.indexOf(d);
 
                 for (var i = 0; i < l; i++) {
-                    prevControlsHeight += d.node.controls[i].height;
-                }return self.y(d.node.headerHeight() + +d.node.outputsHeight() + prevControlsHeight + d.node.position[1]);
+                    prevControlsHeight += d.parent.controls[i].height;
+                }return self.y(d.parent.headerHeight() + +d.parent.outputsHeight() + prevControlsHeight + d.parent.position[1]);
             }).attr('width', function (d) {
+                return self.x(d.parent.width - 2 * d.margin);
+            }).attr('height', function (d) {
+                return self.y(d.height);
+            });
+
+            var inputControls = newGroups.merge(groups).selectAll('foreignObject.input-control').data(function (d) {
+                return d.inputs.filter(function (input) {
+                    return input.showControl();
+                });
+            });
+
+            var newInputControls = inputControls.enter().append('foreignObject').html(function (d) {
+                return d.control.html;
+            }).classed('input-control', true);
+
+            inputControls.exit().remove();
+
+            newInputControls.merge(inputControls).attr('width', function (d) {
                 return self.x(d.node.width - 2 * d.control.margin);
             }).attr('height', function (d) {
                 return self.y(d.control.height);
+            }).attr('x', function (d) {
+                return self.x(d.positionX() + d.socket.radius + d.socket.margin);
+            }).attr('y', function (d) {
+                return self.y(d.positionY() - d.socket.radius - d.socket.margin);
             });
         }
     }, {
