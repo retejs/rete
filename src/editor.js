@@ -268,7 +268,7 @@ export class NodeEditor {
         });
 
         outputs
-            .on('click', function (d) {
+            .on('mousedown', function (d) {
                 self.pickedOutput = d;
             })
             .attr('cx', function (d) {
@@ -285,7 +285,7 @@ export class NodeEditor {
             });
 
         inputs
-            .on('click', function (input) {
+            .on('mousedown', function (input) {
                 if (self.pickedOutput === null) {
                     if (input.hasConnection()) {
                         self.pickedOutput = input.connection.output;
