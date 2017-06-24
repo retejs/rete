@@ -6,30 +6,32 @@
           console.log('nodeCreated');
       };
 
-      events.edgeCreated = function(i) {
-          console.log('edgeCreated');
+      events.connectionCreated = function(i) {
+          console.log('connectionCreated');
       };
 
       events.nodeSelected = function(i) {
           console.log('nodeSelected');
       };
 
-      events.edgeSelected = function(i) {
-          console.log('edgeSelected');
+      events.connectionSelected = function(i) {
+          console.log('connectionSelected');
       };
 
       events.nodeRemoved = function(i) {
           console.log('nodeRemoved');
       };
 
-      events.edgeRemoved = function(i) {
-          console.log('edgeRemoved');
+      events.connectionRemoved = function(i) {
+          console.log('connectionRemoved');
       };
         
-		 var numSocket = new D3NE.Socket('number', 'Number value', 'hint');
+	  var numSocket = new D3NE.Socket('number', 'Number value', 'hint');
       var imageSocket = new D3NE.Socket('image', 'Image', 'hint');
       var arraySocket = new D3NE.Socket('array', 'Array', 'hint');
       
+      numSocket.combineWith(imageSocket);
+
       var shapebuilder = new D3NE.NodeBuilder('Shape', function() {
             
           var input1 = new D3NE.Input('Texture', imageSocket);
@@ -71,29 +73,28 @@
          						.addOutput(out);
       });
 		 
-      var tnode = texturebuilder.build();
-
-      tnode.position = [0.2, 0.1];
-
       var tnode2 = texturebuilder.build();
-
-      tnode2.position = [0.08, 0.1];
-
-      var snode = shapebuilder.build();
-
-      snode.position = [0.4, 0.2];
+      var tnode = texturebuilder.build();
       var vnode = valbuilder.build();
-
+      var snode = shapebuilder.build();
+      
+      tnode2.position = [0.08, 0.1];
+      tnode.position = [0.2, 0.1];
+      snode.position = [0.4, 0.2];
       vnode.position = [0.25, 0.3];
 		
       tnode.outputs[0].connectTo(snode.inputs[0]);
       vnode.outputs[0].connectTo(snode.inputs[1]);
-		
+      tnode2.outputs[0].connectTo(tnode.inputs[0]);
+      
       var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
-             				[tnode2, tnode, snode, vnode],
              				[shapebuilder, texturebuilder, valbuilder],
                                          events);
-	
+
+      nodeEditor.addNode(tnode2);
+      nodeEditor.addNode(tnode);
+      nodeEditor.addNode(snode);
+      nodeEditor.addNode(vnode);
       nodeEditor.selectNode(tnode);
 
   }

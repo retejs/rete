@@ -13,12 +13,11 @@ html, body {
     fill: #ffd92c;
     stroke: #e3c000; }
 
-.node-editor .edge {
+.node-editor .connection {
   fill: none;
   stroke: steelblue;
-  stroke-width: 5px;
-  cursor: pointer; }
-  .node-editor .edge.active {
+  stroke-width: 5px; }
+  .node-editor .connection.active {
     stroke: #e3c000; }
 
 .node-editor .input, .node-editor .output {

@@ -174,10 +174,13 @@ var Output = function () {
         key: 'connectTo',
         value: function connectTo(input) {
             if (!(input instanceof Input)) throw new Error('Invalid input');
-            if (this.socket !== input.socket) throw new Error('Sockets not compatible');
+            if (!this.socket.compatibleWith(input.socket)) throw new Error('Sockets not compatible');
             if (input.hasConnection()) throw new Error('Input already has one connection');
 
-            this.connections.push(new Connection(this, input));
+            var connection = new Connection(this, input);
+
+            this.connections.push(connection);
+            return connection;
         }
     }, {
         key: 'connectedTo',
@@ -225,7 +228,7 @@ var Node = function () {
         this.inputs = [];
         this.outputs = [];
         this.controls = [];
-        console.log(this.id);
+
         this.position = [0, 0];
         this.title = {
             size: 0.01,
@@ -341,15 +344,15 @@ var NodeBuilder = function () {
 }();
 
 var NodeEditor = function () {
-    function NodeEditor(id, nodes, builders, event) {
+    function NodeEditor(id, builders, event) {
         classCallCheck(this, NodeEditor);
 
 
         var self = this;
 
         this.event = event;
-        this.active = nodes[0];
-        this.nodes = nodes;
+        this.active = null;
+        this.nodes = [];
         this.builders = builders;
 
         this.pickedOutput = null;
@@ -380,7 +383,9 @@ var NodeEditor = function () {
 
         this.valueline = d3.line().curve(d3.curveBasis);
 
-        d3.select(window).on('keydown.' + id, self.keyDown.bind(this)).on('resize.' + id, function () {
+        d3.select(window).on('mousemove', function () {
+            self.updateConnections();
+        }).on('keydown.' + id, self.keyDown.bind(this)).on('resize.' + id, function () {
             self.resize();
             self.update();
         });
@@ -389,20 +394,20 @@ var NodeEditor = function () {
     }
 
     createClass(NodeEditor, [{
-        key: 'getConnectionData',
-        value: function getConnectionData(c) {
-            var distanceX = Math.abs(c.input.positionX() - c.output.positionX());
-            var distanceY = c.input.positionY() - c.output.positionY();
+        key: 'getConnectionPath',
+        value: function getConnectionPath(connection, x1, y1, x2, y2) {
+            var distanceX = Math.abs(x1 - x2);
+            var distanceY = y2 - y1;
 
-            var p1 = [c.output.positionX(), c.output.positionY()];
-            var p4 = [c.input.positionX(), c.input.positionY()];
+            var p1 = [x1, y1];
+            var p4 = [x2, y2];
 
-            var p2 = [p1[0] + 0.01 + 0.4 * distanceX, p1[1] + 0.2 * distanceY];
-            var p3 = [p4[0] - 0.01 - 0.4 * distanceX, p4[1] - 0.2 * distanceY];
+            var p2 = [x1 + 0.3 * distanceX, y1 + 0.1 * distanceY];
+            var p3 = [x2 - 0.3 * distanceX, y2 - 0.1 * distanceY];
 
             var points = [p1, p2, p3, p4];
 
-            points.connection = c;
+            points.connection = connection;
             return points;
         }
     }, {
@@ -495,26 +500,31 @@ var NodeEditor = function () {
                     var cons = outputs[j].connections;
 
                     for (var k in cons) {
-                        pathData.push(this.getConnectionData(cons[k]));
+                        var input = cons[k].input;
+                        var output = cons[k].output;
+
+                        pathData.push(this.getConnectionPath(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY()));
                     }
                 }
+            }
+
+            if (self.pickedOutput !== null) {
+                var mouse = d3.mouse(this.view.node());
+                var output = self.pickedOutput;
+                var input = [self.x.invert(mouse[0]), self.y.invert(mouse[1])];
+
+                pathData.push(this.getConnectionPath(null, output.positionX(), output.positionY(), input[0], input[1]));
             }
 
             var path = this.view.selectAll('path').data(pathData);
 
             path.exit().remove();
 
-            var new_path = path.enter().append('path').on('click', function (d) {
-                self.selectConnection(d.connection);
-            }).each(function () {
+            var new_path = path.enter().append('path').each(function () {
                 d3.select(this).moveToBack();
-            });
+            }).on('click', this.areaClick.bind(this));
 
-            this.view.selectAll('path').attr('d', this.valueline).classed('edge', true).attr('class', function (d) {
-                var index = pathData.indexOf(d);
-
-                return self.active === d.connection ? 'edge active' : 'edge';
-            });
+            this.view.selectAll('path').attr('d', this.valueline).classed('connection', true);
         }
     }, {
         key: 'updateSockets',
@@ -570,15 +580,26 @@ var NodeEditor = function () {
             });
 
             inputs.on('click', function (input) {
-                if (self.pickedOutput === null) return;
+                if (self.pickedOutput === null) {
+                    if (input.hasConnection()) {
+                        self.pickedOutput = input.connection.output;
+                        self.removeConnection(input.connection);
+                    }
+                    return;
+                }
+
+                if (input.hasConnection()) self.removeConnection(input.connection);
 
                 try {
-                    self.pickedOutput.connectTo(input);
+                    var connection = self.pickedOutput.connectTo(input);
+
+                    self.event.connectionCreated(connection);
                 } catch (e) {
                     alert(e.message);
+                } finally {
+                    self.pickedOutput = null;
+                    self.update();
                 }
-                self.pickedOutput = null;
-                self.update();
             }).attr('cx', function (d) {
                 return self.x(d.positionX());
             }).attr('cy', function (d) {
@@ -597,7 +618,9 @@ var NodeEditor = function () {
 
             inputTitles.exit().remove();
 
-            var newInputTitles = inputTitles.enter().append('text').classed('input-title', true).attr('alignment-baseline', 'after-edge');
+            var newInputTitles = inputTitles.enter().append('text').classed('input-title', true).attr('alignment-baseline', 'after-edge').text(function (d) {
+                return d.title;
+            });
 
             inputTitles = newInputTitles.merge(inputTitles);
 
@@ -605,8 +628,6 @@ var NodeEditor = function () {
                 return self.x(d.positionX() + d.socket.radius + d.socket.margin);
             }).attr('y', function (d) {
                 return self.y(d.positionY() + d.socket.margin);
-            }).text(function (d) {
-                return d.title;
             });
 
             var outputTitles = groups.selectAll('text.output-title').data(function (d) {
@@ -615,7 +636,9 @@ var NodeEditor = function () {
 
             outputTitles.exit().remove();
 
-            var newOutputTitles = outputTitles.enter().append('text').classed('output-title', true).attr('text-anchor', 'end').attr('alignment-baseline', 'after-edge');
+            var newOutputTitles = outputTitles.enter().append('text').classed('output-title', true).attr('text-anchor', 'end').attr('alignment-baseline', 'after-edge').text(function (d) {
+                return d.title;
+            });
 
             outputTitles = newOutputTitles.merge(outputTitles);
 
@@ -623,8 +646,6 @@ var NodeEditor = function () {
                 return self.x(d.positionX() - d.socket.radius - d.socket.margin);
             }).attr('y', function (d) {
                 return self.y(d.positionY() + d.socket.margin);
-            }).text(function (d) {
-                return d.title;
             });
         }
     }, {
@@ -699,19 +720,27 @@ var NodeEditor = function () {
     }, {
         key: 'areaClick',
         value: function areaClick() {
+            if (this.pickedOutput !== null) {
+                this.pickedOutput = null;
+                this.update();
+                return;
+            }
+
             if (this.contextMenu.isVisible()) this.contextMenu.hide();else this.contextMenu.show(d3.event.clientX, d3.event.clientY);
         }
     }, {
         key: 'addNode',
-        value: function addNode(builderName) {
-            var builder = this.builders.find(function (builder) {
-                return builder.name == builderName;
-            });
+        value: function addNode(node) {
+            if (!(node instanceof Node)) {
+                var builder = this.builders.find(function (b) {
+                    return b.name === node;
+                });
 
-            var pos = d3.mouse(this.view.node());
-            var node = builder.build();
+                var pos = d3.mouse(this.view.node());
 
-            node.position = [this.x.invert(pos[0]), this.y.invert(pos[1])];
+                node = builder.build();
+                node.position = [this.x.invert(pos[0]), this.y.invert(pos[1])];
+            }
 
             this.nodes.push(node);
 
@@ -725,8 +754,7 @@ var NodeEditor = function () {
 
             switch (d3.event.keyCode) {
                 case 46:
-                    if (this.active instanceof Node) this.removeNode(this.active);else if (this.active instanceof Connection) this.removeConnection(this.active);
-
+                    this.removeNode(this.active);
                     this.update();
                     break;
                 case 27:
@@ -751,7 +779,6 @@ var NodeEditor = function () {
         value: function removeConnection(connection) {
             connection.remove();
             this.event.connectionRemoved(connection);
-            this.selectNode(this.nodes[0]);
         }
     }, {
         key: 'selectNode',
@@ -760,15 +787,6 @@ var NodeEditor = function () {
 
             this.active = node;
             this.event.nodeSelected(node);
-            this.update();
-        }
-    }, {
-        key: 'selectConnection',
-        value: function selectConnection(connection) {
-            if (!(connection instanceof Connection)) throw new Error('Invalid instance');
-
-            this.active = connection;
-            this.event.connectionSelected(connection);
             this.update();
         }
     }, {
@@ -787,13 +805,26 @@ var Socket = function () {
         this.id = id;
         this.name = name;
         this.hint = hint;
+        this.compatible = [];
 
         this.radius = 0.006;
         this.margin = 0.004;
     }
 
     createClass(Socket, [{
-        key: "height",
+        key: 'combineWith',
+        value: function combineWith(socket) {
+            if (!(socket instanceof Socket)) throw new Error('Invalid socket');
+            this.compatible.push(socket);
+        }
+    }, {
+        key: 'compatibleWith',
+        value: function compatibleWith(socket) {
+            if (!(socket instanceof Socket)) throw new Error('Invalid socket');
+            return this === socket || this.compatible.indexOf(socket) !== -1;
+        }
+    }, {
+        key: 'height',
         value: function height() {
             return 2 * this.radius + 2 * this.margin;
         }
