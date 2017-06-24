@@ -32,7 +32,7 @@ Create some NodeBuilder's
 var texturebuilder = new D3NE.NodeBuilder("Texture",function(){
             var out = new D3NE.Output("Texture",imageSocket);
             return new D3NE.Node("Texture")
-         					.addOutput(out);
+                        .addOutput(out);
          });
          
 var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
@@ -40,17 +40,17 @@ var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
             var out = new D3NE.Output("Value",numSocket);
             return new D3NE.Node("Shape")
             	    	.addInput(input)
-         		    	.addOutput(out);			
+                        .addOutput(out);			
             });
 ```
 And create NodeEditor
 ```js
  var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
-             				[],
-             				[shapebuilder,texturebuilder],
-                            new D3NE.Events());
+                        [shapebuilder,texturebuilder],
+                        new D3NE.Events());
 ```
 For detail see [demo](https://github.com/Ni55aN/D3-Node-editor/tree/master/demo)
+([codepen](https://codepen.io/Ni55aN/pen/jBEKBQ))
 
 
 License
