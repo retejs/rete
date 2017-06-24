@@ -212,21 +212,13 @@ export class NodeEditor {
 
         var new_path = path.enter()
             .append('path')
-            .on('click', function (d) {
-                self.selectConnection(d.connection);
-            })
             .each(function () {
                 d3.select(this).moveToBack();
             });
 
         this.view.selectAll('path')
             .attr('d', this.valueline)
-            .classed('edge', true)
-            .attr('class', function (d) {
-                var index = pathData.indexOf(d);
-
-                return self.active === d.connection ? 'edge active' : 'edge';
-            });
+            .classed('connection', true);
     }
 
     updateSockets() {
@@ -495,10 +487,7 @@ export class NodeEditor {
 
         switch (d3.event.keyCode) {
         case 46:
-            if (this.active instanceof Node) 
-                this.removeNode(this.active);
-            else if (this.active instanceof Connection) 
-                this.removeConnection(this.active);
+            this.removeNode(this.active);
             this.update();
             break;
         case 27:
@@ -522,8 +511,6 @@ export class NodeEditor {
     removeConnection(connection) {
         connection.remove();
         this.event.connectionRemoved(connection);
-        if (this.active === connection)
-            this.selectNode(this.nodes[0])
     }
 
     selectNode(node) {
@@ -531,14 +518,6 @@ export class NodeEditor {
 
         this.active = node;
         this.event.nodeSelected(node);
-        this.update();
-    }
-
-    selectConnection(connection) {
-        if (!(connection instanceof Connection)) throw new Error('Invalid instance');
-
-        this.active = connection;
-        this.event.connectionSelected(connection);
         this.update();
     }
 
