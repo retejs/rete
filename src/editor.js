@@ -47,6 +47,9 @@ export class NodeEditor {
             .curve(d3.curveBasis);
 
         d3.select(window)
+            .on('mousemove', function () {
+                self.updateConnections();
+            })
             .on('keydown.' + id, self.keyDown.bind(this))
             .on('resize.' + id, function () {
                 self.resize();
@@ -56,19 +59,19 @@ export class NodeEditor {
         this.resize();
     }
 
-    getConnectionData(c) {
-        var distanceX = Math.abs(c.input.positionX() - c.output.positionX());
-        var distanceY = c.input.positionY() - c.output.positionY();
+    getConnectionPath(connection, x1, y1, x2, y2) {
+        var distanceX = Math.abs(x1-x2);
+        var distanceY = y2-y1;
 
-        var p1 = [c.output.positionX(), c.output.positionY()];
-        var p4 = [c.input.positionX(), c.input.positionY()];
+        var p1 = [x1, y1];
+        var p4 = [x2, y2];
 
-        var p2 = [p1[0] + 0.3 * distanceX, p1[1] + 0.1 * distanceY];
-        var p3 = [p4[0] - 0.3 * distanceX, p4[1] - 0.1 * distanceY];
+        var p2 = [x1 + 0.3 * distanceX, y1 + 0.1 * distanceY];
+        var p3 = [x2 - 0.3 * distanceX, y2 - 0.1 * distanceY];
 
         var points = [p1, p2, p3, p4];
 
-        points.connection = c;
+        points.connection = connection;
         return points;
     }
 
@@ -168,7 +171,7 @@ export class NodeEditor {
     updateConnections() {
 
         var self = this;
-
+    
         this.valueline
             .x(function (d) {
                 return self.x(d[0]);
@@ -185,10 +188,22 @@ export class NodeEditor {
             for (var j in outputs) {
                 var cons = outputs[j].connections;
 
-                for (var k in cons)
-                    pathData.push(this.getConnectionData(cons[k]));
+                for (var k in cons) {
+                    var input = cons[k].input;
+                    var output = cons[k].output;
+
+                    pathData.push(this.getConnectionPath(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY()));
+                }
             }
         }
+        
+        if (self.pickedOutput !== null) { 
+            var mouse = d3.mouse(this.view.node());
+            var output = self.pickedOutput;
+            var input = [self.x.invert(mouse[0]), self.y.invert(mouse[1])];
+
+            pathData.push(this.getConnectionPath(null, output.positionX(), output.positionY(), input[0], input[1]));
+        }  
 
         var path = this.view.selectAll('path')
             .data(pathData);
@@ -259,12 +274,13 @@ export class NodeEditor {
             return 'socket output ' + d.socket.id;
         });
 
-        outputs.on('click', function (d) {
-            self.pickedOutput = d;
-
-        }).attr('cx', function (d) {
-            return self.x(d.positionX());
-        })
+        outputs
+            .on('click', function (d) {
+                self.pickedOutput = d;
+            })
+            .attr('cx', function (d) {
+                return self.x(d.positionX());
+            })
             .attr('cy', function (d) {
                 return self.y(d.positionY());
             })
@@ -275,25 +291,31 @@ export class NodeEditor {
                 return d.socket.name+'\n'+d.socket.hint
             });
 
-        inputs.on('click', function (input) {
-            if (self.pickedOutput === null) return;
-            if (input.hasConnection())
-                self.removeConnection(input.connection);
-            
-            try {
-                var connection = self.pickedOutput.connectTo(input);
+        inputs
+            .on('click', function (input) {
+                if (self.pickedOutput === null && input.hasConnection()) {
+                    self.pickedOutput = input.connection.output;
+                    self.removeConnection(input.connection);    
+                    return;
+                }
 
-                self.event.connectionCreated(connection);
-            } catch (e) {
-                alert(e.message);
-            } finally {
-                self.pickedOutput = null;
-                self.update();
-            }    
+                if (input.hasConnection()) 
+                    self.removeConnection(input.connection);  
+                 
+                try {
+                    var connection = self.pickedOutput.connectTo(input);
 
-        }).attr('cx', function (d) {
-            return self.x(d.positionX());
-        })
+                    self.event.connectionCreated(connection);
+                } catch (e) {
+                    alert(e.message);
+                } finally {
+                    self.pickedOutput = null;
+                    self.update();
+                }   
+            })
+            .attr('cx', function (d) {
+                return self.x(d.positionX());
+            })
             .attr('cy', function (d) {
                 return self.y(d.positionY());
             })
@@ -441,6 +463,8 @@ export class NodeEditor {
     }
 
     areaClick() {
+        this.pickedOutput = null;
+
         if (this.contextMenu.isVisible())
             this.contextMenu.hide();
         else
