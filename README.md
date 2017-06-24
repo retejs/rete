@@ -1,6 +1,6 @@
-D3 Node Editor
+D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-editor)
 ====
-#### JavaScript library
+#### JavaScript library 
 ![node editor](https://github.com/Ni55aN/D3-Node-editor/blob/master/demo/screenshot.png?raw=true)
 
 ### Dependencies

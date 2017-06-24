@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "node"
+
+before_script:
+  - npm install
+
+script: 
+  - npm run lint
+  - npm run build
+  - npm run minify-build
+
+cache:
+  directories:
+    - "node_modules"
+
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: build/*
+  skip_cleanup: true
+  on:
+    tags: true
