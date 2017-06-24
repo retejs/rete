@@ -214,7 +214,8 @@ export class NodeEditor {
             .append('path')
             .each(function () {
                 d3.select(this).moveToBack();
-            });
+            })
+            .on('click', this.areaClick.bind(this));
 
         this.view.selectAll('path')
             .attr('d', this.valueline)
@@ -285,15 +286,17 @@ export class NodeEditor {
 
         inputs
             .on('click', function (input) {
-                if (self.pickedOutput === null && input.hasConnection()) {
-                    self.pickedOutput = input.connection.output;
-                    self.removeConnection(input.connection);    
+                if (self.pickedOutput === null) {
+                    if (input.hasConnection()) {
+                        self.pickedOutput = input.connection.output;
+                        self.removeConnection(input.connection);
+                    }
                     return;
                 }
-
+                    
                 if (input.hasConnection()) 
-                    self.removeConnection(input.connection);  
-                 
+                    self.removeConnection(input.connection);
+
                 try {
                     var connection = self.pickedOutput.connectTo(input);
 
@@ -455,7 +458,12 @@ export class NodeEditor {
     }
 
     areaClick() {
-        this.pickedOutput = null;
+        if (this.pickedOutput !== null)
+        {
+            this.pickedOutput = null;
+            this.update();
+            return;
+        }    
 
         if (this.contextMenu.isVisible())
             this.contextMenu.hide();
