@@ -4,9 +4,20 @@ export class Socket {
         this.id = id;
         this.name = name;
         this.hint = hint;
-	  
-	  this.radius = 0.006; 
-	  this.margin = 0.004;
+        this.compatible = [];
+
+	    this.radius = 0.006; 
+	    this.margin = 0.004;
+    }
+
+    combineWith(socket) {
+        if (!(socket instanceof Socket)) throw new Error('Invalid socket');
+        this.compatible.push(socket);
+    }
+
+    compatibleWith(socket) {
+        if (!(socket instanceof Socket)) throw new Error('Invalid socket');
+        return this === socket || this.compatible.indexOf(socket) !== -1;
     }
 
     height() {

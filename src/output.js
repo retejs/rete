@@ -13,10 +13,13 @@ export class Output {
 
     connectTo(input) {
         if (!(input instanceof Input)) throw new Error('Invalid input');
-        if (this.socket !== input.socket) throw new Error('Sockets not compatible');
+        if (!this.socket.compatibleWith(input.socket)) throw new Error('Sockets not compatible');
         if (input.hasConnection()) throw new Error('Input already has one connection');
 
-        this.connections.push(new Connection(this, input));
+        var connection = new Connection(this, input);
+
+        this.connections.push(connection);
+        return connection;
     }
 
     connectedTo(input) {

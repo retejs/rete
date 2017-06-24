@@ -4,13 +4,13 @@ import {Node} from './node';
 
 export class NodeEditor {
 
-    constructor(id, nodes, builders, event) {
+    constructor(id, builders, event) {
 
         var self = this;
                 
         this.event = event;
-        this.active = nodes[0];
-        this.nodes = nodes;
+        this.active = null;
+        this.nodes = [];
         this.builders = builders;
 
         this.pickedOutput = null;
@@ -63,8 +63,8 @@ export class NodeEditor {
         var p1 = [c.output.positionX(), c.output.positionY()];
         var p4 = [c.input.positionX(), c.input.positionY()];
 
-        var p2 = [p1[0] + 0.01 + 0.4 * distanceX, p1[1] + 0.2 * distanceY];
-        var p3 = [p4[0] - 0.01 - 0.4 * distanceX, p4[1] - 0.2 * distanceY];
+        var p2 = [p1[0] + 0.3 * distanceX, p1[1] + 0.1 * distanceY];
+        var p3 = [p4[0] - 0.3 * distanceX, p4[1] - 0.1 * distanceY];
 
         var points = [p1, p2, p3, p4];
 
@@ -277,14 +277,19 @@ export class NodeEditor {
 
         inputs.on('click', function (input) {
             if (self.pickedOutput === null) return;
-
+            if (input.hasConnection())
+                self.removeConnection(input.connection);
+            
             try {
-                self.pickedOutput.connectTo(input);
+                var connection = self.pickedOutput.connectTo(input);
+
+                self.event.connectionCreated(connection);
             } catch (e) {
                 alert(e.message);
-            }
-            self.pickedOutput = null;
-            self.update();
+            } finally {
+                self.pickedOutput = null;
+                self.update();
+            }    
 
         }).attr('cx', function (d) {
             return self.x(d.positionX());
@@ -442,15 +447,17 @@ export class NodeEditor {
             this.contextMenu.show(d3.event.clientX, d3.event.clientY);
     }
 
-    addNode(builderName) {
-        var builder = this.builders.find(function (builder) {
-            return builder.name == builderName;
-        });
+    addNode(node) {
+        if (!(node instanceof Node)) {
+            var builder = this.builders.find(function (b) {
+                return b.name === node;
+            });
 
-        var pos = d3.mouse(this.view.node());
-        var node = builder.build();
+            var pos = d3.mouse(this.view.node());
 
-        node.position = [this.x.invert(pos[0]), this.y.invert(pos[1])];
+            node = builder.build();
+            node.position = [this.x.invert(pos[0]), this.y.invert(pos[1])];
+        }
 
         this.nodes.push(node);
 
@@ -464,11 +471,10 @@ export class NodeEditor {
 
         switch (d3.event.keyCode) {
         case 46:
-            if (this.active instanceof Node)
+            if (this.active instanceof Node) 
                 this.removeNode(this.active);
-            else if (this.active instanceof Connection)
+            else if (this.active instanceof Connection) 
                 this.removeConnection(this.active);
-
             this.update();
             break;
         case 27:
@@ -492,7 +498,8 @@ export class NodeEditor {
     removeConnection(connection) {
         connection.remove();
         this.event.connectionRemoved(connection);
-        this.selectNode(this.nodes[0]);
+        if (this.active === connection)
+            this.selectNode(this.nodes[0])
     }
 
     selectNode(node) {
