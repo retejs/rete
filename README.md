@@ -1,14 +1,14 @@
 D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-editor)
 ====
 #### JavaScript library 
-![node editor](https://codepen.io/Ni55aN/pen/jBEKBQ/image/large.png)
+![node editor](https://drive.google.com/uc?export=download&id=0BzysCNw7yv8MeXdkSV9oeHZLQkk)
 
 ### Dependencies
   - [D3.js](https://github.com/d3/d3)
   - [d3-extended](https://github.com/wbkd/d3-extended)
 
 ### Usage
-Download the library and styles. Include it in your html.
+[Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library and styles. Include it in your html.
 ```html
 <script src="js/node-editor.min.js"></script>
 <link  href="css/node-editor.css" rel="stylesheet" type="text/css"></link>
