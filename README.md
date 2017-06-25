@@ -1,7 +1,7 @@
 D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-editor)
 ====
 #### JavaScript library 
-![node editor](https://github.com/Ni55aN/D3-Node-editor/blob/master/demo/screenshot.png?raw=true)
+![node editor](https://codepen.io/Ni55aN/pen/jBEKBQ/image/large.png)
 
 ### Dependencies
   - [D3.js](https://github.com/d3/d3)
@@ -49,8 +49,7 @@ And create NodeEditor
                         [shapebuilder,texturebuilder],
                         new D3NE.Events());
 ```
-For detail see [demo](https://github.com/Ni55aN/D3-Node-editor/tree/master/demo)
-([codepen](https://codepen.io/Ni55aN/pen/jBEKBQ))
+For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 
 
 License
