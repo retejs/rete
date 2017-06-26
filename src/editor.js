@@ -1,5 +1,5 @@
-import {Connection} from './connection';
 import {ContextMenu} from './contextmenu';
+import {Group} from './group';
 import {Node} from './node';
 
 export class NodeEditor {
@@ -11,6 +11,7 @@ export class NodeEditor {
         this.event = event;
         this.active = null;
         this.nodes = [];
+        this.groups = [];
         this.builders = builders;
 
         this.pickedOutput = null;
@@ -115,13 +116,19 @@ export class NodeEditor {
                     .attr('cx', d.position[0] += self.x.invert(d3.event.dx))
                     .attr('cy', d.position[1] += self.y.invert(d3.event.dy));
                 self.update();
+            }).on('end', function (d) {
+                self.groups.forEach(group => {
+                    var contain = group.containNode(d);
+                    var cover = group.isCoverNode(d);
+                    
+                    if (contain && !cover)
+                        group.removeNode(d);
+                    else if (!contain && cover)
+                        group.addNode(d);
+                });
             }))
-            .attr('rx', function () {
-                return 8;
-            })
-            .attr('ry', function () {
-                return 8;
-            });
+            .attr('rx', 8)
+            .attr('ry', 8);
 
         rects.exit().remove();
 
@@ -166,6 +173,124 @@ export class NodeEditor {
                 return self.x(d.title.size) + 'px';
             });
 
+    }
+
+    updateGroups() {
+        var self = this;
+
+        var rects = this.view
+            .selectAll('rect.group')
+            .data(this.groups, function (d) { return d.name; });
+
+        rects.enter()
+            .append('rect')
+            .attr('class', 'group')
+            .on('click', function (d) {
+                self.selectGroup(d);
+            })
+            .each(function () {
+                d3.select(this).moveToBack();
+            })
+            .call(d3.drag().on('drag', function (d) {
+                d3.select(this)
+                    .attr('cx', d.position[0] += self.x.invert(d3.event.dx))
+                    .attr('cy', d.position[1] += self.y.invert(d3.event.dy));
+                for (var i in d.nodes) {
+                    var node = d.nodes[i];
+
+                    node.position[0] += self.x.invert(d3.event.dx);
+                    node.position[1] += self.y.invert(d3.event.dy);
+                }
+                self.update();
+            }));
+
+        rects.exit().remove();
+
+        this.view.selectAll('rect.group')
+            .attr('x', function (d) {
+                return self.x(d.position[0]);
+            })
+            .attr('y', function (d) {
+                return self.y(d.position[1]);
+            })
+            .attr('width', function (d) {
+                return self.x(d.width);
+            })
+            .attr('height', function (d) {
+                return self.y(d.height);
+            })
+            .attr('class', function (d) {
+                return self.active === d ? 'group active' : 'group';
+            });
+        
+        var handlers = this.view
+            .selectAll('rect.group-handler')
+            .data(this.groups, function (d) { return d.name; });
+
+        handlers.enter()
+            .append('rect')
+            .attr('class', 'group-handler')
+            .call(d3.drag().on('drag', function (d) {
+                d3.select(this)
+                        .attr('cx', d.setWidth(d.width + self.x.invert(d3.event.dx)))
+                        .attr('cy', d.setHeight(d.height + self.y.invert(d3.event.dy)));
+                self.update();
+            }).on('end', function (d) {
+                self.nodes.forEach(node => {
+                    if (d.isCoverNode(node))
+                        d.addNode(node);
+                    else
+                        d.removeNode(node);
+                        
+                });
+            }));
+
+        handlers.exit().remove();
+
+        this.view.selectAll('rect.group-handler')
+            .attr('x', function (d) {
+                return self.x(d.position[0] + d.width - 2/3*d.handler.size);
+            })
+            .attr('y', function (d) {
+                return self.y(d.position[1] + d.height - 2/3*d.handler.size);
+            })
+            .attr('width', function (d) {
+                return self.x(d.handler.size);
+            })
+            .attr('height', function (d) {
+                return self.y(d.handler.size);
+            })
+            .attr('class', 'group-handler');
+        
+        var titles = this.view
+            .selectAll('text.group-title')
+            .data(this.groups, function (d) { return d.id; });
+
+        titles.enter()
+            .append('text')
+            .classed('group-title', true)
+            .on('click', function (d) {
+                var title = prompt('Please enter title of the group', d.title.text);
+
+                d.title.text = title;
+                self.update();
+            });
+
+        titles.exit().remove();
+
+        this.view.selectAll('text.group-title')
+            .attr('x', function (d) {
+                return self.x(d.position[0] + d.margin);
+            })
+            .attr('y', function (d) {
+                return self.y(d.position[1] + d.margin + d.title.size);
+            })
+            .text(function (d) {
+                return d.title.text;
+            })
+            .attr('font-size', function (d) {
+                return self.x(d.title.size) + 'px';
+            });
     }
 
     updateConnections() {
@@ -451,6 +576,7 @@ export class NodeEditor {
     }
 
     update() {
+        this.updateGroups();
         this.updateConnections();
         this.updateNodes();
         this.updateSockets();
@@ -489,17 +615,28 @@ export class NodeEditor {
         this.selectNode(node);
     }
 
+    addGroup(group) {
+        this.groups.push(group);
+        this.update();
+    }
+
     keyDown() {
         if (this.dom !== document.activeElement)
             return;
 
         switch (d3.event.keyCode) {
         case 46:
-            this.removeNode(this.active);
+            if (this.active instanceof Node)        
+                this.removeNode(this.active);
+            else if (this.active instanceof Group)      
+                this.removeGroup(this.active);
             this.update();
             break;
-        case 27:
+        case 71:
+            if (!(this.active instanceof Node)) { alert('Select the node for adding to group'); return; }
+            var group = new Group('Group', {nodes:[this.active]});    
 
+            this.addGroup(group);   
             break;
         }
     }
@@ -516,6 +653,12 @@ export class NodeEditor {
         this.update();
     }
 
+    removeGroup(group) {
+        group.remove();
+        this.groups.splice(this.groups.indexOf(group), 1);
+        this.update();
+    }
+
     removeConnection(connection) {
         connection.remove();
         this.event.connectionRemoved(connection);
@@ -526,6 +669,11 @@ export class NodeEditor {
 
         this.active = node;
         this.event.nodeSelected(node);
+        this.update();
+    }
+
+    selectGroup(group) {
+        this.active = group;
         this.update();
     }
 

@@ -6,6 +6,7 @@ export class Node {
    
     constructor(title, width) {
         this.id = Node.incrementId();
+        this.group = null;
         this.inputs = [];
         this.outputs = [];
         this.controls = [];

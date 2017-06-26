@@ -1,5 +1,6 @@
 $node-color: #6e88ff
-
+$node-color-active: #ffd92c
+$group-color: rgba(15,80,255,0.2)
 html,body
   margin: 0
   height: 100%
@@ -13,15 +14,27 @@ html,body
     &:hover
       fill: lighten($node-color,4%)
     &.active
-      fill: #ffd92c
+      fill: $node-color-active
       stroke: #e3c000
-    
+  .group
+    rx: 16
+    ry: 16
+    fill: $group-color
+    cursor: pointer
+    &.active
+      stroke: #ffd92c
+      stroke-width: 6
+  .group-title
+    fill: white
+    font-family: sans-serif
+  .group-handler
+    fill: transparent
+    cursor: se-resize
+
   .connection
     fill: none
     stroke: steelblue
     stroke-width: 5px
-    &.active
-      stroke: #e3c000
       
   .input,.output
     cursor: pointer
