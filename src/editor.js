@@ -189,7 +189,7 @@ export class NodeEditor {
                 self.selectGroup(d);
             })
             .each(function () {
-                d3.select(this).moveToBack();
+                d3.select(this).lower();
             })
             .call(d3.drag().on('drag', function (d) {
                 d3.select(this)
@@ -338,7 +338,7 @@ export class NodeEditor {
         var new_path = path.enter()
             .append('path')
             .each(function () {
-                d3.select(this).moveToBack();
+                d3.select(this).lower();
             })
             .on('click', this.areaClick.bind(this));
 

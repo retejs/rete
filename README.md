@@ -5,7 +5,6 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?
 
 ### Dependencies
   - [D3.js](https://github.com/d3/d3)
-  - [d3-extended](https://github.com/wbkd/d3-extended)
 
 ### Usage
 [Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library and styles. Include it in your html.
