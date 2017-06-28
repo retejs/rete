@@ -1,0 +1,103 @@
+// Nodes
+g(al-repeat='node in nodes')
+  rect.node(
+    al-dragable-node, 
+    al-click='editor.selectNode(node);', 
+    x='{{editor.x(node.position[0])}}', 
+    y='{{editor.y(node.position[1])}}', 
+    width='{{editor.x(node.width)}}', 
+    height='{{editor.y(node.height)}}', 
+    rx='8', ry='8', 
+    class="{{editor.active===node?'active':''}}"
+  )
+  text.title(
+    x='{{editor.x(node.position[0] + node.margin)}}', 
+    y='{{editor.y(node.position[1] + node.margin + node.title.size)}}', 
+    font-size='{{editor.x(node.title.size)}}'
+  )
+    | {{node.title.text}}
+  
+  // Sockets
+  g(al-repeat='input in node.inputs')
+    circle.socket.input(
+      al-pick-input, 
+      cx='{{editor.x(input.positionX())}}', 
+      cy='{{editor.y(input.positionY())}}', 
+      r='{{editor.x(input.socket.radius)}}', 
+      class='{{input.socket.id}}'
+    )
+      title {{input.socket.name+'\n'+input.socket.hint}}
+    text.input-title(
+      al-if='!input.showControl()', 
+      x='{{editor.x(input.positionX() + input.socket.radius + input.socket.margin)}}', 
+      y='{{editor.y(input.positionY() + input.socket.margin)}}'
+    )
+      | {{input.title}}
+  g(al-repeat='output in node.outputs')
+    circle.socket.output(
+      al-pick-output, 
+      cx='{{editor.x(output.positionX())}}', 
+      cy='{{editor.y(output.positionY())}}', 
+      r='{{editor.x(output.socket.radius)}}', 
+      class='{{output.socket.id}}'
+    )
+      title {{output.socket.name+'\n'+output.socket.hint}}
+    text.output-title(
+      x='{{editor.x(output.positionX() - output.socket.radius - output.socket.margin)}}', 
+      y='{{editor.y(output.positionY() + output.socket.margin)}}'
+    )
+      | {{output.title}}
+  
+  // Controls
+  foreignobject.control(
+    al-repeat='control in node.controls', 
+    x='{{editor.x(control.positionX())}}', 
+    y='{{editor.y(control.positionY())}}', 
+    width='{{editor.x(control.parent.width - 2 * control.margin)}}', 
+    height='{{editor.y(control.height)}}', 
+    al-control-html='control'
+  )
+  foreignobject.input-control(
+    al-repeat='input in node.inputs | filterInputControl', 
+    x='{{editor.x(input.control.positionInputX())}}', 
+    y='{{editor.y(input.control.positionInputY())}}', 
+    width='{{editor.x(input.node.width - 2 * input.control.margin)}}', 
+    height='{{editor.y(input.control.height)}}', 
+    al-control-html='input.control'
+  )
+
+
+// Groups
+g(al-repeat='group in groups', al-svg-back)
+  rect.group(
+    al-dragable-group, 
+    al-click='editor.selectGroup(group);', 
+    x='{{editor.x(group.position[0])}}', 
+    y='{{editor.y(group.position[1])}}', 
+    width='{{editor.x(group.width)}}', 
+    height='{{editor.y(group.height)}}', 
+    class="{{editor.active === group?'active':''}}"
+  )
+  rect.group-handler(
+    al-dragable-group-handler, 
+    x='{{editor.x(group.position[0] + group.width - 2/3*group.handler.size)}}', 
+    y='{{editor.y(group.position[1] + group.height - 2/3*group.handler.size)}}', 
+    width='{{editor.x(group.handler.size)}}', 
+    height='{{editor.x(group.handler.size)}}'
+  )
+  text.group-title(
+    al-group-title-click, 
+    x='{{editor.x(group.position[0] + group.margin)}}', 
+    y='{{editor.y(group.position[1] + group.margin + group.title.size)}}', 
+    font-size='{{editor.x(group.title.size)}}'
+  )
+    | {{group.title.text}}
+
+
+// Connections
+path.connection(
+  al-repeat='path in paths', 
+  al-svg-back, 
+  al-mousedown='editor.areaClick()', 
+  d='{{path}}'
+)

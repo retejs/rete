@@ -35,7 +35,7 @@ export class NodeEditor {
         this.y = d3.scaleLinear();
 
         this.view = this.svg.append('g');
-
+       
         this.zoom = d3.zoom()
             .scaleExtent([0.2, 1.5])
             .on('zoom', function () {
@@ -44,23 +44,166 @@ export class NodeEditor {
 
         this.svg.call(this.zoom);
 
-        this.valueline = d3.line()
-            .curve(d3.curveBasis);
-
         d3.select(window)
-            .on('mousemove', function () {
-                self.updateConnections();
-            })
+            .on('mousemove', function () { self.update();}) // update picked connection   
             .on('keydown.' + id, self.keyDown.bind(this))
-            .on('resize.' + id, function () {
-                self.resize();
-                self.update();
-            });
+            .on('resize.' + id, function () { self.resize();});
+        
+        self.$scope = alight.Scope();
+        self.$scope.nodes = self.nodes;
+        self.$scope.groups = self.groups;
+        self.$scope.editor = self;
 
-        this.resize();
+        self.declareDirectives();
+        
+        d3.text('view.html', function(error, text) {
+            if (error) throw error;
+            self.view.html(text);
+            alight.applyBindings(self.$scope, self.view.node());
+            self.resize(); 
+        });
+        
     }
 
-    getConnectionPath(connection, x1, y1, x2, y2) {
+    declareDirectives() {
+        var self = this;
+
+        alight.directives.al.dragableNode = function (scope, el, obj) {
+            var node = scope.node;
+
+            d3.select(el).call(d3.drag().on('start', function () {
+                d3.select(this.parentNode).raise();
+            }).on('drag', function () {
+                node.position[0] += self.x.invert(d3.event.dx);
+                node.position[1] += self.y.invert(d3.event.dy);
+                self.update();
+            }).on('end', function () {
+                self.groups.forEach(group => {
+                    var contain = group.containNode(node);
+                    var cover = group.isCoverNode(node);
+                    
+                    if (contain && !cover)
+                        group.removeNode(node);
+                    else if (!contain && cover)
+                        group.addNode(node);
+                });
+                self.update();
+            }))
+        };
+
+        alight.directives.al.dragableGroup = function (scope, el, obj) {
+            var group = scope.group;
+
+            d3.select(el).call(d3.drag().on('drag', function () {
+                group.position[0] += self.x.invert(d3.event.dx);
+                group.position[1] += self.y.invert(d3.event.dy);
+
+                for (var i in group.nodes) {
+                    var node = group.nodes[i];
+
+                    node.position[0] += self.x.invert(d3.event.dx);
+                    node.position[1] += self.y.invert(d3.event.dy);
+                }
+
+                self.update();
+            }));
+        };
+
+        alight.directives.al.dragableGroupHandler = function (scope, el, obj) {
+            var group = scope.group;
+
+            d3.select(el).call(d3.drag().on('drag', function () {
+                d3.select(this)
+                        .attr('cx', group.setWidth(group.width + self.x.invert(d3.event.dx)))
+                        .attr('cy', group.setHeight(group.height + self.y.invert(d3.event.dy)));
+                
+                self.update();
+            }).on('end', function () {
+                self.nodes.forEach(node => {
+                    if (group.isCoverNode(node))
+                        group.addNode(node);
+                    else
+                        group.removeNode(node);
+                        
+                });
+                self.update();
+            }))
+        };
+
+        alight.directives.al.svgBack = function (scope, el, obj) {
+            d3.select(el).lower();
+            scope.$scan();
+        }
+
+        alight.directives.al.groupTitleClick = function (scope, el, obj) {
+            var group = scope.group;
+
+            d3.select(el).on('click', function () {
+                var title = prompt('Please enter title of the group', group.title.text);
+
+                group.title.text = title;
+                scope.$scan();
+            });
+        };
+
+        alight.filters.filterInputControl = function (input) {
+            return input.filter(function (item) {
+                return item.showControl();
+            });
+        }
+        /*alight.filters.filterInputControl.prototype.onChange = function(value) {
+            value = value.filter(function (item) {
+                return item.showControl();
+            })
+            this.setValue(value);
+        }
+        alight.filters.filterInputControl.prototype.watchMode = 'array';*/
+        
+        alight.directives.al.pickInput = function (scope, el, obj) {
+            d3.select(el).on('mousedown', function () {
+                var input = scope.input;
+
+                if (self.pickedOutput === null) {
+                    if (input.hasConnection()) {
+                        self.pickedOutput = input.connection.output;
+                        self.removeConnection(input.connection);
+                    }
+                    return;
+                }
+                    
+                if (input.hasConnection())
+                    self.removeConnection(input.connection);
+
+                try {
+                    var connection = self.pickedOutput.connectTo(input);
+
+                    self.event.connectionCreated(connection);
+                } catch (e) {
+                    alert(e.message);
+                } finally {
+                    self.pickedOutput = null;
+                    self.update();
+                }
+            });     
+        }
+
+        alight.directives.al.pickOutput = function (scope, el, obj) {
+            var output = scope.output;
+
+            d3.select(el).on('mousedown', function () {
+                self.pickedOutput = output;
+            });
+        }
+
+        alight.directives.al.controlHtml = function (scope, el, obj) {
+            var control = obj.split('.').reduce((o, i) => o[i], scope);
+
+            el.innerHTML = control.html;
+        };
+    }
+
+    getConnectionPathData(connection, x1, y1, x2, y2) {
+        var self = this;
         var distanceX = Math.abs(x1-x2);
         var distanceY = y2-y1;
 
@@ -72,8 +215,18 @@ export class NodeEditor {
 
         var points = [p1, p2, p3, p4];
 
-        points.connection = connection;
-        return points;
+        var curve = d3.curveBasis(d3.path());
+
+        curve.lineStart();
+        for (var i = 0; i < points.length;i++) {
+            var point = points[i];
+
+            curve.point(self.x(point[0]), self.y(point[1]));
+        }
+        curve.lineEnd();
+        var d = curve._context.toString();
+
+        return d;
     }
 
     resize() {
@@ -96,215 +249,11 @@ export class NodeEditor {
             [-size, -size / 2],
             [size * 2, size]
         ]);
-    }
 
-    updateNodes() {
-        var self = this;
-
-        var rects = this.view
-            .selectAll('rect.node')
-            .data(this.nodes, function (d) { return d.id; });
-
-        rects.enter()
-            .append('rect')
-            .attr('class', 'node')
-            .on('click', function (d) {
-                self.selectNode(d);
-            })
-            .call(d3.drag().on('drag', function (d) {
-                d3.select(this)
-                    .attr('cx', d.position[0] += self.x.invert(d3.event.dx))
-                    .attr('cy', d.position[1] += self.y.invert(d3.event.dy));
-                self.update();
-            }).on('end', function (d) {
-                self.groups.forEach(group => {
-                    var contain = group.containNode(d);
-                    var cover = group.isCoverNode(d);
-                    
-                    if (contain && !cover)
-                        group.removeNode(d);
-                    else if (!contain && cover)
-                        group.addNode(d);
-                });
-            }))
-            .attr('rx', 8)
-            .attr('ry', 8);
-
-        rects.exit().remove();
-
-        this.view.selectAll('rect.node')
-            .attr('x', function (d) {
-                return self.x(d.position[0]);
-            })
-            .attr('y', function (d) {
-                return self.y(d.position[1]);
-            })
-            .attr('width', function (d) {
-                return self.x(d.width);
-            })
-            .attr('height', function (d) {
-                return self.y(d.height);
-            })
-            .attr('class', function (d) {
-                return self.active === d ? 'node active' : 'node';
-            });
-
-        var titles = this.view
-            .selectAll('text.title')
-            .data(this.nodes, function (d) { return d.id; });
-
-        titles.enter()
-            .append('text')
-            .classed('title', true);
-
-        titles.exit().remove();
-
-        this.view.selectAll('text.title')
-            .attr('x', function (d) {
-                return self.x(d.position[0] + d.margin);
-            })
-            .attr('y', function (d) {
-                return self.y(d.position[1] + d.margin + d.title.size);
-            })
-            .text(function (d) {
-                return d.title.text;
-            })
-            .attr('font-size', function (d) {
-                return self.x(d.title.size) + 'px';
-            });
-
-    }
-
-    updateGroups() {
-        var self = this;
-
-        var rects = this.view
-            .selectAll('rect.group')
-            .data(this.groups, function (d) { return d.name; });
-
-        rects.enter()
-            .append('rect')
-            .attr('class', 'group')
-            .on('click', function (d) {
-                self.selectGroup(d);
-            })
-            .each(function () {
-                d3.select(this).lower();
-            })
-            .call(d3.drag().on('drag', function (d) {
-                d3.select(this)
-                    .attr('cx', d.position[0] += self.x.invert(d3.event.dx))
-                    .attr('cy', d.position[1] += self.y.invert(d3.event.dy));
-                for (var i in d.nodes) {
-                    var node = d.nodes[i];
-
-                    node.position[0] += self.x.invert(d3.event.dx);
-                    node.position[1] += self.y.invert(d3.event.dy);
-                }
-                self.update();
-            }));
-
-        rects.exit().remove();
-
-        this.view.selectAll('rect.group')
-            .attr('x', function (d) {
-                return self.x(d.position[0]);
-            })
-            .attr('y', function (d) {
-                return self.y(d.position[1]);
-            })
-            .attr('width', function (d) {
-                return self.x(d.width);
-            })
-            .attr('height', function (d) {
-                return self.y(d.height);
-            })
-            .attr('class', function (d) {
-                return self.active === d ? 'group active' : 'group';
-            });
-        
-        var handlers = this.view
-            .selectAll('rect.group-handler')
-            .data(this.groups, function (d) { return d.name; });
-
-        handlers.enter()
-            .append('rect')
-            .attr('class', 'group-handler')
-            .call(d3.drag().on('drag', function (d) {
-                d3.select(this)
-                        .attr('cx', d.setWidth(d.width + self.x.invert(d3.event.dx)))
-                        .attr('cy', d.setHeight(d.height + self.y.invert(d3.event.dy)));
-                self.update();
-            }).on('end', function (d) {
-                self.nodes.forEach(node => {
-                    if (d.isCoverNode(node))
-                        d.addNode(node);
-                    else
-                        d.removeNode(node);
-                        
-                });
-            }));
-
-        handlers.exit().remove();
-
-        this.view.selectAll('rect.group-handler')
-            .attr('x', function (d) {
-                return self.x(d.position[0] + d.width - 2/3*d.handler.size);
-            })
-            .attr('y', function (d) {
-                return self.y(d.position[1] + d.height - 2/3*d.handler.size);
-            })
-            .attr('width', function (d) {
-                return self.x(d.handler.size);
-            })
-            .attr('height', function (d) {
-                return self.y(d.handler.size);
-            })
-            .attr('class', 'group-handler');
-        
-        var titles = this.view
-            .selectAll('text.group-title')
-            .data(this.groups, function (d) { return d.id; });
-
-        titles.enter()
-            .append('text')
-            .classed('group-title', true)
-            .on('click', function (d) {
-                var title = prompt('Please enter title of the group', d.title.text);
-
-                d.title.text = title;
-                self.update();
-            });
-
-        titles.exit().remove();
-
-        this.view.selectAll('text.group-title')
-            .attr('x', function (d) {
-                return self.x(d.position[0] + d.margin);
-            })
-            .attr('y', function (d) {
-                return self.y(d.position[1] + d.margin + d.title.size);
-            })
-            .text(function (d) {
-                return d.title.text;
-            })
-            .attr('font-size', function (d) {
-                return self.x(d.title.size) + 'px';
-            });
+        this.update();
     }
 
     updateConnections() {
-
-        var self = this;
-    
-        this.valueline
-            .x(function (d) {
-                return self.x(d[0]);
-            })
-            .y(function (d) {
-                return self.y(d[1]);
-            });
-
         var pathData = [];
 
         for (var i in this.nodes) {
@@ -317,275 +266,31 @@ export class NodeEditor {
                     var input = cons[k].input;
                     var output = cons[k].output;
 
-                    pathData.push(this.getConnectionPath(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY()));
+                    pathData.push(this.getConnectionPathData(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY()));
                 }
             }
         }
         
-        if (self.pickedOutput !== null) { 
+        if (this.pickedOutput !== null) {
             var mouse = d3.mouse(this.view.node());
-            var output = self.pickedOutput;
-            var input = [self.x.invert(mouse[0]), self.y.invert(mouse[1])];
+            var output = this.pickedOutput;
+            var input = [this.x.invert(mouse[0]), this.y.invert(mouse[1])];
 
-            pathData.push(this.getConnectionPath(null, output.positionX(), output.positionY(), input[0], input[1]));
+            pathData.push(this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]));
         }  
 
-        var path = this.view.selectAll('path')
-            .data(pathData);
-
-        path.exit().remove();
-
-        var new_path = path.enter()
-            .append('path')
-            .each(function () {
-                d3.select(this).lower();
-            })
-            .on('click', this.areaClick.bind(this));
-
-        this.view.selectAll('path')
-            .attr('d', this.valueline)
-            .classed('connection', true);
-    }
-
-    updateSockets() {
-        var self = this;
-
-        var groups = this.view
-            .selectAll('g.gg')
-            .data(this.nodes, function (d) { return d.id; });
-
-        var newGroups = groups.enter()
-            .append('g')
-            .classed('gg', true)
-
-        groups.exit().remove();
-
-        groups = newGroups.merge(groups);
-        
-        var inputs = groups.selectAll('circle.input')
-            .data(function (d) {
-                return d.inputs;
-            });
-
-        inputs.exit().remove();
-        var newInputs = inputs.enter()
-            .append('circle');
-
-        inputs = newInputs.merge(inputs);
-
-        inputs.attr('class', function (d) {
-            return 'socket input ' + d.socket.id;
-        });
-
-        var outputs = groups.selectAll('circle.output')
-            .data(function (d) {
-                return d.outputs;
-            });
-
-        outputs.exit().remove();
-        var newOutputs = outputs.enter()
-            .append('circle');
-
-        outputs = newOutputs.merge(outputs);
-
-        outputs.attr('class', function (d) {
-            return 'socket output ' + d.socket.id;
-        });
-
-        outputs
-            .on('mousedown', function (d) {
-                self.pickedOutput = d;
-            })
-            .attr('cx', function (d) {
-                return self.x(d.positionX());
-            })
-            .attr('cy', function (d) {
-                return self.y(d.positionY());
-            })
-            .attr('r', function (d) {
-                return self.x(d.socket.radius);
-            })
-            .append('title').text(function (d) {
-                return d.socket.name+'\n'+d.socket.hint
-            });
-
-        inputs
-            .on('mousedown', function (input) {
-                if (self.pickedOutput === null) {
-                    if (input.hasConnection()) {
-                        self.pickedOutput = input.connection.output;
-                        self.removeConnection(input.connection);
-                    }
-                    return;
-                }
-                    
-                if (input.hasConnection()) 
-                    self.removeConnection(input.connection);
-
-                try {
-                    var connection = self.pickedOutput.connectTo(input);
-
-                    self.event.connectionCreated(connection);
-                } catch (e) {
-                    alert(e.message);
-                } finally {
-                    self.pickedOutput = null;
-                    self.update();
-                }   
-            })
-            .attr('cx', function (d) {
-                return self.x(d.positionX());
-            })
-            .attr('cy', function (d) {
-                return self.y(d.positionY());
-            })
-            .attr('r', function (d) {
-                return self.x(d.socket.radius);
-            })
-            .append('title').text(function (d) {
-                return d.socket.name+'\n'+d.socket.hint
-            });
-
-        var inputTitles = groups.selectAll('text.input-title')
-            .data(function (d) {
-                return d.inputs.filter(function (input) {
-                    return !input.showControl();
-                });
-            });
-
-        inputTitles.exit().remove();
-
-        var newInputTitles = inputTitles.enter()
-            .append('text')
-            .classed('input-title', true)
-            .attr('alignment-baseline', 'after-edge')
-            .text(function (d) { return d.title });
-
-        inputTitles = newInputTitles.merge(inputTitles);
-        
-        inputTitles.attr('x', function (d) {
-            return self.x(d.positionX() + d.socket.radius + d.socket.margin);
-        })
-            .attr('y', function (d) {
-                return self.y(d.positionY() + d.socket.margin);
-            });
-        
-        var outputTitles = groups.selectAll('text.output-title')
-            .data(function (d) {
-                return d.outputs;
-            });
-
-        outputTitles.exit().remove();
-
-        var newOutputTitles = outputTitles.enter()
-            .append('text')
-            .classed('output-title', true)
-            .attr('text-anchor', 'end')
-            .attr('alignment-baseline', 'after-edge')
-            .text(function (d) { return d.title });
-
-        outputTitles = newOutputTitles.merge(outputTitles);
-        
-        outputTitles.attr('x', function (d) {
-            return self.x(d.positionX() - d.socket.radius - d.socket.margin);
-        })
-        .attr('y', function (d) {
-            return self.y(d.positionY() + d.socket.margin);
-        });
-    }
-
-    updateControls() {
-        var self = this;
-
-        var groups = this.view
-            .selectAll('g.controls')
-            .data(this.nodes, function (d) { return d.id; });    
-        
-        var newGroups = groups
-            .enter()
-            .append('g')
-            .classed('controls', true);
-
-        groups.exit().remove();
-
-        var controls = newGroups.merge(groups).selectAll('foreignObject.control')
-            .data(function (d) {
-                return d.controls;
-            });
-        
-        controls.exit().remove();
-
-        var newControls = controls.enter()
-            .append('foreignObject')
-            .html(function (d) {
-                return d.html;
-            })
-            .classed('control', true);
-        
-        newControls.merge(controls)
-            .attr('x', function (d) {
-                return self.x(d.margin + d.parent.position[0]);
-            })
-            .attr('y', function (d) {
-
-                var prevControlsHeight = 0;
-                var l = d.parent.controls.indexOf(d);
-
-                for (var i = 0; i < l; i++)
-                    prevControlsHeight += d.parent.controls[i].height;
-
-                return self.y(d.parent.headerHeight() +
-                    + d.parent.outputsHeight()
-                    + prevControlsHeight
-                    + d.parent.position[1]);
-            })
-            .attr('width', function (d) {
-                return self.x(d.parent.width - 2 * d.margin)
-            })
-            .attr('height', function (d) {
-                return self.y(d.height);
-            });
-
-        var inputControls = newGroups.merge(groups).selectAll('foreignObject.input-control')
-            .data(function (d) {
-                return d.inputs.filter(function (input) { return input.showControl();});
-            });
-
-        var newInputControls = inputControls.enter()
-            .append('foreignObject')
-            .html(function (d) {
-                return d.control.html;
-            })
-            .classed('input-control', true);
-        
-        inputControls.exit().remove();
-
-        newInputControls.merge(inputControls)
-            .attr('width', function (d) {
-                return self.x(d.node.width - 2 * d.control.margin)
-            })
-            .attr('height', function (d) {
-                return self.y(d.control.height);
-            })    
-            .attr('x', function (d) {
-                return self.x(d.positionX() + d.socket.radius + d.socket.margin);
-            })
-            .attr('y', function (d) {
-                return self.y(d.positionY() - d.socket.radius - d.socket.margin);
-            });
+        this.$scope.paths = pathData;
     }
 
     update() {
-        this.updateGroups();
         this.updateConnections();
-        this.updateNodes();
-        this.updateSockets();
-        this.updateControls();
+        this.$scope.$scan();
     }
 
     areaClick() {
         if (this.pickedOutput !== null)
         {
+
             this.pickedOutput = null;
             this.update();
             return;
