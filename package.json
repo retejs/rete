@@ -5,7 +5,7 @@
   "main": "build/node-editor.js",
   "scripts": {
     "lint": "eslint src",
-    "build": "rollup -c | npm-sass src/style/style.sass > build/node-editor.css",
+    "build": "rollup -c | npm-sass src/style/style.sass > build/node-editor.css | pug < src/template/view.pug > build/view.html",
     "minify-build": "uglifyjs build/node-editor.js --support-ie8  --compress --output build/node-editor.min.js"
   },
   "repository": {
@@ -35,10 +35,12 @@
     "npm-sass": "^2.0.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.7.1",
-    "uglify-js": "^2.8.29"
+    "uglify-js": "^2.8.29",
+    "pug": "^2.0.0-rc.2",
+    "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
-    "d3": "^4.9.1",
-    "d3-extended": "^1.2.10"
+    "alight": "^0.12.30",
+    "d3": "^4.9.1"
   }
 }
