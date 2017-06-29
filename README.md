@@ -13,7 +13,6 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?
 <script src="js/node-editor.min.js"></script>
 <link  href="css/node-editor.css" rel="stylesheet" type="text/css"></link>
 ```
-Put view.html in the folder with your page
 
 Create needed sockets
 ```js

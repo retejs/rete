@@ -5,7 +5,7 @@ import {Socket} from './socket';
 
 export class NodeEditor {
 
-    constructor(id, builders, event) {
+    constructor(id, template, builders, event) {
 
         this.event = event;
         this.active = null;
@@ -51,7 +51,7 @@ export class NodeEditor {
 
         this.declareDirectives();
         
-        d3.text('view.html', (error, text) => {
+        d3.text(template, (error, text) => {
             if (error) throw error;
             this.view.html(text);
             alight.applyBindings(this.$scope, this.view.node());
