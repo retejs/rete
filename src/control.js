@@ -36,4 +36,20 @@ export class Control {
             - this.parent.socket.margin;
     }
 
+    toJSON() {
+        return {
+            'margin': this.margin,
+            'height': this.height,
+            'html': this.html
+        }
+    }
+
+    static fromJSON(json) {
+        var control = new Control(json.html);
+
+        control.height = json.height;
+        control.margin = json.margin;
+        
+        return control;
+    }    
 }

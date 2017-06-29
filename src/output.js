@@ -53,4 +53,21 @@ export class Output {
             this.socket.radius +   
             node.outputs.indexOf(this) * this.socket.height();
     }
+
+    toJSON() {
+        return {
+            'node': this.node.id,
+            'connections': this.connections.map(a => {
+                return { node: a.input.node.id, input: a.input.node.inputs.indexOf(a.input)}
+            }),
+            'title': this.title,
+            'socket': this.socket.id
+        }
+    }
+
+    static fromJSON(json) {
+        var output = new Output(json.title);
+
+        return output;
+    }
 }

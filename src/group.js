@@ -90,4 +90,35 @@ export class Group {
             node.group = null;
         })
     }
+
+    toJSON() {
+        return {
+            'id': this.id,
+            'title': this.title,
+            'margin': this.margin,
+            'nodes': this.nodes.map(a => a.id),
+            'minWidth': this.minWidth,
+            'minHeight': this.minHeight,
+            'handler': this.handler,
+            'position': this.position,
+            'width': this.width,
+            'height': this.height
+        }
+    }
+
+    static fromJSON(json) {
+        var group = new Group(null, {
+            position: json.position,
+            width: json.width,
+            height: json.height
+        });
+
+        group.id = json.id;
+        group.title = json.title;
+        group.margin = json.margin;
+        group.minWidth = json.minWidth;
+        group.minHeight = json.minHeight;
+        group.handler = json.handler;
+        return group;
+    }
 }

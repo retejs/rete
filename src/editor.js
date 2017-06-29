@@ -1,6 +1,7 @@
 import {ContextMenu} from './contextmenu';
 import {Group} from './group';
 import {Node} from './node';
+import {Socket} from './socket';
 
 export class NodeEditor {
 
@@ -384,5 +385,84 @@ export class NodeEditor {
 
     remove() {
         this.dom.remove();
+    }
+
+    toJSON() {
+        var nodes = {};
+        var groups = {};
+        var sockets = {};
+
+        this.nodes.forEach(node => nodes[node.id] = node.toJSON());
+        this.groups.forEach(group => groups[group.id] = group.toJSON());
+        this.nodes.forEach(node => {
+            node.inputs.forEach(input => {
+                var id = input.socket.id;
+
+                if (!sockets[id])
+                    sockets[id] = input.socket.toJSON();
+            });
+            node.outputs.forEach(output => {
+                var id = output.socket.id;
+
+                if (!sockets[id])
+                    sockets[id] = output.socket.toJSON();
+            });
+        });
+
+        return {
+            'nodes': nodes,
+            'groups': groups,
+            'sockets': sockets
+        };
+    }
+
+    fromJSON(json) {
+        this.nodes.splice(0, this.nodes.length);
+        this.groups.splice(0, this.groups.length);
+
+        var sockets = {};
+        var nodes = {};
+
+        Object.keys(json.sockets).forEach(id => {
+            sockets[id] = Socket.fromJSON(json.sockets[id]);
+        });
+        
+        Object.keys(json.sockets).forEach(id => {
+            json.sockets[id].compatible.forEach(combId => {
+                sockets[id].combineWith(sockets[combId])
+            });    
+        });
+        
+        Object.keys(json.nodes).forEach(id => {
+            this.nodes.push(nodes[id] = Node.fromJSON(json.nodes[id], sockets));
+        });
+        
+        Object.keys(json.nodes).forEach(id => {
+            var jsonNode = json.nodes[id];
+            var node = nodes[id];
+                
+            jsonNode.outputs.forEach((outputJson, i) => {
+                outputJson.connections.forEach(jsonConnection => {
+                    var nodeId = jsonConnection.node;
+                    var inputIndex = jsonConnection.input;
+                    var targetInput = nodes[nodeId].inputs[inputIndex];
+
+                    node.outputs[i].connectTo(targetInput);
+                });
+            });
+
+        });  
+
+        Object.keys(json.groups).forEach(id => {
+            var group = Group.fromJSON(json.groups[id]);
+
+            json.groups[id].nodes.forEach(nodeId => {
+                var node = nodes[nodeId];
+
+                group.addNode(node);
+            })
+            this.groups.push(group);
+        });
+        this.update();
     }
 }

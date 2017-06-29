@@ -95,4 +95,54 @@ export class Node {
             output.removeConnections();
         })
     }
+
+    toJSON() {
+        return {
+            'id': this.id,
+            'group': this.group ? this.group.id : null,
+            'inputs': this.inputs.map(a => a.toJSON()),
+            'outputs': this.outputs.map(a => a.toJSON()),
+            'controls': this.controls.map(a => a.toJSON()),
+            'position': this.position,
+            'title': this.title,
+            'margin': this.margin,
+            'width': this.width,
+            'height': this.height
+        }
+    }
+
+    static fromJSON(json, sockets) {
+        var node = new Node();
+
+        node.id = json.id;
+        node.position = json.position;
+        node.title = json.title;
+        node.margin = json.margin;
+        node.width = json.width;
+        node.height = json.height;
+        
+        json.inputs.forEach(inputJson => {
+            var input = Input.fromJSON(inputJson);
+
+            input.socket = sockets[inputJson.socket];
+            if (inputJson.control !== null)
+                input.addControl(Control.fromJSON(inputJson.control));
+            node.addInput(input);
+        });
+
+        json.outputs.forEach(outputJson => {
+            var output = Output.fromJSON(outputJson);
+
+            output.socket = sockets[outputJson.socket];
+            node.addOutput(output);
+        });
+
+        json.controls.forEach(controlJson => {
+            var control = Control.fromJSON(controlJson);
+
+            node.addControl(control);
+        })
+
+        return node;
+    }
 }

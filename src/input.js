@@ -46,4 +46,22 @@ export class Input {
             node.inputs.indexOf(this) * this.socket.height()
             + this.socket.margin;
     }
+
+    toJSON() {
+        var c = this.connection;
+
+        return {
+            'node': this.node.id,
+            'connection': c ? { node: c.output.node.id, output: c.output.node.outputs.indexOf(c.output) }:null,
+            'title': this.title,
+            'socket': this.socket.id,
+            'control': this.control?this.control.toJSON():null
+        }
+    }
+
+    static fromJSON(json) {
+        var input = new Input(json.title, null);
+
+        return input;
+    }
 }

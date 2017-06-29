@@ -23,4 +23,24 @@ export class Socket {
     height() {
         return 2 * this.radius + 2 * this.margin;
     }
+
+    toJSON() {
+        return {
+            'id': this.id,
+            'name': this.name,
+            'hint': this.hint,
+            'compatible': this.compatible.map(a => a.id),
+            'radius': this.radius,
+            'margin': this.margin
+        }
+    }
+
+    static fromJSON(json) {
+        var socket = new Socket(json.id, json.name, json.hint);
+
+        socket.radius = json.radius;
+        socket.margin = json.margin;
+            
+        return socket;
+    }
 }
