@@ -67,6 +67,7 @@ export class NodeEditor {
 
             d3.select(el).call(d3.drag().on('start', () => {
                 d3.select(parent).raise();
+                this.selectNode(node);
             }).on('drag', () => {
                 node.position[0] += this.x.invert(d3.event.dx);
                 node.position[1] += this.y.invert(d3.event.dy);
@@ -88,7 +89,9 @@ export class NodeEditor {
         alight.directives.al.dragableGroup = (scope, el, obj) => {
             var group = scope.group;
 
-            d3.select(el).call(d3.drag().on('drag', ()=> {
+            d3.select(el).call(d3.drag().on('start', () => {
+                this.selectGroup(group);
+            }).on('drag', ()=> {
                 group.position[0] += this.x.invert(d3.event.dx);
                 group.position[1] += this.y.invert(d3.event.dy);
 
