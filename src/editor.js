@@ -7,8 +7,6 @@ export class NodeEditor {
 
     constructor(id, builders, event) {
 
-        var self = this;
-                
         this.event = event;
         this.active = null;
         this.nodes = [];
@@ -21,9 +19,7 @@ export class NodeEditor {
         this.dom = document.getElementById(id);
         this.dom.tabIndex = 1;
 
-        var nodeNames = builders.map(function (e) {
-            return e.name;
-        });
+        var nodeNames = builders.map(e => e.name);
 
         this.contextMenu = new ContextMenu(nodeNames, this.addNode.bind(this));
         this.svg = d3.select(this.dom);
@@ -39,47 +35,44 @@ export class NodeEditor {
        
         this.zoom = d3.zoom()
             .scaleExtent([0.2, 1.5])
-            .on('zoom', function () {
-                self.view.attr('transform', d3.event.transform);
+            .on('zoom', () => {
+                this.view.attr('transform', d3.event.transform);
             });
 
         this.svg.call(this.zoom);
 
         d3.select(window)
-            .on('mousemove', function () { self.update();}) // update picked connection   
-            .on('keydown.' + id, self.keyDown.bind(this))
-            .on('resize.' + id, function () { self.resize();});
+            .on('mousemove', () => { this.update();}) // update picked connection   
+            .on('keydown.' + id, this.keyDown.bind(this))
+            .on('resize.' + id, ()=> { this.resize();});
         
-        self.$scope = alight.Scope();
-        self.$scope.nodes = self.nodes;
-        self.$scope.groups = self.groups;
-        self.$scope.editor = self;
+        this.$scope = alight.Scope();
+        this.$scope.editor = this;
 
-        self.declareDirectives();
+        this.declareDirectives();
         
-        d3.text('view.html', function(error, text) {
+        d3.text('view.html', (error, text) => {
             if (error) throw error;
-            self.view.html(text);
-            alight.applyBindings(self.$scope, self.view.node());
-            self.resize(); 
+            this.view.html(text);
+            alight.applyBindings(this.$scope, this.view.node());
+            this.resize(); 
         });
         
     }
 
     declareDirectives() {
-        var self = this;
-
-        alight.directives.al.dragableNode = function (scope, el, obj) {
+        alight.directives.al.dragableNode = (scope, el, obj) => {
             var node = scope.node;
+            var parent = el.parentNode;
 
-            d3.select(el).call(d3.drag().on('start', function () {
-                d3.select(this.parentNode).raise();
-            }).on('drag', function () {
-                node.position[0] += self.x.invert(d3.event.dx);
-                node.position[1] += self.y.invert(d3.event.dy);
-                self.update();
-            }).on('end', function () {
-                self.groups.forEach(group => {
+            d3.select(el).call(d3.drag().on('start', () => {
+                d3.select(parent).raise();
+            }).on('drag', () => {
+                node.position[0] += this.x.invert(d3.event.dx);
+                node.position[1] += this.y.invert(d3.event.dy);
+                this.update();
+            }).on('end', () => {
+                this.groups.forEach(group => {
                     var contain = group.containNode(node);
                     var cover = group.isCoverNode(node);
                     
@@ -88,58 +81,58 @@ export class NodeEditor {
                     else if (!contain && cover)
                         group.addNode(node);
                 });
-                self.update();
+                this.update();
             }))
         };
 
-        alight.directives.al.dragableGroup = function (scope, el, obj) {
+        alight.directives.al.dragableGroup = (scope, el, obj) => {
             var group = scope.group;
 
-            d3.select(el).call(d3.drag().on('drag', function () {
-                group.position[0] += self.x.invert(d3.event.dx);
-                group.position[1] += self.y.invert(d3.event.dy);
+            d3.select(el).call(d3.drag().on('drag', ()=> {
+                group.position[0] += this.x.invert(d3.event.dx);
+                group.position[1] += this.y.invert(d3.event.dy);
 
                 for (var i in group.nodes) {
                     var node = group.nodes[i];
 
-                    node.position[0] += self.x.invert(d3.event.dx);
-                    node.position[1] += self.y.invert(d3.event.dy);
+                    node.position[0] += this.x.invert(d3.event.dx);
+                    node.position[1] += this.y.invert(d3.event.dy);
                 }
 
-                self.update();
+                this.update();
             }));
         };
 
-        alight.directives.al.dragableGroupHandler = function (scope, el, obj) {
+        alight.directives.al.dragableGroupHandler = (scope, el, obj) => {
             var group = scope.group;
 
-            d3.select(el).call(d3.drag().on('drag', function () {
-                d3.select(this)
-                        .attr('cx', group.setWidth(group.width + self.x.invert(d3.event.dx)))
-                        .attr('cy', group.setHeight(group.height + self.y.invert(d3.event.dy)));
+            d3.select(el).call(d3.drag().on('drag', (d, i, els) => {
+                d3.select(el[0])
+                        .attr('cx', group.setWidth(group.width + this.x.invert(d3.event.dx)))
+                        .attr('cy', group.setHeight(group.height + this.y.invert(d3.event.dy)));
                 
-                self.update();
-            }).on('end', function () {
-                self.nodes.forEach(node => {
+                this.update();
+            }).on('end', () => {
+                this.nodes.forEach(node => {
                     if (group.isCoverNode(node))
                         group.addNode(node);
                     else
                         group.removeNode(node);
                         
                 });
-                self.update();
+                this.update();
             }))
         };
 
-        alight.directives.al.svgBack = function (scope, el, obj) {
+        alight.directives.al.svgBack = (scope, el, obj) => {
             d3.select(el).lower();
             scope.$scan();
         }
 
-        alight.directives.al.groupTitleClick = function (scope, el, obj) {
+        alight.directives.al.groupTitleClick = (scope, el, obj) => {
             var group = scope.group;
 
-            d3.select(el).on('click', function () {
+            d3.select(el).on('click', () => {
                 var title = prompt('Please enter title of the group', group.title.text);
 
                 group.title.text = title;
@@ -147,43 +140,43 @@ export class NodeEditor {
             });
         };
         
-        alight.directives.al.pickInput = function (scope, el, obj) {
-            d3.select(el).on('mousedown', function () {
+        alight.directives.al.pickInput = (scope, el, obj)=> {
+            d3.select(el).on('mousedown', () => {
                 var input = scope.input;
 
-                if (self.pickedOutput === null) {
+                if (this.pickedOutput === null) {
                     if (input.hasConnection()) {
-                        self.pickedOutput = input.connection.output;
-                        self.removeConnection(input.connection);
+                        this.pickedOutput = input.connection.output;
+                        this.removeConnection(input.connection);
                     }
                     return;
                 }
                     
                 if (input.hasConnection())
-                    self.removeConnection(input.connection);
+                    this.removeConnection(input.connection);
 
                 try {
-                    var connection = self.pickedOutput.connectTo(input);
+                    var connection = this.pickedOutput.connectTo(input);
 
-                    self.event.connectionCreated(connection);
+                    this.event.connectionCreated(connection);
                 } catch (e) {
                     alert(e.message);
                 } finally {
-                    self.pickedOutput = null;
-                    self.update();
+                    this.pickedOutput = null;
+                    this.update();
                 }
             });     
         }
 
-        alight.directives.al.pickOutput = function (scope, el, obj) {
+        alight.directives.al.pickOutput = (scope, el, obj) => {
             var output = scope.output;
 
-            d3.select(el).on('mousedown', function () {
-                self.pickedOutput = output;
+            d3.select(el).on('mousedown', () => {
+                this.pickedOutput = output;
             });
         }
 
-        alight.directives.al.controlHtml = function (scope, el, obj) {
+        alight.directives.al.controlHtml = (scope, el, obj) => {
             var control = obj.split('.').reduce((o, i) => o[i], scope);
 
             el.innerHTML = control.html;
@@ -191,7 +184,6 @@ export class NodeEditor {
     }
 
     getConnectionPathData(connection, x1, y1, x2, y2) {
-        var self = this;
         var distanceX = Math.abs(x1-x2);
         var distanceY = y2-y1;
 
@@ -209,7 +201,7 @@ export class NodeEditor {
         for (var i = 0; i < points.length;i++) {
             var point = points[i];
 
-            curve.point(self.x(point[0]), self.y(point[1]));
+            curve.point(this.x(point[0]), this.y(point[1]));
         }
         curve.lineEnd();
         var d = curve._context.toString();
@@ -267,7 +259,7 @@ export class NodeEditor {
             pathData.push(this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]));
         }  
 
-        this.$scope.paths = pathData;
+        this.paths = pathData;
     }
 
     update() {
@@ -278,7 +270,6 @@ export class NodeEditor {
     areaClick() {
         if (this.pickedOutput !== null)
         {
-
             this.pickedOutput = null;
             this.update();
             return;
@@ -292,9 +283,7 @@ export class NodeEditor {
 
     addNode(node) {
         if (!(node instanceof Node)) {
-            var builder = this.builders.find(function (b) {
-                return b.name === node;
-            });
+            var builder = this.builders.find(b => b.name === node);
 
             var pos = d3.mouse(this.view.node());
 
@@ -421,7 +410,7 @@ export class NodeEditor {
         });
         
         Object.keys(json.nodes).forEach(id => {
-            this.nodes.push(nodes[id] = Node.fromJSON(json.nodes[id], sockets));
+            this.addNode(nodes[id] = Node.fromJSON(json.nodes[id], sockets));
         });
         
         Object.keys(json.nodes).forEach(id => {

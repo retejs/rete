@@ -1,5 +1,5 @@
 // Nodes
-g(al-repeat='node in nodes')
+g(al-repeat='node in editor.nodes')
   rect.node(
     al-dragable-node, 
     al-click='editor.selectNode(node);', 
@@ -68,7 +68,7 @@ g(al-repeat='node in nodes')
 
 
 // Groups
-g(al-repeat='group in groups', al-svg-back)
+g(al-repeat='group in editor.groups', al-svg-back)
   rect.group(
     al-dragable-group, 
     al-click='editor.selectGroup(group);', 
@@ -96,7 +96,7 @@ g(al-repeat='group in groups', al-svg-back)
 
 // Connections
 path.connection(
-  al-repeat='path in paths', 
+  al-repeat='path in editor.paths', 
   al-svg-back, 
   al-mousedown='editor.areaClick()', 
   d='{{path}}'
