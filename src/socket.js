@@ -17,7 +17,7 @@ export class Socket {
 
     compatibleWith(socket) {
         if (!(socket instanceof Socket)) throw new Error('Invalid socket');
-        return this === socket || this.compatible.indexOf(socket) !== -1;
+        return this.id === socket.id || this.compatible.indexOf(socket) !== -1;
     }
 
     height() {
