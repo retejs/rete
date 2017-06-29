@@ -146,19 +146,6 @@ export class NodeEditor {
                 scope.$scan();
             });
         };
-
-        alight.filters.filterInputControl = function (input) {
-            return input.filter(function (item) {
-                return item.showControl();
-            });
-        }
-        /*alight.filters.filterInputControl.prototype.onChange = function(value) {
-            value = value.filter(function (item) {
-                return item.showControl();
-            })
-            this.setValue(value);
-        }
-        alight.filters.filterInputControl.prototype.watchMode = 'array';*/
         
         alight.directives.al.pickInput = function (scope, el, obj) {
             d3.select(el).on('mousedown', function () {

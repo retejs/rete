@@ -86,6 +86,11 @@ export class Node {
         this.update();
         return this;
     }
+    inputsWithVisibleControl() {
+        return this.inputs.filter(function (input) {
+            return input.showControl();
+        });
+    }
 
     remove() {
         this.inputs.forEach(function(input) {

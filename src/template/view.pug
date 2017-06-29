@@ -58,7 +58,7 @@ g(al-repeat='node in nodes')
     al-control-html='control'
   )
   foreignobject.input-control(
-    al-repeat='input in node.inputs | filterInputControl', 
+    al-repeat='input in node.inputsWithVisibleControl()', 
     x='{{editor.x(input.control.positionInputX())}}', 
     y='{{editor.y(input.control.positionInputY())}}', 
     width='{{editor.x(input.node.width - 2 * input.control.margin)}}', 
