@@ -1,24 +1,30 @@
 export class Input {
    
-    constructor(title, socket) {
-	    this.node = null;
-        this.connection = null;
+    constructor(title, socket, multipleConnections) {
+        this.node = null;
+        this.multipleConnections = multipleConnections || false;
+        this.connections = [];
         this.title = title;
         this.socket = socket;
         this.control = null;
     }
 
     hasConnection() {
-        return this.connection !== null;
+        return this.connections.length > 0;
     }
 
-    setConnection(c) {
-        this.connection = c;
+    addConnection(c) {
+        if (!this.multipleConnections && this.hasConnection())
+            throw new Error('Multiple connections not allowed');
+        this.connections.push(c);
     }
 
-    removeConnection() {
-        if (this.connection)
-            this.connection.remove();
+    removeConnection(connection) {
+        this.connections.splice(this.connections.indexOf(connection), 1);
+    }
+
+    removeConnections() {
+        this.connections.forEach(c => c.remove());
     }
 
     addControl(control) {
@@ -27,7 +33,7 @@ export class Input {
     }
 
     showControl() {
-        return this.connection === null && this.control !== null;
+        return !this.hasConnection() && this.control !== null;
     }
 
     positionX() {
@@ -48,11 +54,10 @@ export class Input {
     }
 
     toJSON() {
-        var c = this.connection;
-
         return {
             'node': this.node.id,
-            'connection': c ? { node: c.output.node.id, output: c.output.node.outputs.indexOf(c.output) }:null,
+            'connections': this.connections.map(c => { return { node: c.output.node.id, output: c.output.node.outputs.indexOf(c.output) } }),
+            'multipleConnections': this.multipleConnections,
             'title': this.title,
             'socket': this.socket.id,
             'control': this.control?this.control.toJSON():null
@@ -60,7 +65,7 @@ export class Input {
     }
 
     static fromJSON(json) {
-        var input = new Input(json.title, null);
+        var input = new Input(json.title, null, json.multipleConnections);
 
         return input;
     }

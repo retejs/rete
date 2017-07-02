@@ -118,5 +118,6 @@ path.connection(
   al-repeat='path in editor.paths', 
   al-svg-back, 
   al-mousedown='editor.areaClick()', 
-  d='{{path}}'
+  d='{{path.d}}'
+  class='{{path.active?"active":null}}'
 )

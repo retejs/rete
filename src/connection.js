@@ -4,11 +4,11 @@ export class Connection {
         this.output = output;
         this.input = input;
 
-        this.input.setConnection(this);
+        this.input.addConnection(this);
     }
 
     remove() {
-        this.input.setConnection(null);
+        this.input.removeConnection(this);
         this.output.removeConnection(this, false);
     }
 }

@@ -14,7 +14,7 @@ export class Output {
     connectTo(input) {
         if (!(input instanceof Input)) throw new Error('Invalid input');
         if (!this.socket.compatibleWith(input.socket)) throw new Error('Sockets not compatible');
-        if (input.hasConnection()) throw new Error('Input already has one connection');
+        if (!input.multipleConnections && input.hasConnection()) throw new Error('Input already has one connection');
 
         var connection = new Connection(this, input);
 

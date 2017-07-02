@@ -94,7 +94,7 @@ export class Node {
 
     remove() {
         this.inputs.forEach(function(input) {
-            input.removeConnection();
+            input.removeConnections();
         });
         this.outputs.forEach(function(output) {
             output.removeConnections();

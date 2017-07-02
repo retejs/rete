@@ -162,16 +162,20 @@ export class NodeEditor {
             d3.select(el).on('mousedown', () => {
                 var input = scope.input;
 
+                d3.event.preventDefault();                
                 if (this.pickedOutput === null) {
                     if (input.hasConnection()) {
-                        this.pickedOutput = input.connection.output;
-                        this.removeConnection(input.connection);
+                        this.pickedOutput = input.connections[0].output;
+                        this.removeConnection(input.connections[0]);
                     }
+                    this.update();
                     return;
                 }
                     
-                if (input.hasConnection())
-                    this.removeConnection(input.connection);
+                if (!input.multipleConnections && input.hasConnection())
+                    this.removeConnection(input.connections[0]);
+                else if (this.pickedOutput.connectedTo(input))
+                    this.removeConnection(input.connections.filter(c => c.output === this.pickedOutput)[0]);    
 
                 try {
                     var connection = this.pickedOutput.connectTo(input);
@@ -264,7 +268,7 @@ export class NodeEditor {
                     var input = cons[k].input;
                     var output = cons[k].output;
 
-                    pathData.push(this.getConnectionPathData(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY()));
+                    pathData.push({ d: this.getConnectionPathData(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY())});
                 }
             }
         }
@@ -274,7 +278,7 @@ export class NodeEditor {
             var output = this.pickedOutput;
             var input = [this.x.invert(mouse[0]), this.y.invert(mouse[1])];
 
-            pathData.push(this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]));
+            pathData.push({ active: true, d: this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]) });
         }  
 
         this.paths = pathData;
