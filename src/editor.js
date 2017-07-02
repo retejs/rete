@@ -1,4 +1,4 @@
-import {ContextMenu} from './contextmenu';
+import { ContextMenu } from './contextmenu';
 import {Group} from './group';
 import {Node} from './node';
 import {Socket} from './socket';
@@ -61,7 +61,7 @@ export class NodeEditor {
     }
 
     declareDirectives() {
-        alight.directives.al.dragableNode = (scope, el, obj) => {
+        alight.directives.al.dragableNode = (scope, el) => {
             var node = scope.node;
             var parent = el.parentNode;
 
@@ -86,7 +86,7 @@ export class NodeEditor {
             }))
         };
 
-        alight.directives.al.dragableGroup = (scope, el, obj) => {
+        alight.directives.al.dragableGroup = (scope, el) => {
             var group = scope.group;
 
             d3.select(el).call(d3.drag().on('start', () => {
@@ -142,27 +142,28 @@ export class NodeEditor {
             }))
         };
 
-        alight.directives.al.svgBack = (scope, el, obj) => {
+        alight.directives.al.svgBack = (scope, el) => {
             d3.select(el).lower();
             scope.$scan();
         }
 
-        alight.directives.al.groupTitleClick = (scope, el, obj) => {
+        alight.directives.al.groupTitleClick = (scope, el) => {
             var group = scope.group;
 
             d3.select(el).on('click', () => {
                 var title = prompt('Please enter title of the group', group.title.text);
 
-                group.title.text = title;
+                if (title !== null && title.length > 0)
+                    group.title.text = title;
                 scope.$scan();
             });
         };
         
-        alight.directives.al.pickInput = (scope, el, obj)=> {
+        alight.directives.al.pickInput = (scope, el)=> {
             d3.select(el).on('mousedown', () => {
                 var input = scope.input;
 
-                d3.event.preventDefault();                
+                d3.event.preventDefault();
                 if (this.pickedOutput === null) {
                     if (input.hasConnection()) {
                         this.pickedOutput = input.connections[0].output;
@@ -174,8 +175,11 @@ export class NodeEditor {
                     
                 if (!input.multipleConnections && input.hasConnection())
                     this.removeConnection(input.connections[0]);
-                else if (this.pickedOutput.connectedTo(input))
-                    this.removeConnection(input.connections.filter(c => c.output === this.pickedOutput)[0]);    
+                else if (this.pickedOutput.connectedTo(input)) {
+                    var connections = input.connections.filter(c => c.output === this.pickedOutput);
+
+                    this.removeConnection(connections[0]);
+                }
 
                 try {
                     var connection = this.pickedOutput.connectTo(input);
@@ -190,7 +194,7 @@ export class NodeEditor {
             });     
         }
 
-        alight.directives.al.pickOutput = (scope, el, obj) => {
+        alight.directives.al.pickOutput = (scope, el) => {
             var output = scope.output;
 
             d3.select(el).on('mousedown', () => {
@@ -265,8 +269,8 @@ export class NodeEditor {
                 var cons = outputs[j].connections;
 
                 for (var k in cons) {
-                    var input = cons[k].input;
-                    var output = cons[k].output;
+                    let input = cons[k].input;
+                    let output = cons[k].output;
 
                     pathData.push({ d: this.getConnectionPathData(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY())});
                 }
@@ -275,8 +279,8 @@ export class NodeEditor {
         
         if (this.pickedOutput !== null) {
             var mouse = d3.mouse(this.view.node());
-            var output = this.pickedOutput;
-            var input = [this.x.invert(mouse[0]), this.y.invert(mouse[1])];
+            let output = this.pickedOutput;
+            let input = [this.x.invert(mouse[0]), this.y.invert(mouse[1])];
 
             pathData.push({ active: true, d: this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]) });
         }  
@@ -337,7 +341,9 @@ export class NodeEditor {
             this.update();
             break;
         case 71:
-            if (!(this.active instanceof Node)) { alert('Select the node for adding to group'); return; }
+            if (!(this.active instanceof Node)) {
+                alert('Select the node for adding to group'); return;
+            }
             var group = new Group('Group', {nodes:[this.active]});    
 
             this.addGroup(group);   

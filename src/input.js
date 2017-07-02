@@ -56,7 +56,12 @@ export class Input {
     toJSON() {
         return {
             'node': this.node.id,
-            'connections': this.connections.map(c => { return { node: c.output.node.id, output: c.output.node.outputs.indexOf(c.output) } }),
+            'connections': this.connections.map(c => {
+                return {
+                    node: c.output.node.id,
+                    output: c.output.node.outputs.indexOf(c.output)
+                }
+            }),
             'multipleConnections': this.multipleConnections,
             'title': this.title,
             'socket': this.socket.id,

@@ -68,8 +68,10 @@ export class Node {
     }
 
     addInput(input) {
-        if (!(input instanceof Input)) throw new Error('Invalid instance');
-        if (input.node !== null) throw new Error('Input has already been added to the node');
+        if (!(input instanceof Input))
+            throw new Error('Invalid instance');
+        if (input.node !== null)
+            throw new Error('Input has already been added to the node');
         input.node = this;
         this.inputs.push(input);
 
@@ -78,8 +80,11 @@ export class Node {
     }
 
     addOutput(output) {
-        if (!(output instanceof Output)) throw new Error('Invalid instance');
-        if (output.node !== null) throw new Error('Output has already been added to the node');
+        if (!(output instanceof Output))
+            throw new Error('Invalid instance');
+        if (output.node !== null)
+            throw new Error('Output has already been added to the node');
+        
         output.node = this;
         this.outputs.push(output);
 

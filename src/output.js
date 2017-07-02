@@ -12,9 +12,12 @@ export class Output {
     }
 
     connectTo(input) {
-        if (!(input instanceof Input)) throw new Error('Invalid input');
-        if (!this.socket.compatibleWith(input.socket)) throw new Error('Sockets not compatible');
-        if (!input.multipleConnections && input.hasConnection()) throw new Error('Input already has one connection');
+        if (!(input instanceof Input))
+            throw new Error('Invalid input');
+        if (!this.socket.compatibleWith(input.socket))
+            throw new Error('Sockets not compatible');
+        if (!input.multipleConnections && input.hasConnection())
+            throw new Error('Input already has one connection');
 
         var connection = new Connection(this, input);
 
@@ -58,7 +61,10 @@ export class Output {
         return {
             'node': this.node.id,
             'connections': this.connections.map(a => {
-                return { node: a.input.node.id, input: a.input.node.inputs.indexOf(a.input)}
+                return {
+                    node: a.input.node.id,
+                    input: a.input.node.inputs.indexOf(a.input)
+                }
             }),
             'title': this.title,
             'socket': this.socket.id

@@ -3,6 +3,12 @@
   "ecmaFeatures": {
     "modules": true
   },
+  "globals": {
+    "document": true,
+    "alight": true,
+    "window": true,
+    "d3": true
+  },
   "rules": {
     "comma-dangle": [1, "never"],
     "no-cond-assign": 1,
