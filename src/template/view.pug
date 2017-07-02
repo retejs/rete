@@ -77,9 +77,30 @@ g(al-repeat='group in editor.groups', al-svg-back)
     class="{{editor.active === group?'active':''}}"
   )
   rect.group-handler(
-    al-dragable-group-handler, 
+    al-dragable-group-handler="rb", 
     x='{{editor.x(group.position[0] + group.width - 2/3*group.handler.size)}}', 
     y='{{editor.y(group.position[1] + group.height - 2/3*group.handler.size)}}', 
+    width='{{editor.x(group.handler.size)}}', 
+    height='{{editor.x(group.handler.size)}}'
+  )
+  rect.group-handler(
+    al-dragable-group-handler="lt", 
+    x='{{editor.x(group.position[0] - 1/3*group.handler.size)}}', 
+    y='{{editor.y(group.position[1] - 1/3*group.handler.size)}}', 
+    width='{{editor.x(group.handler.size)}}', 
+    height='{{editor.x(group.handler.size)}}'
+  )
+  rect.group-handler(
+    al-dragable-group-handler="lb", 
+    x='{{editor.x(group.position[0] - 1/3*group.handler.size)}}', 
+    y='{{editor.y(group.position[1] + group.height - 2/3*group.handler.size)}}', 
+    width='{{editor.x(group.handler.size)}}', 
+    height='{{editor.x(group.handler.size)}}'
+  )
+  rect.group-handler(
+    al-dragable-group-handler="rt", 
+    x='{{editor.x(group.position[0] + group.width - 2/3*group.handler.size)}}', 
+    y='{{editor.y(group.position[1] - 1/3*group.handler.size)}}', 
     width='{{editor.x(group.handler.size)}}', 
     height='{{editor.x(group.handler.size)}}'
   )

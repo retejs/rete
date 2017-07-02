@@ -29,7 +29,14 @@ html,body
     font-family: sans-serif
   .group-handler
     fill: transparent
-    cursor: se-resize
+    &[al-dragable-group-handler="rb"]
+      cursor: se-resize
+    &[al-dragable-group-handler="lt"]
+      cursor: nw-resize
+    &[al-dragable-group-handler="rt"]
+      cursor: ne-resize
+    &[al-dragable-group-handler="lb"]
+      cursor: sw-resize
 
   .connection
     fill: none

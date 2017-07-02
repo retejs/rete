@@ -106,13 +106,28 @@ export class NodeEditor {
             }));
         };
 
-        alight.directives.al.dragableGroupHandler = (scope, el, obj) => {
+        alight.directives.al.dragableGroupHandler = (scope, el, arg) => {
             var group = scope.group;
 
-            d3.select(el).call(d3.drag().on('drag', (d, i, els) => {
-                d3.select(el[0])
-                        .attr('cx', group.setWidth(group.width + this.x.invert(d3.event.dx)))
-                        .attr('cy', group.setHeight(group.height + this.y.invert(d3.event.dy)));
+            d3.select(el).call(d3.drag().on('drag', () => {
+                var deltax = this.x.invert(d3.event.dx);
+                var deltay = this.y.invert(d3.event.dy);
+                var deltaw = Math.max(0, group.width - group.minWidth);
+                var deltah = Math.max(0, group.height - group.minHeight);
+                
+                if (arg.match('l')) {
+                    group.position[0] += Math.min(deltaw, deltax);
+                    group.setWidth(group.width - deltax);
+                }
+                else if (arg.match('r'))
+                    group.setWidth(group.width + deltax);
+                
+                if (arg.match('t')) {
+                    group.position[1] += Math.min(deltah, deltay);
+                    group.setHeight(group.height - deltay);
+                }
+                else if (arg.match('b')) 
+                    group.setHeight(group.height + deltay);
                 
                 this.update();
             }).on('end', () => {
