@@ -28,9 +28,6 @@ export class NodeEditor {
             .attr('fill', 'transparent')
             .on('click', this.areaClick.bind(this));
 
-        this.x = d3.scaleLinear();
-        this.y = d3.scaleLinear();
-
         this.view = this.svg.append('g');
        
         this.zoom = d3.zoom()
@@ -47,7 +44,6 @@ export class NodeEditor {
             .on('resize.' + id, ()=> { this.resize();});
         
         this.$scope = alight.Scope();
-        this.$scope.editor = this;
 
         this.declareDirectives();
         
@@ -69,8 +65,8 @@ export class NodeEditor {
                 d3.select(parent).raise();
                 this.selectNode(node);
             }).on('drag', () => {
-                node.position[0] += this.x.invert(d3.event.dx);
-                node.position[1] += this.y.invert(d3.event.dy);
+                node.position[0] += d3.event.dx;
+                node.position[1] += d3.event.dy;
                 this.update();
             }).on('end', () => {
                 this.groups.forEach(group => {
@@ -92,14 +88,14 @@ export class NodeEditor {
             d3.select(el).call(d3.drag().on('start', () => {
                 this.selectGroup(group);
             }).on('drag', ()=> {
-                group.position[0] += this.x.invert(d3.event.dx);
-                group.position[1] += this.y.invert(d3.event.dy);
+                group.position[0] += d3.event.dx;
+                group.position[1] += d3.event.dy;
 
                 for (var i in group.nodes) {
                     var node = group.nodes[i];
 
-                    node.position[0] += this.x.invert(d3.event.dx);
-                    node.position[1] += this.y.invert(d3.event.dy);
+                    node.position[0] += d3.event.dx;
+                    node.position[1] += d3.event.dy;
                 }
 
                 this.update();
@@ -110,8 +106,8 @@ export class NodeEditor {
             var group = scope.group;
 
             d3.select(el).call(d3.drag().on('drag', () => {
-                var deltax = this.x.invert(d3.event.dx);
-                var deltay = this.y.invert(d3.event.dy);
+                var deltax = d3.event.dx;
+                var deltay = d3.event.dy;
                 var deltaw = Math.max(0, group.width - group.minWidth);
                 var deltah = Math.max(0, group.height - group.minHeight);
                 
@@ -227,7 +223,7 @@ export class NodeEditor {
         for (var i = 0; i < points.length;i++) {
             var point = points[i];
 
-            curve.point(this.x(point[0]), this.y(point[1]));
+            curve.point(point[0], point[1]);
         }
         curve.lineEnd();
         var d = curve._context.toString();
@@ -247,9 +243,6 @@ export class NodeEditor {
             .attr('height', height + 20);
 
         var size = (width + height); // Math.max(width,height);
-
-        this.x.range([0, size]);
-        this.y.range([0, size]);
 
         this.zoom.translateExtent([
             [-size, -size / 2],
@@ -280,7 +273,7 @@ export class NodeEditor {
         if (this.pickedOutput !== null) {
             var mouse = d3.mouse(this.view.node());
             let output = this.pickedOutput;
-            let input = [this.x.invert(mouse[0]), this.y.invert(mouse[1])];
+            let input = [mouse[0], mouse[1]];
 
             pathData.push({ active: true, d: this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]) });
         }  
@@ -314,7 +307,7 @@ export class NodeEditor {
             var pos = d3.mouse(this.view.node());
 
             node = builder.build();
-            node.position = [this.x.invert(pos[0]), this.y.invert(pos[1])];
+            node.position = [pos[0], pos[1]];
         }
 
         this.nodes.push(node);

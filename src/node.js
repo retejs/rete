@@ -1,24 +1,25 @@
+import {Block} from './block';
 import {Control} from './control';
 import {Input} from './input';
 import {Output} from './output';
 
-export class Node {
+export class Node extends Block {
    
     constructor(title, width) {
+        super();
         this.id = Node.incrementId();
         this.group = null;
         this.inputs = [];
         this.outputs = [];
         this.controls = [];
         
-        this.position = [0, 0];
         this.title = {
-            size: 0.01,
+            size: 20,
             text: title
         };
-        this.margin = 0.005;
-        this.width = width || 0.1;
-        this.height = 0.05;
+        this.margin = 10;
+        this.width = width || 200;
+        this.height = 100;
     }
 
     static incrementId() {

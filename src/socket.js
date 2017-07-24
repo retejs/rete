@@ -6,8 +6,8 @@ export class Socket {
         this.hint = hint;
         this.compatible = [];
 
-	    this.radius = 0.006; 
-	    this.margin = 0.004;
+	    this.radius = 12; 
+	    this.margin = 8;
     }
 
     combineWith(socket) {

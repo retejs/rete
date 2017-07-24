@@ -1,7 +1,7 @@
 export class Control {
 
-    constructor(html, height = 0.02) {
-        this.margin = 0.01;
+    constructor(html, height = 40) {
+        this.margin = 20;
         this.height = height;
         this.html = html;
         this.parent = null;

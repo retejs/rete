@@ -1,19 +1,22 @@
-export class Group {
+import {Block} from './block';
+
+export class Group extends Block {
 
     constructor(title, params) {
+        super();
         this.id = Group.incrementId();
         this.title = {
             text: title,
-            margin: 0.012,
-            size: 0.016
+            margin: 8,
+            size: 22
         };
 
-        this.margin = 0.01;
+        this.margin = 20;
         this.nodes = [];
-        this.minWidth = 0.3;
-        this.minHeight = 0.14;
+        this.minWidth = 600;
+        this.minHeight = 250;
         this.handler = {
-            size: 0.02
+            size: 40
         };
 
         if (params.nodes)
@@ -52,7 +55,7 @@ export class Group {
 
     coverNodes(nodes) {
         var self = this;
-        var margin = 0.02;
+        var margin = 30;
         var minX = Math.min(...nodes.map(node => node.position[0]));
         var minY = Math.min(...nodes.map(node => node.position[1]));
         var maxX = Math.max(...nodes.map(node => node.position[0] + node.width));
