@@ -23,7 +23,7 @@ g(al-repeat='node in editor.nodes')
       cx='{{editor.x(input.positionX())}}', 
       cy='{{editor.y(input.positionY())}}', 
       r='{{editor.x(input.socket.radius)}}', 
-      class='{{input.socket.id}}'
+      class="{{input.socket.id}} {{input.multipleConnections?'multiple':''}}"
     )
       title {{input.socket.name+'\n'+input.socket.hint}}
     text.input-title(
