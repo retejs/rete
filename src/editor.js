@@ -54,15 +54,17 @@ export class NodeEditor {
         });
         
     }
-    
+    updateNodeSize(scope) {
+        scope.node.width = scope.node.el.offsetWidth;
+        scope.node.height = scope.node.el.offsetHeight;
+    }
+
     declareDirectives() {
         alight.directives.al.dragableNode = (scope, el) => {
             var node = scope.node;
             var parent = el.parentNode;
 
-            node.width = el.offsetWidth;
-            node.height = el.offsetHeight;
-
+            node.el = el;
             d3.select(el).call(d3.drag().on('start', () => {
                 d3.select(parent).raise();
                 this.selectNode(node);

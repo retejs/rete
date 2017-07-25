@@ -4,6 +4,7 @@ foreignobject(al-repeat='node in editor.nodes',
   y='{{node.position[1]}}',
   width='{{node.width}}',
   height='{{node.height}}'
+  onload='{{editor.updateNodeSize(this)}}'
   ) 
   div.node(
     al-dragable-node,  
