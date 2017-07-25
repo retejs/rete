@@ -36,23 +36,6 @@ export class Input {
         return !this.hasConnection() && this.control !== null;
     }
 
-    positionX() {
-        return this.node.position[0];
-    }
-
-    positionY() {
-        var node = this.node;
-
-        return node.position[1] +
-            node.headerHeight() +
-            node.outputsHeight() +
-            node.controlsHeight() +
-            this.socket.margin +
-            this.socket.radius +   
-            node.inputs.indexOf(this) * this.socket.height()
-            + this.socket.margin;
-    }
-
     toJSON() {
         return {
             'node': this.node.id,

@@ -5,21 +5,15 @@ import {Output} from './output';
 
 export class Node extends Block {
    
-    constructor(title, width) {
+    constructor(title) {
         super();
         this.id = Node.incrementId();
         this.group = null;
         this.inputs = [];
         this.outputs = [];
         this.controls = [];
-        
-        this.title = {
-            size: 20,
-            text: title
-        };
-        this.margin = 10;
-        this.width = width || 200;
-        this.height = 100;
+
+        this.title = title;
     }
 
     static incrementId() {
@@ -30,41 +24,11 @@ export class Node extends Block {
         return this.latestId
     }
 
-    update() {
-        this.height = this.headerHeight()
-            + this.outputsHeight()
-            + this.inputsHeight() 
-            + this.controlsHeight()
-            + this.margin;
-    }
-
-    headerHeight() {
-        return 2 * this.margin + this.title.size;
-    }
-
-    controlsHeight() {
-        return this.controls.reduce(function (a, b) {
-            return a + b.height;
-        }, 0);
-    }
-
-    outputsHeight() {
-        return this.outputs.reduce(function(a, b) {
-            return a + b.socket.height();
-        }, 0);
-    }
-
-    inputsHeight() {
-        return this.inputs.reduce(function(a, b) {
-            return a + b.socket.height();
-        }, 0);
-    }
-
     addControl(control) {
         if (!(control instanceof Control)) throw new Error('Invalid instance');
         this.controls.push(control);
         control.parent = this;
-        this.update();
+        
         return this;
     }
 
@@ -75,8 +39,7 @@ export class Node extends Block {
             throw new Error('Input has already been added to the node');
         input.node = this;
         this.inputs.push(input);
-
-        this.update();
+        
         return this;
     }
 
@@ -89,7 +52,6 @@ export class Node extends Block {
         output.node = this;
         this.outputs.push(output);
 
-        this.update();
         return this;
     }
     inputsWithVisibleControl() {
@@ -115,10 +77,7 @@ export class Node extends Block {
             'outputs': this.outputs.map(a => a.toJSON()),
             'controls': this.controls.map(a => a.toJSON()),
             'position': this.position,
-            'title': this.title,
-            'margin': this.margin,
-            'width': this.width,
-            'height': this.height
+            'title': this.title
         }
     }
 
@@ -128,9 +87,6 @@ export class Node extends Block {
         node.id = json.id;
         node.position = json.position;
         node.title = json.title;
-        node.margin = json.margin;
-        node.width = json.width;
-        node.height = json.height;
         
         json.inputs.forEach(inputJson => {
             var input = Input.fromJSON(inputJson);

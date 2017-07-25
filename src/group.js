@@ -5,27 +5,17 @@ export class Group extends Block {
     constructor(title, params) {
         super();
         this.id = Group.incrementId();
-        this.title = {
-            text: title,
-            margin: 8,
-            size: 22
-        };
+        this.title = title;
 
-        this.margin = 20;
         this.nodes = [];
         this.minWidth = 600;
         this.minHeight = 250;
-        this.handler = {
-            size: 40
-        };
 
         if (params.nodes)
             this.coverNodes(params.nodes);
-        else {
+        else 
             this.position = params.position;
-            this.width = params.width;
-            this.height = params.height;
-        }
+        
     }
 
     static incrementId() {
@@ -47,10 +37,11 @@ export class Group extends Block {
     isCoverNode(node) {
         var gp = this.position;
         var np = node.position;
+        var margin = 30;
 
         return np[0] > gp[0] && np[1] > gp[1]
-            && np[0] + node.width < gp[0] + this.width
-            && np[1] + node.height < gp[1] + this.height;
+            && np[0] + margin < gp[0] + this.width
+            && np[1] + margin < gp[1] + this.height;
     }
 
     coverNodes(nodes) {
@@ -58,8 +49,8 @@ export class Group extends Block {
         var margin = 30;
         var minX = Math.min(...nodes.map(node => node.position[0]));
         var minY = Math.min(...nodes.map(node => node.position[1]));
-        var maxX = Math.max(...nodes.map(node => node.position[0] + node.width));
-        var maxY = Math.max(...nodes.map(node => node.position[1] + node.height));
+        var maxX = Math.max(...nodes.map(node => node.position[0] + margin));
+        var maxY = Math.max(...nodes.map(node => node.position[1] + margin));
 
         nodes.forEach(node => {
             if (node.group !== null) node.group.removeNode(node.group);
@@ -98,11 +89,9 @@ export class Group extends Block {
         return {
             'id': this.id,
             'title': this.title,
-            'margin': this.margin,
             'nodes': this.nodes.map(a => a.id),
             'minWidth': this.minWidth,
             'minHeight': this.minHeight,
-            'handler': this.handler,
             'position': this.position,
             'width': this.width,
             'height': this.height
@@ -118,10 +107,8 @@ export class Group extends Block {
 
         group.id = json.id;
         group.title = json.title;
-        group.margin = json.margin;
         group.minWidth = json.minWidth;
         group.minHeight = json.minHeight;
-        group.handler = json.handler;
         return group;
     }
 }

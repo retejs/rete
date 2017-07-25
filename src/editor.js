@@ -14,8 +14,6 @@ export class NodeEditor {
         this.builders = builders;
 
         this.pickedOutput = null;
-        this.dom = null;
-
         this.dom = document.getElementById(id);
         this.dom.tabIndex = 1;
 
@@ -44,6 +42,7 @@ export class NodeEditor {
             .on('resize.' + id, ()=> { this.resize();});
         
         this.$scope = alight.Scope();
+        this.$scope.editor = this;
 
         this.declareDirectives();
         
@@ -55,7 +54,7 @@ export class NodeEditor {
         });
         
     }
-
+    
     declareDirectives() {
         alight.directives.al.dragableNode = (scope, el) => {
             var node = scope.node;
@@ -87,7 +86,7 @@ export class NodeEditor {
 
             d3.select(el).call(d3.drag().on('start', () => {
                 this.selectGroup(group);
-            }).on('drag', ()=> {
+            }).on('drag', () => {
                 group.position[0] += d3.event.dx;
                 group.position[1] += d3.event.dy;
 
@@ -110,7 +109,7 @@ export class NodeEditor {
                 var deltay = d3.event.dy;
                 var deltaw = Math.max(0, group.width - group.minWidth);
                 var deltah = Math.max(0, group.height - group.minHeight);
-                
+                    
                 if (arg.match('l')) {
                     group.position[0] += Math.min(deltaw, deltax);
                     group.setWidth(group.width - deltax);
@@ -147,18 +146,20 @@ export class NodeEditor {
             var group = scope.group;
 
             d3.select(el).on('click', () => {
-                var title = prompt('Please enter title of the group', group.title.text);
+                var title = prompt('Please enter title of the group', group.title);
 
                 if (title !== null && title.length > 0)
-                    group.title.text = title;
+                    group.title = title;
                 scope.$scan();
             });
         };
         
-        alight.directives.al.pickInput = (scope, el)=> {
-            d3.select(el).on('mousedown', () => {
-                var input = scope.input;
+        alight.directives.al.pickInput = (scope, el) => {
+            var input = scope.input;
 
+            input.el = el;
+
+            d3.select(el).on('mousedown', () => {
                 d3.event.preventDefault();
                 if (this.pickedOutput === null) {
                     if (input.hasConnection()) {
@@ -192,6 +193,8 @@ export class NodeEditor {
 
         alight.directives.al.pickOutput = (scope, el) => {
             var output = scope.output;
+
+            output.el = el;
 
             d3.select(el).on('mousedown', () => {
                 this.pickedOutput = output;
@@ -262,20 +265,35 @@ export class NodeEditor {
                 var cons = outputs[j].connections;
 
                 for (var k in cons) {
+                    if (!cons[k].input.el) break;
                     let input = cons[k].input;
                     let output = cons[k].output;
-
-                    pathData.push({ d: this.getConnectionPathData(cons[k], output.positionX(), output.positionY(), input.positionX(), input.positionY())});
+                    
+                    pathData.push({
+                        d: this.getConnectionPathData(cons[k],
+                            output.node.position[0] + output.el.offsetLeft + output.el.offsetWidth / 2,
+                            output.node.position[1] + output.el.offsetTop + output.el.offsetHeight / 2,
+                            input.node.position[0] + input.el.offsetLeft + input.el.offsetWidth / 2,
+                            input.node.position[1] + input.el.offsetTop + input.el.offsetHeight / 2)
+                    });
                 }
             }
         }
         
         if (this.pickedOutput !== null) {
             var mouse = d3.mouse(this.view.node());
+
+            if (!this.pickedOutput.el) return;
             let output = this.pickedOutput;
             let input = [mouse[0], mouse[1]];
 
-            pathData.push({ active: true, d: this.getConnectionPathData(null, output.positionX(), output.positionY(), input[0], input[1]) });
+            pathData.push({
+                active: true, d: this.getConnectionPathData(null,
+                    output.node.position[0] + output.el.offsetLeft + output.el.offsetWidth / 2,
+                    output.node.position[1] + output.el.offsetTop + output.el.offsetHeight / 2,
+                    input[0],
+                    input[1])
+            });
         }  
 
         this.paths = pathData;

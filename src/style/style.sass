@@ -1,42 +1,102 @@
 $node-color: rgba(110,136,255,0.8)
 $node-color-active: #ffd92c
 $group-color: rgba(15,80,255,0.2)
-html,body
-  margin: 0
-  height: 100%
+$group-handler-size: 40px
+$socket-size: 24px
+$socket-margin: 6px
+$node-width: 180px
 
 .node-editor
+  *
+    box-sizing: border-box
   .node
-    fill: $node-color
-    stroke: #4e58bf
-    stroke-width: 2
+    background: $node-color
+    border: 2px solid #4e58bf
+    border-radius: 10px
     cursor: pointer
+    width: $node-width
+    height: auto
+    padding-bottom: 6px
+    box-sizing: content-box
     &:hover
-      fill: lighten($node-color,4%)
+      background: lighten($node-color,4%)
     &.active
-      fill: $node-color-active
-      stroke: #e3c000
+      background: $node-color-active
+      border-color: #e3c000
+    .title
+      color: white
+      font-family: sans-serif
+      font-size: 18px
+      padding: 8px
+    .socket
+      display: inline-block
+      cursor: pointer
+      border: 1px solid white
+      border-radius: $socket-size/2.0
+      width: $socket-size
+      height: $socket-size
+      margin: $socket-margin
+      vertical-align: middle
+      z-index: 2
+      &:hover
+        border-width: 4px
+      &.multiple
+        border-color: yellow
+      &.output
+        margin-right: - $socket-size / 2
+      &.input
+        margin-left: - $socket-size / 2
+    .input-title,.output-title
+      vertical-align: middle
+      color: white
+      display: inline-block
+      font-family: sans-serif
+      font-size: 14px
+      margin: $socket-margin
+      line-height: $socket-size
+    .input-control
+      z-index: 1
+      width: $node-width - $socket-size - 2*$socket-margin
+      vertical-align: middle
+      display: inline-block
+    .control
+      padding: $socket-margin $socket-size/2 + $socket-margin
+
   .group
-    rx: 16
-    ry: 16
-    fill: $group-color
+    border-radius: 16px
+    background: $group-color
     cursor: pointer
+    width: inherit
+    height: inherit
+    border: 6px solid transparent
     &.active
-      stroke: #ffd92c
-      stroke-width: 6
-  .group-title
-    fill: white
-    font-family: sans-serif
-  .group-handler
-    fill: transparent
-    &[al-dragable-group-handler="rb"]
-      cursor: se-resize
-    &[al-dragable-group-handler="lt"]
-      cursor: nw-resize
-    &[al-dragable-group-handler="rt"]
-      cursor: ne-resize
-    &[al-dragable-group-handler="lb"]
-      cursor: sw-resize
+      border-color: #ffd92c
+    .group-title
+      color: white
+      font-family: sans-serif
+      font-size: 18px
+      padding: 12px
+    .group-handler
+      background: transparent
+      width: $group-handler-size
+      height: $group-handler-size
+      position: fixed // need absolute, but webkit bug present
+      &[al-dragable-group-handler="rb"]
+        cursor: se-resize
+        right: 0
+        bottom: 0
+      &[al-dragable-group-handler="lt"]
+        cursor: nw-resize
+        left: 0
+        top: 0
+      &[al-dragable-group-handler="rt"]
+        cursor: ne-resize
+        right: 0
+        top: 0
+      &[al-dragable-group-handler="lb"]
+        cursor: sw-resize
+        left: 0
+        bottom: 0
 
   .connection
     fill: none
@@ -44,32 +104,14 @@ html,body
     stroke-width: 5px
     &.active
       stroke: powderblue  
-      
-  .input,.output
-    cursor: pointer
-    stroke: white
-    stroke-width: 1px
-    &:hover
-      stroke-width: 4px
-    &.multiple
-      stroke: yellow
-  .title,.input-title,.output-title
-    fill: white
-    font-family: sans-serif
-    alignment-baseline: after-edge
-  .output-title
-    text-anchor: end
-  
 
   select, input
     width: 100%
-    height: 90%
     border-radius: 30px
     background-color: white
     padding: 2px 6px
     border: 1px solid #999
     font-size: 110%
-    box-sizing: border-box
   
 
 .context-menu

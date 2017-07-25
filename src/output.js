@@ -43,20 +43,6 @@ export class Output {
         });
     }
 
-    positionX() {
-        return this.node.position[0] + this.node.width;
-    }
-
-    positionY() {
-        var node = this.node;
-
-        return node.position[1] +
-            node.headerHeight() +
-            this.socket.margin +
-            this.socket.radius +   
-            node.outputs.indexOf(this) * this.socket.height();
-    }
-
     toJSON() {
         return {
             'node': this.node.id,
