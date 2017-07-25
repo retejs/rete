@@ -60,6 +60,9 @@ export class NodeEditor {
             var node = scope.node;
             var parent = el.parentNode;
 
+            node.width = el.offsetWidth;
+            node.height = el.offsetHeight;
+
             d3.select(el).call(d3.drag().on('start', () => {
                 d3.select(parent).raise();
                 this.selectNode(node);

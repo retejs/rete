@@ -37,11 +37,10 @@ export class Group extends Block {
     isCoverNode(node) {
         var gp = this.position;
         var np = node.position;
-        var margin = 30;
 
         return np[0] > gp[0] && np[1] > gp[1]
-            && np[0] + margin < gp[0] + this.width
-            && np[1] + margin < gp[1] + this.height;
+            && np[0] + node.width < gp[0] + this.width
+            && np[1] + node.height < gp[1] + this.height;
     }
 
     coverNodes(nodes) {
@@ -49,8 +48,8 @@ export class Group extends Block {
         var margin = 30;
         var minX = Math.min(...nodes.map(node => node.position[0]));
         var minY = Math.min(...nodes.map(node => node.position[1]));
-        var maxX = Math.max(...nodes.map(node => node.position[0] + margin));
-        var maxY = Math.max(...nodes.map(node => node.position[1] + margin));
+        var maxX = Math.max(...nodes.map(node => node.position[0] + node.width));
+        var maxY = Math.max(...nodes.map(node => node.position[1] + node.height));
 
         nodes.forEach(node => {
             if (node.group !== null) node.group.removeNode(node.group);

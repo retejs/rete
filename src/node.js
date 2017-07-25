@@ -14,6 +14,8 @@ export class Node extends Block {
         this.controls = [];
 
         this.title = title;
+        this.width = 180;
+        this.height = 100;
     }
 
     static incrementId() {
