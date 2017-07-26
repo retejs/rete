@@ -2,6 +2,7 @@ $node-color: rgba(110,136,255,0.8)
 $node-color-active: #ffd92c
 $group-color: rgba(15,80,255,0.2)
 $group-handler-size: 40px
+$group-handler-offset: -10px
 $socket-size: 24px
 $socket-margin: 6px
 $node-width: 180px
@@ -83,20 +84,20 @@ $node-width: 180px
       position: fixed // need absolute, but webkit bug present
       &[al-dragable-group-handler="rb"]
         cursor: se-resize
-        right: 0
-        bottom: 0
+        right: $group-handler-offset
+        bottom: $group-handler-offset
       &[al-dragable-group-handler="lt"]
         cursor: nw-resize
-        left: 0
-        top: 0
+        left: $group-handler-offset
+        top: $group-handler-offset
       &[al-dragable-group-handler="rt"]
         cursor: ne-resize
-        right: 0
-        top: 0
+        right: $group-handler-offset
+        top: $group-handler-offset
       &[al-dragable-group-handler="lb"]
         cursor: sw-resize
-        left: 0
-        bottom: 0
+        left: $group-handler-offset
+        bottom: $group-handler-offset
 
   .connection
     fill: none

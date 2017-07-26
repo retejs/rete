@@ -108,13 +108,24 @@ export class NodeEditor {
 
         alight.directives.al.dragableGroupHandler = (scope, el, arg) => {
             var group = scope.group;
+            var mousePrev;
 
-            d3.select(el).call(d3.drag().on('drag', () => {
-                var deltax = d3.event.dx;
-                var deltay = d3.event.dy;
+            d3.select(el).call(d3.drag().on('start', () => {
+                mousePrev = d3.mouse(this.svg.node());
+                this.selectGroup(group);
+            }).on('drag', () => {
+                var zoom = d3.zoomTransform(this.dom);
+                var mouse = d3.mouse(this.svg.node());
+                var deltax = (mouse[0] - mousePrev[0]) / zoom.k;
+                var deltay = (mouse[1] - mousePrev[1]) / zoom.k;
                 var deltaw = Math.max(0, group.width - group.minWidth);
                 var deltah = Math.max(0, group.height - group.minHeight);
                     
+                if (deltaw !== 0)
+                    mousePrev[0] = mouse[0];
+                if (deltah !== 0)
+                    mousePrev[1] = mouse[1];
+
                 if (arg.match('l')) {
                     group.position[0] += Math.min(deltaw, deltax);
                     group.setWidth(group.width - deltax);
