@@ -26,36 +26,51 @@ export class Node extends Block {
         return this.latestId
     }
 
-    addControl(control) {
+    addControl(control, index = -1) {
         if (!(control instanceof Control)) throw new Error('Invalid instance');
-        this.controls.push(control);
+        
         control.parent = this;
+
+        if (index >= 0)
+            this.controls.splice(index, 0, control);
+        else
+            this.controls.push(control);        
         
         return this;
     }
 
-    addInput(input) {
+    addInput(input, index = -1) {
         if (!(input instanceof Input))
             throw new Error('Invalid instance');
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
+        
         input.node = this;
-        this.inputs.push(input);
+
+        if (index >= 0)
+            this.inputs.splice(index, 0, input);
+        else
+            this.inputs.push(input);
         
         return this;
     }
 
-    addOutput(output) {
+    addOutput(output, index = -1) {
         if (!(output instanceof Output))
             throw new Error('Invalid instance');
         if (output.node !== null)
             throw new Error('Output has already been added to the node');
         
         output.node = this;
-        this.outputs.push(output);
+
+        if (index >= 0)
+            this.outputs.splice(index, 0, output);
+        else
+            this.outputs.push(output);
 
         return this;
     }
+
     inputsWithVisibleControl() {
         return this.inputs.filter(function (input) {
             return input.showControl();
