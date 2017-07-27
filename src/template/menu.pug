@@ -1,0 +1,14 @@
+.context-menu(
+    style='left:{{contextMenu.x}}px; top:{{contextMenu.y}}px;',
+    al-mouseleave='contextMenu.hide()',
+    al-if='contextMenu.visible'
+
+)
+  .item(al-repeat='(name,item) in contextMenu.items')
+    | {{name}}
+    .subitems
+      .item(
+        al-repeat='(name,subitem) in item',
+        al-click='contextMenu.onClick(subitem)'
+      )
+        | {{name}}

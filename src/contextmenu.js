@@ -1,24 +1,25 @@
 export class ContextMenu {
 
-    constructor(items, onselect) {
+    constructor(template, items) {
         this.visible = false;
-        this.menu = d3.select('body')
-            .append('div')
-            .classed('context-menu', true)
-            .style('display', 'none');
+        this.x = 0;
+        this.y = 0;
+        this.items = items;
+        
+        this.$scope = alight.Scope();
+        this.$scope.contextMenu = this;
 
-        this.item = this.menu.selectAll('div.item')
-            .data(items)
-            .enter()
-            .append('div')
-            .classed('item', true)
-            .text(function (d) {
-                return d;
-            })
-            .on('click', (d) => {
-                onselect(d);
-                this.hide();
-            });
+        d3.text(template, (error, text) => {
+            if (error) throw error;
+            var dom = d3.select('body').append('div');
+
+            dom.html(text);
+            alight.applyBindings(this.$scope, dom.node());
+        });
+    }
+
+    onCilck(subitem) {
+        throw new TypeError('onClick should be overrided');
     }
 
     isVisible() {
@@ -27,15 +28,13 @@ export class ContextMenu {
 
     show(x, y) {
         this.visible = true;
-        this.menu
-            .style('left', x + 'px')
-            .style('top', y + 'px')
-            .style('display', 'block');
+        this.x = x;
+        this.y = y;
+        this.$scope.$scan();
     }
 
     hide() {
         this.visible = false;
-        this.menu
-            .style('display', 'none');
+        this.$scope.$scan();
     }
 }

@@ -1,26 +1,31 @@
-import { ContextMenu } from './contextmenu';
 import {Group} from './group';
 import {Node} from './node';
 import {Socket} from './socket';
 
 export class NodeEditor {
 
-    constructor(id, template, builders, event) {
+    constructor(id, template, menu, event) {
 
         this.event = event;
         this.active = null;
         this.nodes = [];
         this.groups = [];
-        this.builders = builders;
 
         this.pickedOutput = null;
         this.dom = document.getElementById(id);
         this.dom.tabIndex = 1;
-
-        var nodeNames = builders.map(e => e.name);
-
-        this.contextMenu = new ContextMenu(nodeNames, this.addNode.bind(this));
         this.svg = d3.select(this.dom);
+        this.mouse = [0, 0];
+
+        this.contextMenu = menu;
+        this.contextMenu.onClick = (subitem) => {
+            var result = subitem();
+
+            if (result instanceof Node)
+                this.addNode(result, true);
+            
+            this.contextMenu.hide();
+        };
 
         this.clickable = this.svg.append('rect')
             .attr('fill', 'transparent')
@@ -37,9 +42,12 @@ export class NodeEditor {
         this.svg.call(this.zoom);
 
         d3.select(window)
-            .on('mousemove', () => { this.update();}) // update picked connection   
+            .on('mousemove', () => {
+                this.mouse = d3.mouse(this.view.node());
+                this.update();
+            })    
             .on('keydown.' + id, this.keyDown.bind(this))
-            .on('resize.' + id, ()=> { this.resize();});
+            .on('resize.' + id, this.resize.bind(this));
         
         this.$scope = alight.Scope();
         this.$scope.editor = this;
@@ -297,11 +305,9 @@ export class NodeEditor {
         }
         
         if (this.pickedOutput !== null) {
-            var mouse = d3.mouse(this.view.node());
-
             if (!this.pickedOutput.el) return;
             let output = this.pickedOutput;
-            let input = [mouse[0], mouse[1]];
+            let input = this.mouse;
 
             pathData.push({
                 active: true, d: this.getConnectionPathData(null,
@@ -327,23 +333,17 @@ export class NodeEditor {
             this.update();
             return;
         }    
-
-        if (this.contextMenu.isVisible())
-            this.contextMenu.hide();
-        else
-            this.contextMenu.show(d3.event.clientX, d3.event.clientY);
+        
+        this.contextMenu.show(d3.event.clientX - 20, d3.event.clientY - 20);
+        this.update();
     }
 
-    addNode(node) {
-        if (!(node instanceof Node)) {
-            var builder = this.builders.find(b => b.name === node);
-
-            var pos = d3.mouse(this.view.node());
-
-            node = builder.build();
-            node.position = [pos[0], pos[1]];
-        }
-
+    addNode(node, mousePlaced = false) {
+        if (!(node instanceof Node))
+            throw new Error('Wrong instance');
+        
+        if (mousePlaced)
+            node.position = this.mouse;
         this.nodes.push(node);
 
         this.event.nodeCreated(node);
