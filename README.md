@@ -22,21 +22,21 @@ var imageSocket = new D3NE.Socket('image', 'Image', 'hint');
 Define them styles
 ```css
 .socket.number{
-    fill: #96b38a
+    background: #96b38a
 }
 .socket.image{
-    fill: #cc2a6a
+    background: #cc2a6a
 }
 ```
 Create some NodeBuilder's
 ```js
-var texturebuilder = new D3NE.NodeBuilder("Texture",function(){
+var createTexture = function(){
             var out = new D3NE.Output("Texture",imageSocket);
             return new D3NE.Node("Texture")
                         .addOutput(out);
          });
          
-var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
+var createShape = function(){
             var input = new D3NE.Input("Texture",imageSocket);
             var out = new D3NE.Output("Value",numSocket);
             return new D3NE.Node("Shape")
@@ -46,9 +46,19 @@ var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
 ```
 And create NodeEditor
 ```js
- var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
-                        [shapebuilder,texturebuilder],
-                        new D3NE.Events());
+
+var menu = new D3NE.ContextMenu('./menu.html',
+                        {
+                            "Actions":{
+                                "Action":function(){alert('Subitem selected');}
+                            },
+                            "Nodes":{
+                                "Shape":createShape, 
+                                "Texture":createTexture
+                            }
+                        });
+
+ var nodeEditor = new D3NE.NodeEditor('nodeEditor', './view.html', menu, new D3NE.Events());
 ```
 For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 
