@@ -343,15 +343,16 @@ export class NodeEditor {
         if (mousePlaced)
             node.position = this.mouse;
         this.nodes.push(node);
+        this.selectNode(node);
 
         this.event.nodeCreated(node);
-        this.selectNode(node);
     }
 
     addGroup(group) {
         this.groups.push(group);
-        this.event.groupCreated(group);
         this.update();
+
+        this.event.groupCreated(group);
     }
 
     keyDown() {
@@ -382,19 +383,20 @@ export class NodeEditor {
 
         this.nodes.splice(index, 1);
         node.remove();
-        this.event.nodeRemoved(node);
 
         if (this.nodes.length > 0)
             this.selectNode(this.nodes[Math.max(0, index - 1)]);
         this.update();
+
+        this.event.nodeRemoved(node);
     }
 
     removeGroup(group) {
         group.remove();
         this.groups.splice(this.groups.indexOf(group), 1);
-        this.event.groupRemoved(group);
-
         this.update();
+
+        this.event.groupRemoved(group);
     }
 
     connect(output, input) {
@@ -409,18 +411,20 @@ export class NodeEditor {
     }
 
     selectNode(node) {
-        if (this.nodes.indexOf(node) === -1) throw new Error('Node not exist in list');
+        if (this.nodes.indexOf(node) === -1)
+            throw new Error('Node not exist in list');
 
         this.active = node;
-        this.event.nodeSelected(node);
         this.update();
+
+        this.event.nodeSelected(node);
     }
 
     selectGroup(group) {
         this.active = group;
-        this.event.groupSelected(group);
-        
         this.update();
+
+        this.event.groupSelected(group);
     }
 
     remove() {
