@@ -1,8 +1,9 @@
 export class Control {
 
-    constructor(html) {
+    constructor(html, handler = () => { }) {
         this.html = html;
         this.parent = null;
+        this.handler = handler;
     }
 
     toJSON() {

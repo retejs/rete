@@ -227,6 +227,7 @@ export class NodeEditor {
             var control = obj.split('.').reduce((o, i) => o[i], scope);
 
             el.innerHTML = control.html;
+            control.handler(el.children[0], control);
         };
     }
 
