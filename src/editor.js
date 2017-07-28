@@ -203,9 +203,7 @@ export class NodeEditor {
                 }
 
                 try {
-                    var connection = this.pickedOutput.connectTo(input);
-
-                    this.event.connectionCreated(connection);
+                    this.connect(this.pickedOutput, input);
                 } catch (e) {
                     alert(e.message);
                 } finally {
@@ -399,6 +397,12 @@ export class NodeEditor {
         this.update();
     }
 
+    connect(output, input) {
+        var connection = output.connectTo(input);
+
+        this.event.connectionCreated(connection);
+    }
+
     removeConnection(connection) {
         connection.remove();
         this.event.connectionRemoved(connection);
@@ -483,7 +487,7 @@ export class NodeEditor {
                     var inputIndex = jsonConnection.input;
                     var targetInput = nodes[nodeId].inputs[inputIndex];
 
-                    node.outputs[i].connectTo(targetInput);
+                    this.connect(node.outputs[i], targetInput);
                 });
             });
 

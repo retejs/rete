@@ -5,7 +5,6 @@ export class Events {
         this.connectionCreated = function (connection) { };
         this.groupCreated = function (group) { };
         this.nodeSelected = function (node) {};
-        this.connectionSelected = function (connection) {};
         this.groupSelected = function (group) {};
         this.nodeRemoved = function (node) {};
         this.connectionRemoved = function (connection) {};
