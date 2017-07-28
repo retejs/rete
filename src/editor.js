@@ -497,7 +497,7 @@ export class NodeEditor {
 
                 group.addNode(node);
             })
-            this.groups.push(group);
+            this.addGroup(group);
         });
         this.update();
     }
