@@ -108,6 +108,7 @@ export class Group extends Block {
         });
 
         group.id = json.id;
+        Group.latestId = Math.max(group.id, Group.latestId);
         group.title = json.title;
         group.minWidth = json.minWidth;
         group.minHeight = json.minHeight;

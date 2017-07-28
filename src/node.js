@@ -102,6 +102,7 @@ export class Node extends Block {
         var node = new Node();
 
         node.id = json.id;
+        Node.latestId = Math.max(node.id, Node.latestId);
         node.position = json.position;
         node.title = json.title;
         
