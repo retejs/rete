@@ -223,7 +223,7 @@ export class NodeEditor {
             });
         }
 
-        alight.directives.al.controlHtml = (scope, el, obj) => {
+        alight.directives.al.control = (scope, el, obj) => {
             var control = obj.split('.').reduce((o, i) => o[i], scope);
 
             el.innerHTML = control.html;

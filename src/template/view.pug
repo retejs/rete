@@ -29,7 +29,7 @@ foreignobject(al-repeat='node in editor.nodes',
       style="text-align: center",
       width='{{control.parent.width - 2 * control.margin}}', 
       height='{{control.height}}', 
-      al-control-html='control'
+      al-control='control'
     )
 
     // Inputs
@@ -45,7 +45,7 @@ foreignobject(al-repeat='node in editor.nodes',
         | {{input.title}}
       .input-control(
         al-if='input.showControl()'
-        al-control-html='input.control'
+        al-control='input.control'
       )
 
 

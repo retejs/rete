@@ -12,6 +12,7 @@ export class Node extends Block {
         this.inputs = [];
         this.outputs = [];
         this.controls = [];
+        this.data = {};
 
         this.title = title;
         this.width = 180;
@@ -89,6 +90,7 @@ export class Node extends Block {
     toJSON() {
         return {
             'id': this.id,
+            'data': this.data,
             'group': this.group ? this.group.id : null,
             'inputs': this.inputs.map(a => a.toJSON()),
             'outputs': this.outputs.map(a => a.toJSON()),
@@ -102,6 +104,7 @@ export class Node extends Block {
         var node = new Node();
 
         node.id = json.id;
+        node.data = json.data;
         Node.latestId = Math.max(node.id, Node.latestId);
         node.position = json.position;
         node.title = json.title;
