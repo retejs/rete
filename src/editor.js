@@ -352,6 +352,7 @@ export class NodeEditor {
 
     addGroup(group) {
         this.groups.push(group);
+        this.event.groupCreated(group);
         this.update();
     }
 
@@ -393,6 +394,8 @@ export class NodeEditor {
     removeGroup(group) {
         group.remove();
         this.groups.splice(this.groups.indexOf(group), 1);
+        this.event.groupRemoved(group);
+
         this.update();
     }
 
@@ -411,6 +414,8 @@ export class NodeEditor {
 
     selectGroup(group) {
         this.active = group;
+        this.event.groupSelected(group);
+        
         this.update();
     }
 
