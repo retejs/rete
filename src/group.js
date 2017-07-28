@@ -13,8 +13,11 @@ export class Group extends Block {
 
         if (params.nodes)
             this.coverNodes(params.nodes);
-        else 
+        else {
             this.position = params.position;
+            this.width = params.width;
+            this.height = params.height;
+        }
         
     }
 
