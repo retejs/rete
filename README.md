@@ -8,7 +8,7 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?
   - [Angular Light](https://github.com/lega911/angular-light)
 
 ### Usage
-[Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library and styles. Include it in your html.
+[Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library, templates and styles. Include it in your html.
 ```html
 <script src="js/node-editor.min.js"></script>
 <link  href="css/node-editor.css" rel="stylesheet" type="text/css"></link>
@@ -28,21 +28,22 @@ Define them styles
     background: #cc2a6a
 }
 ```
-Create some NodeBuilder's
+Create some node builders
 ```js
-var createTexture = function(){
+var builder = {
+    "texture": function(){
             var out = new D3NE.Output("Texture",imageSocket);
             return new D3NE.Node("Texture")
                         .addOutput(out);
-         });
-         
-var createShape = function(){
+            },
+    "shape": function(){
             var input = new D3NE.Input("Texture",imageSocket);
             var out = new D3NE.Output("Value",numSocket);
             return new D3NE.Node("Shape")
             	    	.addInput(input)
                         .addOutput(out);			
-            });
+            }
+};
 ```
 And create NodeEditor
 ```js
@@ -53,12 +54,12 @@ var menu = new D3NE.ContextMenu('./menu.html',
                                 "Action":function(){alert('Subitem selected');}
                             },
                             "Nodes":{
-                                "Shape":createShape, 
-                                "Texture":createTexture
+                                "Shape":builder.shape, 
+                                "Texture":builder.texture
                             }
                         });
 
- var nodeEditor = new D3NE.NodeEditor('nodeEditor', './view.html', menu, new D3NE.Events());
+ var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu, new D3NE.Events());
 ```
 For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 
