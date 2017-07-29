@@ -5,9 +5,10 @@ import {Utils} from './utils';
 
 export class NodeEditor {
 
-    constructor(id, container, template, menu, event) {
+    constructor(id, container, template, builder, menu, event) {
 
         this.id = id;
+        this.builder = builder;
         this.event = event;
         this.active = null;
         this.nodes = [];
@@ -452,29 +453,13 @@ export class NodeEditor {
     toJSON() {
         var nodes = {};
         var groups = {};
-        var sockets = {};
 
         this.nodes.forEach(node => nodes[node.id] = node.toJSON());
         this.groups.forEach(group => groups[group.id] = group.toJSON());
-        this.nodes.forEach(node => {
-            node.inputs.forEach(input => {
-                var id = input.socket.id;
-
-                if (!sockets[id])
-                    sockets[id] = input.socket.toJSON();
-            });
-            node.outputs.forEach(output => {
-                var id = output.socket.id;
-
-                if (!sockets[id])
-                    sockets[id] = output.socket.toJSON();
-            });
-        });
 
         return {
             'nodes': nodes,
-            'groups': groups,
-            'sockets': sockets
+            'groups': groups
         };
     }
 
@@ -482,21 +467,13 @@ export class NodeEditor {
         this.nodes.splice(0, this.nodes.length);
         this.groups.splice(0, this.groups.length);
 
-        var sockets = {};
         var nodes = {};
-
-        Object.keys(json.sockets).forEach(id => {
-            sockets[id] = Socket.fromJSON(json.sockets[id]);
-        });
-        
-        Object.keys(json.sockets).forEach(id => {
-            json.sockets[id].compatible.forEach(combId => {
-                sockets[id].combineWith(sockets[combId])
-            });    
-        });
         
         Object.keys(json.nodes).forEach(id => {
-            this.addNode(nodes[id] = Node.fromJSON(json.nodes[id], sockets));
+            var node = json.nodes[id];
+
+            nodes[id] = Node.fromJSON(this.builder[node.title.toLowerCase()], node);
+            this.addNode(nodes[id]);
         });
         
         Object.keys(json.nodes).forEach(id => {

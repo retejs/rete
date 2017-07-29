@@ -92,44 +92,21 @@ export class Node extends Block {
             'id': this.id,
             'data': this.data,
             'group': this.group ? this.group.id : null,
-            'inputs': this.inputs.map(a => a.toJSON()),
-            'outputs': this.outputs.map(a => a.toJSON()),
-            'controls': this.controls.map(a => a.toJSON()),
+            'inputs': this.inputs.map(input => input.toJSON()),
+            'outputs': this.outputs.map(output => output.toJSON()),
             'position': this.position,
             'title': this.title
         }
     }
 
-    static fromJSON(json, sockets) {
-        var node = new Node();
+    static fromJSON(builder, json) {
+        var node = builder();
 
         node.id = json.id;
         node.data = json.data;
         Node.latestId = Math.max(node.id, Node.latestId);
         node.position = json.position;
         node.title = json.title;
-        
-        json.inputs.forEach(inputJson => {
-            var input = Input.fromJSON(inputJson);
-
-            input.socket = sockets[inputJson.socket];
-            if (inputJson.control !== null)
-                input.addControl(Control.fromJSON(inputJson.control));
-            node.addInput(input);
-        });
-
-        json.outputs.forEach(outputJson => {
-            var output = Output.fromJSON(outputJson);
-
-            output.socket = sockets[outputJson.socket];
-            node.addOutput(output);
-        });
-
-        json.controls.forEach(controlJson => {
-            var control = Control.fromJSON(controlJson);
-
-            node.addControl(control);
-        })
 
         return node;
     }

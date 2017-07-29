@@ -21,17 +21,5 @@ export class Control {
 
     putData(key, data) {
         this.getNode().data[key] = data;
-    }
-
-    toJSON() {
-        return {
-            'html': this.html
-        }
-    }
-
-    static fromJSON(json) {
-        var control = new Control(json.html);
-        
-        return control;
-    }    
+    }  
 }
