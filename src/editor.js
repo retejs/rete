@@ -5,15 +5,16 @@ import {Utils} from './utils';
 
 export class NodeEditor {
 
-    constructor(id, template, menu, event) {
+    constructor(id, container, template, menu, event) {
 
+        this.id = id;
         this.event = event;
         this.active = null;
         this.nodes = [];
         this.groups = [];
 
         this.pickedOutput = null;
-        this.dom = document.getElementById(id);
+        this.dom = container;
         this.dom.tabIndex = 1;
         this.svg = d3.select(this.dom);
         this.mouse = [0, 0];
@@ -446,10 +447,6 @@ export class NodeEditor {
 
         this.zoom.translateTo(this.svg, cx, cy);
         this.zoom.scaleTo(this.svg, scalar * k);
-    }
-
-    remove() {
-        this.dom.remove();
     }
 
     toJSON() {
