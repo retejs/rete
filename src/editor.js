@@ -1,6 +1,7 @@
 import {Group} from './group';
 import {Node} from './node';
 import {Socket} from './socket';
+import {Utils} from './utils';
 
 export class NodeEditor {
 
@@ -58,10 +59,16 @@ export class NodeEditor {
             if (error) throw error;
             this.view.html(text);
             alight.applyBindings(this.$scope, this.view.node());
-            this.resize(); 
+            this.resize();
+            this.onload();
         });
         
     }
+
+    onload() {
+        
+    }
+
     updateNodeSize(scope) {
         scope.node.width = scope.node.el.offsetWidth;
         scope.node.height = scope.node.el.offsetHeight;
@@ -426,6 +433,19 @@ export class NodeEditor {
         this.update();
 
         this.event.groupSelected(group);
+    }
+
+    zoomAt(nodes) {
+        var bbox = Utils.nodesBBox(nodes);
+        var scalar = 0.9;
+        var kh = this.dom.clientHeight/Math.abs(bbox.top - bbox.bottom);
+        var kw = this.dom.clientWidth/Math.abs(bbox.left - bbox.right);
+        var k = Math.min(kh, kw, 1);
+        var cx = (bbox.left + bbox.right) / 2;
+        var cy = (bbox.top + bbox.bottom) / 2;
+
+        this.zoom.translateTo(this.svg, cx, cy);
+        this.zoom.scaleTo(this.svg, scalar * k);
     }
 
     remove() {
