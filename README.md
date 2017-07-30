@@ -17,49 +17,64 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?
 Create needed sockets
 ```js
 var numSocket = new D3NE.Socket('number', 'Number value', 'hint');
-var imageSocket = new D3NE.Socket('image', 'Image', 'hint');
 ```
 Define them styles
 ```css
 .socket.number{
     background: #96b38a
 }
-.socket.image{
-    background: #cc2a6a
-}
 ```
 Create some node builders
 ```js
 var builder = {
-    "texture": function(){
-            var out = new D3NE.Output("Texture",imageSocket);
-            return new D3NE.Node("Texture")
-                        .addOutput(out);
-            },
-    "shape": function(){
-            var input = new D3NE.Input("Texture",imageSocket);
-            var out = new D3NE.Output("Value",numSocket);
-            return new D3NE.Node("Shape")
-            	    	.addInput(input)
-                        .addOutput(out);			
-            }
+    number: function() {
+    
+        var out = new D3NE.Output('Number',numSocket); 
+        var numControl = new D3NE.Control('<input type="number">',(element, control)=>{
+            control.putData('num', 1);
+         });
+
+        return new D3NE.Node('Number')
+                    .addControl(numControl)
+                    .addOutput(out);
+    },
+    add: function(){
+        return ...
+    }
 };
 ```
 And create NodeEditor
 ```js
 
 var menu = new D3NE.ContextMenu('./menu.html',
-                        {
-                            "Actions":{
-                                "Action":function(){alert('Subitem selected');}
-                            },
-                            "Nodes":{
-                                "Shape":builder.shape, 
-                                "Texture":builder.texture
-                            }
-                        });
+                {
+                    'Actions':{
+                    'Action': function(){alert('Subitem selected');}
+                    },
+                    'Nodes':{
+                        'Number': builder.number, 
+                        'Add': builder.add
+                    }
+                });
 
  var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu, new D3NE.Events());
+```
+Use the Engine to start processing the data
+```js
+ var engine = new D3NE.Engine('demo@0.1.0', {
+    number: function(node, inputs, outputs){
+        outputs[0] = node.data.num;
+        return outputs;
+    },
+    add:function(node, inputs, outputs){
+        ...
+        return outputs;
+    }
+});
+    
+nodeEditor.onload = function(){
+    engine.process(nodeEditor.toJSON());            
+};
 ```
 For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 
