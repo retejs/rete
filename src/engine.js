@@ -30,10 +30,11 @@ export class Engine {
 
                 return connData;
             });
+            var outputData = node.outputs.map(() => null);
             
             var key = node.title.toLowerCase();
 
-            node.outputData = this.worker[key](node, inputData, []);
+            node.outputData = this.worker[key](node, inputData, outputData);
             if (node.outputData.length !== node.outputs.length)
                 throw new Error('Output data does not correspond to number of outputs');
             
