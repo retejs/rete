@@ -1,11 +1,11 @@
 {
   "name": "d3-node-editor",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": " JavaScript library",
   "main": "build/node-editor.js",
   "scripts": {
     "lint": "eslint src",
-    "build": "rollup -c | npm-sass src/style/style.sass > build/node-editor.css | pug < src/template/view.pug > build/view.html",
+    "build": "rollup -c | npm-sass src/style/style.sass > build/node-editor.css | pug < src/template/view.pug > build/view.html |  pug < src/template/menu.pug > build/menu.html",
     "minify-build": "uglifyjs build/node-editor.js --support-ie8  --compress --output build/node-editor.min.js"
   },
   "repository": {

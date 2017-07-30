@@ -16,19 +16,4 @@ export class Socket {
         if (!(socket instanceof Socket)) throw new Error('Invalid socket');
         return this.id === socket.id || this.compatible.indexOf(socket) !== -1;
     }
-
-    toJSON() {
-        return {
-            'id': this.id,
-            'name': this.name,
-            'hint': this.hint,
-            'compatible': this.compatible.map(a => a.id)
-        }
-    }
-
-    static fromJSON(json) {
-        var socket = new Socket(json.id, json.name, json.hint);
-            
-        return socket;
-    }
 }

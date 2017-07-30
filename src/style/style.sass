@@ -6,6 +6,7 @@ $group-handler-offset: -10px
 $socket-size: 24px
 $socket-margin: 6px
 $node-width: 180px
+$context-menu-round: 7px
 
 .node-editor
   *
@@ -116,16 +117,38 @@ $node-width: 180px
   
 
 .context-menu
-  position: absolute
   left: 0
   top: 0
-  border-radius: 7px
-  overflow: hidden
+  position: absolute
+  padding: 10px
   & > .item
+    .subitems
+      position: absolute
+      display: none
+      left: 100%
+      top: 0
+      border-radius: $context-menu-round
+      overflow: overlay
+    &:hover .subitems
+      display: block
+    &:after
+      content: '►'
+      position: absolute
+      opacity: 0.6
+      right: 5px
+      top: 5px
+  .item
     padding: 4px
-    border: 1px solid darken($node-color,8%)
+    border-bottom: 1px solid darken($node-color,8%)
     color: #fff
     background-color: $node-color
     cursor: pointer
+    width: 100px
+    position: relative
+    &:first-child
+      border-radius: $context-menu-round $context-menu-round 0 0
+    &:last-child
+      border-radius: 0 0 $context-menu-round $context-menu-round
     &:hover
       background-color: lighten($node-color,4%)
+      

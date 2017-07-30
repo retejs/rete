@@ -1,4 +1,5 @@
 import {Block} from './block';
+import {Utils} from './utils';
 
 export class Group extends Block {
 
@@ -13,8 +14,11 @@ export class Group extends Block {
 
         if (params.nodes)
             this.coverNodes(params.nodes);
-        else 
+        else {
             this.position = params.position;
+            this.width = params.width;
+            this.height = params.height;
+        }
         
     }
 
@@ -46,18 +50,15 @@ export class Group extends Block {
     coverNodes(nodes) {
         var self = this;
         var margin = 30;
-        var minX = Math.min(...nodes.map(node => node.position[0]));
-        var minY = Math.min(...nodes.map(node => node.position[1]));
-        var maxX = Math.max(...nodes.map(node => node.position[0] + node.width));
-        var maxY = Math.max(...nodes.map(node => node.position[1] + node.height));
+        var bbox = Utils.nodesBBox(nodes);
 
         nodes.forEach(node => {
             if (node.group !== null) node.group.removeNode(node.group);
             self.addNode(node);
         });
-        this.position = [minX - margin, minY - 2 * margin];
-        this.setWidth(maxX - minX + 2 * margin);
-        this.setHeight(maxY - minY + 3 * margin);
+        this.position = [bbox.left - margin, bbox.top - 2 * margin];
+        this.setWidth(bbox.right - bbox.left + 2 * margin);
+        this.setHeight(bbox.bottom - bbox.top + 3 * margin);
     }
 
     containNode(node) {
@@ -105,6 +106,7 @@ export class Group extends Block {
         });
 
         group.id = json.id;
+        Group.latestId = Math.max(group.id, Group.latestId);
         group.title = json.title;
         group.minWidth = json.minWidth;
         group.minHeight = json.minHeight;

@@ -45,21 +45,12 @@ export class Output {
 
     toJSON() {
         return {
-            'node': this.node.id,
-            'connections': this.connections.map(a => {
+            'connections': this.connections.map(c => {
                 return {
-                    node: a.input.node.id,
-                    input: a.input.node.inputs.indexOf(a.input)
+                    node: c.input.node.id,
+                    input: c.input.node.inputs.indexOf(c.input)
                 }
-            }),
-            'title': this.title,
-            'socket': this.socket.id
-        }
-    }
-
-    static fromJSON(json) {
-        var output = new Output(json.title);
-
-        return output;
+            })
+        };
     }
 }

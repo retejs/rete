@@ -1,26 +1,37 @@
-import { ContextMenu } from './contextmenu';
 import {Group} from './group';
 import {Node} from './node';
-import {Socket} from './socket';
+import {Utils} from './utils';
 
 export class NodeEditor {
 
-    constructor(id, template, builders, event) {
+    constructor(id, container, template, builder, menu, event) {
 
+        if (!Utils.isValidId(id))
+            throw new Error('ID should be valid to name@0.1.0 format');  
+        
+        this.id = id;
+        this.builder = builder;
         this.event = event;
         this.active = null;
         this.nodes = [];
         this.groups = [];
-        this.builders = builders;
-
+     
         this.pickedOutput = null;
-        this.dom = document.getElementById(id);
+        this.dom = container;
         this.dom.tabIndex = 1;
-
-        var nodeNames = builders.map(e => e.name);
-
-        this.contextMenu = new ContextMenu(nodeNames, this.addNode.bind(this));
         this.svg = d3.select(this.dom);
+        this.loaded = false;   
+        this.mouse = [0, 0];
+
+        this.contextMenu = menu;
+        this.contextMenu.onClick = (subitem) => {
+            var result = subitem();
+
+            if (result instanceof Node)
+                this.addNode(result, true);
+            
+            this.contextMenu.hide();
+        };
 
         this.clickable = this.svg.append('rect')
             .attr('fill', 'transparent')
@@ -37,9 +48,12 @@ export class NodeEditor {
         this.svg.call(this.zoom);
 
         d3.select(window)
-            .on('mousemove', () => { this.update();}) // update picked connection   
+            .on('mousemove', () => {
+                this.mouse = d3.mouse(this.view.node());
+                this.update();
+            })    
             .on('keydown.' + id, this.keyDown.bind(this))
-            .on('resize.' + id, ()=> { this.resize();});
+            .on('resize.' + id, this.resize.bind(this));
         
         this.$scope = alight.Scope();
         this.$scope.editor = this;
@@ -50,10 +64,17 @@ export class NodeEditor {
             if (error) throw error;
             this.view.html(text);
             alight.applyBindings(this.$scope, this.view.node());
-            this.resize(); 
+            this.resize();
+            this.loaded = true;
+            this.onload();
         });
         
     }
+
+    onload() {
+        
+    }
+
     updateNodeSize(scope) {
         scope.node.width = scope.node.el.offsetWidth;
         scope.node.height = scope.node.el.offsetHeight;
@@ -108,23 +129,24 @@ export class NodeEditor {
 
         alight.directives.al.dragableGroupHandler = (scope, el, arg) => {
             var group = scope.group;
-            var x, y;
+            var mousePrev;
 
             d3.select(el).call(d3.drag().on('start', () => {
+                mousePrev = d3.mouse(this.svg.node());
                 this.selectGroup(group);
-                x = d3.event.sourceEvent.clientX;
-                y = d3.event.sourceEvent.clientY;
             }).on('drag', () => {
-                var deltax = d3.event.sourceEvent.clientX-x;
-                var deltay = d3.event.sourceEvent.clientY-y;
+                var zoom = d3.zoomTransform(this.dom);
+                var mouse = d3.mouse(this.svg.node());
+                var deltax = (mouse[0] - mousePrev[0]) / zoom.k;
+                var deltay = (mouse[1] - mousePrev[1]) / zoom.k;
                 var deltaw = Math.max(0, group.width - group.minWidth);
                 var deltah = Math.max(0, group.height - group.minHeight);
-
+                    
                 if (deltaw !== 0)
-                    x = d3.event.sourceEvent.clientX;
+                    mousePrev[0] = mouse[0];
                 if (deltah !== 0)
-                    y = d3.event.sourceEvent.clientY;
-                
+                    mousePrev[1] = mouse[1];
+
                 if (arg.match('l')) {
                     group.position[0] += Math.min(deltaw, deltax);
                     group.setWidth(group.width - deltax);
@@ -194,9 +216,7 @@ export class NodeEditor {
                 }
 
                 try {
-                    var connection = this.pickedOutput.connectTo(input);
-
-                    this.event.connectionCreated(connection);
+                    this.connect(this.pickedOutput, input);
                 } catch (e) {
                     alert(e.message);
                 } finally {
@@ -216,10 +236,11 @@ export class NodeEditor {
             });
         }
 
-        alight.directives.al.controlHtml = (scope, el, obj) => {
+        alight.directives.al.control = (scope, el, obj) => {
             var control = obj.split('.').reduce((o, i) => o[i], scope);
 
             el.innerHTML = control.html;
+            control.handler(el.children[0], control);
         };
     }
 
@@ -296,11 +317,9 @@ export class NodeEditor {
         }
         
         if (this.pickedOutput !== null) {
-            var mouse = d3.mouse(this.view.node());
-
             if (!this.pickedOutput.el) return;
             let output = this.pickedOutput;
-            let input = [mouse[0], mouse[1]];
+            let input = this.mouse;
 
             pathData.push({
                 active: true, d: this.getConnectionPathData(null,
@@ -326,32 +345,28 @@ export class NodeEditor {
             this.update();
             return;
         }    
-
-        if (this.contextMenu.isVisible())
-            this.contextMenu.hide();
-        else
-            this.contextMenu.show(d3.event.clientX, d3.event.clientY);
+        
+        this.contextMenu.show(d3.event.clientX - 20, d3.event.clientY - 20);
+        this.update();
     }
 
-    addNode(node) {
-        if (!(node instanceof Node)) {
-            var builder = this.builders.find(b => b.name === node);
-
-            var pos = d3.mouse(this.view.node());
-
-            node = builder.build();
-            node.position = [pos[0], pos[1]];
-        }
-
+    addNode(node, mousePlaced = false) {
+        if (!(node instanceof Node))
+            throw new Error('Wrong instance');
+        
+        if (mousePlaced)
+            node.position = this.mouse;
         this.nodes.push(node);
+        this.selectNode(node);
 
         this.event.nodeCreated(node);
-        this.selectNode(node);
     }
 
     addGroup(group) {
         this.groups.push(group);
         this.update();
+
+        this.event.groupCreated(group);
     }
 
     keyDown() {
@@ -382,17 +397,26 @@ export class NodeEditor {
 
         this.nodes.splice(index, 1);
         node.remove();
-        this.event.nodeRemoved(node);
 
         if (this.nodes.length > 0)
             this.selectNode(this.nodes[Math.max(0, index - 1)]);
         this.update();
+
+        this.event.nodeRemoved(node);
     }
 
     removeGroup(group) {
         group.remove();
         this.groups.splice(this.groups.indexOf(group), 1);
         this.update();
+
+        this.event.groupRemoved(group);
+    }
+
+    connect(output, input) {
+        var connection = output.connectTo(input);
+
+        this.event.connectionCreated(connection);
     }
 
     removeConnection(connection) {
@@ -401,48 +425,46 @@ export class NodeEditor {
     }
 
     selectNode(node) {
-        if (this.nodes.indexOf(node) === -1) throw new Error('Node not exist in list');
+        if (this.nodes.indexOf(node) === -1)
+            throw new Error('Node not exist in list');
 
         this.active = node;
-        this.event.nodeSelected(node);
         this.update();
+
+        this.event.nodeSelected(node);
     }
 
     selectGroup(group) {
         this.active = group;
         this.update();
+
+        this.event.groupSelected(group);
     }
 
-    remove() {
-        this.dom.remove();
+    zoomAt(nodes) {
+        var bbox = Utils.nodesBBox(nodes);
+        var scalar = 0.9;
+        var kh = this.dom.clientHeight/Math.abs(bbox.top - bbox.bottom);
+        var kw = this.dom.clientWidth/Math.abs(bbox.left - bbox.right);
+        var k = Math.min(kh, kw, 1);
+        var cx = (bbox.left + bbox.right) / 2;
+        var cy = (bbox.top + bbox.bottom) / 2;
+
+        this.zoom.translateTo(this.svg, cx, cy);
+        this.zoom.scaleTo(this.svg, scalar * k);
     }
 
     toJSON() {
         var nodes = {};
         var groups = {};
-        var sockets = {};
 
         this.nodes.forEach(node => nodes[node.id] = node.toJSON());
         this.groups.forEach(group => groups[group.id] = group.toJSON());
-        this.nodes.forEach(node => {
-            node.inputs.forEach(input => {
-                var id = input.socket.id;
-
-                if (!sockets[id])
-                    sockets[id] = input.socket.toJSON();
-            });
-            node.outputs.forEach(output => {
-                var id = output.socket.id;
-
-                if (!sockets[id])
-                    sockets[id] = output.socket.toJSON();
-            });
-        });
 
         return {
+            'id': this.id,
             'nodes': nodes,
-            'groups': groups,
-            'sockets': sockets
+            'groups': groups
         };
     }
 
@@ -450,21 +472,13 @@ export class NodeEditor {
         this.nodes.splice(0, this.nodes.length);
         this.groups.splice(0, this.groups.length);
 
-        var sockets = {};
         var nodes = {};
-
-        Object.keys(json.sockets).forEach(id => {
-            sockets[id] = Socket.fromJSON(json.sockets[id]);
-        });
-        
-        Object.keys(json.sockets).forEach(id => {
-            json.sockets[id].compatible.forEach(combId => {
-                sockets[id].combineWith(sockets[combId])
-            });    
-        });
         
         Object.keys(json.nodes).forEach(id => {
-            this.addNode(nodes[id] = Node.fromJSON(json.nodes[id], sockets));
+            var node = json.nodes[id];
+
+            nodes[id] = Node.fromJSON(this.builder[node.title.toLowerCase()], node);
+            this.addNode(nodes[id]);
         });
         
         Object.keys(json.nodes).forEach(id => {
@@ -477,7 +491,7 @@ export class NodeEditor {
                     var inputIndex = jsonConnection.input;
                     var targetInput = nodes[nodeId].inputs[inputIndex];
 
-                    node.outputs[i].connectTo(targetInput);
+                    this.connect(node.outputs[i], targetInput);
                 });
             });
 
@@ -491,7 +505,7 @@ export class NodeEditor {
 
                 group.addNode(node);
             })
-            this.groups.push(group);
+            this.addGroup(group);
         });
         this.update();
     }

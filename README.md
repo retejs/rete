@@ -8,7 +8,7 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?
   - [Angular Light](https://github.com/lega911/angular-light)
 
 ### Usage
-[Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library and styles. Include it in your html.
+[Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library, templates and styles. Include it in your html.
 ```html
 <script src="js/node-editor.min.js"></script>
 <link  href="css/node-editor.css" rel="stylesheet" type="text/css"></link>
@@ -17,38 +17,64 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?
 Create needed sockets
 ```js
 var numSocket = new D3NE.Socket('number', 'Number value', 'hint');
-var imageSocket = new D3NE.Socket('image', 'Image', 'hint');
 ```
 Define them styles
 ```css
 .socket.number{
-    fill: #96b38a
-}
-.socket.image{
-    fill: #cc2a6a
+    background: #96b38a
 }
 ```
-Create some NodeBuilder's
+Create some node builders
 ```js
-var texturebuilder = new D3NE.NodeBuilder("Texture",function(){
-            var out = new D3NE.Output("Texture",imageSocket);
-            return new D3NE.Node("Texture")
-                        .addOutput(out);
+var builder = {
+    number: function() {
+    
+        var out = new D3NE.Output('Number',numSocket); 
+        var numControl = new D3NE.Control('<input type="number">',(element, control)=>{
+            control.putData('num', 1);
          });
-         
-var shapebuilder = new D3NE.NodeBuilder("Shape",function(){
-            var input = new D3NE.Input("Texture",imageSocket);
-            var out = new D3NE.Output("Value",numSocket);
-            return new D3NE.Node("Shape")
-            	    	.addInput(input)
-                        .addOutput(out);			
-            });
+
+        return new D3NE.Node('Number')
+                    .addControl(numControl)
+                    .addOutput(out);
+    },
+    add: function(){
+        return ...
+    }
+};
 ```
 And create NodeEditor
 ```js
- var nodeEditor = new D3NE.NodeEditor('nodeEditor', 
-                        [shapebuilder,texturebuilder],
-                        new D3NE.Events());
+
+var menu = new D3NE.ContextMenu('./menu.html',
+                {
+                    'Actions':{
+                    'Action': function(){alert('Subitem selected');}
+                    },
+                    'Nodes':{
+                        'Number': builder.number, 
+                        'Add': builder.add
+                    }
+                });
+
+ var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu, new D3NE.Events());
+```
+Use the Engine to start processing the data
+```js
+ var engine = new D3NE.Engine('demo@0.1.0', {
+    number: function(node, inputs, outputs){
+        outputs[0] = node.data.num;
+        return outputs;
+    },
+    add:function(node, inputs, outputs){
+        ...
+        return outputs;
+    }
+});
+    
+nodeEditor.onload = function(){
+    engine.process(nodeEditor.toJSON());            
+};
 ```
 For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 

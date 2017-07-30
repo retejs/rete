@@ -38,23 +38,12 @@ export class Input {
 
     toJSON() {
         return {
-            'node': this.node.id,
             'connections': this.connections.map(c => {
                 return {
                     node: c.output.node.id,
                     output: c.output.node.outputs.indexOf(c.output)
-                }
-            }),
-            'multipleConnections': this.multipleConnections,
-            'title': this.title,
-            'socket': this.socket.id,
-            'control': this.control?this.control.toJSON():null
-        }
-    }
-
-    static fromJSON(json) {
-        var input = new Input(json.title, null, json.multipleConnections);
-
-        return input;
+                };
+            })
+        };
     }
 }
