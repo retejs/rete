@@ -15,11 +15,12 @@ export class NodeEditor {
         this.active = null;
         this.nodes = [];
         this.groups = [];
-
+     
         this.pickedOutput = null;
         this.dom = container;
         this.dom.tabIndex = 1;
         this.svg = d3.select(this.dom);
+        this.loaded = false;   
         this.mouse = [0, 0];
 
         this.contextMenu = menu;
@@ -64,6 +65,7 @@ export class NodeEditor {
             this.view.html(text);
             alight.applyBindings(this.$scope, this.view.node());
             this.resize();
+            this.loaded = true;
             this.onload();
         });
         
