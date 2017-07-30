@@ -1,12 +1,14 @@
 import {Group} from './group';
 import {Node} from './node';
-import {Socket} from './socket';
 import {Utils} from './utils';
 
 export class NodeEditor {
 
     constructor(id, container, template, builder, menu, event) {
 
+        if (!Utils.isValidId(id))
+            throw new Error('ID should be valid to name@0.1.0 format');  
+        
         this.id = id;
         this.builder = builder;
         this.event = event;
@@ -458,6 +460,7 @@ export class NodeEditor {
         this.groups.forEach(group => groups[group.id] = group.toJSON());
 
         return {
+            'id': this.id,
             'nodes': nodes,
             'groups': groups
         };

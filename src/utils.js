@@ -13,4 +13,29 @@ export class Utils {
             bottom: bottom
         };
     }
+
+    static isValidJSON(data) {
+        return typeof data.id === 'string' &&
+            typeof data.nodes === 'object' &&
+            typeof data.groups ==='object'
+    }
+
+    static isValidId(id) {
+        return /^[\w-]{3,}@[0-9]+\.[0-9]+\.[0-9]+$/.test(id);
+    }
+
+    static isCompatibleIDs(id1, id2) {
+        id1 = id1.split('@');
+        id2 = id2.split('@');
+
+        if (id1[0] !== id2[0]) {
+            console.error('Names don\'t match');
+            return false
+        }
+        if (id1[1] !== id2[1]) {
+            console.error('Versions don\'t match');
+            return false
+        }
+        return true;
+    }
 }
