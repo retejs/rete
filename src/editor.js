@@ -214,15 +214,11 @@ export class NodeEditor {
 
                     this.removeConnection(connections[0]);
                 }
+                
+                this.connect(this.pickedOutput, input);
 
-                try {
-                    this.connect(this.pickedOutput, input);
-                } catch (e) {
-                    alert(e.message);
-                } finally {
-                    this.pickedOutput = null;
-                    this.update();
-                }
+                this.pickedOutput = null;
+                this.update();
             });     
         }
 
@@ -414,7 +410,13 @@ export class NodeEditor {
     }
 
     connect(output, input) {
-        var connection = output.connectTo(input);
+        try {
+            var connection = output.connectTo(input);
+
+        } catch (e) {
+            console.error(e);
+            alert(e.message);
+        }
 
         this.event.connectionCreated(connection);
     }
