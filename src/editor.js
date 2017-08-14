@@ -1,17 +1,18 @@
+import {EventListener} from './eventlistener';
 import {Group} from './group';
 import {Node} from './node';
 import {Utils} from './utils';
 
 export class NodeEditor {
 
-    constructor(id, container, template, builder, menu, event) {
+    constructor(id, container, template, builder, menu) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
         
         this.id = id;
         this.builder = builder;
-        this.event = event;
+        this.eventListener = new EventListener();
         this.active = null;
         this.nodes = [];
         this.groups = [];
@@ -103,6 +104,8 @@ export class NodeEditor {
                     else if (!contain && cover)
                         group.addNode(node);
                 });
+
+                this.eventListener.trigger('change');
                 this.update();
             }))
         };
@@ -124,7 +127,10 @@ export class NodeEditor {
                 }
 
                 this.update();
-            }));
+            }).on('end', () => {
+                this.eventListener.trigger('change');
+            })
+            );
         };
 
         alight.directives.al.dragableGroupHandler = (scope, el, arg, env) => {
@@ -170,6 +176,8 @@ export class NodeEditor {
                         group.removeNode(node);
                         
                 });
+
+                this.eventListener.trigger('change');
                 this.update();
             }))
         };
@@ -351,19 +359,22 @@ export class NodeEditor {
         if (!(node instanceof Node))
             throw new Error('Wrong instance');
         
-        if (mousePlaced)
-            node.position = this.mouse;
-        this.nodes.push(node);
-        this.selectNode(node);
-
-        this.event.nodeCreated(node);
+        if (this.eventListener.trigger('nodecreate', node)) {
+            if (mousePlaced)
+                node.position = this.mouse;
+            this.nodes.push(node);
+            this.eventListener.trigger('change');
+            this.selectNode(node);
+        }
     }
 
     addGroup(group) {
-        this.groups.push(group);
+        if (this.eventListener.trigger('groupcreate', group)) {
+            this.groups.push(group);
+            this.eventListener.trigger('change');
+        }
+        
         this.update();
-
-        this.event.groupCreated(group);
     }
 
     keyDown() {
@@ -392,56 +403,61 @@ export class NodeEditor {
     removeNode(node) {
         var index = this.nodes.indexOf(node);
 
-        this.nodes.splice(index, 1);
-        node.remove();
+        if (this.eventListener.trigger('noderemove', node)) {
+            this.nodes.splice(index, 1);
+            node.remove();
+            this.eventListener.trigger('change');
 
-        if (this.nodes.length > 0)
-            this.selectNode(this.nodes[Math.max(0, index - 1)]);
+            if (this.nodes.length > 0)
+                this.selectNode(this.nodes[Math.max(0, index - 1)]);
+        }
+
         this.update();
-
-        this.event.nodeRemoved(node);
     }
 
     removeGroup(group) {
-        group.remove();
-        this.groups.splice(this.groups.indexOf(group), 1);
-        this.update();
+        if (this.eventListener.trigger('groupremove', group)) {
+            group.remove();
+            this.groups.splice(this.groups.indexOf(group), 1);
+            this.eventListener.trigger('change');
+        }    
 
-        this.event.groupRemoved(group);
+        this.update(); 
     }
 
     connect(output, input) {
-        try {
-            var connection = output.connectTo(input);
-
-        } catch (e) {
-            console.error(e);
-            alert(e.message);
-        }
-
-        this.event.connectionCreated(connection);
+        if (this.eventListener.trigger('connectioncreate', { output: output, input: input }))
+            try {
+                output.connectTo(input);
+                this.eventListener.trigger('change');
+            } catch (e) {
+                console.error(e);
+                alert(e.message);
+            }
     }
 
     removeConnection(connection) {
-        connection.remove();
-        this.event.connectionRemoved(connection);
+        if (this.eventListener.trigger('connectionremove', connection)) {
+            connection.remove();
+            this.eventListener.trigger('change');
+        }
     }
 
     selectNode(node) {
         if (this.nodes.indexOf(node) === -1)
             throw new Error('Node not exist in list');
-
-        this.active = node;
+        
+        if (this.eventListener.trigger('nodeselect', node))
+            this.active = node;
+        
         this.update();
-
-        this.event.nodeSelected(node);
     }
 
     selectGroup(group) {
-        this.active = group;
+        if (this.eventListener.trigger('groupselect', group))
+            this.active = group;
+        
         this.update();
-
-        this.event.groupSelected(group);
     }
 
     zoomAt(nodes) {
