@@ -1,9 +1,9 @@
 // Nodes
 foreignobject(al-repeat='node in editor.nodes',
-  x='{{node.position[0]}}', 
-  y='{{node.position[1]}}',
-  width='{{node.width}}',
-  height='{{node.height}}'
+  :x='node.position[0]', 
+  :y='node.position[1]',
+  :width='node.width',
+  :height='node.height'
   onload='{{editor.updateNodeSize(this)}}'
   ) 
   div.node(
@@ -27,8 +27,8 @@ foreignobject(al-repeat='node in editor.nodes',
     div.control(
       al-repeat='control in node.controls', 
       style="text-align: center",
-      width='{{control.parent.width - 2 * control.margin}}', 
-      height='{{control.height}}', 
+      :width='control.parent.width - 2 * control.margin', 
+      :height='control.height', 
       al-control='control'
     )
 
@@ -52,10 +52,10 @@ foreignobject(al-repeat='node in editor.nodes',
 // Groups
 foreignobject(al-repeat='group in editor.groups', 
   al-svg-back,
-  x='{{group.position[0]}}', 
-  y='{{group.position[1]}}',
-  width='{{group.width}}', 
-  height='{{group.height}}'
+  :x='group.position[0]', 
+  :y='group.position[1]',
+  :width='group.width', 
+  :height='group.height'
   )
   div.group(
     al-dragable-group,
@@ -74,6 +74,6 @@ path.connection(
   al-repeat='path in editor.paths', 
   al-svg-back, 
   al-on.mousedown='editor.areaClick()', 
-  d='{{path.d}}'
+  :d='path.d'
   class='{{path.active?"active":null}}'
 )
