@@ -55,15 +55,15 @@ export class NodeEditor {
             .on('keydown.' + id, this.keyDown.bind(this))
             .on('resize.' + id, this.resize.bind(this));
         
-        this.$scope = alight.Scope();
-        this.$scope.editor = this;
+        this.$cd = alight.ChangeDetector();
+        this.$cd.scope.editor = this;
 
         this.declareDirectives();
         
         d3.text(template, (error, text) => {
             if (error) throw error;
             this.view.html(text);
-            alight.applyBindings(this.$scope, this.view.node());
+            alight.bind(this.$cd, this.view.node());
             this.resize();
             this.loaded = true;
             this.onload();
@@ -81,8 +81,8 @@ export class NodeEditor {
     }
 
     declareDirectives() {
-        alight.directives.al.dragableNode = (scope, el) => {
-            var node = scope.node;
+        alight.directives.al.dragableNode = (scope, el, expression, env) => {
+            var node = env.changeDetector.locals.node;
             var parent = el.parentNode;
 
             node.el = el;
@@ -107,8 +107,8 @@ export class NodeEditor {
             }))
         };
 
-        alight.directives.al.dragableGroup = (scope, el) => {
-            var group = scope.group;
+        alight.directives.al.dragableGroup = (scope, el, expression, env) => {
+            var group = env.changeDetector.locals.group;
 
             d3.select(el).call(d3.drag().on('start', () => {
                 this.selectGroup(group);
@@ -127,8 +127,8 @@ export class NodeEditor {
             }));
         };
 
-        alight.directives.al.dragableGroupHandler = (scope, el, arg) => {
-            var group = scope.group;
+        alight.directives.al.dragableGroupHandler = (scope, el, arg, env) => {
+            var group = env.changeDetector.locals.group;
             var mousePrev;
 
             d3.select(el).call(d3.drag().on('start', () => {
@@ -174,25 +174,25 @@ export class NodeEditor {
             }))
         };
 
-        alight.directives.al.svgBack = (scope, el) => {
+        alight.directives.al.svgBack = (scope, el, expression, env) => {
             d3.select(el).lower();
-            scope.$scan();
+            env.scan();
         }
 
-        alight.directives.al.groupTitleClick = (scope, el) => {
-            var group = scope.group;
+        alight.directives.al.groupTitleClick = (scope, el, expression, env) => {
+            var group = env.changeDetector.locals.group;
 
             d3.select(el).on('click', () => {
                 var title = prompt('Please enter title of the group', group.title);
 
                 if (title !== null && title.length > 0)
                     group.title = title;
-                scope.$scan();
+                env.scan();
             });
         };
         
-        alight.directives.al.pickInput = (scope, el) => {
-            var input = scope.input;
+        alight.directives.al.pickInput = (scope, el, expression, env) => {
+            var input = env.changeDetector.locals.input;
 
             input.el = el;
 
@@ -222,8 +222,8 @@ export class NodeEditor {
             });     
         }
 
-        alight.directives.al.pickOutput = (scope, el) => {
-            var output = scope.output;
+        alight.directives.al.pickOutput = (scope, el, expression, env) => {
+            var output = env.changeDetector.locals.output;
 
             output.el = el;
 
@@ -232,8 +232,9 @@ export class NodeEditor {
             });
         }
 
-        alight.directives.al.control = (scope, el, obj) => {
-            var control = obj.split('.').reduce((o, i) => o[i], scope);
+        alight.directives.al.control = (scope, el, expression, env) => {
+            var locals = env.changeDetector.locals;
+            var control = expression.split('.').reduce((o, i) => o[i], locals);
 
             el.innerHTML = control.html;
             control.handler(el.children[0], control);
@@ -331,7 +332,7 @@ export class NodeEditor {
 
     update() {
         this.updateConnections();
-        this.$scope.$scan();
+        this.$cd.scan();
     }
 
     areaClick() {

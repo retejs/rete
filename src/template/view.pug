@@ -73,7 +73,7 @@ foreignobject(al-repeat='group in editor.groups',
 path.connection(
   al-repeat='path in editor.paths', 
   al-svg-back, 
-  al-mousedown='editor.areaClick()', 
+  al-on.mousedown='editor.areaClick()', 
   d='{{path.d}}'
   class='{{path.active?"active":null}}'
 )

@@ -6,15 +6,15 @@ export class ContextMenu {
         this.y = 0;
         this.items = items;
         
-        this.$scope = alight.Scope();
-        this.$scope.contextMenu = this;
+        this.$cd = alight.ChangeDetector();
+        this.$cd.scope.contextMenu = this;
 
         d3.text(template, (error, text) => {
             if (error) throw error;
             var dom = d3.select('body').append('div');
 
             dom.html(text);
-            alight.applyBindings(this.$scope, dom.node());
+            alight.bind(this.$cd, dom.node());
         });
     }
 
@@ -30,11 +30,11 @@ export class ContextMenu {
         this.visible = true;
         this.x = x;
         this.y = y;
-        this.$scope.$scan();
+        this.$cd.scan();
     }
 
     hide() {
         this.visible = false;
-        this.$scope.$scan();
+        this.$cd.scan();
     }
 }
