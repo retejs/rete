@@ -1,14 +1,10 @@
-D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-editor)
+D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-Editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-Editor)
 ====
 #### JavaScript library 
 ![node editor](https://drive.google.com/uc?export=download&id=0BzysCNw7yv8MeXdkSV9oeHZLQkk)
 
-### Dependencies
-  - [D3.js](https://github.com/d3/d3)
-  - [Angular Light](https://github.com/lega911/angular-light)
-
 ### Usage
-[Download](https://github.com/Ni55aN/D3-Node-editor/releases/latest) the library, templates and styles. Include it in your html.
+[Download](https://github.com/Ni55aN/D3-Node-Editor/releases/latest) the library, templates and styles. Include it in your html.
 ```html
 <script src="js/node-editor.min.js"></script>
 <link  href="css/node-editor.css" rel="stylesheet" type="text/css"></link>
@@ -59,7 +55,7 @@ var menu = new D3NE.ContextMenu('./menu.html',
 
  var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu, new D3NE.Events());
 ```
-Use the Engine to start processing the data
+Use the Engine to start processing the data (also [avaliable](https://github.com/Ni55aN/D3-Node-Engine) cross-platform Engine)
 ```js
  var engine = new D3NE.Engine('demo@0.1.0', {
     number: function(node, inputs, outputs){
