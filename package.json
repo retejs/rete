@@ -5,7 +5,8 @@
   "main": "build/node-editor.js",
   "scripts": {
     "lint": "eslint src",
-    "build": "rollup -c | npm-sass src/style/style.sass > build/node-editor.css | pug < src/template/view.pug > build/view.html |  pug < src/template/menu.pug > build/menu.html",
+    "build-assets": "name=${npm_config_target:-default} && npm-sass assets/$name/style.sass > build/node-editor.css | pug < assets/$name/view.pug > build/view.html |  pug < assets/$name/menu.pug > build/menu.html",
+    "build": "rollup -c",
     "minify-build": "uglifyjs build/node-editor.js --support-ie8  --compress --output build/node-editor.min.js"
   },
   "repository": {
