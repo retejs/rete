@@ -72,8 +72,19 @@ nodeEditor.onload = function(){
     engine.process(nodeEditor.toJSON());            
 };
 ```
+
 For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 
+### Assets
+
+It allows you to change the appearance of the editor.
+<br>
+
+Build for yourself:
+```bash
+npm run build-assets --target=myAssets
+```
+where *myAssets* — folder inside [/assets](https://github.com/Ni55aN/D3-Node-Editor/tree/master/assets). It must contain `menu.pug`, `view.pug`, `style.sass`
 
 License
 ----
