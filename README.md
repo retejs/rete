@@ -53,7 +53,7 @@ var menu = new D3NE.ContextMenu('./menu.html',
                     }
                 });
 
- var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu, new D3NE.Events());
+ var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu);
 ```
 Use the Engine to start processing the data (also [avaliable](https://github.com/Ni55aN/D3-Node-Engine) cross-platform Engine)
 ```js
