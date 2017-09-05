@@ -67,12 +67,8 @@ export class NodeEditor {
             alight.bind(this.$cd, this.view.node());
             this.resize();
             this.loaded = true;
-            this.onload();
+            this.eventListener.trigger('load');
         });
-        
-    }
-
-    onload() {
         
     }
 
