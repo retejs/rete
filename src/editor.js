@@ -177,12 +177,7 @@ export class NodeEditor {
                 this.update();
             }))
         };
-
-        alight.directives.al.svgBack = (scope, el, expression, env) => {
-            d3.select(el).lower();
-            env.scan();
-        }
-
+        
         alight.directives.al.groupTitleClick = (scope, el, expression, env) => {
             var group = env.changeDetector.locals.group;
 
