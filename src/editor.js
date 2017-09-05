@@ -170,7 +170,6 @@ export class NodeEditor {
                         group.addNode(node);
                     else
                         group.removeNode(node);
-                        
                 });
 
                 this.eventListener.trigger('change');

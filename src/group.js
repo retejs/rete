@@ -74,8 +74,8 @@ export class Group extends Block {
     }
 
     removeNode(node) {
-        if (this.containNode(node))
-            this.nodes.splice(this.nodes.indexOf(node), 1);
+        if (!this.containNode(node)) return;
+        this.nodes.splice(this.nodes.indexOf(node), 1);
         node.group = null;
     }
 
