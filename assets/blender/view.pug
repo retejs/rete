@@ -21,8 +21,7 @@ foreignobject(al-repeat='group in editor.groups',
 // Connections
 path.connection(
   al-repeat='path in editor.paths', 
-  al-svg-back, 
-  al-on.mousedown='editor.areaClick()', 
+  al-svg-back,  
   :d='path.d'
   class='{{path.active?"active":null}}'
 )
@@ -33,10 +32,10 @@ foreignobject(al-repeat='node in editor.nodes',
   :y='node.position[1]',
   :width='node.width',
   :height='node.height'
-  onload='{{editor.updateNodeSize(this)}}'
   ) 
   div.node(
     al-dragable-node,  
+    al-node-load,
     class="{{editor.active===node?'active':''}}"
   )
     div.title
