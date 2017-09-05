@@ -89,3 +89,7 @@ where *myAssets* — folder inside [/assets](https://github.com/Ni55aN/D3-Node-E
 License
 ----
 MIT
+
+Donate  [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor) 
+[![Gratipay](https://img.shields.io/gratipay/project/D3-Node-Editor.svg)](https://gratipay.com/d3-node-editor/)
+----
