@@ -68,9 +68,9 @@ Use the Engine to start processing the data (also [avaliable](https://github.com
     }
 });
     
-nodeEditor.onload = function(){
+nodeEditor.eventListener.on('load', function(){
     engine.process(nodeEditor.toJSON());            
-};
+});
 ```
 
 For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
