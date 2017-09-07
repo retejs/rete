@@ -44,13 +44,13 @@ And create NodeEditor
 
 var menu = new D3NE.ContextMenu('./menu.html',
                 {
-                    'Actions':{
+                'Actions':{
                     'Action': function(){alert('Subitem selected');}
-                    },
-                    'Nodes':{
-                        'Number': builder.number, 
-                        'Add': builder.add
-                    }
+                },
+                'Nodes':{
+                    'Number': builder.number, 
+                    'Add': builder.add
+                }
                 });
 
  var nodeEditor = new D3NE.NodeEditor('demo@0.1.0', container, './view.html', builder, menu);
@@ -60,20 +60,19 @@ Use the Engine to start processing the data (also [avaliable](https://github.com
  var engine = new D3NE.Engine('demo@0.1.0', {
     number: function(node, inputs, outputs){
         outputs[0] = node.data.num;
-        return outputs;
     },
     add:function(node, inputs, outputs){
         ...
-        return outputs;
     }
 });
     
-nodeEditor.eventListener.on('load', function(){
-    engine.process(nodeEditor.toJSON());            
+nodeEditor.eventListener.on('change', async function(){
+    await engine.abort();            
+    var status = await engine.process(nodeEditor.toJSON());            
 });
 ```
 
-For detail see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
+For details see [demo](https://codepen.io/Ni55aN/pen/jBEKBQ)
 
 ### Assets
 
