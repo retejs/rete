@@ -123,11 +123,20 @@ export class Engine {
         if (!Utils.isCompatibleIDs(data.id, this.id))
             throw new Error('IDs not compatible');
 
-        data = this.data = Object.assign({}, data);
-        startNode = startNode || this.data.nodes[Object.keys(data.nodes)[0]];
+        this.data = Object.assign({}, data);
+        
+        if (startNode) {
+            await this.processNode(startNode);
+            await this.forwardProcess(startNode);
+        }
+        
+        for (var i in this.data.nodes) // process nodes that have not been reached
+            if (this.data.nodes[i].outputData === undefined) {
+                var node = this.data.nodes[i];
 
-        await this.processNode(startNode);
-        await this.forwardProcess(startNode);
+                await this.processNode(node);
+                await this.forwardProcess(node);
+            }
         
         return this.processDone()?'success':'aborted';
     }
