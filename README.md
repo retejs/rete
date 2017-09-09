@@ -61,8 +61,8 @@ Use the Engine to start processing the data (also [avaliable](https://github.com
     number: function(node, inputs, outputs){
         outputs[0] = node.data.num;
     },
-    add:function(node, inputs, outputs){
-        ...
+    add: async function(node, inputs, outputs){
+        await asyncTask();
     }
 });
     
