@@ -48,38 +48,67 @@ export class Engine {
         });
     }
 
-    async backProcess(node) {
-        if (this.state === State.ABORT)
-            return null;
-        if (node.outputData)
-            return node.outputData;
-        
-        var inputData = await Promise.all(node.inputs.map(async (input) => {
-            var connData = await Promise.all(input.connections.map(async (c) => {
-                return (await this.backProcess(this.data.nodes[c.node]))[c.output];
+    async lock(node) {
+        return new Promise(res => {
+            node.unlockPool = node.unlockPool || [];
+            if (node.busy)
+                node.unlockPool.push(res);
+            else 
+                res();
+            
+            node.busy = true;
+        });    
+    }
+
+    unlock(node) {
+        node.unlockPool.forEach(a => a());
+        node.unlockPool = [];
+        node.busy = false;
+    }
+
+    async extractInputData(node) {
+        return await Promise.all(node.inputs.map(async (input) => {
+            let connData = await Promise.all(input.connections.map(async (c) => {
+                let outputs = await this.processNode(this.data.nodes[c.node], node);
+
+                return outputs[c.output];
             }));
 
             return connData;
         }));
-        
-        node.outputData = node.outputs.map(() => null);
-        
-        var key = node.title.toLowerCase();
+    }
 
-        await this.worker[key](node, inputData, node.outputData);
-        if (node.outputData.length !== node.outputs.length)
-            throw new Error('Output data does not correspond to number of outputs');
+    async processNode(node, exclude) {
+        if (this.state === State.ABORT)
+            return null;
         
+        if (!node.outputData) {
+            await this.lock(node);
+            
+            let inputData = await this.extractInputData(node);
+
+            node.outputData = node.outputs.map(() => null);
+        
+            var key = node.title.toLowerCase();
+
+            await this.worker[key](node, inputData, node.outputData);
+            
+            if (node.outputData.length !== node.outputs.length)
+                throw new Error('Output data does not correspond to number of outputs');
+            
+            this.unlock(node);
+        }
         return node.outputData;
     }
 
     async forwardProcess(node) {
+        
         if (this.state === State.ABORT)
             return null;
 
-        await Promise.all(node.outputs.map(async (output) => {
+        return await Promise.all(node.outputs.map(async (output) => {
             return await Promise.all(output.connections.map(async (c) => {
-                await this.backProcess(this.data.nodes[c.node]);
+                await this.processNode(this.data.nodes[c.node]);
                 await this.forwardProcess(this.data.nodes[c.node]);
             }));
         }));
@@ -95,8 +124,8 @@ export class Engine {
 
         data = this.data = Object.assign({}, data);
         startNode = startNode || this.data.nodes[Object.keys(data.nodes)[0]];
-        
-        await this.backProcess(startNode);
+
+        await this.processNode(startNode);
         await this.forwardProcess(startNode);
         
         return this.processDone()?'success':'aborted';
