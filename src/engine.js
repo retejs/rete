@@ -51,7 +51,7 @@ export class Engine {
     async lock(node) {
         return new Promise(res => {
             node.unlockPool = node.unlockPool || [];
-            if (node.busy)
+            if (node.busy && !node.outputData)
                 node.unlockPool.push(res);
             else 
                 res();
@@ -78,13 +78,13 @@ export class Engine {
         }));
     }
 
-    async processNode(node, exclude) {
+    async processNode(node) {
         if (this.state === State.ABORT)
             return null;
         
+        await this.lock(node);
+
         if (!node.outputData) {
-            await this.lock(node);
-            
             let inputData = await this.extractInputData(node);
 
             node.outputData = node.outputs.map(() => null);
@@ -96,8 +96,9 @@ export class Engine {
             if (node.outputData.length !== node.outputs.length)
                 throw new Error('Output data does not correspond to number of outputs');
             
-            this.unlock(node);
         }
+
+        this.unlock(node);
         return node.outputData;
     }
 
