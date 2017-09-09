@@ -131,7 +131,7 @@ export class Engine {
         }
         
         for (var i in this.data.nodes) // process nodes that have not been reached
-            if (this.data.nodes[i].outputData === undefined) {
+            if (typeof this.data.nodes[i].outputData === 'undefined') {
                 var node = this.data.nodes[i];
 
                 await this.processNode(node);
