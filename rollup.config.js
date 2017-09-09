@@ -16,6 +16,7 @@ if (process.env.npm_config_es2017) {
 export default {
     entry: entries,
     dest: 'build/node-editor.js',
+    sourceMap: true,
     plugins: [ 
         multiEntry(),
         babel({
