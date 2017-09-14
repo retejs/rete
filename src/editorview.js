@@ -37,7 +37,7 @@ export class EditorView {
         this.svg.call(this.zoom);
             
         this.setScaleExtent(0.1, 1);
-        var size = 2**12;
+        var size = Math.pow(2, 12);
 
         this.setTranslateExtent(-size, -size, size, size);
         
