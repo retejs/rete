@@ -30,13 +30,17 @@ export class EditorView {
         this.view = this.svg.append('g');
        
         this.zoom = d3.zoom()
-            .scaleExtent([0.2, 1.5])
             .on('zoom', () => {
                 this.view.attr('transform', d3.event.transform);
             });
-
+        
         this.svg.call(this.zoom);
+            
+        this.setScaleExtent(0.1, 1);
+        var size = 2**12;
 
+        this.setTranslateExtent(-size, -size, size, size);
+        
         d3.select(window)
             .on('mousemove', () => {
                 this.mouse = d3.mouse(this.view.node());
@@ -259,7 +263,7 @@ export class EditorView {
         var d = curve._context.toString();
 
         return d;
-    }
+    } 
 
     resize() {
         var width = this.dom.parentElement.clientWidth;
@@ -271,13 +275,6 @@ export class EditorView {
         this.clickable
             .attr('width', width + 20)
             .attr('height', height + 20);
-
-        var size = (width + height); // Math.max(width,height);
-
-        this.zoom.translateExtent([
-            [-size, -size / 2],
-            [size * 2, size]
-        ]);
 
         this.update();
     }
@@ -353,4 +350,12 @@ export class EditorView {
         this.zoom.translateTo(this.svg, cx, cy);
         this.zoom.scaleTo(this.svg, scalar * k);
     }
+
+    setScaleExtent(scaleMin, scaleMax) {
+        this.zoom.scaleExtent([scaleMin, scaleMax]);
+    }
+
+    setTranslateExtent(left, top, right, bottom) {
+        this.zoom.translateExtent([[left, top], [right, bottom]]);
+    }   
 }
