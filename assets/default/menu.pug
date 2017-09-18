@@ -2,9 +2,10 @@
     style='left:{{contextMenu.x}}px; top:{{contextMenu.y}}px;',
     al-on.mouseleave='contextMenu.hide()',
     al-if='contextMenu.visible'
-
 )
-  .item(al-repeat='(name,item) in contextMenu.items')
+  .search.item
+    input(al-value='filter')
+  .item(al-repeat='(name,item) in contextMenu.searchItems(filter)')
     | {{name}}
     .subitems
       .item(

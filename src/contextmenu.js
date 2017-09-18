@@ -18,6 +18,30 @@ export class ContextMenu {
         });
     }
 
+    searchItems(filter) {
+        var regex = new RegExp(filter, 'i'); 
+
+        var items = Object.assign({}, this.items);
+
+        Object.keys(items).forEach(key => {
+            items[key] = Object.assign({}, items[key]);
+        });
+
+        Object.keys(items).forEach(itemKey => {
+            var itemObj = items[itemKey];
+
+            Object.keys(itemObj).forEach(subitem => {
+                if (!regex.test(subitem))
+                    delete itemObj[subitem];
+            });
+
+            if (Object.keys(itemObj).length === 0)
+                delete items[itemKey];
+        });
+
+        return items;
+    }
+
     onCilck(subitem) {
         throw new TypeError('onClick should be overrided');
     }

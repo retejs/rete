@@ -1,5 +1,6 @@
 $node-color: rgba(110,136,255,0.8)
 $node-color-active: #ffd92c
+$context-color: $node-color
 $group-color: rgba(15,80,255,0.2)
 $group-handler-size: 40px
 $group-handler-offset: -10px
@@ -138,11 +139,23 @@ $context-menu-round: 7px
       opacity: 0.6
       right: 5px
       top: 5px
+  .search
+    &:after
+      content: none
+    input    
+      color: white
+      padding: 1px 8px
+      border: 1px solid white
+      border-radius: 10px
+      font-size: 16px;
+      font-family: serif;
+      width: 100%
+      background: transparent
   .item
     padding: 4px
-    border-bottom: 1px solid darken($node-color,8%)
+    border-bottom: 1px solid darken($context-color,8%)
     color: #fff
-    background-color: $node-color
+    background-color: $context-color
     cursor: pointer
     width: 100px
     position: relative
@@ -151,5 +164,5 @@ $context-menu-round: 7px
     &:last-child
       border-radius: 0 0 $context-menu-round $context-menu-round
     &:hover
-      background-color: lighten($node-color,4%)
+      background-color: lighten($context-color,4%)
       
