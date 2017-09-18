@@ -91,8 +91,12 @@ export class Engine {
         
             var key = node.title.toLowerCase();
 
-            await this.worker[key](node, inputData, node.outputData);
-            
+            try {
+                await this.worker[key](node, inputData, node.outputData);
+            } catch (e) {
+                this.abort();
+                console.error(e);
+            }
             if (node.outputData.length !== node.outputs.length)
                 throw new Error('Output data does not correspond to number of outputs');
             
