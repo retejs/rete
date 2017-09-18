@@ -160,9 +160,11 @@ $context-menu-round: 7px
     width: 100px
     position: relative
     &:first-child
-      border-radius: $context-menu-round $context-menu-round 0 0
+      border-top-left-radius: $context-menu-round
+      border-top-right-radius: $context-menu-round
     &:last-child
-      border-radius: 0 0 $context-menu-round $context-menu-round
+      border-bottom-left-radius: $context-menu-round
+      border-bottom-right-radius: $context-menu-round
     &:hover
       background-color: lighten($context-color,4%)
       
