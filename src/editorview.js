@@ -327,14 +327,10 @@ export class EditorView {
     }
 
     areaClick() {
-        if (this.pickedOutput !== null)
-        {
+        if (this.pickedOutput !== null && !d3.event.ctrlKey)
             this.pickedOutput = null;
-            this.update();
-            return;
-        }    
-        
-        this.contextMenu.show(d3.event.clientX - 20, d3.event.clientY - 20);
+        else
+            this.contextMenu.show(d3.event.clientX - 20, d3.event.clientY - 20);
         this.update();
     }
 
