@@ -1,9 +1,10 @@
-import {Utils} from './utils';
+import { Utils } from './utils';
+
 var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
 
 export class Engine {
 
-    constructor(id, worker) {
+    constructor(id: string, worker: Object) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
@@ -12,7 +13,7 @@ export class Engine {
         this.worker = worker;
         this.data = null;
         this.state = State.AVALIABLE;
-        this.onAbort = function () { };
+        this.onAbort = () => { };
     }
 
     processStart() {
@@ -31,7 +32,7 @@ export class Engine {
         
         if (!success) {
             this.onAbort();
-            this.onAbort = function () { }
+            this.onAbort = () => { }
         }    
 
         return success;
@@ -119,7 +120,7 @@ export class Engine {
         }));
     }
 
-    async process(data, startNode = null) {
+    async process(data: Object, startNode = null) {
         if (!this.processStart()) return 'not started';
 
         if (!Utils.isValidJSON(data))

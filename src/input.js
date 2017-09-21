@@ -1,8 +1,12 @@
+import { Connection } from './connection';
+import { Control } from './control';
+import { Socket } from './socket';
+
 export class Input {
    
-    constructor(title, socket, multipleConnections) {
+    constructor(title: string, socket: Socket, multipleConnections: boolean = false) {
         this.node = null;
-        this.multipleConnections = multipleConnections || false;
+        this.multipleConnections = multipleConnections;
         this.connections = [];
         this.title = title;
         this.socket = socket;
@@ -13,13 +17,13 @@ export class Input {
         return this.connections.length > 0;
     }
 
-    addConnection(c) {
+    addConnection(connection: Connection) {
         if (!this.multipleConnections && this.hasConnection())
             throw new Error('Multiple connections not allowed');
-        this.connections.push(c);
+        this.connections.push(connection);
     }
 
-    removeConnection(connection) {
+    removeConnection(connection: Connection) {
         this.connections.splice(this.connections.indexOf(connection), 1);
     }
 
@@ -27,7 +31,7 @@ export class Input {
         this.connections.forEach(c => c.remove());
     }
 
-    addControl(control) {
+    addControl(control: Control) {
         this.control = control;
         control.parent = this;
     }

@@ -4,22 +4,19 @@ export class EventListener {
         this.events = [];
     }
 
-    on(names, handler) {
-        if (typeof handler !== 'function')
-            throw new Error('Second argument should be function');    
-        
+    on(names: string, handler: () => {}) { 
+
         names.split(' ').forEach(name => {
             this.events[name] = handler;
         });
-
+        
         return this;
     }
 
-    trigger(name, args) {
-        var handler = this.events[name];
-   
-        if (typeof handler === 'function')
-            return handler(args) !== false;
+    trigger(name: string, args) {
+
+        if (name in this.events)
+            return this.events[name](args) !== false;
             
         return true;
     }

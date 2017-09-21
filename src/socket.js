@@ -1,19 +1,17 @@
 export class Socket {
 
-    constructor(id, name, hint) {
+    constructor(id: string, name: string, hint: string) {
         this.id = id;
         this.name = name;
         this.hint = hint;
         this.compatible = [];
     }
 
-    combineWith(socket) {
-        if (!(socket instanceof Socket)) throw new Error('Invalid socket');
+    combineWith(socket: Socket) {
         this.compatible.push(socket);
     }
 
-    compatibleWith(socket) {
-        if (!(socket instanceof Socket)) throw new Error('Invalid socket');
+    compatibleWith(socket: Socket) {
         return this.id === socket.id || this.compatible.indexOf(socket) !== -1;
     }
 }

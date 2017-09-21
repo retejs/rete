@@ -1,12 +1,16 @@
-import {EditorView} from './editorview';
-import {EventListener} from './eventlistener';
-import {Group} from './group';
-import {Node} from './node';
-import {Utils} from './utils';
+import { Connection } from './connection';
+import { ContextMenu } from './contextmenu';
+import { EditorView } from './editorview';
+import { EventListener } from './eventlistener';
+import { Input } from './input';
+import { Group } from './group';
+import { Node } from './node';
+import { Output } from './output';
+import { Utils } from './utils';
 
 export class NodeEditor {
 
-    constructor(id, container, template, builder, menu) {
+    constructor(id: string, container: Element, template: string, builder: Object, menu: ContextMenu) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
@@ -21,10 +25,7 @@ export class NodeEditor {
         this.loaded = false;   
     }
 
-    addNode(node, mousePlaced = false) {
-        if (!(node instanceof Node))
-            throw new Error('Wrong instance');
-        
+    addNode(node: Node, mousePlaced = false) {
         if (this.eventListener.trigger('nodecreate', node)) {
             if (mousePlaced)
                 node.position = this.view.mouse;
@@ -34,7 +35,7 @@ export class NodeEditor {
         }
     }
 
-    addGroup(group) {
+    addGroup(group: Group) {
         if (this.eventListener.trigger('groupcreate', group)) {
             this.groups.push(group);
             this.eventListener.trigger('change');
@@ -43,7 +44,7 @@ export class NodeEditor {
         this.view.update();
     }
 
-    removeNode(node) {
+    removeNode(node: Node) {
         var index = this.nodes.indexOf(node);
 
         if (this.eventListener.trigger('noderemove', node)) {
@@ -58,7 +59,7 @@ export class NodeEditor {
         this.view.update();
     }
 
-    removeGroup(group) {
+    removeGroup(group: Group) {
         if (this.eventListener.trigger('groupremove', group)) {
             group.remove();
             this.groups.splice(this.groups.indexOf(group), 1);
@@ -68,8 +69,8 @@ export class NodeEditor {
         this.view.update(); 
     }
 
-    connect(output, input) {
-        if (this.eventListener.trigger('connectioncreate', { output: output, input: input }))
+    connect(output: Output, input: Input) {
+        if (this.eventListener.trigger('connectioncreate', { output, input }))
             try {
                 output.connectTo(input);
                 this.eventListener.trigger('change');
@@ -79,14 +80,14 @@ export class NodeEditor {
             }
     }
 
-    removeConnection(connection) {
+    removeConnection(connection: Connection) {
         if (this.eventListener.trigger('connectionremove', connection)) {
             connection.remove();
             this.eventListener.trigger('change');
         }
     }
 
-    selectNode(node) {
+    selectNode(node: Node) {
         if (this.nodes.indexOf(node) === -1)
             throw new Error('Node not exist in list');
         
@@ -96,25 +97,11 @@ export class NodeEditor {
         this.view.update();
     }
 
-    selectGroup(group) {
+    selectGroup(group: Group) {
         if (this.eventListener.trigger('groupselect', group))
             this.active = group;
         
         this.view.update();
-    }
-
-    toJSON() {
-        var nodes = {};
-        var groups = {};
-
-        this.nodes.forEach(node => nodes[node.id] = node.toJSON());
-        this.groups.forEach(group => groups[group.id] = group.toJSON());
-
-        return {
-            'id': this.id,
-            'nodes': nodes,
-            'groups': groups
-        };
     }
     
     keyDown() {
@@ -138,7 +125,21 @@ export class NodeEditor {
         }
     }
 
-    fromJSON(json) {
+    toJSON() {
+        var nodes = {};
+        var groups = {};
+
+        this.nodes.forEach(node => nodes[node.id] = node.toJSON());
+        this.groups.forEach(group => groups[group.id] = group.toJSON());
+
+        return {
+            'id': this.id,
+            'nodes': nodes,
+            'groups': groups
+        };
+    }
+
+    fromJSON(json: Object) {
         this.nodes.splice(0, this.nodes.length);
         this.groups.splice(0, this.groups.length);
 

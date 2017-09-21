@@ -1,8 +1,8 @@
-import {Node} from './node';
+import { Node } from './node';
 
 export class Control {
 
-    constructor(html, handler = () => { }) {
+    constructor(html: string, handler = () => { }) {
         this.html = html;
         this.parent = null;
         this.handler = handler;

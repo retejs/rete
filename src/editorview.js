@@ -1,12 +1,13 @@
-import {Node} from './node';
-import {Utils} from './utils';
+import { ContextMenu } from './contextmenu';
+import { Node } from './node';
+import { NodeEditor } from './editor';
+import { Utils } from './utils';
 
 const zoomMargin = 0.9;
 
 export class EditorView {
 
-    constructor(editor, container, template, menu) {
-
+    constructor(editor: NodeEditor, container: Element, template: string, menu: ContextMenu) {
         this.editor = editor;
         this.pickedOutput = null;
         this.dom = container;
@@ -98,7 +99,7 @@ export class EditorView {
         };
 
         alight.directives.al.nodeLoad = (scope, el, expression, env) => {
-            window.addEventListener('load', function () {
+            window.addEventListener('load', () => {
                 var node = env.changeDetector.locals.node;
 
                 node.width = el.offsetWidth;
@@ -240,32 +241,6 @@ export class EditorView {
         };
     }
 
-    getConnectionPathData(connection, x1, y1, x2, y2) {
-        var distanceX = Math.abs(x1-x2);
-        var distanceY = y2-y1;
-
-        var p1 = [x1, y1];
-        var p4 = [x2, y2];
-
-        var p2 = [x1 + 0.3 * distanceX, y1 + 0.1 * distanceY];
-        var p3 = [x2 - 0.3 * distanceX, y2 - 0.1 * distanceY];
-
-        var points = [p1, p2, p3, p4];
-
-        var curve = d3.curveBasis(d3.path());
-
-        curve.lineStart();
-        for (var i = 0; i < points.length;i++) {
-            var point = points[i];
-
-            curve.point(point[0], point[1]);
-        }
-        curve.lineEnd();
-        var d = curve._context.toString();
-
-        return d;
-    }
-
     resize() {
         var width = this.dom.parentElement.clientWidth;
         var height = this.dom.parentElement.clientHeight;
@@ -283,27 +258,21 @@ export class EditorView {
     updateConnections() {
         var pathData = [];
 
-        for (var i in this.editor.nodes) {
-            var outputs = this.editor.nodes[i].outputs;
+        this.editor.nodes.forEach(node => {
+            node.outputs.forEach(output => {
+                output.connections.forEach(connection => {
+                    let input = connection.input;
 
-            for (var j in outputs) {
-                var cons = outputs[j].connections;
-
-                for (var k in cons) {
-                    if (!cons[k].input.el) break;
-                    let input = cons[k].input;
-                    let output = cons[k].output;
-
-                    pathData.push({
-                        d: this.getConnectionPathData(cons[k],
-                            output.node.position[0] + output.el.offsetLeft + output.el.offsetWidth / 2,
-                            output.node.position[1] + output.el.offsetTop + output.el.offsetHeight / 2,
-                            input.node.position[0] + input.el.offsetLeft + input.el.offsetWidth / 2,
-                            input.node.position[1] + input.el.offsetTop + input.el.offsetHeight / 2)
-                    });
-                }
-            }
-        }
+                    if (input.el)
+                        pathData.push({
+                            d: Utils.getConnectionPath(
+                                ...Utils.getOutputPosition(output),
+                                ...Utils.geInputPosition(input)
+                            )
+                        });
+                });
+            });
+        });
 
         if (this.pickedOutput !== null) {
             if (!this.pickedOutput.el) return;
@@ -311,11 +280,11 @@ export class EditorView {
             let input = this.mouse;
 
             pathData.push({
-                active: true, d: this.getConnectionPathData(null,
-                    output.node.position[0] + output.el.offsetLeft + output.el.offsetWidth / 2,
-                    output.node.position[1] + output.el.offsetTop + output.el.offsetHeight / 2,
-                    input[0],
-                    input[1])
+                active: true,
+                d: Utils.getConnectionPath(
+                    ...Utils.getOutputPosition(output),
+                    ...input
+                )
             });
         }
 
@@ -335,7 +304,7 @@ export class EditorView {
         this.update();
     }
 
-    zoomAt(nodes) {
+    zoomAt(nodes: Node[]) {
         if (nodes.legth === 0) return;
 
         var bbox = Utils.nodesBBox(nodes);
@@ -347,11 +316,11 @@ export class EditorView {
         this.zoom.scaleTo(this.svg, zoomMargin * k);
     }
 
-    setScaleExtent(scaleMin, scaleMax) {
+    setScaleExtent(scaleMin: number, scaleMax: number) {
         this.zoom.scaleExtent([scaleMin, scaleMax]);
     }
 
-    setTranslateExtent(left, top, right, bottom) {
+    setTranslateExtent(left: number, top: number, right: number, bottom: number) {
         this.zoom.translateExtent([[left, top], [right, bottom]]);
     }
 }

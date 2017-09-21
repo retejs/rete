@@ -1,9 +1,10 @@
 import { Connection } from './connection';
 import { Input } from './input';
+import { Socket } from './socket';
 
 export class Output {
   
-    constructor(title, socket) {
+    constructor(title: string, socket: Socket) {
 	    this.node = null;
         this.connections = [];
 	   
@@ -11,9 +12,7 @@ export class Output {
         this.socket = socket;
     }
 
-    connectTo(input) {
-        if (!(input instanceof Input))
-            throw new Error('Invalid input');
+    connectTo(input: Input) {
         if (!this.socket.compatibleWith(input.socket))
             throw new Error('Sockets not compatible');
         if (!input.multipleConnections && input.hasConnection())
@@ -25,20 +24,20 @@ export class Output {
         return connection;
     }
 
-    connectedTo(input) {
-        return this.connections.some(function(item) {
+    connectedTo(input: Input) {
+        return this.connections.some((item) => {
             return item.input === input;
         });
     }
 
-    removeConnection(connection, propagate = true) {
+    removeConnection(connection: Connection, propagate:boolean = true) {
         this.connections.splice(this.connections.indexOf(connection), 1);
         if (propagate)
             connection.remove();
     }
 
     removeConnections() {
-        this.connections.forEach(function(connection) {
+        this.connections.forEach((connection) => {
             connection.remove();
         });
     }

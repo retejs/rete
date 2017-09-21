@@ -1,6 +1,6 @@
 export class ContextMenu {
 
-    constructor(template, items) {
+    constructor(template: string, items: Object) {
         this.visible = false;
         this.x = 0;
         this.y = 0;
@@ -18,7 +18,7 @@ export class ContextMenu {
         });
     }
 
-    searchItems(filter) {
+    searchItems(filter: string) {
         var regex = new RegExp(filter, 'i'); 
 
         var items = Object.assign({}, this.items);
@@ -50,7 +50,7 @@ export class ContextMenu {
         return this.visible;
     }
 
-    show(x, y) {
+    show(x: number, y: number) {
         this.visible = true;
         this.x = x;
         this.y = y;

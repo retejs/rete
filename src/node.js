@@ -1,11 +1,11 @@
-import {Block} from './block';
-import {Control} from './control';
-import {Input} from './input';
-import {Output} from './output';
+import { Block } from './block';
+import { Control } from './control';
+import { Input } from './input';
+import { Output } from './output';
 
 export class Node extends Block {
    
-    constructor(title) {
+    constructor(title: string) {
         super();
         this.id = Node.incrementId();
         this.group = null;
@@ -27,12 +27,10 @@ export class Node extends Block {
         return this.latestId
     }
 
-    addControl(control, index = -1) {
-        if (!(control instanceof Control)) throw new Error('Invalid instance');
-        
+    addControl(control: Control, index: ?uint8 = null) {
         control.parent = this;
 
-        if (index >= 0)
+        if (index)
             this.controls.splice(index, 0, control);
         else
             this.controls.push(control);        
@@ -40,15 +38,13 @@ export class Node extends Block {
         return this;
     }
 
-    addInput(input, index = -1) {
-        if (!(input instanceof Input))
-            throw new Error('Invalid instance');
+    addInput(input: Input, index: ?uint8 = null) {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
         
         input.node = this;
 
-        if (index >= 0)
+        if (index)
             this.inputs.splice(index, 0, input);
         else
             this.inputs.push(input);
@@ -56,15 +52,13 @@ export class Node extends Block {
         return this;
     }
 
-    addOutput(output, index = -1) {
-        if (!(output instanceof Output))
-            throw new Error('Invalid instance');
+    addOutput(output: Output, index: ?uint8 = null) {
         if (output.node !== null)
             throw new Error('Output has already been added to the node');
         
         output.node = this;
 
-        if (index >= 0)
+        if (index)
             this.outputs.splice(index, 0, output);
         else
             this.outputs.push(output);
@@ -73,16 +67,16 @@ export class Node extends Block {
     }
 
     inputsWithVisibleControl() {
-        return this.inputs.filter(function (input) {
+        return this.inputs.filter((input)=> {
             return input.showControl();
         });
     }
 
     remove() {
-        this.inputs.forEach(function(input) {
+        this.inputs.forEach((input) => {
             input.removeConnections();
         });
-        this.outputs.forEach(function(output) {
+        this.outputs.forEach((output) => {
             output.removeConnections();
         })
     }
@@ -99,7 +93,7 @@ export class Node extends Block {
         }
     }
 
-    static fromJSON(builder, json) {
+    static fromJSON(builder: Object, json: Object) {
         var node = builder();
 
         node.id = json.id;

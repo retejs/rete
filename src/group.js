@@ -1,9 +1,10 @@
-import {Block} from './block';
-import {Utils} from './utils';
+import { Block } from './block';
+import { Node } from './node';
+import { Utils } from './utils';
 
 export class Group extends Block {
 
-    constructor(title, params) {
+    constructor(title: string, params: Object) {
         super();
         this.id = Group.incrementId();
         this.title = title;
@@ -30,15 +31,15 @@ export class Group extends Block {
         return this.latestId
     }
 
-    setWidth(w) {
+    setWidth(w: number) {
         return this.width = Math.max(this.minWidth, w);
     }
 
-    setHeight(h) {
+    setHeight(h: number) {
         return this.height = Math.max(this.minHeight, h);
     }
 
-    isCoverNode(node) {
+    isCoverNode(node: Node) {
         var gp = this.position;
         var np = node.position;
 
@@ -47,7 +48,7 @@ export class Group extends Block {
             && np[1] + node.height < gp[1] + this.height;
     }
 
-    coverNodes(nodes) {
+    coverNodes(nodes: Node[]) {
         var self = this;
         var margin = 30;
         var bbox = Utils.nodesBBox(nodes);
@@ -61,11 +62,11 @@ export class Group extends Block {
         this.setHeight(bbox.bottom - bbox.top + 3 * margin);
     }
 
-    containNode(node) {
+    containNode(node: Node) {
         return this.nodes.indexOf(node) !== -1;
     }
 
-    addNode(node) {
+    addNode(node: Node) {
         if (this.containNode(node)) return false;
         if (node.group !== null) node.group.removeNode(node);
         node.group = this;
@@ -73,7 +74,7 @@ export class Group extends Block {
         return true;
     }
 
-    removeNode(node) {
+    removeNode(node: Node) {
         if (!this.containNode(node)) return;
         this.nodes.splice(this.nodes.indexOf(node), 1);
         node.group = null;
@@ -98,7 +99,7 @@ export class Group extends Block {
         }
     }
 
-    static fromJSON(json) {
+    static fromJSON(json: Object) {
         var group = new Group(null, {
             position: json.position,
             width: json.width,
