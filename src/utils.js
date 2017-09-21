@@ -10,7 +10,13 @@ export class Utils {
             left: left,
             right: right,
             top: top,
-            bottom: bottom
+            bottom: bottom,
+            getCenter: function () {
+                return [
+                    (left + right) / 2,
+                    (top + bottom) / 2
+                ];
+            }
         };
     }
 

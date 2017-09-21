@@ -1,6 +1,7 @@
-
 import {Node} from './node';
 import {Utils} from './utils';
+
+const zoomMargin = 0.9;
 
 export class EditorView {
 
@@ -19,7 +20,7 @@ export class EditorView {
 
             if (result instanceof Node)
                 this.editor.addNode(result, true);
-            
+
             this.contextMenu.hide();
         };
 
@@ -28,35 +29,35 @@ export class EditorView {
             .on('click', this.areaClick.bind(this));
 
         this.view = this.svg.append('g');
-       
+
         this.zoom = d3.zoom()
             .on('zoom', () => {
                 this.view.attr('transform', d3.event.transform);
             });
-        
+
         this.svg.call(this.zoom);
-            
+
         this.setScaleExtent(0.1, 1);
         var size = Math.pow(2, 12);
 
         this.setTranslateExtent(-size, -size, size, size);
-        
+
         d3.select(window)
             .on('mousemove', () => {
                 this.mouse = d3.mouse(this.view.node());
                 this.update();
-            })    
+            })
             .on('keydown.' + editor.id, (e) => {
                 if (this.dom === document.activeElement)
                     editor.keyDown(e);
             })
             .on('resize.' + editor.id, this.resize.bind(this));
-        
+
         this.$cd = alight.ChangeDetector();
         this.$cd.scope.editor = editor;
 
         this.declareDirectives();
-        
+
         d3.text(template, (error, text) => {
             if (error) throw error;
             this.view.html(text);
@@ -84,7 +85,7 @@ export class EditorView {
                 this.editor.groups.forEach(group => {
                     var contain = group.containNode(node);
                     var cover = group.isCoverNode(node);
-                    
+
                     if (contain && !cover)
                         group.removeNode(node);
                     else if (!contain && cover)
@@ -103,7 +104,7 @@ export class EditorView {
                 node.width = el.offsetWidth;
                 node.height = el.offsetHeight;
                 env.scan();
-            });  
+            });
         }
 
         alight.directives.al.dragableGroup = (scope, el, expression, env) => {
@@ -143,7 +144,7 @@ export class EditorView {
                 var deltay = (mouse[1] - mousePrev[1]) / zoom.k;
                 var deltaw = Math.max(0, group.width - group.minWidth);
                 var deltah = Math.max(0, group.height - group.minHeight);
-                    
+
                 if (deltaw !== 0)
                     mousePrev[0] = mouse[0];
                 if (deltah !== 0)
@@ -155,14 +156,14 @@ export class EditorView {
                 }
                 else if (arg.match('r'))
                     group.setWidth(group.width + deltax);
-                
+
                 if (arg.match('t')) {
                     group.position[1] += Math.min(deltah, deltay);
                     group.setHeight(group.height - deltay);
                 }
-                else if (arg.match('b')) 
+                else if (arg.match('b'))
                     group.setHeight(group.height + deltay);
-                
+
                 this.update();
             }).on('end', () => {
                 this.editor.nodes.forEach(node => {
@@ -176,7 +177,7 @@ export class EditorView {
                 this.update();
             }))
         };
-        
+
         alight.directives.al.groupTitleClick = (scope, el, expression, env) => {
             var group = env.changeDetector.locals.group;
 
@@ -188,7 +189,7 @@ export class EditorView {
                 env.scan();
             });
         };
-        
+
         alight.directives.al.pickInput = (scope, el, expression, env) => {
             var input = env.changeDetector.locals.input;
 
@@ -204,7 +205,7 @@ export class EditorView {
                     this.update();
                     return;
                 }
-                    
+
                 if (!input.multipleConnections && input.hasConnection())
                     this.editor.removeConnection(input.connections[0]);
                 else if (this.pickedOutput.connectedTo(input)) {
@@ -212,12 +213,12 @@ export class EditorView {
 
                     this.editor.removeConnection(connections[0]);
                 }
-                
+
                 this.editor.connect(this.pickedOutput, input);
 
                 this.pickedOutput = null;
                 this.update();
-            });     
+            });
         }
 
         alight.directives.al.pickOutput = (scope, el, expression, env) => {
@@ -263,7 +264,7 @@ export class EditorView {
         var d = curve._context.toString();
 
         return d;
-    } 
+    }
 
     resize() {
         var width = this.dom.parentElement.clientWidth;
@@ -292,7 +293,7 @@ export class EditorView {
                     if (!cons[k].input.el) break;
                     let input = cons[k].input;
                     let output = cons[k].output;
-                    
+
                     pathData.push({
                         d: this.getConnectionPathData(cons[k],
                             output.node.position[0] + output.el.offsetLeft + output.el.offsetWidth / 2,
@@ -303,7 +304,7 @@ export class EditorView {
                 }
             }
         }
-        
+
         if (this.pickedOutput !== null) {
             if (!this.pickedOutput.el) return;
             let output = this.pickedOutput;
@@ -316,7 +317,7 @@ export class EditorView {
                     input[0],
                     input[1])
             });
-        }  
+        }
 
         this.editor.paths = pathData;
     }
@@ -335,16 +336,15 @@ export class EditorView {
     }
 
     zoomAt(nodes) {
-        var bbox = Utils.nodesBBox(nodes);
-        var scalar = 0.9;
-        var kh = this.dom.clientHeight/Math.abs(bbox.top - bbox.bottom);
-        var kw = this.dom.clientWidth/Math.abs(bbox.left - bbox.right);
-        var k = Math.min(kh, kw, 1);
-        var cx = (bbox.left + bbox.right) / 2;
-        var cy = (bbox.top + bbox.bottom) / 2;
+        if (nodes.legth === 0) return;
 
-        this.zoom.translateTo(this.svg, cx, cy);
-        this.zoom.scaleTo(this.svg, scalar * k);
+        var bbox = Utils.nodesBBox(nodes);
+        var kh = this.dom.clientHeight / Math.abs(bbox.top - bbox.bottom);
+        var kw = this.dom.clientWidth / Math.abs(bbox.left - bbox.right);
+        var k = Math.min(kh, kw, 1);
+
+        this.zoom.translateTo(this.svg, ...bbox.getCenter());
+        this.zoom.scaleTo(this.svg, zoomMargin * k);
     }
 
     setScaleExtent(scaleMin, scaleMax) {
@@ -353,5 +353,5 @@ export class EditorView {
 
     setTranslateExtent(left, top, right, bottom) {
         this.zoom.translateExtent([[left, top], [right, bottom]]);
-    }   
+    }
 }
