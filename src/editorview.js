@@ -305,7 +305,7 @@ export class EditorView {
     }
 
     zoomAt(nodes: Node[]) {
-        if (nodes.legth === 0) return;
+        if (nodes.length === 0) return;
 
         var bbox = Utils.nodesBBox(nodes);
         var kh = this.dom.clientHeight / Math.abs(bbox.top - bbox.bottom);
