@@ -18,7 +18,7 @@ export class ContextMenu {
         });
     }
 
-    searchItems(filter: string) {
+    searchItems(filter: ?string) {
         var regex = new RegExp(filter, 'i'); 
 
         var items = Object.assign({}, this.items);
