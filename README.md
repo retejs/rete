@@ -1,6 +1,7 @@
-D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-Editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-Editor)
+D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-Editor.svg?branch=master)](https://travis-ci.org/Ni55aN/D3-Node-Editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ====
 #### JavaScript library 
+
 ![node editor](https://drive.google.com/uc?export=download&id=0BzysCNw7yv8MeXdkSV9oeHZLQkk)
 
 ### Usage
