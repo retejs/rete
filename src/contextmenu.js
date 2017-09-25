@@ -20,9 +20,8 @@ export class ContextMenu {
                     needHide = false;
                 parent = parent.parentElement;
             }
-
             if (needHide)
-                this.hide();
+                setTimeout(this.hide.bind(this), 100);
         });
 
         d3.text(template, (error, text) => {
