@@ -7,13 +7,14 @@ const zoomMargin = 0.9;
 
 export class EditorView {
 
-    constructor(editor: NodeEditor, container: Element, template: string, menu: ContextMenu) {
+    constructor(editor: NodeEditor, container: HTMLElement, template: string, menu: ContextMenu) {
         this.editor = editor;
         this.pickedOutput = null;
         this.dom = container;
         this.dom.tabIndex = 1;
-        this.svg = d3.select(this.dom);
+        this.d3Container = d3.select(this.dom);
         this.mouse = [0, 0];
+        this.transform = d3.zoomIdentity;
 
         this.contextMenu = menu;
         this.contextMenu.onClick = (subitem) => {
@@ -25,18 +26,27 @@ export class EditorView {
             this.contextMenu.hide();
         };
 
-        this.clickable = this.svg.append('rect')
-            .attr('fill', 'transparent')
-            .on('click', this.areaClick.bind(this));
+        this.d3Container
+            .style('background', 'transparent')
+            .on('click', () => {
+                if (this.d3Container.node() === d3.event.target)
+                    this.areaClick()
+            });
 
-        this.view = this.svg.append('g');
+        this.view = this.d3Container.append('div')
+            .style('transform-origin', '0 0')
+            .style('width', 1)
+            .style('height', 1);
 
         this.zoom = d3.zoom()
             .on('zoom', () => {
-                this.view.attr('transform', d3.event.transform);
+                var t = this.transform = d3.event.transform;
+                var style = `translate(${t.x}px, ${t.y}px) scale(${t.k})`;
+
+                this.view.style('transform', style);
             });
 
-        this.svg.call(this.zoom);
+        this.d3Container.call(this.zoom);
 
         this.setScaleExtent(0.1, 1);
         var size = Math.pow(2, 12);
@@ -45,7 +55,11 @@ export class EditorView {
 
         d3.select(window)
             .on('mousemove', () => {
-                this.mouse = d3.mouse(this.view.node());
+                var k = this.transform.k;
+                var position = d3.mouse(this.view.node());
+
+                this.mouse = [position[0]/k, position[1]/k];
+                
                 this.update();
             })
             .on('keydown.' + editor.id, (e) => {
@@ -79,8 +93,11 @@ export class EditorView {
                 d3.select(parent).raise();
                 this.editor.selectNode(node);
             }).on('drag', () => {
-                node.position[0] += d3.event.dx;
-                node.position[1] += d3.event.dy;
+                var dx = d3.event.dx / this.transform.k;
+                var dy = d3.event.dy / this.transform.k;
+
+                node.position[0] += dx;
+                node.position[1] += dy;
                 this.update();
             }).on('end', () => {
                 this.editor.groups.forEach(group => {
@@ -114,14 +131,17 @@ export class EditorView {
             d3.select(el).call(d3.drag().on('start', () => {
                 this.editor.selectGroup(group);
             }).on('drag', () => {
-                group.position[0] += d3.event.dx;
-                group.position[1] += d3.event.dy;
+                var dx = d3.event.dx / this.transform.k;
+                var dy = d3.event.dy / this.transform.k;
+
+                group.position[0] += dx;
+                group.position[1] += dy;
 
                 for (var i in group.nodes) {
                     var node = group.nodes[i];
 
-                    node.position[0] += d3.event.dx;
-                    node.position[1] += d3.event.dy;
+                    node.position[0] += dx;
+                    node.position[1] += dy;
                 }
 
                 this.update();
@@ -136,11 +156,11 @@ export class EditorView {
             var mousePrev;
 
             d3.select(el).call(d3.drag().on('start', () => {
-                mousePrev = d3.mouse(this.svg.node());
+                mousePrev = d3.mouse(this.d3Container.node());
                 this.editor.selectGroup(group);
             }).on('drag', () => {
                 var zoom = d3.zoomTransform(this.dom);
-                var mouse = d3.mouse(this.svg.node());
+                var mouse = d3.mouse(this.d3Container.node());
                 var deltax = (mouse[0] - mousePrev[0]) / zoom.k;
                 var deltay = (mouse[1] - mousePrev[1]) / zoom.k;
                 var deltaw = Math.max(0, group.width - group.minWidth);
@@ -245,12 +265,8 @@ export class EditorView {
         var width = this.dom.parentElement.clientWidth;
         var height = this.dom.parentElement.clientHeight;
 
-        this.svg.style('width', width + 'px')
+        this.d3Container.style('width', width + 'px')
             .style('height', height + 'px');
-
-        this.clickable
-            .attr('width', width + 20)
-            .attr('height', height + 20);
 
         this.update();
     }
@@ -312,8 +328,8 @@ export class EditorView {
         var kw = this.dom.clientWidth / Math.abs(bbox.left - bbox.right);
         var k = Math.min(kh, kw, 1);
 
-        this.zoom.translateTo(this.svg, ...bbox.getCenter());
-        this.zoom.scaleTo(this.svg, zoomMargin * k);
+        this.zoom.translateTo(this.d3Container, ...bbox.getCenter());
+        this.zoom.scaleTo(this.d3Container, zoomMargin * k);
     }
 
     setScaleExtent(scaleMin: number, scaleMax: number) {

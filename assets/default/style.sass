@@ -10,6 +10,7 @@ $node-width: 180px
 $context-menu-round: 7px
 
 .node-editor
+  overflow: hidden
   *
     box-sizing: border-box
   .node
@@ -72,6 +73,7 @@ $context-menu-round: 7px
     width: inherit
     height: inherit
     border: 6px solid transparent
+    position: relative
     &.active
       border-color: #ffd92c
     .group-title
@@ -83,7 +85,7 @@ $context-menu-round: 7px
       background: transparent
       width: $group-handler-size
       height: $group-handler-size
-      position: fixed // need absolute, but webkit bug present
+      position: absolute
       &[al-dragable-group-handler="rb"]
         cursor: se-resize
         right: $group-handler-offset
@@ -100,6 +102,12 @@ $context-menu-round: 7px
         cursor: sw-resize
         left: $group-handler-offset
         bottom: $group-handler-offset
+
+  .connections
+    position: absolute;
+    overflow: visible
+    width: 100%
+    height: 100%
 
   .connection
     fill: none

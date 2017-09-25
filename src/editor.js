@@ -10,7 +10,7 @@ import { Utils } from './utils';
 
 export class NodeEditor {
 
-    constructor(id: string, container: Element, template: string, builder: Object, menu: ContextMenu) {
+    constructor(id: string, container: HTMLElement, template: string, builder: Object, menu: ContextMenu) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
