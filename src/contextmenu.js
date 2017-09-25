@@ -8,13 +8,15 @@ export class ContextMenu {
         
         this.$cd = alight.ChangeDetector();
         this.$cd.scope.contextMenu = this;
+        this.dom = d3.select('body').append('div');
+        this.dom.node().setAttribute('tabindex', 1);
+        this.dom.on('blur', this.hide.bind(this));
 
         d3.text(template, (error, text) => {
             if (error) throw error;
-            var dom = d3.select('body').append('div');
 
-            dom.html(text);
-            alight.bind(this.$cd, dom.node());
+            this.dom.html(text);
+            alight.bind(this.$cd, this.dom.node());
         });
     }
 
@@ -54,6 +56,7 @@ export class ContextMenu {
         this.visible = true;
         this.x = x;
         this.y = y;
+        this.dom.node().focus();
         this.$cd.scan();
     }
 
