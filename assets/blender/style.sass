@@ -14,9 +14,10 @@ $context-menu-r: 6px
 $shadow: 3px 5px 12px rgba(0, 0, 0, 0.4)
 
 .node-editor
-  background-size: $grid-size $grid-size;
-  background-image: linear-gradient(to right, $grid-color 1px, transparent 1px), linear-gradient(to bottom, $grid-color 1px, transparent 1px);
-  background-color:  #393939;
+  background-size: $grid-size $grid-size
+  background-image: linear-gradient(to right, $grid-color 1px, transparent 1px), linear-gradient(to bottom, $grid-color 1px, transparent 1px)
+  background-color:  #393939
+  overflow: hidden
   *
     box-sizing: border-box
     color: $font-color
@@ -39,15 +40,15 @@ $shadow: 3px 5px 12px rgba(0, 0, 0, 0.4)
       padding-left: 10px
       margin-bottom: 10px
       border-radius: $node-border-r $node-border-r 0 0
-      background: linear-gradient(to top, rgba(85,85,85,0.7) 0%,  rgba(85,85,85,0.7) 70%,  rgba(110,110,110,0.7) 100%);
+      background: linear-gradient(to top, rgba(85,85,85,0.7) 0%,  rgba(85,85,85,0.7) 70%,  rgba(110,110,110,0.7) 100%)
       .arrow
-        display: inline-block;
-        margin: 0 5px -4px 5px;
-        width: 0;
-        height: 0;
-        border-left: 7px solid transparent;
-        border-right: 7px solid transparent;
-        border-top: 14px solid #363636;
+        display: inline-block
+        margin: 0 5px -4px 5px
+        width: 0
+        height: 0
+        border-left: 7px solid transparent
+        border-right: 7px solid transparent
+        border-top: 14px solid #363636
     .socket
       display: inline-block
       cursor: pointer
@@ -90,6 +91,7 @@ $shadow: 3px 5px 12px rgba(0, 0, 0, 0.4)
     height: inherit
     border: 1px solid transparent
     box-shadow: $shadow
+    position: relative
     &.active
       border-color: $color-active
     .group-title
@@ -104,7 +106,7 @@ $shadow: 3px 5px 12px rgba(0, 0, 0, 0.4)
       background: transparent
       width: $group-handler-size
       height: $group-handler-size
-      position: fixed // need absolute, but webkit bug present
+      position: absolute
       &[al-dragable-group-handler="rb"]
         cursor: se-resize
         right: $group-handler-offset
@@ -121,14 +123,18 @@ $shadow: 3px 5px 12px rgba(0, 0, 0, 0.4)
         cursor: sw-resize
         left: $group-handler-offset
         bottom: $group-handler-offset
-
-  .connection
-    fill: none
-    stroke: #e7e7e7
-    stroke-width: 2px
-    pointer-events: none
-    &.active
-      stroke: powderblue  
+  .connections
+    position: absolute
+    overflow: visible
+    width: 100%
+    height: 100%
+    .connection
+      fill: none
+      stroke: #e7e7e7
+      stroke-width: 2px
+      pointer-events: none
+      &.active
+        stroke: powderblue  
 
   select, input
     width: 100%

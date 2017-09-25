@@ -27,7 +27,6 @@ export class EditorView {
         };
 
         this.d3Container
-            .style('background', 'transparent')
             .on('click', () => {
                 if (this.d3Container.node() === d3.event.target)
                     this.areaClick()

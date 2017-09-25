@@ -1,78 +1,66 @@
 // Groups
-foreignobject(al-repeat='group in editor.groups', 
-  al-svg-back,
-  :x='group.position[0]', 
-  :y='group.position[1]',
-  :width='group.width', 
-  :height='group.height'
+div.group(al-repeat='group in editor.groups',
+  style='position: absolute; left: {{group.position[0]}}px; top: {{group.position[1]}}px;width: {{group.width}}; height: {{group.height}}'
+  al-dragable-group,
+  class="{{editor.active === group?'active':''}}"
   )
-  div.group(
-    al-dragable-group,
-    class="{{editor.active === group?'active':''}}"
-  )
-    div.group-title(al-group-title-click)
-      | {{group.title}}
-    div.group-handler(al-dragable-group-handler="rb")
-    div.group-handler(al-dragable-group-handler="lt")
-    div.group-handler(al-dragable-group-handler="lb")
-    div.group-handler(al-dragable-group-handler="rt")
-
+  div.group-title(al-group-title-click)
+    | {{group.title}}
+  div.group-handler(al-dragable-group-handler="rb")
+  div.group-handler(al-dragable-group-handler="lt")
+  div.group-handler(al-dragable-group-handler="lb")
+  div.group-handler(al-dragable-group-handler="rt")
 
 // Connections
-path.connection(
-  al-repeat='path in editor.paths', 
-  al-svg-back,  
-  :d='path.d'
-  class='{{path.active?"active":null}}'
-)
+svg.connections
+  path.connection(
+    al-repeat='path in editor.paths', 
+    :d='path.d'
+    class='{{path.active?"active":null}}'
+  )
 
 // Nodes
-foreignobject(al-repeat='node in editor.nodes',
-  :x='node.position[0]', 
-  :y='node.position[1]',
-  :width='node.width',
-  :height='node.height'
-  ) 
-  div.node(
-    al-dragable-node,  
-    al-node-load,
-    class="{{editor.active===node?'active':''}}"
+div.node(al-repeat='node in editor.nodes',
+  style='position: absolute; left: {{node.position[0]}}px; top: {{node.position[1]}}px;'
+  al-dragable-node,
+  al-node-load,  
+  class="{{editor.active===node?'active':''}}"
   )
-    div.title
-      .arrow
-      | {{node.title}}
-  
-    // Outputs
-    div(al-repeat='output in node.outputs',style="text-align: right")
-      .output-title
-        | {{output.title}}
-      .socket.output(
-        al-pick-output, 
-        class='{{output.socket.id}}',
-        title='{{output.socket.name}}\n{{output.socket.hint}}'
-      )
+  div.title
+    .arrow
+    | {{node.title}}
 
-    // Controls
-    div.control(
-      al-repeat='control in node.controls', 
-      style="text-align: center",
-      :width='control.parent.width - 2 * control.margin', 
-      :height='control.height', 
-      al-control='control'
+  // Outputs
+  div(al-repeat='output in node.outputs',style="text-align: right")
+    .output-title
+      | {{output.title}}
+    .socket.output(
+      al-pick-output, 
+      class='{{output.socket.id}}',
+      title='{{output.socket.name}}\n{{output.socket.hint}}'
     )
 
-    // Inputs
-    div(al-repeat='input in node.inputs',style="text-align: left")
-      .socket.input(
-        al-pick-input,
-        class="{{input.socket.id}} {{input.multipleConnections?'multiple':''}}"
-        title='{{input.socket.name}}\n{{input.socket.hint}}'
-      )
-      .input-title(
-        al-if='!input.showControl()'
-      )
-        | {{input.title}}
-      .input-control(
-        al-if='input.showControl()'
-        al-control='input.control'
-      )
+  // Controls
+  div.control(
+    al-repeat='control in node.controls', 
+    style="text-align: center",
+    :width='control.parent.width - 2 * control.margin', 
+    :height='control.height', 
+    al-control='control'
+  )
+
+  // Inputs
+  div(al-repeat='input in node.inputs',style="text-align: left")
+    .socket.input(
+      al-pick-input,
+      class="{{input.socket.id}} {{input.multipleConnections?'multiple':''}}"
+      title='{{input.socket.name}}\n{{input.socket.hint}}'
+    )
+    .input-title(
+      al-if='!input.showControl()'
+    )
+      | {{input.title}}
+    .input-control(
+      al-if='input.showControl()'
+      al-control='input.control'
+    )
