@@ -10,7 +10,20 @@ export class ContextMenu {
         this.$cd.scope.contextMenu = this;
         this.dom = d3.select('body').append('div');
         this.dom.node().setAttribute('tabindex', 1);
-        this.dom.on('blur', this.hide.bind(this));
+     
+        this.dom.on('blur', () => {
+            var parent = d3.event.relatedTarget;
+            var needHide = true;
+
+            while (parent) {
+                if (this.dom.node() === parent)
+                    needHide = false;
+                parent = parent.parentElement;
+            }
+
+            if (needHide)
+                this.hide();
+        });
 
         d3.text(template, (error, text) => {
             if (error) throw error;
