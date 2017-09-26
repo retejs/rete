@@ -1,9 +1,9 @@
 // Groups
 div.group(al-repeat='group in editor.groups',
-  :style.left='group.position[0]',
-  :style.top='group.position[1]',
-  :style.width='group.width',
-  :style.height='group.height',
+  :style.left='group.position[0]+"px"',
+  :style.top='group.position[1]+"px"',
+  :style.width='group.width+"px"',
+  :style.height='group.height+"px"',
   al-dragable-group,
   class="{{editor.active === group?'active':''}}"
   )
@@ -24,8 +24,8 @@ svg.connections
 
 // Nodes
 div.node(al-repeat='node in editor.nodes',
-  :style.left='node.position[0]',
-  :style.top='node.position[1]',
+  :style.left='node.position[0]+"px"',
+  :style.top='node.position[1]+"px"',
   al-dragable-node,
   al-node-load,  
   class="{{editor.active===node?'active':''}}"
