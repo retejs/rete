@@ -88,23 +88,15 @@ $context-menu-round: 7px
       width: $group-handler-size
       height: $group-handler-size
       position: absolute
-      &[al-dragable-group-handler="rb"]
-        cursor: se-resize
-        right: $group-handler-offset
-        bottom: $group-handler-offset
-      &[al-dragable-group-handler="lt"]
-        cursor: nw-resize
-        left: $group-handler-offset
-        top: $group-handler-offset
-      &[al-dragable-group-handler="rt"]
-        cursor: ne-resize
-        right: $group-handler-offset
-        top: $group-handler-offset
-      &[al-dragable-group-handler="lb"]
-        cursor: sw-resize
-        left: $group-handler-offset
-        bottom: $group-handler-offset
-
+      =handler($w,$h,$direction)
+        &.#{$w}.#{$h}
+          cursor: #{$direction}-resize
+          #{$w}: $group-handler-offset
+          #{$h}: $group-handler-offset
+      +handler(right,bottom,se)
+      +handler(left,top,nw)
+      +handler(right,top,ne)
+      +handler(left,bottom,sw)
   .connections
     position: absolute;
     overflow: visible

@@ -9,10 +9,10 @@ div.group(al-repeat='group in editor.groups',
   )
   div.group-title(al-group-title)
     | {{group.title}}
-  div.group-handler(al-group-handler="rb")
-  div.group-handler(al-group-handler="lt")
-  div.group-handler(al-group-handler="lb")
-  div.group-handler(al-group-handler="rt")
+  div.group-handler.right.bottom(al-group-handler="rb")
+  div.group-handler.left.top(al-group-handler="lt")
+  div.group-handler.left.bottom(al-group-handler="lb")
+  div.group-handler.right.top(al-group-handler="rt")
 
 // Connections
 svg.connections
