@@ -1,14 +1,18 @@
 .context-menu(
-    style='left:{{contextMenu.x}}px; top:{{contextMenu.y}}px;',
+    :style.left='contextMenu.x+"px"',
+    :style.top='contextMenu.y+"px"',
     @mouseleave='contextMenu.hide()',
     al-if='contextMenu.visible'
-
 )
-  .item(al-repeat='(name,item) in contextMenu.items')
+  .search.item(al-if='searchBar')
+    input(al-value='filter')
+  .item(al-repeat='(name,item) in contextMenu.searchItems(filter)',
+    al-item
+    )
     | {{name}}
     .subitems
       .item(
         al-repeat='(name,subitem) in item',
-        @click='contextMenu.onClick(subitem)'
+        al-item
       )
         | {{name}}

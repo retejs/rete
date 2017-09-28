@@ -1,3 +1,5 @@
+import { Group } from '../group';
+
 export function Node(scope, el, expression, env) {
     var node = env.changeDetector.locals.node;
 
@@ -34,5 +36,30 @@ export function Node(scope, el, expression, env) {
     window.addEventListener('load', () => {
         node.width = el.offsetWidth;
         node.height = el.offsetHeight;
+    });
+
+    var items = {
+        'Remove node': () => {
+            this.editor.removeNode(node);
+        },
+        'Add to group': () => {
+            var group = new Group('Group', {nodes:[node]});
+
+            this.editor.addGroup(group);
+        }
+    };
+
+    var onClick = (subitem) => {
+        subitem.call(this);
+        this.contextMenu.hide();
+    }
+
+    d3.select(el).on('contextmenu', () => {
+        var x = d3.event.clientX;
+        var y = d3.event.clientY;
+
+        this.editor.selectNode(node);
+        this.contextMenu.show(x, y, items, false, onClick);
+        d3.event.preventDefault();
     });
 }

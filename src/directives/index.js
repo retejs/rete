@@ -1,3 +1,4 @@
+import { Item } from './contextmenu';
 import { Control } from './control';
 import { Group, GroupHandler, GroupTitle } from './group';
 import { PickInput, PickOutput } from './io';
@@ -15,5 +16,7 @@ export function declareDirectives(view) {
     alight.directives.al.pickOutput = PickOutput.bind(view);
     
     alight.directives.al.control = Control.bind(view);
+
+    alight.directives.al.item = Item.bind(view.contextMenu);
     
 }

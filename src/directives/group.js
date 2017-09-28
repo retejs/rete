@@ -24,6 +24,26 @@ export function Group(scope, el, expression, env) {
             this.editor.eventListener.trigger('change');
         })
     );
+
+    var items = {
+        'Remove group': () => {
+            this.editor.removeGroup(group);
+        }
+    };
+
+    var onClick = (subitem) => {
+        subitem.call(this);
+        this.contextMenu.hide();
+    }
+
+    d3.select(el).on('contextmenu', () => {
+        var x = d3.event.clientX;
+        var y = d3.event.clientY;
+
+        this.editor.selectGroup(group);
+        this.contextMenu.show(x, y, items, false, onClick);
+        d3.event.preventDefault();
+    });
 }
 
 export function GroupHandler(scope, el, arg, env) {

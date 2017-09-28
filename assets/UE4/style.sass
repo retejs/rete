@@ -164,12 +164,14 @@ $context-menu-round: 7px
       overflow: overlay
     &:hover .subitems
       display: block
-    &:after
-      content: '►'
-      position: absolute
-      opacity: 0.6
-      right: 5px
-      top: 5px
+    &.have-subitems
+      padding-right: 16px
+      &:after
+        content: '►'
+        position: absolute
+        opacity: 0.6
+        right: 5px
+        top: 5px
   .item
     padding: 4px
     border-bottom: 1px solid darken($node-color,8%)

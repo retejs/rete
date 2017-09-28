@@ -135,15 +135,15 @@ $context-menu-round: 7px
       overflow: overlay
     &:hover .subitems
       display: block
-    &:after
-      content: '►'
-      position: absolute
-      opacity: 0.6
-      right: 5px
-      top: 5px
+    &.have-subitems
+      padding-right: 16px
+      &:after
+        content: '►'
+        position: absolute
+        opacity: 0.6
+        right: 5px
+        top: 5px
   .search
-    &:after
-      content: none
     input    
       color: white
       padding: 1px 8px

@@ -1,10 +1,14 @@
 export class ContextMenu {
 
-    constructor(template: string, items: Object) {
+    constructor(template: string, items: Object, searchBar: boolean = true) {
         this.visible = false;
         this.x = 0;
         this.y = 0;
-        this.items = items;
+        this.default = {
+            items,
+            searchBar,
+            onClick() { throw new TypeError('onClick should be overrided');}
+        };
         
         this.$cd = alight.ChangeDetector();
         this.$cd.scope.contextMenu = this;
@@ -25,11 +29,14 @@ export class ContextMenu {
         var items = Object.assign({}, this.items);
 
         Object.keys(items).forEach(key => {
-            items[key] = Object.assign({}, items[key]);
+            if (typeof items[key] !== 'function')
+                items[key] = Object.assign({}, items[key]);
         });
 
         Object.keys(items).forEach(itemKey => {
             var itemObj = items[itemKey];
+
+            if (typeof itemObj === 'function') return;    
 
             Object.keys(itemObj).forEach(subitem => {
                 if (!regex.test(subitem))
@@ -43,16 +50,15 @@ export class ContextMenu {
         return items;
     }
 
-    onCilck(subitem) {
-        throw new TypeError('onClick should be overrided');
-    }
-
     isVisible() {
         return this.visible;
     }
 
-    show(x: number, y: number) {
+    show(x: number, y: number, items: ?Object = null, searchBar: ?boolean = null, onClick = null) {
         this.visible = true;
+        this.items = items || this.default.items;
+        this.searchBar = searchBar || this.default.searchBar;
+        this.onClick = onClick || this.default.onClick;
         this.x = x;
         this.y = y;
         this.$cd.scan();

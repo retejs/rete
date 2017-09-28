@@ -18,7 +18,7 @@ export class EditorView {
         this.transform = d3.zoomIdentity;
 
         this.contextMenu = menu;
-        this.contextMenu.onClick = (subitem) => {
+        this.contextMenu.default.onClick = (subitem) => {
             var result = subitem();
 
             if (result instanceof Node)
@@ -139,7 +139,7 @@ export class EditorView {
         else if (this.contextMenu.visible)
             this.contextMenu.hide();
         else
-            this.contextMenu.show(d3.event.clientX - 20, d3.event.clientY - 20);
+            this.contextMenu.show(d3.event.clientX, d3.event.clientY);
         this.update();
     }
 
