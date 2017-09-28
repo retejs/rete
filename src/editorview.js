@@ -312,6 +312,8 @@ export class EditorView {
     areaClick() {
         if (this.pickedOutput !== null && !d3.event.ctrlKey)
             this.pickedOutput = null;
+        else if (this.contextMenu.visible)
+            this.contextMenu.hide();
         else
             this.contextMenu.show(d3.event.clientX - 20, d3.event.clientY - 20);
         this.update();
