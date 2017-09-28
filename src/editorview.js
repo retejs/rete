@@ -77,7 +77,6 @@ export class EditorView {
             this.view.html(text);
             alight.bind(this.$cd, this.view.node());
             this.resize();
-            editor.loaded = true;
             editor.eventListener.trigger('load');
         });
     }

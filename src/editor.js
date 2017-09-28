@@ -22,7 +22,6 @@ export class NodeEditor {
         this.active = null;
         this.nodes = [];
         this.groups = [];
-        this.loaded = false;   
     }
 
     addNode(node: Node, mousePlaced = false) {
