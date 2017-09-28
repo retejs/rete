@@ -2,7 +2,8 @@ import { ContextMenu } from './contextmenu';
 import { Node } from './node';
 import { NodeEditor } from './editor';
 import { Utils } from './utils';
-
+import { declareDirectives } from './directives/index';
+    
 const zoomMargin = 0.9;
 
 export class EditorView {
@@ -69,8 +70,8 @@ export class EditorView {
 
         this.$cd = alight.ChangeDetector();
         this.$cd.scope.editor = editor;
-
-        this.declareDirectives();
+        
+        declareDirectives(this);
 
         d3.text(template, (error, text) => {
             if (error) throw error;
@@ -79,183 +80,6 @@ export class EditorView {
             this.resize();
             editor.eventListener.trigger('load');
         });
-    }
-
-    declareDirectives() {
-        alight.directives.al.dragableNode = (scope, el, expression, env) => {
-            var node = env.changeDetector.locals.node;
-            
-            node.el = el;
-            d3.select(el).call(d3.drag().on('start', () => {
-                d3.select(el).raise();
-                this.editor.selectNode(node);
-            }).on('drag', () => {
-                var dx = d3.event.dx / this.transform.k;
-                var dy = d3.event.dy / this.transform.k;
-
-                node.position[0] += dx;
-                node.position[1] += dy;
-                this.update();
-            }).on('end', () => {
-                this.editor.groups.forEach(group => {
-                    var contain = group.containNode(node);
-                    var cover = group.isCoverNode(node);
-
-                    if (contain && !cover)
-                        group.removeNode(node);
-                    else if (!contain && cover)
-                        group.addNode(node);
-                });
-
-                this.editor.eventListener.trigger('change');
-                this.update();
-            }))
-        };
-
-        alight.directives.al.nodeLoad = (scope, el, expression, env) => {
-            window.addEventListener('load', () => {
-                var node = env.changeDetector.locals.node;
-
-                node.width = el.offsetWidth;
-                node.height = el.offsetHeight;
-                env.scan();
-            });
-        }
-
-        alight.directives.al.dragableGroup = (scope, el, expression, env) => {
-            var group = env.changeDetector.locals.group;
-
-            d3.select(el).call(d3.drag().on('start', () => {
-                this.editor.selectGroup(group);
-            }).on('drag', () => {
-                var dx = d3.event.dx / this.transform.k;
-                var dy = d3.event.dy / this.transform.k;
-
-                group.position[0] += dx;
-                group.position[1] += dy;
-
-                for (var i in group.nodes) {
-                    var node = group.nodes[i];
-
-                    node.position[0] += dx;
-                    node.position[1] += dy;
-                }
-
-                this.update();
-            }).on('end', () => {
-                this.editor.eventListener.trigger('change');
-            })
-            );
-        };
-
-        alight.directives.al.dragableGroupHandler = (scope, el, arg, env) => {
-            var group = env.changeDetector.locals.group;
-            var mousePrev;
-
-            d3.select(el).call(d3.drag().on('start', () => {
-                mousePrev = d3.mouse(this.d3Container.node());
-                this.editor.selectGroup(group);
-            }).on('drag', () => {
-                var zoom = d3.zoomTransform(this.dom);
-                var mouse = d3.mouse(this.d3Container.node());
-                var deltax = (mouse[0] - mousePrev[0]) / zoom.k;
-                var deltay = (mouse[1] - mousePrev[1]) / zoom.k;
-                var deltaw = Math.max(0, group.width - group.minWidth);
-                var deltah = Math.max(0, group.height - group.minHeight);
-
-                if (deltaw !== 0)
-                    mousePrev[0] = mouse[0];
-                if (deltah !== 0)
-                    mousePrev[1] = mouse[1];
-
-                if (arg.match('l')) {
-                    group.position[0] += Math.min(deltaw, deltax);
-                    group.setWidth(group.width - deltax);
-                }
-                else if (arg.match('r'))
-                    group.setWidth(group.width + deltax);
-
-                if (arg.match('t')) {
-                    group.position[1] += Math.min(deltah, deltay);
-                    group.setHeight(group.height - deltay);
-                }
-                else if (arg.match('b'))
-                    group.setHeight(group.height + deltay);
-
-                this.update();
-            }).on('end', () => {
-                this.editor.nodes.forEach(node => {
-                    if (group.isCoverNode(node))
-                        group.addNode(node);
-                    else
-                        group.removeNode(node);
-                });
-
-                this.editor.eventListener.trigger('change');
-                this.update();
-            }))
-        };
-
-        alight.directives.al.groupTitleClick = (scope, el, expression, env) => {
-            var group = env.changeDetector.locals.group;
-
-            d3.select(el).on('click', () => {
-                var title = prompt('Please enter title of the group', group.title);
-
-                if (title !== null && title.length > 0)
-                    group.title = title;
-                env.scan();
-            });
-        };
-
-        alight.directives.al.pickInput = (scope, el, expression, env) => {
-            var input = env.changeDetector.locals.input;
-
-            input.el = el;
-
-            d3.select(el).on('mousedown', () => {
-                d3.event.preventDefault();
-                if (this.pickedOutput === null) {
-                    if (input.hasConnection()) {
-                        this.pickedOutput = input.connections[0].output;
-                        this.editor.removeConnection(input.connections[0]);
-                    }
-                    this.update();
-                    return;
-                }
-
-                if (!input.multipleConnections && input.hasConnection())
-                    this.editor.removeConnection(input.connections[0]);
-                else if (this.pickedOutput.connectedTo(input)) {
-                    var connections = input.connections.filter(c => c.output === this.pickedOutput);
-
-                    this.editor.removeConnection(connections[0]);
-                }
-
-                this.editor.connect(this.pickedOutput, input);
-
-                this.pickedOutput = null;
-                this.update();
-            });
-        }
-
-        alight.directives.al.pickOutput = (scope, el, expression, env) => {
-            var output = env.changeDetector.locals.output;
-
-            output.el = el;
-
-            d3.select(el).on('mousedown', () => {
-                this.pickedOutput = output;
-            });
-        }
-
-        alight.directives.al.control = (scope, el, expression, env) => {
-            var locals = env.changeDetector.locals;
-            var control = expression.split('.').reduce((o, i) => o[i], locals);
-
-            el.innerHTML = control.html;
-            control.handler(el.children[0], control);
-        };
     }
 
     resize() {

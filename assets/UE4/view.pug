@@ -4,15 +4,15 @@ div.group(al-repeat='group in editor.groups',
   :style.top='group.position[1]+"px"',
   :style.width='group.width+"px"',
   :style.height='group.height+"px"',
-  al-dragable-group,
+  al-group,
   class="{{editor.active === group?'active':''}}"
   )
-  div.group-title(al-group-title-click)
+  div.group-title(al-group-title)
     | {{group.title}}
-  div.group-handler(al-dragable-group-handler="rb")
-  div.group-handler(al-dragable-group-handler="lt")
-  div.group-handler(al-dragable-group-handler="lb")
-  div.group-handler(al-dragable-group-handler="rt")
+  div.group-handler(al-group-handler="rb")
+  div.group-handler(al-group-handler="lt")
+  div.group-handler(al-group-handler="lb")
+  div.group-handler(al-group-handler="rt")
 
 // Connections
 svg.connections
@@ -26,8 +26,7 @@ svg.connections
 div.node(al-repeat='node in editor.nodes',
   :style.left='node.position[0]+"px"',
   :style.top='node.position[1]+"px"',
-  al-dragable-node,
-  al-node-load,  
+  al-node,  
   class="{{editor.active===node?'active':''}}"
   )
   div.title
