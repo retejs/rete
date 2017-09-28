@@ -98,8 +98,9 @@ $context-menu-round: 7px
       +handler(right,top,ne)
       +handler(left,bottom,sw)
   .connections
-    position: absolute;
+    position: absolute
     overflow: visible
+    pointer-events: none
     .connection
       fill: none
       stroke: steelblue
@@ -146,8 +147,8 @@ $context-menu-round: 7px
       padding: 1px 8px
       border: 1px solid white
       border-radius: 10px
-      font-size: 16px;
-      font-family: serif;
+      font-size: 16px
+      font-family: serif
       width: 100%
       background: transparent
   .item
