@@ -1,6 +1,5 @@
 export function Node(scope, el, expression, env) {
     var node = env.changeDetector.locals.node;
-    var k = this.transform.k;
 
     node.el = el;
 
@@ -9,6 +8,7 @@ export function Node(scope, el, expression, env) {
             d3.select(el).raise();
             this.editor.selectNode(node);
         }).on('drag', () => {
+            var k = this.transform.k;            
             var dx = d3.event.dx / k;
             var dy = d3.event.dy / k;
 

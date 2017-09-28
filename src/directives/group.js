@@ -1,11 +1,11 @@
 export function Group(scope, el, expression, env) {
     var group = env.changeDetector.locals.group;
-    var k = this.transform.k;
-
+    
     d3.select(el).call(
         d3.drag().on('start', () => {
             this.editor.selectGroup(group);
         }).on('drag', () => {
+            var k = this.transform.k;
             var dx = d3.event.dx / k;
             var dy = d3.event.dy / k;
 
