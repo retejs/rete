@@ -85,11 +85,10 @@ export class EditorView {
     declareDirectives() {
         alight.directives.al.dragableNode = (scope, el, expression, env) => {
             var node = env.changeDetector.locals.node;
-            var parent = el.parentNode;
-
+            
             node.el = el;
             d3.select(el).call(d3.drag().on('start', () => {
-                d3.select(parent).raise();
+                d3.select(el).raise();
                 this.editor.selectNode(node);
             }).on('drag', () => {
                 var dx = d3.event.dx / this.transform.k;
