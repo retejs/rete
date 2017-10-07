@@ -2,7 +2,7 @@ D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/D3-Node-Editor.svg?
 ====
 #### JavaScript library for visual programming
 
-![node editor](https://drive.google.com/uc?export=download&id=0BzysCNw7yv8MeXdkSV9oeHZLQkk)
+![d3ne logo](https://i.imgur.com/rydGu6B.png)
 
 Introduction
 ----
