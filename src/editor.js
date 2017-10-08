@@ -139,6 +139,11 @@ export class NodeEditor {
     }
 
     fromJSON(json: Object) {
+		if (!Utils.isValidJSON(json))
+            throw new Error('Data are damaged'); 
+        if (!Utils.isCompatibleIDs(json.id, this.id))
+            throw new Error('IDs not compatible');
+		
         this.nodes.splice(0, this.nodes.length);
         this.groups.splice(0, this.groups.length);
 
