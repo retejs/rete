@@ -4,7 +4,7 @@
     @mouseleave='contextMenu.hide()',
     al-if='contextMenu.visible'
 )
-  .search.item(al-if='searchBar')
+  .search.item(al-if='contextMenu.searchBar')
     input(al-value='filter')
   .item(al-repeat='(name,item) in contextMenu.searchItems(filter)',
     al-item

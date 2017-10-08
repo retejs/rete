@@ -126,6 +126,7 @@ $context-menu-round: 7px
   margin-top: -20px
   & > .item
     margin-left: -80%
+    padding-right: 16px
     .subitems
       position: absolute
       display: none
@@ -135,14 +136,12 @@ $context-menu-round: 7px
       overflow: overlay
     &:hover .subitems
       display: block
-    &.have-subitems
-      padding-right: 16px
-      &:after
-        content: '►'
-        position: absolute
-        opacity: 0.6
-        right: 5px
-        top: 5px
+    &.have-subitems:after
+      content: '►'
+      position: absolute
+      opacity: 0.6
+      right: 5px
+      top: 5px
   .search
     input    
       color: white
@@ -152,6 +151,7 @@ $context-menu-round: 7px
       font-size: 16px
       font-family: serif
       width: 100%
+      box-sizing: border-box
       background: transparent
   .item
     padding: 4px
