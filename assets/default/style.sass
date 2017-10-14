@@ -1,5 +1,5 @@
 $node-color: rgba(110,136,255,0.8)
-$node-color-active: #ffd92c
+$node-color-selected: #ffd92c
 $context-color: $node-color
 $group-color: rgba(15,80,255,0.2)
 $group-handler-size: 40px
@@ -26,8 +26,8 @@ $context-menu-round: 7px
     position: absolute
     &:hover
       background: lighten($node-color,4%)
-    &.active
-      background: $node-color-active
+    &.selected
+      background: $node-color-selected
       border-color: #e3c000
     .title
       color: white
@@ -76,7 +76,7 @@ $context-menu-round: 7px
     height: inherit
     border: 6px solid transparent
     position: absolute
-    &.active
+    &.selected
       border-color: #ffd92c
     .group-title
       color: white
@@ -106,7 +106,7 @@ $context-menu-round: 7px
       stroke: steelblue
       stroke-width: 5px
       pointer-events: none
-      &.active
+      &.selected
         stroke: powderblue  
 
   select, input

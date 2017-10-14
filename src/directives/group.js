@@ -3,21 +3,29 @@ export function Group(scope, el, expression, env) {
     
     d3.select(el).call(
         d3.drag().on('start', () => {
-            this.editor.selectGroup(group);
+            if (!d3.event.sourceEvent.shiftKey)
+                this.editor.selectGroup(group, d3.event.sourceEvent.ctrlKey);
         }).on('drag', () => {
             var k = this.transform.k;
             var dx = d3.event.dx / k;
             var dy = d3.event.dy / k;
 
-            group.position[0] += dx;
-            group.position[1] += dy;
+            this.editor.selected.each(item => {
+                item.position[0] += dx;
+                item.position[1] += dy;
+            });
 
-            for (var i in group.nodes) {
-                var node = group.nodes[i];
+            this.editor.selected.eachGroup(item => {
+                for (var i in item.nodes) {
+                    let node = item.nodes[i];
 
-                node.position[0] += dx;
-                node.position[1] += dy;
-            }
+                    if (this.editor.selected.contains(node))
+                        continue;    
+
+                    node.position[0] += dx;
+                    node.position[1] += dy;
+                }
+            });
 
             this.update();
         }).on('end', () => {

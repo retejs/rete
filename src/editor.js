@@ -6,6 +6,7 @@ import { Input } from './input';
 import { Group } from './group';
 import { Node } from './node';
 import { Output } from './output';
+import { Selected } from './selected';
 import { Utils } from './utils';
 
 export class NodeEditor {
@@ -19,7 +20,7 @@ export class NodeEditor {
         this.builder = builder;
         this.view = new EditorView(this, container, template, menu);
         this.eventListener = new EventListener();
-        this.active = null;
+        this.selected = new Selected();
         this.nodes = [];
         this.groups = [];
     }
@@ -86,19 +87,22 @@ export class NodeEditor {
         }
     }
 
-    selectNode(node: Node) {
+    selectNode(node: Node, accumulate: boolean = false) {
         if (this.nodes.indexOf(node) === -1)
             throw new Error('Node not exist in list');
         
         if (this.eventListener.trigger('nodeselect', node))
-            this.active = node;
+            this.selected.add(node, accumulate);
         
         this.view.update();
     }
 
-    selectGroup(group: Group) {
+    selectGroup(group: Group, accumulate: boolean = false) {
+        if (this.groups.indexOf(group) === -1)
+            throw new Error('Group not exist in list');
+        
         if (this.eventListener.trigger('groupselect', group))
-            this.active = group;
+            this.selected.add(group, accumulate);
         
         this.view.update();
     }
@@ -107,19 +111,16 @@ export class NodeEditor {
     
         switch (d3.event.keyCode) {
         case 46:
-            if (this.active instanceof Node)        
-                this.removeNode(this.active);
-            else if (this.active instanceof Group)      
-                this.removeGroup(this.active);
+            this.selected.eachNode(this.removeNode.bind(this));
+            this.selected.eachGroup(this.removeGroup.bind(this));
             this.view.update();
             break;
         case 71:
-            if (!(this.active instanceof Node)) {
-                alert('Select the node for adding to group'); return;
-            }    
-            var group = new Group('Group', {nodes:[this.active]});    
-    
-            this.addGroup(group);   
+            let nodes = this.selected.getNodes();
+                
+            if (nodes.length > 0) 
+                this.addGroup(new Group('Group', { nodes }));
+            
             break;
         }
     }

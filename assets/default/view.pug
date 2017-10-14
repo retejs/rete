@@ -5,7 +5,7 @@ div.group(al-repeat='group in editor.groups',
   :style.width='group.width+"px"',
   :style.height='group.height+"px"',
   al-group,
-  class="{{editor.active === group?'active':''}}"
+  class="{{editor.selected.contains(group)?'selected':''}}"
   )
   div.group-title(al-group-title)
     | {{group.title}}
@@ -19,7 +19,7 @@ svg.connections
   path.connection(
     al-repeat='path in editor.paths',
     :d='path.d'
-    class='{{path.active?"active":null}}'
+    class='{{path.selected?"selected":null}}'
   )
 
 // Nodes
@@ -27,7 +27,7 @@ div.node(al-repeat='node in editor.nodes',
   :style.left='node.position[0]+"px"',
   :style.top='node.position[1]+"px"',
   al-node,
-  class="{{editor.active===node?'active':''}}"
+  class="{{editor.selected.contains(node)?'selected':''}}"
   ) 
   div.title
     | {{node.title}}

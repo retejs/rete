@@ -8,24 +8,42 @@ export function Node(scope, el, expression, env) {
     d3.select(el).call(
         d3.drag().on('start', () => {
             d3.select(el).raise();
-            this.editor.selectNode(node);
+            if (!d3.event.sourceEvent.shiftKey)
+                this.editor.selectNode(node, d3.event.sourceEvent.ctrlKey);
         }).on('drag', () => {
             var k = this.transform.k;            
             var dx = d3.event.dx / k;
             var dy = d3.event.dy / k;
 
-            node.position[0] += dx;
-            node.position[1] += dy;
+            this.editor.selected.each(item => {
+                item.position[0] += dx;
+                item.position[1] += dy;
+            });
+
+            this.editor.selected.eachGroup(item => {
+                for (var i in item.nodes) {
+                    let _node = item.nodes[i];
+
+                    if (this.editor.selected.contains(_node))
+                        continue;    
+
+                    _node.position[0] += dx;
+                    _node.position[1] += dy;
+                }
+            });
+            
             this.update();
         }).on('end', () => {
             this.editor.groups.forEach(group => {
-                var contain = group.containNode(node);
-                var cover = group.isCoverNode(node);
+                this.editor.selected.eachNode(_node => {
+                    var contain = group.containNode(_node);
+                    var cover = group.isCoverNode(_node);
 
-                if (contain && !cover)
-                    group.removeNode(node);
-                else if (!contain && cover)
-                    group.addNode(node);
+                    if (contain && !cover)
+                        group.removeNode(_node);
+                    else if (!contain && cover)
+                        group.addNode(_node);
+                });
             });
 
             this.editor.eventListener.trigger('change');
