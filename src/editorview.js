@@ -121,7 +121,7 @@ export class EditorView {
             let input = this.mouse;
 
             pathData.push({
-                active: true,
+                selected: true,
                 d: Utils.getConnectionPath(
                     ...Utils.getOutputPosition(output),
                     ...input
