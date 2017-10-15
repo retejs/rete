@@ -1,3 +1,4 @@
+import { Component } from './component';
 import { ContextMenu } from './contextmenu';
 import { Control } from './control';
 import { Engine } from './engine';
@@ -9,6 +10,7 @@ import { Output } from './output';
 import { Socket } from './socket';
 
 export {
+    Component,
     ContextMenu,
     Control,
     NodeEditor,

@@ -1,12 +1,11 @@
 {
   "name": "d3-node-editor",
   "version": "0.4.4",
-  "description": " JavaScript library",
+  "description": "JavaScript library",
   "main": "build/node-editor.js",
   "scripts": {
     "lint": "eslint src",
-    "build-assets": "name=${npm_config_target:-default} && npm-sass assets/$name/style.sass > build/node-editor.css | pug < assets/$name/view.pug > build/view.html |  pug < assets/$name/menu.pug > build/menu.html",
-    "build": "rollup -c",
+    "build": "rollup -c && npm-sass src/styles/index.sass > build/node-editor.css",
     "minify-build": "uglifyjs build/node-editor.js --support-ie8  --compress --output build/node-editor.min.js"
   },
   "repository": {
@@ -37,11 +36,11 @@
     "eslint": "^3.17.1",
     "npm-sass": "^2.0.0",
     "pug": "^2.0.0-rc.4",
-    "pug-cli": "^1.0.0-alpha6",
     "regenerator-runtime": "^0.11.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-multi-entry": "^2.0.1",
+    "rollup-plugin-pug": "^0.1.6",
     "uglify-js": "^2.8.29"
   },
   "dependencies": {

@@ -1,0 +1,32 @@
+// Groups
+div.group(al-repeat='group in editor.groups',
+  :style.left='group.position[0]+"px"',
+  :style.top='group.position[1]+"px"',
+  :style.width='group.width+"px"',
+  :style.height='group.height+"px"',
+  al-group,
+  :class.selected='editor.selected.contains(group)'
+  )
+  div.group-title(al-group-title)
+    | {{group.title}}
+  div.group-handler.right.bottom(al-group-handler='rb')
+  div.group-handler.left.top(al-group-handler='lt')
+  div.group-handler.left.bottom(al-group-handler='lb')
+  div.group-handler.right.top(al-group-handler='rt')
+
+// Connections
+svg.connections
+  path.connection(
+    al-repeat='path in editor.paths',
+    :d='path.d'
+    :class.selected='path.selected'
+  )
+
+// Nodes
+div.node(al-repeat='node in editor.nodes',
+  :style.left='node.position[0]+"px"',
+  :style.top='node.position[1]+"px"',
+  al-node,
+  class="{{editor.selected.contains(node)?'selected':''}} {{node.title.toLowerCase().replace('/\ /g','-')}}"
+  )
+  div(al-html="editor.view.getTemplate(node)")

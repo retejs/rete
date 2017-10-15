@@ -1,3 +1,4 @@
+import { Component } from './component';
 import { Connection } from './connection';
 import { ContextMenu } from './contextmenu';
 import { EditorView } from './editorview';
@@ -11,18 +12,20 @@ import { Utils } from './utils';
 
 export class NodeEditor {
 
-    constructor(id: string, container: HTMLElement, template: string, builder: Object, menu: ContextMenu) {
+    constructor(id: string, container: HTMLElement, components: Component[], menu: ContextMenu) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
         
         this.id = id;
-        this.builder = builder;
-        this.view = new EditorView(this, container, template, menu);
+        this.components = components;
+        this.view = new EditorView(this, container, menu);
         this.eventListener = new EventListener();
         this.selected = new Selected();
         this.nodes = [];
         this.groups = [];
+        
+        this.view.resize();
     }
 
     addNode(node: Node, mousePlaced = false) {
@@ -108,7 +111,6 @@ export class NodeEditor {
     }
     
     keyDown() {
-    
         switch (d3.event.keyCode) {
         case 46:
             this.selected.eachNode(this.removeNode.bind(this));
@@ -152,8 +154,9 @@ export class NodeEditor {
         
         Object.keys(json.nodes).forEach(id => {
             var node = json.nodes[id];
+            var component = this.components.find(c => c.name === node.title.toLowerCase());
 
-            nodes[id] = Node.fromJSON(this.builder[node.title.toLowerCase()], node);
+            nodes[id] = Node.fromJSON(component.builder, node);
             this.addNode(nodes[id]);
         });
         

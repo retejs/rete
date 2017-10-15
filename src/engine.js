@@ -1,16 +1,17 @@
+import { Component } from './component';
 import { Utils } from './utils';
 
 var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
 
 export class Engine {
 
-    constructor(id: string, worker: Object) {
+    constructor(id: string, components: Component[]) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
         
         this.id = id;
-        this.worker = worker;
+        this.components = components;
         this.data = null;
         this.state = State.AVALIABLE;
         this.onAbort = () => { };
@@ -91,9 +92,10 @@ export class Engine {
             node.outputData = node.outputs.map(() => null);
         
             var key = node.title.toLowerCase();
+            var component = this.components.find(c => c.name === key);
 
             try {
-                await this.worker[key](node, inputData, node.outputData);
+                await component.worker(node, inputData, node.outputData);
             } catch (e) {
                 this.abort();
                 console.error(e);

@@ -3,12 +3,13 @@ import { Node } from './node';
 import { NodeEditor } from './editor';
 import { Utils } from './utils';
 import { declareDirectives } from './directives/index';
-    
+import template from './templates/view.pug';
+
 const zoomMargin = 0.9;
 
 export class EditorView {
 
-    constructor(editor: NodeEditor, container: HTMLElement, template: string, menu: ContextMenu) {
+    constructor(editor: NodeEditor, container: HTMLElement, menu: ContextMenu) {
         this.editor = editor;
         this.pickedOutput = null;
         this.dom = container;
@@ -72,14 +73,17 @@ export class EditorView {
         this.$cd.scope.editor = editor;
         
         declareDirectives(this);
+        
+        this.view.html(template());
+        alight.bind(this.$cd, this.view.node());
+    }
 
-        d3.text(template, (error, text) => {
-            if (error) throw error;
-            this.view.html(text);
-            alight.bind(this.$cd, this.view.node());
-            this.resize();
-            editor.eventListener.trigger('load');
+    getTemplate(node) {
+        var component = this.editor.components.find(c => {
+            return c.name === node.title.toLowerCase()
         });
+
+        return component.template;
     }
 
     resize() {

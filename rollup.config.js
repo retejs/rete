@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel';
+import pug from 'rollup-plugin-pug';
 import multiEntry from 'rollup-plugin-multi-entry';
 
 var entries = ['src/index.js', 'node_modules/regenerator-runtime/runtime.js'];
@@ -20,6 +21,7 @@ export default {
     sourceMap: true,
     plugins: [ 
         multiEntry(),
+        pug(),
         babel({
 	        'presets': presets,
             'plugins': babelPlugins

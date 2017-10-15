@@ -1,6 +1,8 @@
+import template from './templates/menu.pug';
+
 export class ContextMenu {
 
-    constructor(template: string, items: Object, searchBar: boolean = true) {
+    constructor(items: Object, searchBar: boolean = true) {
         this.visible = false;
         this.x = 0;
         this.y = 0;
@@ -14,13 +16,10 @@ export class ContextMenu {
         this.$cd.scope.contextMenu = this;
         this.dom = d3.select('body').append('div');
         this.dom.node().setAttribute('tabindex', 1);
-
-        d3.text(template, (error, text) => {
-            if (error) throw error;
-
-            this.dom.html(text);
-            alight.bind(this.$cd, this.dom.node());
-        });
+      
+        this.dom.html(template());
+        alight.bind(this.$cd, this.dom.node());
+        
     }
 
     searchItems(filter: ?string) {
