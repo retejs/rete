@@ -3,6 +3,7 @@ import { Connection } from './connection';
 import { ContextMenu } from './contextmenu';
 import { EditorView } from './editorview';
 import { EventListener } from './eventlistener';
+import { History } from './history';
 import { Input } from './input';
 import { Group } from './group';
 import { Node } from './node';
@@ -22,6 +23,7 @@ export class NodeEditor {
         this.view = new EditorView(this, container, menu);
         this.eventListener = new EventListener();
         this.selected = new Selected();
+        this.history = new History(this);
         this.nodes = [];
         this.groups = [];
         
@@ -35,6 +37,7 @@ export class NodeEditor {
             this.nodes.push(node);
             this.eventListener.trigger('change');
             this.selectNode(node);
+            this.history.add(this.addNode.bind(this), this.removeNode.bind(this), [node]);
         }
     }
 
@@ -51,12 +54,25 @@ export class NodeEditor {
         var index = this.nodes.indexOf(node);
 
         if (this.eventListener.trigger('noderemove', node)) {
+            node.inputs.map(input => {
+                input.connections.forEach(c => {
+                    this.removeConnection(c)
+                });
+            });  
+            node.outputs.forEach(output => {
+                output.connections.forEach(c => {
+                    this.removeConnection(c)
+                });
+            });
+
             this.nodes.splice(index, 1);
             node.remove();
             this.eventListener.trigger('change');
 
             if (this.nodes.length > 0)
                 this.selectNode(this.nodes[Math.max(0, index - 1)]);
+            
+            this.history.add(this.removeNode.bind(this), this.addNode.bind(this), [node]);
         }
 
         this.view.update();
@@ -72,22 +88,34 @@ export class NodeEditor {
         this.view.update(); 
     }
 
-    connect(output: Output, input: Input) {
-        if (this.eventListener.trigger('connectioncreate', { output, input }))
+    connect(output: Output | Connection, input: ?Input) {
+        if (output instanceof Connection) {
+            input = output.input;
+            output = output.output;
+        }
+
+        if (this.eventListener.trigger('connectioncreate', { output, input })) {
             try {
-                output.connectTo(input);
+                var connection = output.connectTo(input);
+
                 this.eventListener.trigger('change');
+                this.history.add(this.connect.bind(this), this.removeConnection.bind(this), [connection]);
             } catch (e) {
                 console.error(e);
                 alert(e.message);
             }
+        }
+        this.view.update(); 
     }
 
     removeConnection(connection: Connection) {
         if (this.eventListener.trigger('connectionremove', connection)) {
             connection.remove();
             this.eventListener.trigger('change');
+
+            this.history.add(this.removeConnection.bind(this), this.connect.bind(this), [connection]);
         }
+        this.view.update(); 
     }
 
     selectNode(node: Node, accumulate: boolean = false) {
@@ -124,6 +152,14 @@ export class NodeEditor {
                 this.addGroup(new Group('Group', { nodes }));
             
             break;
+        case 90:
+            if (d3.event.ctrlKey && d3.event.shiftKey)
+                this.history.redo();  
+            else        
+            if (d3.event.ctrlKey)
+                this.history.undo();
+                
+            break    
         }
     }
 
