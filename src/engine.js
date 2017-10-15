@@ -73,7 +73,10 @@ export class Engine {
             let connData = await Promise.all(input.connections.map(async (c) => {
                 let outputs = await this.processNode(this.data.nodes[c.node], node);
 
-                return outputs[c.output];
+                if (!outputs) 
+                    this.abort();
+                else
+                    return outputs[c.output];
             }));
 
             return connData;
@@ -81,7 +84,7 @@ export class Engine {
     }
 
     async processNode(node) {
-        if (this.state === State.ABORT)
+        if (this.state === State.ABORT || !node)
             return null;
         
         await this.lock(node);
