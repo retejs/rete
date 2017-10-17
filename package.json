@@ -2,7 +2,7 @@
   "name": "d3-node-editor",
   "version": "0.5.0",
   "description": "JavaScript library",
-  "main": "build/node-editor.js",
+  "main": "src/index.js",
   "scripts": {
     "lint": "eslint src",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/node-editor.css",
