@@ -212,16 +212,17 @@ export class NodeEditor {
 
         });  
 
-        Object.keys(json.groups).forEach(id => {
-            var group = Group.fromJSON(json.groups[id]);
+        if (typeof json.groups === 'object')
+            Object.keys(json.groups).forEach(id => {
+                var group = Group.fromJSON(json.groups[id]);
 
-            json.groups[id].nodes.forEach(nodeId => {
-                var node = nodes[nodeId];
+                json.groups[id].nodes.forEach(nodeId => {
+                    var node = nodes[nodeId];
 
-                group.addNode(node);
-            })
-            this.addGroup(group);
-        });
+                    group.addNode(node);
+                })
+                this.addGroup(group);
+            });
         this.view.update();
     }
 }

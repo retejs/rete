@@ -62,7 +62,7 @@ export class Utils {
     static isValidJSON(data) {
         return typeof data.id === 'string' &&
             typeof data.nodes === 'object' &&
-            typeof data.groups ==='object'
+            (!data.groups || typeof data.groups ==='object')
     }
 
     static isValidId(id) {
