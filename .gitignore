@@ -2,5 +2,4 @@ node_modules
 .idea/
 .vscode/
 npm-debug.log
-build/*
-!build/.keep
+build
