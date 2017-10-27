@@ -21,7 +21,9 @@ export default {
     sourceMap: true,
     plugins: [ 
         multiEntry(),
-        pug(),
+        pug({
+            pugRuntime: false
+        }),
         babel({
 	        'presets': presets,
             'plugins': babelPlugins
