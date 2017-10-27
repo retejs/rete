@@ -3,9 +3,9 @@ import { Connection } from './connection';
 import { ContextMenu } from './contextmenu';
 import { EditorView } from './editorview';
 import { EventListener } from './eventlistener';
+import { Group } from './group';
 import { History } from './history';
 import { Input } from './input';
-import { Group } from './group';
 import { Node } from './node';
 import { Output } from './output';
 import { Selected } from './selected';
@@ -37,7 +37,9 @@ export class NodeEditor {
             this.nodes.push(node);
             this.eventListener.trigger('change');
             this.selectNode(node);
-            this.history.add(this.addNode.bind(this), this.removeNode.bind(this), [node]);
+            this.history.add(this.addNode.bind(this),
+                            this.removeNode.bind(this),
+                            [node]);
         }
     }
 
@@ -54,25 +56,17 @@ export class NodeEditor {
         var index = this.nodes.indexOf(node);
 
         if (this.eventListener.trigger('noderemove', node)) {
-            node.inputs.map(input => {
-                input.connections.forEach(c => {
-                    this.removeConnection(c)
-                });
-            });  
-            node.outputs.forEach(output => {
-                output.connections.forEach(c => {
-                    this.removeConnection(c)
-                });
-            });
+            node.getConnections().forEach(c => this.removeConnection(c));
 
             this.nodes.splice(index, 1);
-            node.remove();
             this.eventListener.trigger('change');
 
             if (this.nodes.length > 0)
                 this.selectNode(this.nodes[Math.max(0, index - 1)]);
             
-            this.history.add(this.removeNode.bind(this), this.addNode.bind(this), [node]);
+            this.history.add(this.removeNode.bind(this),
+                            this.addNode.bind(this),
+                            [node]);
         }
 
         this.view.update();
@@ -99,7 +93,9 @@ export class NodeEditor {
                 var connection = output.connectTo(input);
 
                 this.eventListener.trigger('change');
-                this.history.add(this.connect.bind(this), this.removeConnection.bind(this), [connection]);
+                this.history.add(this.connect.bind(this),
+                                this.removeConnection.bind(this),
+                                [connection]);
             } catch (e) {
                 console.error(e);
                 alert(e.message);
@@ -113,7 +109,9 @@ export class NodeEditor {
             connection.remove();
             this.eventListener.trigger('change');
 
-            this.history.add(this.removeConnection.bind(this), this.connect.bind(this), [connection]);
+            this.history.add(this.removeConnection.bind(this),
+                            this.connect.bind(this),
+                            [connection]);
         }
         this.view.update(); 
     }
@@ -163,6 +161,11 @@ export class NodeEditor {
         }
     }
 
+    clear() {
+        this.nodes.splice(0, this.nodes.length);
+        this.groups.splice(0, this.groups.length);
+    }
+
     toJSON() {
         var nodes = {};
         var groups = {};
@@ -178,19 +181,19 @@ export class NodeEditor {
     }
 
     fromJSON(json: Object) {
-        if (!Utils.isValidJSON(json))
-            throw new Error('Data are damaged'); 
-        if (!Utils.isCompatibleIDs(json.id, this.id))
-            throw new Error('IDs not compatible');
-		
-        this.nodes.splice(0, this.nodes.length);
-        this.groups.splice(0, this.groups.length);
+        var checking = Utils.validate(this.id, json);
 
+        if (!checking.success)
+            throw new Error(checking.msg);   
+        
+        this.clear();
         var nodes = {};
         
         Object.keys(json.nodes).forEach(id => {
             var node = json.nodes[id];
-            var component = this.components.find(c => c.name === node.title.toLowerCase());
+            var component = this.components.find(c => {
+                return c.name === node.title.toLowerCase()
+            });
 
             nodes[id] = Node.fromJSON(component.builder, node);
             this.addNode(nodes[id]);

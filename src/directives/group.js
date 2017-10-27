@@ -59,11 +59,11 @@ export function GroupHandler(scope, el, arg, env) {
     var mousePrev = null;
 
     d3.select(el).call(d3.drag().on('start', () => {
-        mousePrev = d3.mouse(this.d3Container.node());
+        mousePrev = d3.mouse(this.container.node());
         this.editor.selectGroup(group);
     }).on('drag', () => {
         var zoom = d3.zoomTransform(this.dom);
-        var mouse = d3.mouse(this.d3Container.node());
+        var mouse = d3.mouse(this.container.node());
         var deltax = (mouse[0] - mousePrev[0]) / zoom.k;
         var deltay = (mouse[1] - mousePrev[1]) / zoom.k;
         var deltaw = Math.max(0, group.width - group.minWidth);

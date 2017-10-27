@@ -7,7 +7,13 @@
     "document": true,
     "alight": true,
     "window": true,
-    "d3": true
+    "d3": true,
+    "console": true,
+    "uint8": true,
+    "Promise": true,
+    "HTMLElement": true,
+    "alert": true,
+    "prompt": true
   },
   "rules": {
     "comma-dangle": [1, "never"],
@@ -71,7 +77,7 @@
     "space-in-parens": [1, "never"],
     "keyword-spacing": 1,
     "max-depth": [1, 4],
-    "max-len": [1, 80, 4, {
+    "max-len": [1, 100, 4, {
       "ignoreComments": true
     }],
     "max-params": [1, 6],

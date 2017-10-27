@@ -12,9 +12,7 @@ export class EditorView {
     constructor(editor: NodeEditor, container: HTMLElement, menu: ContextMenu) {
         this.editor = editor;
         this.pickedOutput = null;
-        this.dom = container;
-        this.dom.tabIndex = 1;
-        this.d3Container = d3.select(this.dom);
+        this.container = d3.select(container).attr('tabindex', 1);
         this.mouse = [0, 0];
         this.transform = d3.zoomIdentity;
 
@@ -28,13 +26,13 @@ export class EditorView {
             this.contextMenu.hide();
         };
 
-        this.d3Container
+        this.container
             .on('click', () => {
-                if (this.d3Container.node() === d3.event.target)
+                if (this.container.node() === d3.event.target)
                     this.areaClick()
             });
 
-        this.view = this.d3Container.append('div')
+        this.view = this.container.append('div')
             .style('transform-origin', '0 0')
             .style('width', 1)
             .style('height', 1);
@@ -47,7 +45,7 @@ export class EditorView {
                 this.view.style('transform', style);
             });
 
-        this.d3Container.call(this.zoom);
+        this.container.call(this.zoom);
 
         this.setScaleExtent(0.1, 1);
         var size = Math.pow(2, 12);
@@ -64,7 +62,7 @@ export class EditorView {
                 this.update();
             })
             .on('keydown.' + editor.id, (e) => {
-                if (this.dom === document.activeElement)
+                if (this.container.node() === document.activeElement)
                     editor.keyDown(e);
             })
             .on('resize.' + editor.id, this.resize.bind(this));
@@ -87,10 +85,11 @@ export class EditorView {
     }
 
     resize() {
-        var width = this.dom.parentElement.clientWidth;
-        var height = this.dom.parentElement.clientHeight;
+        var width = this.container.node().parentElement.clientWidth;
+        var height = this.container.node().parentElement.clientHeight;
 
-        this.d3Container.style('width', width + 'px')
+        this.container
+            .style('width', width + 'px')
             .style('height', height + 'px');
 
         this.update();
@@ -108,7 +107,7 @@ export class EditorView {
                         pathData.push({
                             d: Utils.getConnectionPath(
                                 ...Utils.getOutputPosition(output),
-                                ...Utils.geInputPosition(input)
+                                ...Utils.getInputPosition(input)
                             )
                         });
                 });
@@ -151,12 +150,12 @@ export class EditorView {
         if (nodes.length === 0) return;
 
         var bbox = Utils.nodesBBox(nodes);
-        var kh = this.dom.clientHeight / Math.abs(bbox.top - bbox.bottom);
-        var kw = this.dom.clientWidth / Math.abs(bbox.left - bbox.right);
+        var kh = this.container.node().clientHeight / Math.abs(bbox.top - bbox.bottom);
+        var kw = this.container.node().clientWidth / Math.abs(bbox.left - bbox.right);
         var k = Math.min(kh, kw, 1);
 
-        this.zoom.translateTo(this.d3Container, ...bbox.getCenter());
-        this.zoom.scaleTo(this.d3Container, zoomMargin * k);
+        this.zoom.translateTo(this.container, ...bbox.getCenter());
+        this.zoom.scaleTo(this.container, zoomMargin * k);
     }
 
     setScaleExtent(scaleMin: number, scaleMax: number) {

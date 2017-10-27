@@ -4,9 +4,9 @@ import { Socket } from './socket';
 
 export class Input {
    
-    constructor(title: string, socket: Socket, multipleConnections: boolean = false) {
+    constructor(title: string, socket: Socket, multiConns: boolean = false) {
         this.node = null;
-        this.multipleConnections = multipleConnections;
+        this.multipleConnections = multiConns;
         this.connections = [];
         this.title = title;
         this.socket = socket;

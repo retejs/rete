@@ -1,7 +1,7 @@
-import { Item } from './contextmenu';
-import { Control } from './control';
 import { Group, GroupHandler, GroupTitle } from './group';
 import { PickInput, PickOutput } from './io';
+import { Control } from './control';
+import { Item } from './contextmenu';
 import { Node } from './node';
 
 export function declareDirectives(view) {

@@ -70,8 +70,10 @@ export class Engine {
 
     async extractInputData(node) {
         return await Promise.all(node.inputs.map(async (input) => {
-            let connData = await Promise.all(input.connections.map(async (c) => {
-                let outputs = await this.processNode(this.data.nodes[c.node], node);
+            var conns = input.connections;
+            let connData = await Promise.all(conns.map(async (c) => {
+
+                let outputs = await this.processNode(this.data.nodes[c.node]);
 
                 if (!outputs) 
                     this.abort();
@@ -126,12 +128,10 @@ export class Engine {
     }
 
     async process(data: Object, startNode = null) {
-        if (!this.processStart()) return 'not started';
-
-        if (!Utils.isValidJSON(data))
-            throw new Error('Data are damaged'); 
-        if (!Utils.isCompatibleIDs(data.id, this.id))
-            throw new Error('IDs not compatible');
+        var checking = Utils.validate(this.id, data);
+        
+        if (!checking.success)
+            throw new Error(checking.msg);  
 
         this.data = Object.assign({}, data);
         

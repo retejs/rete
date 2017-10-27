@@ -6,8 +6,7 @@ import { Output } from './output';
 export class Node extends Block {
    
     constructor(title: string) {
-        super();
-        this.id = Node.incrementId();
+        super(Node);
         this.group = null;
         this.inputs = [];
         this.outputs = [];
@@ -15,16 +14,7 @@ export class Node extends Block {
         this.data = {};
 
         this.title = title;
-        this.width = 180;
-        this.height = 100;
-    }
-
-    static incrementId() {
-        if (!this.latestId)
-            this.latestId = 1
-        else
-            this.latestId++
-        return this.latestId
+        [this.width, this.height] = [180, 100];
     }
 
     addControl(control: Control, index: ?uint8 = null) {
@@ -66,19 +56,26 @@ export class Node extends Block {
         return this;
     }
 
+    getConnections() {
+        var conns = [];
+
+        this.inputs.map(input => {
+            input.connections.forEach(c => {
+                conns.push(c);
+            });
+        });
+        this.outputs.forEach(output => {
+            output.connections.forEach(c => {
+                conns.push(c);
+            });
+        });
+        return conns;
+    }
+
     inputsWithVisibleControl() {
         return this.inputs.filter((input)=> {
             return input.showControl();
         });
-    }
-
-    remove() {
-        this.inputs.forEach((input) => {
-            input.removeConnections();
-        });
-        this.outputs.forEach((output) => {
-            output.removeConnections();
-        })
     }
 
     toJSON() {

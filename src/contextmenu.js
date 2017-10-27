@@ -11,15 +11,18 @@ export class ContextMenu {
             searchBar,
             onClick() { throw new TypeError('onClick should be overrided');}
         };
-        
+
+        this.bindTemplate(template());
+    }
+
+    bindTemplate(t) {
         this.$cd = alight.ChangeDetector();
         this.$cd.scope.contextMenu = this;
         this.dom = d3.select('body').append('div');
         this.dom.node().setAttribute('tabindex', 1);
       
-        this.dom.html(template());
+        this.dom.html(t);
         alight.bind(this.$cd, this.dom.node());
-        
     }
 
     searchItems(filter: ?string) {

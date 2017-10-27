@@ -5,13 +5,11 @@ import { Utils } from './utils';
 export class Group extends Block {
 
     constructor(title: string, params: Object) {
-        super();
-        this.id = Group.incrementId();
+        super(Group);
         this.title = title;
 
         this.nodes = [];
-        this.minWidth = 600;
-        this.minHeight = 250;
+        this.setMinSizes(300, 250);
 
         if (params.nodes)
             this.coverNodes(params.nodes);
@@ -20,15 +18,11 @@ export class Group extends Block {
             this.width = params.width;
             this.height = params.height;
         }
-        
     }
 
-    static incrementId() {
-        if (!this.latestId)
-            this.latestId = 1
-        else
-            this.latestId++
-        return this.latestId
+    setMinSizes(width, height) {
+        this.minWidth = width;
+        this.minHeight = height;
     }
 
     setWidth(w: number) {
