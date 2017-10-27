@@ -1,6 +1,6 @@
 {
   "name": "d3-node-editor",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
   "scripts": {
