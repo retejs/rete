@@ -2,22 +2,22 @@ import babel from 'rollup-plugin-babel';
 import pug from 'rollup-plugin-pug';
 import multiEntry from 'rollup-plugin-multi-entry';
 
-var entries = ['src/index.js', 'node_modules/regenerator-runtime/runtime.js'];
+var entries = ['src/index.js'];
 var babelPlugins = ['typecheck', 'syntax-flow', 'transform-flow-strip-types'];
-var presets = [
-    'es2015-rollup'
-];
+var presets = [];
 
 if (process.env.npm_config_es2017) {
-    entries = ['src/index.js'];
     presets = ['es2017'];
 }
-else
+else {
+    entries.push('node_modules/regenerator-runtime/runtime.js');
     babelPlugins.push('transform-regenerator');
+    presets = ['es2015-rollup'];
+}
 
 export default {
     entry: entries,
-    dest: 'build/node-editor.js',
+    dest: 'build/d3-node-editor.js',
     sourceMap: true,
     plugins: [ 
         multiEntry(),

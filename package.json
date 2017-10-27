@@ -7,7 +7,7 @@
     "lint": "eslint src",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
     "minify-build": "uglifyjs build/d3-node-editor.js --support-ie8  --compress --output build/d3-node-editor.min.js",
-    "prepublish": "npm run lint && npm run build"
+    "prepublish": "npm run lint && npm run build && npm run minify-build"
   },
   "repository": {
     "type": "git",
