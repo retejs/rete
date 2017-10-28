@@ -2,21 +2,8 @@ import babel from 'rollup-plugin-babel';
 import pug from 'rollup-plugin-pug';
 import multiEntry from 'rollup-plugin-multi-entry';
 
-var entries = ['src/index.js'];
-var babelPlugins = ['typecheck', 'syntax-flow', 'transform-flow-strip-types'];
-var presets = [];
-
-if (process.env.npm_config_es2017) {
-    presets = ['es2017'];
-}
-else {
-    entries.push('node_modules/regenerator-runtime/runtime.js');
-    babelPlugins.push('transform-regenerator');
-    presets = ['es2015-rollup'];
-}
-
 export default {
-    entry: entries,
+    entry: ['src/index.js', 'node_modules/regenerator-runtime/runtime.js'],
     dest: 'build/d3-node-editor.js',
     sourceMap: true,
     plugins: [ 
@@ -24,10 +11,7 @@ export default {
         pug({
             pugRuntime: false
         }),
-        babel({
-	        'presets': presets,
-            'plugins': babelPlugins
-        })
+        babel()
     ],
     format: 'iife',
     moduleName: 'D3NE'

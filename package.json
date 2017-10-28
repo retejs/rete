@@ -7,7 +7,8 @@
     "lint": "eslint src",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
     "minify-build": "uglifyjs build/d3-node-editor.js --support-ie8  --compress --output build/d3-node-editor.min.js",
-    "prepublish": "npm run lint && npm run build && npm run minify-build"
+    "prepublishOnly": "npm run lint && npm run build && npm run minify-build",
+    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
@@ -32,9 +33,11 @@
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-plugin-typecheck": "^3.9.0",
+    "babel-preset-es2015": "^6.24.1",
     "babel-preset-es2015-rollup": "^3.0.0",
-    "babel-preset-es2017": "^6.24.1",
+    "babel-register": "^6.26.0",
     "eslint": "^3.17.1",
+    "mocha": "^4.0.1",
     "npm-sass": "^2.0.0",
     "pug": "^2.0.0-rc.4",
     "regenerator-runtime": "^0.11.0",

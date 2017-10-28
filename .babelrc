@@ -1,0 +1,20 @@
+{
+    "plugins": [
+        "typecheck",
+        "syntax-flow",
+        "transform-flow-strip-types",
+        "transform-regenerator"
+    ],
+    "env": {
+        "development":{
+            "presets": [
+                "es2015-rollup"
+            ]
+        },
+        "test": {
+            "presets": [
+                "es2015"
+            ]
+        }
+    }
+}
