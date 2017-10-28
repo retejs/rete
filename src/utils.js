@@ -68,6 +68,7 @@ export class Utils {
 
     static isValidData(data) {
         return typeof data.id === 'string' &&
+            this.isValidId(data.id) &&
             data.nodes instanceof Object &&
             (!data.groups || data.groups instanceof Object)
     }
