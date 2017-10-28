@@ -56,19 +56,22 @@ export class Node extends Block {
         return this;
     }
 
-    getConnections() {
+    getConnections(type) {
         var conns = [];
 
-        this.inputs.map(input => {
-            input.connections.forEach(c => {
-                conns.push(c);
+        if (type==='input' || !type)
+            this.inputs.map(input => {
+                input.connections.forEach(c => {
+                    conns.push(c);
+                });
             });
-        });
-        this.outputs.forEach(output => {
-            output.connections.forEach(c => {
-                conns.push(c);
+        
+        if (type==='output' || !type)
+            this.outputs.forEach(output => {
+                output.connections.forEach(c => {
+                    conns.push(c);
+                });
             });
-        });
         return conns;
     }
 

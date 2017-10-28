@@ -23,20 +23,20 @@ export class Utils {
         };
     }
 
-    static getConnectionPath(x1, y1, x2, y2) {
-        var offsetX = 0.3 * Math.abs(x1 - x2);
-        var offsetY = 0.1 * (y2 - y1);
+    static getConnectionPath(a, b, produce) {
+        var { points, curve } = produce(...a, ...b);
 
-        var p1 = [x1, y1];
-        var p2 = [x1 + offsetX, y1 + offsetY];
-        var p3 = [x2 - offsetX, y2 - offsetY];
-        var p4 = [x2, y2];
-
-        return this.pointsToPath([p1, p2, p3, p4]);
+        switch (curve) {
+        case 'linear': curve = d3.curveLinear; break;
+        case 'step': curve = d3.curveStep; break;
+        case 'basis': curve = d3.curveBasis; break;
+        default: curve = d3.curveBasis; break;
+        }
+        return this.pointsToPath(points, curve);
     }
 
-    static pointsToPath(points) {
-        var curve = d3.curveBasis(d3.path());
+    static pointsToPath(points, d3curve) {
+        var curve = d3curve(d3.path());
         
         curve.lineStart();
         for (var i = 0; i < points.length;i++)

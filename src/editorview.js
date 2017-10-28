@@ -95,22 +95,38 @@ export class EditorView {
         this.update();
     }
 
+    connectionProducer(x1, y1, x2, y2) {
+        var offsetX = 0.3 * Math.abs(x1 - x2);
+        var offsetY = 0.1 * (y2 - y1);
+
+        var p1 = [x1, y1];
+        var p2 = [x1 + offsetX, y1 + offsetY];
+        var p3 = [x2 - offsetX, y2 - offsetY];
+        var p4 = [x2, y2];
+
+        return {
+            points: [p1, p2, p3, p4],
+            curve: 'basis'
+        };
+    }
+
     updateConnections() {
         var pathData = [];
 
         this.editor.nodes.forEach(node => {
-            node.outputs.forEach(output => {
-                output.connections.forEach(connection => {
-                    let input = connection.input;
+            node.getConnections('output').forEach(con => {
+                let output = con.output;
+                let input = con.input;
 
-                    if (input.el)
-                        pathData.push({
-                            d: Utils.getConnectionPath(
-                                ...Utils.getOutputPosition(output),
-                                ...Utils.getInputPosition(input)
-                            )
-                        });
-                });
+                if (input.el) {
+                    pathData.push({
+                        d: Utils.getConnectionPath(
+                            Utils.getOutputPosition(output),
+                            Utils.getInputPosition(input),
+                            this.connectionProducer
+                        )
+                    });
+                }
             });
         });
 
@@ -122,8 +138,9 @@ export class EditorView {
             pathData.push({
                 selected: true,
                 d: Utils.getConnectionPath(
-                    ...Utils.getOutputPosition(output),
-                    ...input
+                    Utils.getOutputPosition(output),
+                    input,
+                    this.connectionProducer
                 )
             });
         }
