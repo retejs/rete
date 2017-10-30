@@ -1,5 +1,5 @@
-import { Component } from './component';
-import { Utils } from './utils';
+import { Component } from '../component';
+import { Utils } from '../utils';
 
 var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
 
