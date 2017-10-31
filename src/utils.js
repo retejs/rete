@@ -2,7 +2,7 @@ export class Utils {
 
     static nodesBBox(nodes) {
         var min = (arr) => Math.min(...arr);
-        var max = (arr) => Math.min(...arr);
+        var max = (arr) => Math.max(...arr);
 
         var left = min(nodes.map(node => node.position[0]));
         var top = min(nodes.map(node => node.position[1]));
