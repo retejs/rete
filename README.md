@@ -12,9 +12,13 @@ Documentation
 ----
 Check the [wiki](https://github.com/Ni55aN/D3-Node-Editor/wiki) and learn about the components and capabilities.
 
-Demo
+Examples
 ----
-[Codepen](https://codepen.io/Ni55aN/pen/jBEKBQ)
+[Flow-based programming](https://codepen.io/Ni55aN/pen/jBEKBQ)
+
+[Event & conditions](https://codepen.io/Ni55aN/pen/MOYPEz)
+
+[Allmatter - tool for generating 3d materials](https://github.com/Ni55aN/allmatter)
 
 License
 ----
