@@ -38,7 +38,11 @@ export class ContextMenu {
         Object.keys(items).forEach(itemKey => {
             var itemObj = items[itemKey];
 
-            if (typeof itemObj === 'function') return;    
+            if (typeof itemObj === 'function') {
+                if (!regex.test(itemKey))
+                    delete items[itemKey];
+                return;
+            }
 
             Object.keys(itemObj).forEach(subitem => {
                 if (!regex.test(subitem))
