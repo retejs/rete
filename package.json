@@ -38,7 +38,7 @@
     "babel-register": "^6.26.0",
     "eslint": "^3.17.1",
     "mocha": "^4.0.1",
-    "npm-sass": "^2.0.0",
+    "npm-sass": "^2.2.1",
     "pug": "^2.0.0-rc.4",
     "regenerator-runtime": "^0.11.0",
     "rollup": "^0.41.5",
