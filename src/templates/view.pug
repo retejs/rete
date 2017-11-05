@@ -1,7 +1,6 @@
 // Groups
 div.group(al-repeat='group in editor.groups',
-  :style.left='group.position[0]+"px"',
-  :style.top='group.position[1]+"px"',
+  :style.transform='"translate("+group.position[0]+"px,"+group.position[1]+"px)"',
   :style.width='group.width+"px"',
   :style.height='group.height+"px"',
   al-group,
@@ -24,8 +23,7 @@ svg.connections
 
 // Nodes
 div.node(al-repeat='node in editor.nodes',
-  :style.left='node.position[0]+"px"',
-  :style.top='node.position[1]+"px"',
+  :style.transform='"translate("+node.position[0]+"px,"+node.position[1]+"px)"',
   al-node,
   class="{{editor.selected.contains(node)?'selected':''}} {{node.title.toLowerCase().replace('/\ /g','-')}}"
   )
