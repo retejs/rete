@@ -127,13 +127,23 @@ export class Engine {
         }));
     }
 
+    copy(data) {
+        data = Object.assign({}, data);
+        data.nodes = Object.assign({}, data.nodes);
+        
+        Object.keys(data.nodes).forEach(key => {
+            data.nodes[key] = Object.assign({}, data.nodes[key])
+        });
+        return data;
+    }
+
     async process(data: Object, startNode = null) {
         var checking = Utils.validate(this.id, data);
         
         if (!checking.success)
             throw new Error(checking.msg);  
-
-        this.data = Object.assign({}, data);
+        
+        this.data = this.copy(data);
         
         if (startNode) {
             await this.processNode(startNode);
