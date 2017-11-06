@@ -1,13 +1,13 @@
 export function Item(scope, el, expression, env) {
     var l = env.changeDetector.locals;
     var item = l.subitem || l.item;
-    var isFunc = typeof item === 'function';
+    var haveSubitems = item.constructor === Object;
 
     d3.select(el)
         .on('click', () => {
-            if (isFunc)
+            if (!haveSubitems)
                 this.onClick(item);
             d3.event.stopPropagation();
         })
-        .classed('have-subitems', !isFunc);
+        .classed('have-subitems', haveSubitems);
 }

@@ -194,10 +194,10 @@ export class NodeEditor {
         Object.keys(json.nodes).forEach(id => {
             var node = json.nodes[id];
             var component = this.components.find(c => {
-                return c.name === node.title.toLowerCase()
+                return c.name === node.title
             });
 
-            nodes[id] = Node.fromJSON(component.builder, node);
+            nodes[id] = Node.fromJSON(component, node);
             this.addNode(nodes[id]);
         });
         

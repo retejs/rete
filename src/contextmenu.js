@@ -27,33 +27,30 @@ export class ContextMenu {
 
     searchItems(filter: ?string) {
         var regex = new RegExp(filter, 'i'); 
+        var items = {};
 
-        var items = Object.assign({}, this.items);
+        Object.keys(this.items).forEach(key => {
+            var item = this.items[key];
 
-        Object.keys(items).forEach(key => {
-            if (typeof items[key] !== 'function')
-                items[key] = Object.assign({}, items[key]);
-        });
+            if (item.constructor === Object) {
+                var subitems = Object.keys(item).filter(subitem => regex.test(subitem))
 
-        Object.keys(items).forEach(itemKey => {
-            var itemObj = items[itemKey];
-
-            if (typeof itemObj === 'function') {
-                if (!regex.test(itemKey))
-                    delete items[itemKey];
-                return;
+                if (subitems.length > 0) {
+                    items[key] = {};
+                    subitems.forEach(sumitem => {
+                        items[key][sumitem] = item[sumitem];
+                    });
+                }
             }
-
-            Object.keys(itemObj).forEach(subitem => {
-                if (!regex.test(subitem))
-                    delete itemObj[subitem];
-            });
-
-            if (Object.keys(itemObj).length === 0)
-                delete items[itemKey];
+            else if (regex.test(key))
+                items[key] = item;
         });
 
         return items;
+    }
+
+    haveSubitems(item) {
+        return item.constructor === Object;
     }
 
     isVisible() {

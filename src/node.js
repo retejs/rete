@@ -1,4 +1,5 @@
 import { Block } from './block';
+import { Component } from './component';
 import { Control } from './control';
 import { Input } from './input';
 import { Output } from './output';
@@ -93,14 +94,16 @@ export class Node extends Block {
         }
     }
 
-    static fromJSON(builder: Object, json: Object) {
-        var node = builder(json);
+    static fromJSON(component: Component, json: Object) {
+        var node = component.newNode();
 
         node.id = json.id;
         node.data = json.data;
         Node.latestId = Math.max(node.id, Node.latestId);
         node.position = json.position;
         node.title = json.title;
+
+        component.builder(node);
 
         return node;
     }

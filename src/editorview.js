@@ -1,4 +1,5 @@
 import { ContextMenu } from './contextmenu';
+import { Component } from './component';
 import { Node } from './node';
 import { NodeEditor } from './editor';
 import { Utils } from './utils';
@@ -17,11 +18,16 @@ export class EditorView {
         this.transform = d3.zoomIdentity;
 
         this.contextMenu = menu;
-        this.contextMenu.default.onClick = (subitem) => {
-            var result = subitem();
+        this.contextMenu.default.onClick = (item) => {
+           
+            if (item instanceof Component) {
+                let node = item.newNode();
 
-            if (result instanceof Node)
-                this.editor.addNode(result, true);
+                item.builder(node);
+                this.editor.addNode(node, true);
+            }
+            else
+                item();    
 
             this.contextMenu.hide();
         };
@@ -78,7 +84,7 @@ export class EditorView {
 
     getTemplate(node) {
         var component = this.editor.components.find(c => {
-            return c.name === node.title.toLowerCase()
+            return c.name === node.title
         });
 
         return component.template;

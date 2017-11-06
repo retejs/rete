@@ -10,7 +10,7 @@
     al-item
     )
     | {{name}}
-    .subitems
+    .subitems(al-if='contextMenu.haveSubitems(item)')
       .item(
         al-repeat='(name,subitem) in item',
         al-item

@@ -96,7 +96,7 @@ export class Engine {
 
             node.outputData = node.outputs.map(() => null);
         
-            var key = node.title.toLowerCase();
+            var key = node.title;
             var component = this.components.find(c => c.name === key);
 
             try {
