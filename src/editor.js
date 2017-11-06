@@ -182,9 +182,11 @@ export class NodeEditor {
 
     fromJSON(json: Object) {
         var checking = Utils.validate(this.id, json);
-
+        
         if (!checking.success)
-            throw new Error(checking.msg);   
+            throw new Error(checking.msg); 
+        
+        this.eventListener.persistent = false;
         
         this.clear();
         var nodes = {};
@@ -227,5 +229,6 @@ export class NodeEditor {
                 this.addGroup(group);
             });
         this.view.update();
+        this.eventListener.persistent = true;
     }
 }

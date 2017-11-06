@@ -12,6 +12,7 @@ export class EventListener {
             groupselect:[],
             change:[]
         };
+        this.persistent = true;
     }
 
     on(names: string, handler: () => {}) { 
@@ -25,13 +26,13 @@ export class EventListener {
         return this;
     }
 
-    trigger(name: string, args) {
+    trigger(name: string, param) {
 
         if (!(name in this.events))
             throw new Error(`The event ${name} cannot be triggered`);
         
         return this.events[name].reduce((r, e) => {
-            return (e(args) !== false) && r
+            return (e(param, this.persistent) !== false) && r
         }, true); // return false if at least one event is false        
     }
 }
