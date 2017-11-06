@@ -94,7 +94,7 @@ export class Node extends Block {
     }
 
     static fromJSON(builder: Object, json: Object) {
-        var node = builder();
+        var node = builder(json);
 
         node.id = json.id;
         node.data = json.data;
