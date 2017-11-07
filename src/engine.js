@@ -1,5 +1,5 @@
-import { Component } from '../component';
-import { Utils } from '../utils';
+import { Component } from './component';
+import { Utils } from './utils';
 
 var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
 
@@ -16,6 +16,10 @@ export class Engine {
         this.data = null;
         this.state = State.AVALIABLE;
         this.onAbort = () => { };
+    }
+
+    clone() {
+        return new Engine(this.id, this.components);
     }
 
     processStart() {
