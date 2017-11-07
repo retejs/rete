@@ -12,6 +12,7 @@ export class Engine {
         
         this.id = id;
         this.components = components;
+        this.args = [];
         this.data = null;
         this.state = State.AVALIABLE;
         this.onAbort = () => { };
@@ -100,7 +101,7 @@ export class Engine {
             var component = this.components.find(c => c.name === key);
 
             try {
-                await component.worker(node, inputData, node.outputData);
+                await component.worker(node, inputData, node.outputData, ...this.args);
             } catch (e) {
                 this.abort();
                 console.error(e);
@@ -137,13 +138,14 @@ export class Engine {
         return data;
     }
 
-    async process(data: Object, startId = null) {
+    async process(data: Object, startId = null, ...args) {
         var checking = Utils.validate(this.id, data);
 
         if (!checking.success)
             throw new Error(checking.msg);  
         
         this.data = this.copy(data);
+        this.args = args;
         
         if (startId) {
             let startNode = this.data.nodes[startId];
