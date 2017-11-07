@@ -18,6 +18,8 @@ Examples
 
 [Event & conditions](https://codepen.io/Ni55aN/pen/MOYPEz)
 
+[Modules](https://codepen.io/Ni55aN/pen/QOEbEW)
+
 [Allmatter - tool for generating 3d materials](https://github.com/Ni55aN/allmatter)
 
 License
