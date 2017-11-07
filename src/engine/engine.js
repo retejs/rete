@@ -137,15 +137,17 @@ export class Engine {
         return data;
     }
 
-    async process(data: Object, startNode = null) {
+    async process(data: Object, startId = null) {
         var checking = Utils.validate(this.id, data);
-        
+
         if (!checking.success)
             throw new Error(checking.msg);  
         
         this.data = this.copy(data);
         
-        if (startNode) {
+        if (startId) {
+            let startNode = this.data.nodes[startId];
+
             await this.processNode(startNode);
             await this.forwardProcess(startNode);
         }
