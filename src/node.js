@@ -21,7 +21,7 @@ export class Node extends Block {
     addControl(control: Control, index: ?uint8 = null) {
         control.parent = this;
 
-        if (index)
+        if (index !== null)
             this.controls.splice(index, 0, control);
         else
             this.controls.push(control);        
@@ -35,7 +35,7 @@ export class Node extends Block {
         
         input.node = this;
 
-        if (index)
+        if (index !== null)
             this.inputs.splice(index, 0, input);
         else
             this.inputs.push(input);
@@ -49,7 +49,7 @@ export class Node extends Block {
         
         output.node = this;
 
-        if (index)
+        if (index !== null)
             this.outputs.splice(index, 0, output);
         else
             this.outputs.push(output);
