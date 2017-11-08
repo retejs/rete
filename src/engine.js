@@ -142,7 +142,7 @@ export class Engine {
         return data;
     }
 
-    async process(data: Object, startId = null, ...args) {
+    async process(data: Object, startId: ?number = null, ...args) {
         var checking = Utils.validate(this.id, data);
 
         if (!checking.success)
