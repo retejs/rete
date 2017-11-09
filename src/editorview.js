@@ -45,11 +45,9 @@ export class EditorView {
 
         this.zoom = d3.zoom()
             .on('zoom', () => {
-                var t = this.transform = d3.event.transform;
-                var style = `translate(${t.x}px, ${t.y}px) scale(${t.k})`;
-
-                this.view.style('transform', style);
-                this.editor.eventListener.trigger('transform', t);
+                this.transform = d3.event.transform;
+                this.update();
+                this.editor.eventListener.trigger('transform', this.transform);
             });
 
         this.container.call(this.zoom);
@@ -156,6 +154,9 @@ export class EditorView {
     }
 
     update() {
+        var t = this.transform;
+
+        this.view.style('transform', `translate(${t.x}px, ${t.y}px) scale(${t.k})`);
         this.updateConnections();
         this.$cd.scan();
     }
@@ -185,11 +186,14 @@ export class EditorView {
     }
 
     translate(x, y) {
-        this.zoom.translateTo(this.container, x, y);
+        this.transform.x = x;
+        this.transform.y = y;
+        this.update();
     }
 
     scale(scale) {
-        this.zoom.scaleTo(this.container, scale);
+        this.transform.k = scale;
+        this.update();
     }
 
     setScaleExtent(scaleMin: number, scaleMax: number) {
