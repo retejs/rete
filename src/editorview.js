@@ -49,6 +49,7 @@ export class EditorView {
                 var style = `translate(${t.x}px, ${t.y}px) scale(${t.k})`;
 
                 this.view.style('transform', style);
+                this.editor.eventListener.trigger('transform', t);
             });
 
         this.container.call(this.zoom);

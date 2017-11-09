@@ -10,7 +10,8 @@ export class EventListener {
             connectionremove:[],
             nodeselect:[],
             groupselect:[],
-            change:[]
+            change: [],
+            transform: []
         };
         this.persistent = true;
     }
