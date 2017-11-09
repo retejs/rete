@@ -20,6 +20,8 @@ Examples
 
 [Modules](https://codepen.io/Ni55aN/pen/QOEbEW)
 
+[Diff](https://codepen.io/Ni55aN/pen/POWEvm?editors=1010)
+
 [Allmatter - tool for generating 3d materials](https://github.com/Ni55aN/allmatter)
 
 License
