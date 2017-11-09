@@ -26,6 +26,7 @@ export class NodeEditor {
         this.history = new History(this);
         this.nodes = [];
         this.groups = [];
+        this.readOnly = false;
         
         this.view.resize();
     }
@@ -137,6 +138,8 @@ export class NodeEditor {
     }
     
     keyDown() {
+        if (this.readOnly) return;
+
         switch (d3.event.keyCode) {
         case 46:
             this.selected.eachNode(this.removeNode.bind(this));

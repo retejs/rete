@@ -4,6 +4,8 @@ export function PickInput(scope, el, expression, env) {
     input.el = el;
 
     d3.select(el).on('mousedown', () => {
+        if (this.editor.readOnly) return;
+
         d3.event.preventDefault();
         if (this.pickedOutput === null) {
             if (input.hasConnection()) {
@@ -35,6 +37,8 @@ export function PickOutput(scope, el, expression, env) {
     output.el = el;
 
     d3.select(el).on('mousedown', () => {
+        if (this.editor.readOnly) return;
+
         this.pickedOutput = output;
     });
 }

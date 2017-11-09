@@ -161,6 +161,8 @@ export class EditorView {
     }
 
     areaClick() {
+        if (this.editor.readOnly) return;
+
         if (this.pickedOutput !== null && !d3.event.ctrlKey)
             this.pickedOutput = null;
         else if (this.contextMenu.visible)
