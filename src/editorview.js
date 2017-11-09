@@ -182,6 +182,14 @@ export class EditorView {
         this.zoom.scaleTo(this.container, zoomMargin * k);
     }
 
+    translate(x, y) {
+        this.zoom.translateTo(this.container, x, y);
+    }
+
+    scale(scale) {
+        this.zoom.scaleTo(this.container, scale);
+    }
+
     setScaleExtent(scaleMin: number, scaleMax: number) {
         this.zoom.scaleExtent([scaleMin, scaleMax]);
     }
