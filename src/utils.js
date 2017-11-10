@@ -14,6 +14,8 @@ export class Utils {
             right,
             top,
             bottom,
+            width: Math.abs(left - right),
+            height:  Math.abs(top - bottom),
             getCenter: () => {
                 return [
                     (left + right) / 2,

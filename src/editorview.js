@@ -181,13 +181,20 @@ export class EditorView {
     zoomAt(nodes: Node[]) {
         if (nodes.length === 0) return;
 
+        var w = this.container.node().clientWidth;
+        var h = this.container.node().clientHeight;
         var bbox = Utils.nodesBBox(nodes);
-        var kh = this.container.node().clientHeight / Math.abs(bbox.top - bbox.bottom);
-        var kw = this.container.node().clientWidth / Math.abs(bbox.left - bbox.right);
+        var kw = w / bbox.width;
+        var kh = h / bbox.height;
         var k = Math.min(kh, kw, 1);
 
-        this.zoom.translateTo(this.container, ...bbox.getCenter());
-        this.zoom.scaleTo(this.container, zoomMargin * k);
+        var center = bbox.getCenter();
+        var win = [w / 2, h / 2];
+        
+        k *= zoomMargin;
+
+        this.translate(win[0]-center[0]*k, win[1]-center[1]*k);
+        this.scale(k);
     }
 
     translate(x, y) {
