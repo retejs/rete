@@ -38,7 +38,7 @@ export class NodeEditor {
                 node.position = this.view.mouse;
             this.nodes.push(node);
             this.eventListener.trigger('change');
-            this.selectNode(node);
+            
             this.history.add(this.addNode.bind(this),
                             this.removeNode.bind(this),
                             [node]);
@@ -63,9 +63,6 @@ export class NodeEditor {
             this.nodes.splice(index, 1);
             this.eventListener.trigger('change');
 
-            if (this.nodes.length > 0)
-                this.selectNode(this.nodes[Math.max(0, index - 1)]);
-            
             this.history.add(this.removeNode.bind(this),
                             this.addNode.bind(this),
                             [node]);

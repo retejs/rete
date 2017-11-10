@@ -157,6 +157,7 @@ export class EditorView {
 
                 item.builder(node);
                 this.editor.addNode(node, true);
+                this.editor.selectNode(node);
             }
             else
                 item();
