@@ -18,6 +18,12 @@ export class Selected {
             this.list = [item];    
     }
 
+    clear() {
+        this.each(item => {
+            this.remove(item);
+        });
+    }
+
     remove(item) {
         this.list.splice(this.list.indexOf(item), 1);
     }
