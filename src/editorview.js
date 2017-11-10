@@ -59,13 +59,12 @@ export class EditorView {
             })
             .on('resize.d3ne' + editor._id, this.resize.bind(this));
 
-        this.$cd = alight.ChangeDetector();
-        this.$cd.scope.editor = editor;
-        
-        declareViewDirectives(this, this.$cd.scope);
-
         this.view.html(template());
-        alight.bind(this.$cd, this.view.node());
+
+        var al = alight.makeInstance();
+
+        declareViewDirectives(this, al);
+        this.$cd = al(this.view.node(), {editor});
     }
 
     getTemplate(node) {

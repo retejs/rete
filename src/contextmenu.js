@@ -17,15 +17,12 @@ export class ContextMenu {
     }
 
     bindTemplate(t) {
-        this.$cd = alight.ChangeDetector();
-        this.$cd.scope.contextMenu = this;
         this.dom = d3.select('body').append('div');
         this.dom.node().setAttribute('tabindex', 1);
-
         this.dom.html(t);
 
-        declareMenuDirectives(this, this.$cd.scope);
-        alight.bind(this.$cd, this.dom.node());
+        declareMenuDirectives(this, alight);
+        this.$cd = alight(this.dom.node(), {contextMenu: this});
     }
 
     searchItems(filter: ?string) {

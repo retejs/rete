@@ -6,28 +6,32 @@ div(al-repeat='output in node.outputs',style="text-align: right")
   .output-title
     | {{output.title}}
   .socket.output(
+    al-pick-output, 
     class='{{output.socket.id}}',
     title='{{output.socket.name}}\n{{output.socket.hint}}'
-  )&attributes({'pick-output!':''})
+  )
 
 // Controls
 div.control(
   al-repeat='control in node.controls', 
   style="text-align: center",
   :width='control.parent.width - 2 * control.margin', 
-  :height='control.height',
-)&attributes({'control-dir!':''})
+  :height='control.height', 
+  al-control='control'
+)
 
 // Inputs
 div(al-repeat='input in node.inputs',style="text-align: left")
   .socket.input(
+    al-pick-input,
     class="{{input.socket.id}} {{input.multipleConnections?'multiple':''}}"
     title='{{input.socket.name}}\n{{input.socket.hint}}'
-  )&attributes({'pick-input!':''})
+  )
   .input-title(
     al-if='!input.showControl()'
   )
     | {{input.title}}
   .input-control(
     al-if='input.showControl()'
-  )&attributes({'control-dir!':''})
+    al-control='input.control'
+  )
