@@ -4,19 +4,21 @@ import { Control } from './control';
 import { Item } from './contextmenu';
 import { Node } from './node';
 
-export function declareDirectives(view) {
+export function declareViewDirectives(view, scope) {
 
-    alight.directives.al.node = Node.bind(view);
+    scope.nodeDir = Node.bind(view);
 
-    alight.directives.al.group = Group.bind(view);
-    alight.directives.al.groupHandler = GroupHandler.bind(view);
-    alight.directives.al.groupTitle = GroupTitle.bind(view);
+    scope.groupDir = Group.bind(view);
+    scope.groupHandler = GroupHandler.bind(view);
+    scope.groupTitle = GroupTitle.bind(view);
 
-    alight.directives.al.pickInput = PickInput.bind(view);
-    alight.directives.al.pickOutput = PickOutput.bind(view);
+    scope.pickInput = PickInput.bind(view);
+    scope.pickOutput = PickOutput.bind(view);
     
-    alight.directives.al.control = Control.bind(view);
+    scope.controlDir = Control.bind(view);
+}
 
-    alight.directives.al.item = Item.bind(view.contextMenu);
+export function declareMenuDirectives(menu, scope) {
     
+    scope.itemDir = Item.bind(menu);
 }

@@ -3,7 +3,7 @@ import { Component } from './component';
 import { Node } from './node';
 import { NodeEditor } from './editor';
 import { Utils } from './utils';
-import { declareDirectives } from './directives/index';
+import { declareViewDirectives } from './directives/index';
 import template from './templates/view.pug';
 
 const zoomMargin = 0.9;
@@ -18,19 +18,6 @@ export class EditorView {
         this.transform = d3.zoomIdentity;
 
         this.contextMenu = menu;
-        this.contextMenu.default.onClick = (item) => {
-           
-            if (item instanceof Component) {
-                let node = item.newNode();
-
-                item.builder(node);
-                this.editor.addNode(node, true);
-            }
-            else
-                item();    
-
-            this.contextMenu.hide();
-        };
 
         this.container
             .on('click', () => {
@@ -58,25 +45,25 @@ export class EditorView {
         this.setTranslateExtent(-size, -size, size, size);
 
         d3.select(window)
-            .on('mousemove', () => {
+            .on('mousemove.d3ne' + editor._id, () => {
+                
                 var k = this.transform.k;
                 var position = d3.mouse(this.view.node());
 
                 this.mouse = [position[0]/k, position[1]/k];
-                
                 this.update();
             })
-            .on('keydown.' + editor.id, (e) => {
+            .on('keydown.d3ne' + editor._id, (e) => {
                 if (this.container.node() === document.activeElement)
                     editor.keyDown(e);
             })
-            .on('resize.' + editor.id, this.resize.bind(this));
+            .on('resize.d3ne' + editor._id, this.resize.bind(this));
 
         this.$cd = alight.ChangeDetector();
         this.$cd.scope.editor = editor;
         
-        declareDirectives(this);
-        
+        declareViewDirectives(this, this.$cd.scope);
+
         this.view.html(template());
         alight.bind(this.$cd, this.view.node());
     }
@@ -155,11 +142,27 @@ export class EditorView {
 
     update() {
         var t = this.transform;
-
+        
         this.view.style('transform', `translate(${t.x}px, ${t.y}px) scale(${t.k})`);
         this.updateConnections();
         this.$cd.scan();
     }
+
+    assignContextMenuHandler() {
+        this.contextMenu.default.onClick = (item) => {
+        
+            if (item instanceof Component) {
+                let node = item.newNode();
+
+                item.builder(node);
+                this.editor.addNode(node, true);
+            }
+            else
+                item();
+
+            this.contextMenu.hide();
+        };
+    }    
 
     areaClick() {
         if (this.editor.readOnly) return;
@@ -168,8 +171,10 @@ export class EditorView {
             this.pickedOutput = null;
         else if (this.contextMenu.visible)
             this.contextMenu.hide();
-        else
+        else {
+            this.assignContextMenuHandler();
             this.contextMenu.show(d3.event.pageX, d3.event.pageY);
+        }
         this.update();
     }
 

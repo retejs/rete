@@ -19,6 +19,7 @@ export class NodeEditor {
             throw new Error('ID should be valid to name@0.1.0 format');  
         
         this.id = id;
+        this._id = Math.random().toString(36).substr(2, 9);
         this.components = components;
         this.view = new EditorView(this, container, menu);
         this.eventListener = new EventListener();

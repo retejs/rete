@@ -3,15 +3,14 @@ div.group(al-repeat='group in editor.groups',
   :style.transform='"translate("+group.position[0]+"px,"+group.position[1]+"px)"',
   :style.width='group.width+"px"',
   :style.height='group.height+"px"',
-  al-group,
   :class.selected='editor.selected.contains(group)'
-  )
-  div.group-title(al-group-title)
+  )&attributes({'group-dir!':''})
+  div.group-title&attributes({'group-title!':''})
     | {{group.title}}
-  div.group-handler.right.bottom(al-group-handler='rb')
-  div.group-handler.left.top(al-group-handler='lt')
-  div.group-handler.left.bottom(al-group-handler='lb')
-  div.group-handler.right.top(al-group-handler='rt')
+  div.group-handler.right.bottom&attributes({'group-handler!':"this, $element, 'rb', $env"})
+  div.group-handler.left.top&attributes({'group-handler!':"this, $element, 'lt', $env"})
+  div.group-handler.left.bottom&attributes({'group-handler!':"this, $element, 'lb', $env"})
+  div.group-handler.right.top&attributes({'group-handler!':"this, $element, 'rt', $env"})
 
 // Connections
 svg.connections
@@ -24,7 +23,6 @@ svg.connections
 // Nodes
 div.node(al-repeat='node in editor.nodes',
   :style.transform='"translate("+node.position[0]+"px,"+node.position[1]+"px)"',
-  al-node,
   class="{{editor.selected.contains(node)?'selected':''}} {{node.title.toLowerCase().replace('/\ /g','-')}}"
-  )
+  )&attributes({'node-dir!':''})
   div(al-html="editor.view.getTemplate(node)")

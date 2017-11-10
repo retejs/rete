@@ -1,3 +1,4 @@
+import { declareMenuDirectives } from './directives/index';
 import template from './templates/menu.pug';
 
 export class ContextMenu {
@@ -20,8 +21,10 @@ export class ContextMenu {
         this.$cd.scope.contextMenu = this;
         this.dom = d3.select('body').append('div');
         this.dom.node().setAttribute('tabindex', 1);
-      
+
         this.dom.html(t);
+
+        declareMenuDirectives(this, this.$cd.scope);
         alight.bind(this.$cd, this.dom.node());
     }
 

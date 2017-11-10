@@ -154,6 +154,9 @@ export class Engine {
         if (startId) {
             let startNode = this.data.nodes[startId];
 
+            if (!startNode)
+                throw new Error('Node with such id not found');   
+            
             await this.processNode(startNode);
             await this.forwardProcess(startNode);
         }

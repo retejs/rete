@@ -6,13 +6,11 @@
 )
   .search.item(al-if='contextMenu.searchBar')
     input(al-value='filter')
-  .item(al-repeat='(name,item) in contextMenu.searchItems(filter)',
-    al-item
-    )
+  .item(al-repeat='(name,item) in contextMenu.searchItems(filter)'
+    )&attributes({'item-dir!':''})
     | {{name}}
     .subitems(al-if='contextMenu.haveSubitems(item)')
       .item(
-        al-repeat='(name,subitem) in item',
-        al-item
-      )
+        al-repeat='(name,subitem) in item'
+      )&attributes({'item-dir!':''})
         | {{name}}
