@@ -112,6 +112,8 @@ export class EditorView {
 
                 if (input.el) {
                     pathData.push({
+                        output,
+                        input,
                         d: Utils.getConnectionPath(
                             Utils.getOutputPosition(output),
                             Utils.getInputPosition(input),

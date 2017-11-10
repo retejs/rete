@@ -17,6 +17,10 @@ svg.connections
   path.connection(
     al-repeat='path in editor.paths',
     :d='path.d'
+    :data-input-node="path.input?path.input.node.id:null"
+    :data-input-index="path.input?path.input.node.inputs.indexOf(path.input):null"
+    :data-output-node="path.output?path.output.node.id:null"
+    :data-output-index="path.output?path.output.node.outputs.indexOf(path.output):null"
     :class.selected='path.selected'
   )
 
