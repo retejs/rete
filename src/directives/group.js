@@ -1,6 +1,11 @@
 export function Group(scope, el, expression, env) {
     var group = env.changeDetector.locals.group;
     
+    group.el = el;
+    env.watch('node.style', () => {
+        Object.assign(el.style, group.style);
+    }, { deep: true });
+
     d3.select(el).call(
         d3.drag().on('start', () => {
             if (!d3.event.sourceEvent.shiftKey)

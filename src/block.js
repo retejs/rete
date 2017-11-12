@@ -8,6 +8,7 @@ export class Block {
         this.position = [0.0, 0.0];
         this.width = 0;
         this.height = 0;
+        this.style = {};
     }
 
     static incrementId(Class) {

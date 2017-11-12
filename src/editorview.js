@@ -111,8 +111,7 @@ export class EditorView {
 
                 if (input.el) {
                     pathData.push({
-                        output,
-                        input,
+                        connection: con,
                         d: Utils.getConnectionPath(
                             Utils.getOutputPosition(output),
                             Utils.getInputPosition(input),
@@ -123,8 +122,7 @@ export class EditorView {
             });
         });
 
-        if (this.pickedOutput !== null) {
-            if (!this.pickedOutput.el) return;
+        if (this.pickedOutput !== null && this.pickedOutput.el) {
             let output = this.pickedOutput;
             let input = this.mouse;
 

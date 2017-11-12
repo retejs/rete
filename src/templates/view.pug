@@ -18,10 +18,7 @@ svg.connections
   path.connection(
     al-repeat='path in editor.paths',
     :d='path.d'
-    :data-input-node="path.input?path.input.node.id:null"
-    :data-input-index="path.input?path.input.node.inputs.indexOf(path.input):null"
-    :data-output-node="path.output?path.output.node.id:null"
-    :data-output-index="path.output?path.output.node.outputs.indexOf(path.output):null"
+    al-connection
     :class.selected='path.selected'
   )
 
@@ -29,6 +26,7 @@ svg.connections
 div.node(al-repeat='node in editor.nodes',
   :style.transform='"translate("+node.position[0]+"px,"+node.position[1]+"px)"',
   al-node,
+  :data-id="node.id",
   class="{{editor.selected.contains(node)?'selected':''}} {{node.title.toLowerCase().replace('/\ /g','-')}}"
   )
   div(al-html="editor.view.getTemplate(node)")

@@ -4,7 +4,10 @@ export function Node(scope, el, expression, env) {
     var node = env.changeDetector.locals.node;
 
     node.el = el;
-
+    env.watch('node.style', () => {
+        Object.assign(el.style, node.style);
+    }, { deep: true });
+    
     d3.select(el).call(
         d3.drag().on('start', () => {
             d3.select(el).raise();
