@@ -4,9 +4,10 @@ var eqObj = (o1, o2) => JSON.stringify(o1) === JSON.stringify(o2);
 var eqCon = (c1, c2, target) => {
     return c1.node === c2.node && c1[target] === c2[target];
 }
-var diffCons = (cons1, cons2, target) => {
-    var removed = cons1.filter(c1 => !cons2.some(c2 => eqCon(c1, c2, target)));
-    var added = cons2.filter(c2 => !cons1.some(c1 => eqCon(c1, c2, target)));
+var diffCons = (cons1, cons2) => {
+
+    var removed = cons1.filter(c1 => !cons2.some(c2 => eqCon(c1, c2, 'input')));
+    var added = cons2.filter(c2 => !cons1.some(c1 => eqCon(c1, c2, 'input')));
     
     return {removed, added}
 }
@@ -43,22 +44,16 @@ export class Diff {
             return !eqObj(d1, d2);
         });
 
-        var connects = stayed.map(id => {
-            var i1 = a.nodes[id].inputs;
-            var i2 = b.nodes[id].inputs;
+        var connects = stayed.reduce((arr, id) => {
             var o1 = a.nodes[id].outputs;
             var o2 = b.nodes[id].outputs;
 
-            var input = i1.map((inp, i) => {
-                return diffCons(inp.connections, i2[i].connections, 'output')
-            }).filter(diff => diff.added.length !== 0 || diff.removed.length !== 0);
-
             var output = o1.map((out, i) => {
-                return diffCons(out.connections, o2[i].connections, 'input')
+                return Object.assign({output: i}, diffCons(out.connections, o2[i].connections))
             }).filter(diff => diff.added.length !== 0 || diff.removed.length !== 0);
 
-            return { id, input, output };
-        }).filter(c => c.input.length !== 0 || c.output.length !== 0);
+            return [...arr, ...output.map(o => (o.node=id, o))];
+        }, [])
 
         return {removed, added, moved, datachanged, connects}
     }
