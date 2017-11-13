@@ -13,6 +13,6 @@ export default {
         }),
         babel()
     ],
-    format: 'iife',
+    format: 'umd',
     moduleName: 'D3NE'
 };
