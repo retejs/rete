@@ -37,6 +37,7 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-register": "^6.26.0",
     "eslint": "^3.17.1",
+    "jsdom": "^11.3.0",
     "mocha": "^4.0.1",
     "npm-sass": "^2.2.1",
     "pug": "^2.0.0-rc.4",

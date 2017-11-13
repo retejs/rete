@@ -12,6 +12,6 @@ export class Socket {
     }
 
     compatibleWith(socket: Socket) {
-        return this.id === socket.id || this.compatible.indexOf(socket) !== -1;
+        return this === socket || this.compatible.includes(socket);
     }
 }
