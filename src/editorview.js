@@ -148,12 +148,12 @@ export class EditorView {
     }
 
     assignContextMenuHandler() {
-        this.contextMenu.default.onClick = (item) => {
+        this.contextMenu.default.onClick = async (item) => {
         
             if (item instanceof Component) {
                 let node = item.newNode();
 
-                item.builder(node);
+                await item.builder(node);
                 this.editor.addNode(node, true);
                 this.editor.selectNode(node);
             }

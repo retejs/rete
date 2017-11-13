@@ -94,7 +94,7 @@ export class Node extends Block {
         }
     }
 
-    static fromJSON(component: Component, json: Object) {
+    static async fromJSON(component: Component, json: Object) {
         var node = component.newNode();
 
         node.id = json.id;
@@ -103,7 +103,7 @@ export class Node extends Block {
         node.position = json.position;
         node.title = json.title;
 
-        component.builder(node);
+        await component.builder(node);
 
         return node;
     }

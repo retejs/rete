@@ -181,7 +181,7 @@ export class NodeEditor {
         };
     }
 
-    fromJSON(json: Object) {
+    async fromJSON(json: Object) {
         var checking = Utils.validate(this.id, json);
         
         if (!checking.success)
@@ -192,15 +192,15 @@ export class NodeEditor {
         this.clear();
         var nodes = {};
         
-        Object.keys(json.nodes).forEach(id => {
+        await Promise.all(Object.keys(json.nodes).map(async id => {
             var node = json.nodes[id];
             var component = this.components.find(c => {
                 return c.name === node.title
             });
 
-            nodes[id] = Node.fromJSON(component, node);
+            nodes[id] = await Node.fromJSON(component, node);
             this.addNode(nodes[id]);
-        });
+        }));
         
         Object.keys(json.nodes).forEach(id => {
             var jsonNode = json.nodes[id];
