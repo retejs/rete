@@ -8,9 +8,11 @@ export function Connection(scope, el, expression, env) {
     env.watch('path.connection.style', () => {
         Object.assign(el.style, connection.style);
     }, { deep: true });
-
+    
     el.dataset.inputNode = path.connection.input.node.id;
     el.dataset.inputIndex = path.connection.input.node.inputs.indexOf(path.connection.input);
     el.dataset.outputNode = path.connection.output.node.id;
     el.dataset.outputIndex = path.connection.output.node.outputs.indexOf(path.connection.output);
+    el.className.baseVal += ' output-'+path.connection.output.socket.id;
+    el.className.baseVal += ' input-'+path.connection.input.socket.id;
 }
