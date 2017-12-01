@@ -143,6 +143,11 @@ export class Engine {
     }
 
     async process(data: Object, startId: ?number = null, ...args) {
+        if (!this.processStart()) {
+            console.warn('The process is busy and has not been restarted. Use abort() to force it to complete');
+            return;
+        }
+
         var checking = Utils.validate(this.id, data);
 
         if (!checking.success)
