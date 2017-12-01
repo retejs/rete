@@ -15,13 +15,17 @@ export function PickInput(scope, el, expression, env) {
             this.update();
             return;
         }
-
+        
         if (!input.multipleConnections && input.hasConnection())
             this.editor.removeConnection(input.connections[0]);
-        else if (this.pickedOutput.connectedTo(input)) {
-            var connections = input.connections.filter(c => c.output === this.pickedOutput);
+        
+        if (!this.pickedOutput.multipleConnections && this.pickedOutput.hasConnection())
+            this.editor.removeConnection(this.pickedOutput.connections[0]);
+        
+        if (this.pickedOutput.connectedTo(input)) {
+            var connection = input.connections.find(c => c.output === this.pickedOutput);
 
-            this.editor.removeConnection(connections[0]);
+            this.editor.removeConnection(connection);
         }
 
         this.editor.connect(this.pickedOutput, input);

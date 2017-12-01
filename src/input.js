@@ -1,15 +1,12 @@
 import { Connection } from './connection';
 import { Control } from './control';
 import { Socket } from './socket';
+import { IO } from './io';
 
-export class Input {
+export class Input extends IO {
    
     constructor(title: string, socket: Socket, multiConns: boolean = false) {
-        this.node = null;
-        this.multipleConnections = multiConns;
-        this.connections = [];
-        this.title = title;
-        this.socket = socket;
+        super(title, socket, multiConns);
         this.control = null;
     }
 
@@ -21,14 +18,6 @@ export class Input {
         if (!this.multipleConnections && this.hasConnection())
             throw new Error('Multiple connections not allowed');
         this.connections.push(connection);
-    }
-
-    removeConnection(connection: Connection) {
-        this.connections.splice(this.connections.indexOf(connection), 1);
-    }
-
-    removeConnections() {
-        this.connections.forEach(c => c.remove());
     }
 
     addControl(control: Control) {

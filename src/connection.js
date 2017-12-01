@@ -10,6 +10,6 @@ export class Connection {
 
     remove() {
         this.input.removeConnection(this);
-        this.output.removeConnection(this, false);
+        this.output.removeConnection(this);
     }
 }
