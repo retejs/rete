@@ -96,8 +96,8 @@ export class NodeEditor {
                                 this.removeConnection.bind(this),
                                 [connection]);
             } catch (e) {
-                console.error(e);
-                alert(e.message);
+                console.warn(e);
+                this.eventListener.trigger('error', e);
             }
         }
         this.view.update(); 

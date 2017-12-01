@@ -9,7 +9,8 @@ export class EventListener {
             groupremove:[],
             connectionremove:[],
             nodeselect:[],
-            groupselect:[],
+            groupselect: [],
+            error: [],
             change: [],
             transform: []
         };

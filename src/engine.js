@@ -108,7 +108,7 @@ export class Engine {
                 await component.worker(node, inputData, node.outputData, ...this.args);
             } catch (e) {
                 this.abort();
-                console.error(e);
+                console.warn(e);
             }
             if (node.outputData.length !== node.outputs.length)
                 throw new Error('Output data does not correspond to number of outputs');
