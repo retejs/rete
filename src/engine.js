@@ -28,6 +28,11 @@ export class Engine {
             return true;
         }
 
+        if (this.state === State.ABORT) {
+            return false;
+        }
+
+        console.warn('The process is busy and has not been restarted. Use abort() to force it to complete');
         return false;
     }
 
@@ -48,6 +53,10 @@ export class Engine {
         return new Promise(ret => {
             if (this.state === State.PROCESSED) {
                 this.state = State.ABORT;
+                this.onAbort = ret;
+            }
+            else if (this.state === State.ABORT) {
+                this.onAbort();
                 this.onAbort = ret;
             }
             else
@@ -143,11 +152,8 @@ export class Engine {
     }
 
     async process(data: Object, startId: ?number = null, ...args) {
-        if (!this.processStart()) {
-            console.warn('The process is busy and has not been restarted. Use abort() to force it to complete');
-            return;
-        }
-
+        if (!this.processStart()) return;
+        
         var checking = Utils.validate(this.id, data);
 
         if (!checking.success)
