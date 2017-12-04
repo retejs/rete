@@ -184,51 +184,62 @@ export class NodeEditor {
     async fromJSON(json: Object) {
         var checking = Utils.validate(this.id, json);
         
-        if (!checking.success)
-            throw new Error(checking.msg); 
+        if (!checking.success) {
+            this.eventListener.trigger('error', checking.msg);
+            console.warn(checking.msg);
+            return;
+        }
         
         this.eventListener.persistent = false;
         
         this.clear();
         var nodes = {};
-        
-        await Promise.all(Object.keys(json.nodes).map(async id => {
-            var node = json.nodes[id];
-            var component = this.components.find(c => {
-                return c.name === node.title
-            });
 
-            nodes[id] = await Node.fromJSON(component, node);
-            this.addNode(nodes[id]);
-        }));
-        
-        Object.keys(json.nodes).forEach(id => {
-            var jsonNode = json.nodes[id];
-            var node = nodes[id];
-                
-            jsonNode.outputs.forEach((outputJson, i) => {
-                outputJson.connections.forEach(jsonConnection => {
-                    var nodeId = jsonConnection.node;
-                    var inputIndex = jsonConnection.input;
-                    var targetInput = nodes[nodeId].inputs[inputIndex];
-
-                    this.connect(node.outputs[i], targetInput);
+        try {
+            await Promise.all(Object.keys(json.nodes).map(async id => {
+                var node = json.nodes[id];
+                var component = this.components.find(c => {
+                    return c.name === node.title
                 });
+
+                if (!component) throw `Component ${node.title} was not found`;
+
+                nodes[id] = await Node.fromJSON(component, node);
+                this.addNode(nodes[id]);
+            }));
+        
+            Object.keys(json.nodes).forEach(id => {
+                var jsonNode = json.nodes[id];
+                var node = nodes[id];
+                
+                jsonNode.outputs.forEach((outputJson, i) => {
+                    outputJson.connections.forEach(jsonConnection => {
+                        var nodeId = jsonConnection.node;
+                        var inputIndex = jsonConnection.input;
+                        var targetInput = nodes[nodeId].inputs[inputIndex];
+
+                        this.connect(node.outputs[i], targetInput);
+                    });
+                });
+
             });
 
-        });  
+            if (typeof json.groups === 'object')
+                Object.keys(json.groups).forEach(id => {
+                    var group = Group.fromJSON(json.groups[id]);
 
-        if (typeof json.groups === 'object')
-            Object.keys(json.groups).forEach(id => {
-                var group = Group.fromJSON(json.groups[id]);
+                    json.groups[id].nodes.forEach(nodeId => {
+                        var node = nodes[nodeId];
 
-                json.groups[id].nodes.forEach(nodeId => {
-                    var node = nodes[nodeId];
-
-                    group.addNode(node);
-                })
-                this.addGroup(group);
-            });
+                        group.addNode(node);
+                    })
+                    this.addGroup(group);
+                });
+        }
+        catch (e) {
+            console.warn(e);
+            this.eventListener.trigger('error', e);
+        }
         this.view.update();
         this.eventListener.persistent = true;
     }
