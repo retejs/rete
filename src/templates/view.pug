@@ -27,6 +27,6 @@ div.node(al-repeat='node in editor.nodes',
   :style.transform='"translate("+node.position[0]+"px,"+node.position[1]+"px)"',
   al-node,
   :data-id="node.id",
-  class="{{editor.selected.contains(node)?'selected':''}} {{node.title.toLowerCase().replace('/\ /g','-')}}"
+  class="{{editor.selected.contains(node)?'selected':''}} {{node.title.toLowerCase().replace(' ','-')}}"
   )
   div(al-html="editor.view.getTemplate(node)")

@@ -7,7 +7,7 @@ div(al-repeat='output in node.outputs',style="text-align: right")
     | {{output.title}}
   .socket.output(
     al-pick-output, 
-    class='{{output.socket.id}}',
+    class="{{output.socket.id.toLowerCase().replace(' ','-')}}",
     title='{{output.socket.name}}\n{{output.socket.hint}}'
   )
 
@@ -24,7 +24,7 @@ div.control(
 div(al-repeat='input in node.inputs',style="text-align: left")
   .socket.input(
     al-pick-input,
-    class="{{input.socket.id}} {{input.multipleConnections?'multiple':''}}"
+    class="{{input.socket.id.toLowerCase().replace(' ','-')}} {{input.multipleConnections?'multiple':''}}"
     title='{{input.socket.name}}\n{{input.socket.hint}}'
   )
   .input-title(

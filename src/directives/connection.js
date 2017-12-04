@@ -9,10 +9,13 @@ export function Connection(scope, el, expression, env) {
         Object.assign(el.style, connection.style);
     }, { deep: true });
     
-    el.dataset.inputNode = path.connection.input.node.id;
-    el.dataset.inputIndex = path.connection.input.node.inputs.indexOf(path.connection.input);
-    el.dataset.outputNode = path.connection.output.node.id;
-    el.dataset.outputIndex = path.connection.output.node.outputs.indexOf(path.connection.output);
-    el.className.baseVal += ' output-'+path.connection.output.socket.id;
-    el.className.baseVal += ' input-'+path.connection.input.socket.id;
+    var input = path.connection.input;
+    var output = path.connection.output;
+
+    el.dataset.inputNode = input.node.id;
+    el.dataset.inputIndex = input.node.inputs.indexOf(input);
+    el.dataset.outputNode = output.node.id;
+    el.dataset.outputIndex = output.node.outputs.indexOf(output);
+    el.className.baseVal += ' output-'+output.socket.id.toLowerCase().replace(' ', '-');
+    el.className.baseVal += ' input-'+input.socket.id.toLowerCase().replace(' ', '-');
 }
