@@ -27,14 +27,16 @@ describe('Editor', () => {
 
     it('import/export', async () => {
         var editor = new D3NE.NodeEditor('test@0.0.2', c, [], menu);
-
-        await throwsAsync(async () =>
-            await editor.fromJSON({ id: 'test@0.0.1', nodes: {}, groups: {} }),
-            'can not be taken with another id');
+        var ret;
         
-        await throwsAsync(async () =>
-            await editor.fromJSON({ id: 'test@0.0.2', nodes: null, groups: {} }),
-            'nodes are mandatory');
+        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {}, groups: {} });
+        assert.equal(ret, false, 'can not be taken with another id');
+        
+        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {}, groups: {} });
+        assert.equal(ret, false, 'nodes are mandatory');
+
+        ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {}, groups: {} });
+        assert.equal(ret, true, 'correct data');
     });
 
     it('connections', async () => {

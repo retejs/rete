@@ -187,7 +187,7 @@ export class NodeEditor {
         if (!checking.success) {
             this.eventListener.trigger('error', checking.msg);
             console.warn(checking.msg);
-            return;
+            return false;
         }
         
         this.eventListener.persistent = false;
@@ -239,8 +239,10 @@ export class NodeEditor {
         catch (e) {
             console.warn(e);
             this.eventListener.trigger('error', e);
+            return false;
         }
         this.view.update();
         this.eventListener.persistent = true;
+        return true;
     }
 }
