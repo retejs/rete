@@ -32,7 +32,7 @@ Donate
 ----
 ![Bitcoin QR](https://raw.githubusercontent.com/Ni55aN/ni55an.github.io/master/img/1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf.png)
 
-[![Bitcoin](https://img.shields.io/badge/bitcoin-1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf-red.svg)](bitcoin://1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf)
+Bitcoin: 1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf
 
 [![Patreon](https://img.shields.io/badge/patreon-become%20a%20patron-red.svg)](https://www.patreon.com/ni55an)
 <!--- [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor)
