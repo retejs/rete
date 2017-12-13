@@ -1,6 +1,6 @@
 declare namespace D3NE {
   type ComponentBuilder = (node: Node) => any;
-  type ComponentWorker = (node: any, inputs: number[][], outputs: number[]) => any;
+  type ComponentWorker = (node: any, inputs: any[][], outputs: any[]) => any;
   type EngineState = {
     AVALIABLE: 0,
     PROCESSED: 1,
@@ -19,7 +19,40 @@ declare namespace D3NE {
     worker: ComponentWorker;
   }
 
+  class Module {
+    constructor(data: any, titlesInput: String[], titlesOutput: String[]);
+    static extractNodes(data: any, titles: String[]);
+    read(inputs: String[]);
+    write(outputs: String[]);
+  }
+
+  type ModuleWorker = (node: any, inputs: any[][], outputs: any[]) => any;
+  type ModuleWorkerIO = (node: any, inputs: any[][], outputs: any[], module: Module) => any;
+  
+
   type ControlHandler = (element: HTMLElement, control: Control) => any;
+
+  type DiffOutput = {
+    node: Number,
+    input: Number
+  }
+    
+  type DiffConnect = {
+    output: Number,
+    node: Number, 
+    removed: DiffOutput[],
+    added:  DiffOutput[]
+  };
+
+  type DiffResult = {
+    removed : Number[],
+    added: Number[],
+    moved: Number[],
+    datachanged: Number[],
+    connects: DiffConnect[]
+  }
+
+  type TaskAction = (inputs: any[][], data: any) => any[];
 
   export class Engine {
     readonly id: string;
@@ -275,5 +308,33 @@ declare namespace D3NE {
     constructor(name: string, props: ComponentProps);
 
     newNode(): Node;
+  }
+
+  export class Diff{
+    constructor(data1: any, data2: any);
+    public compare(): DiffResult;
+  }
+  
+  export class ModuleManager {
+    constructor(titlesInput: String[], titlesOutput: String[]);
+
+    getInputs(data: any);
+    getOutputs(data: any);
+
+    workerModule: ModuleWorker;
+    workerInputs: ModuleWorkerIO;
+    workerOutputs: ModuleWorkerIO;
+
+    setEngine(engine: Engine);
+  }
+
+  export class Task {
+    constructor(inputs: any[][], action: TaskAction);
+    private getOptions();
+    private getOutputs();
+    reset();
+    run(data: any);
+    option(index: Number);
+    output(index: Number);
   }
 }
