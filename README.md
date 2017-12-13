@@ -20,9 +20,9 @@ Examples
 
 [Modules](https://codepen.io/Ni55aN/pen/QOEbEW)
 
-[Diff](https://codepen.io/Ni55aN/pen/POWEvm?editors=1010)
+[Difference](https://codepen.io/Ni55aN/pen/POWEvm?editors=1010)
 
-[Allmatter - tool for generating 3d materials](https://github.com/Ni55aN/allmatter)
+[Allmatter - 3d materials authoring tool](https://github.com/Ni55aN/allmatter)
 
 License
 ----
@@ -30,5 +30,11 @@ License
 
 Donate
 ----
-[![Patreon](https://img.shields.io/badge/patreon-become%20a%20patron-red.svg)](https://www.patreon.com/ni55an) [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor)  [![Gratipay](https://img.shields.io/gratipay/project/D3-Node-Editor.svg)](https://gratipay.com/d3-node-editor/)
+![Bitcoin QR](https://raw.githubusercontent.com/Ni55aN/ni55an.github.io/master/img/1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf.png)
 
+[![Bitcoin](https://img.shields.io/badge/bitcoin-1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf-red.svg)](bitcoin:1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf)
+
+[![Patreon](https://img.shields.io/badge/patreon-become%20a%20patron-red.svg)](https://www.patreon.com/ni55an)
+<!--- [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor)
+[![Gratipay](https://img.shields.io/gratipay/project/D3-Node-Editor.svg)](https://gratipay.com/d3-node-editor/)
+--->
