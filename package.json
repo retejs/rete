@@ -1,6 +1,6 @@
 {
   "name": "d3-node-editor",
-  "version": "0.6.5",
+  "version": "0.6.6",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
   "scripts": {
@@ -36,19 +36,19 @@
     "babel-preset-es2015-rollup": "^3.0.0",
     "babel-register": "^6.26.0",
     "eslint": "^3.17.1",
-    "jsdom": "^11.3.0",
+    "jsdom": "^11.5.1",
     "mocha": "^4.0.1",
     "npm-sass": "^2.2.1",
     "pug": "^2.0.0-rc.4",
-    "regenerator-runtime": "^0.11.0",
+    "regenerator-runtime": "^0.11.1",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-minify": "^1.0.3",
-    "rollup-plugin-multi-entry": "^2.0.1",
+    "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-pug": "^0.1.6"
   },
   "dependencies": {
-    "alight": "^0.14.0",
-    "d3": "^4.10.2"
+    "alight": "^0.14.1",
+    "d3": "^4.12.0"
   }
 }
