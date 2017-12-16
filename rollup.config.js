@@ -1,6 +1,7 @@
 import babel from 'rollup-plugin-babel';
 import pug from 'rollup-plugin-pug';
 import multiEntry from 'rollup-plugin-multi-entry';
+import minify from 'rollup-plugin-minify'
 
 const { name, version } = require('./package.json');
 const banner = `/*!
@@ -18,7 +19,17 @@ export default {
         pug({
             pugRuntime: false
         }),
-        babel()
+        babel(),
+        minify({
+            umd: {
+                dest: 'build/d3-node-editor.min.js',
+                ie8: true,
+                output: {
+                    beautify: false,
+                    preamble: banner
+                }
+            }
+        })
     ],
     banner,
     format: 'umd',

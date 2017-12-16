@@ -6,7 +6,6 @@
   "scripts": {
     "lint": "eslint src",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
-    "minify-build": "uglifyjs build/d3-node-editor.js --support-ie8  --compress --output build/d3-node-editor.min.js",
     "prepublishOnly": "npm run lint && npm run build && npm run minify-build",
     "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
   },
@@ -44,9 +43,9 @@
     "regenerator-runtime": "^0.11.0",
     "rollup": "^0.41.5",
     "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-minify": "^1.0.3",
     "rollup-plugin-multi-entry": "^2.0.1",
-    "rollup-plugin-pug": "^0.1.6",
-    "uglify-js": "^2.8.29"
+    "rollup-plugin-pug": "^0.1.6"
   },
   "dependencies": {
     "alight": "^0.14.0",
