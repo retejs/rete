@@ -6,7 +6,8 @@ export default async function(fn, msg) {
     try {
         await fn();
     } catch (e) {
-        f = () => {throw e};
+        f = () => { throw new Error(e) };
+        console.log(45);
     } finally {
         assert.throws(f, Error, msg);
     }

@@ -1,16 +1,5 @@
-import * as D3NE from '../build/d3-node-editor';
-import {JSDOM} from 'jsdom';
+import './utils/domReady';
 import assert from 'assert';
-import throwsAsync from './utils/throwsAsync';
-
-const { window } = new JSDOM('<!DOCTYPE html><head></head><body><div id="d3ne"></div></body>');
-const { document } = window;
-
-global.document = document;
-global.window = window;
-global.HTMLElement = window.HTMLElement;
-global.d3 = require('d3');
-global.alight = require('alight');
 
 describe('Editor', () => {
 
