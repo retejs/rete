@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint src",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
-    "prepublishOnly": "npm run lint && npm run build && npm run minify-build",
+    "prepublishOnly": "npm run lint && npm run build",
     "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
   },
   "repository": {
