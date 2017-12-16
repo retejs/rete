@@ -11,10 +11,14 @@ const banner = `/*!
 */`;
 
 export default {
-    entry: ['src/index.js', 'node_modules/regenerator-runtime/runtime.js'],
-    dest: 'build/d3-node-editor.js',
-    sourceMap: true,
-    plugins: [ 
+    input: ['src/index.js', 'node_modules/regenerator-runtime/runtime.js'],
+    output: {
+        file: 'build/d3-node-editor.js',
+        sourcemap: true,
+        format: 'umd',
+        name: 'D3NE'
+    },
+    plugins: [
         multiEntry(),
         pug({
             pugRuntime: false
@@ -31,7 +35,5 @@ export default {
             }
         })
     ],
-    banner,
-    format: 'umd',
-    moduleName: 'D3NE'
+    banner
 };
