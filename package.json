@@ -40,12 +40,12 @@
     "mocha": "^4.0.1",
     "npm-sass": "^2.2.1",
     "pug": "^2.0.0-rc.4",
-    "regenerator-runtime": "^0.11.1",
     "rollup": "^0.52.2",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-minify": "^1.0.3",
     "rollup-plugin-multi-entry": "^2.0.2",
-    "rollup-plugin-pug": "^0.1.6"
+    "rollup-plugin-pug": "^0.1.6",
+    "rollup-plugin-regenerator": "^0.5.4"
   },
   "dependencies": {
     "alight": "^0.14.1",
