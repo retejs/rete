@@ -8,9 +8,9 @@ describe('Utils', () => {
     });
 
     it('validate data', () => {
-        var data = {id: 'demo@0.0.0', nodes: null, goups: {} };
-
-        assert.ok(!Utils.isValidData(data));
+        
+        assert.ok(!Utils.isValidData({id: 'demo@0.0.0', nodes: null, goups: {} }));
+        assert.ok(!Utils.isValidData({id: 'demo@0.0.0', nodes: [], goups: {} }), 'nodes array');
     });
 
     it('validate', () => {
