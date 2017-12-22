@@ -37,7 +37,7 @@ Donate
 Bitcoin: 1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf
 
 [![Patreon](https://img.shields.io/badge/patreon-become%20a%20patron-red.svg)](https://www.patreon.com/ni55an)
-[![Patreon](https://img.shields.io/badge/open collective-become%20a%20backer-red.svg)](https://opencollective.com/d3-node-editor)
+[![Open Collective](https://img.shields.io/badge/open%20collective-become%20a%20backer-red.svg)](https://opencollective.com/d3-node-editor)
 
 <!--- [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor)
 [![Gratipay](https://img.shields.io/gratipay/project/D3-Node-Editor.svg)](https://gratipay.com/d3-node-editor/)
