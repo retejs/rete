@@ -215,4 +215,11 @@ export class EditorView {
     setTranslateExtent(left: number, top: number, right: number, bottom: number) {
         this.zoom.translateExtent([[left, top], [right, bottom]]);
     }
+
+    destroy() {
+        d3.select(window)
+            .on('mousemove.d3ne' + this.editor._id, null)
+            .on('keydown.d3ne' + this.editor._id, null)
+            .on('resize.d3ne' + this.editor._id, null);
+    }
 }
