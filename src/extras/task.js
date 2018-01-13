@@ -30,7 +30,7 @@ export class Task {
         var inputs = Promise.all(this.getOutputs().map(async input => {
             return Promise.all(input.map(async con => {
                 if (con) {
-                    await con.run();
+                    await con.run(data);
                     return con.get();
                 }
             }));
@@ -42,7 +42,7 @@ export class Task {
             await Promise.all(
                 this.next
                     .filter(f => !this.closed.includes(f.index))
-                    .map(async f => await f.task.run())
+                    .map(async f => await f.task.run(data))
             );
         }
     }
