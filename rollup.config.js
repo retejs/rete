@@ -16,7 +16,8 @@ export default {
         file: 'build/d3-node-editor.js',
         sourcemap: true,
         format: 'umd',
-        name: 'D3NE'
+        name: 'D3NE',
+        banner
     },
     plugins: [
         pug({
@@ -34,6 +35,5 @@ export default {
                 }
             }
         })
-    ],
-    banner
+    ]
 };
