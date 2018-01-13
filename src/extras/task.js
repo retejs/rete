@@ -26,20 +26,24 @@ export class Task {
         this.outputData = null;
     }
 
-    run(data) {
-        var inputs = this.getOutputs().map(input => {
-            return input.map(con => {
+    async run(data) {
+        var inputs = Promise.all(this.getOutputs().map(async input => {
+            return Promise.all(input.map(async con => {
                 if (con) {
-                    con.run();
+                    await con.run();
                     return con.get();
                 }
-            })
-        });
+            }));
+        }));
 
         if (!this.outputData) {
-            this.outputData = this.action(inputs, data);
+            this.outputData = await this.action(inputs, data);
 
-            this.next.filter(f => !this.closed.includes(f.index)).forEach(f => f.task.run());
+            await Promise.all(
+                this.next
+                    .filter(f => !this.closed.includes(f.index))
+                    .map(async f => await f.task.run())
+            );
         }
     }
 
