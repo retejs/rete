@@ -26,11 +26,13 @@ export class Task {
         this.outputData = null;
     }
 
-    async run(data) {
+    async run(data, needReset = true, garbage = []) {
+        garbage.push(this);
+
         var inputs = Promise.all(this.getOutputs().map(async input => {
             return Promise.all(input.map(async con => {
                 if (con) {
-                    await con.run(data);
+                    await con.run(data, false, garbage);
                     return con.get();
                 }
             }));
@@ -42,9 +44,14 @@ export class Task {
             await Promise.all(
                 this.next
                     .filter(f => !this.closed.includes(f.index))
-                    .map(async f => await f.task.run(data))
+                    .map(async f => 
+                        await f.task.run(data, false, garbage)
+                    )
             );
         }
+        
+        if (needReset)
+            garbage.map(t => t.reset());
     }
 
     option(index) {
