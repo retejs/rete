@@ -40,8 +40,8 @@ export class NodeEditor {
             this.eventListener.trigger('change');
             
             this.history.add(this.addNode.bind(this),
-                            this.removeNode.bind(this),
-                            [node]);
+                this.removeNode.bind(this),
+                [node]);
         }
     }
 
@@ -64,8 +64,8 @@ export class NodeEditor {
             this.eventListener.trigger('change');
 
             this.history.add(this.removeNode.bind(this),
-                            this.addNode.bind(this),
-                            [node]);
+                this.addNode.bind(this),
+                [node]);
         }
 
         this.view.update();
@@ -93,8 +93,8 @@ export class NodeEditor {
 
                 this.eventListener.trigger('change');
                 this.history.add(this.connect.bind(this),
-                                this.removeConnection.bind(this),
-                                [connection]);
+                    this.removeConnection.bind(this),
+                    [connection]);
             } catch (e) {
                 console.warn(e);
                 this.eventListener.trigger('error', e);
@@ -109,8 +109,8 @@ export class NodeEditor {
             this.eventListener.trigger('change');
 
             this.history.add(this.removeConnection.bind(this),
-                            this.connect.bind(this),
-                            [connection]);
+                this.connect.bind(this),
+                [connection]);
         }
         this.view.update(); 
     }

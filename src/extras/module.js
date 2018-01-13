@@ -14,9 +14,9 @@ export class Module {
     
     static extractNodes(data, titles) {
         return Object.keys(data.nodes)
-                .filter(k => titles.includes(data.nodes[k].title))
-                .map(k => data.nodes[k])
-                .sort((n1, n2) => n1.position[1] > n2.position[1]);
+            .filter(k => titles.includes(data.nodes[k].title))
+            .map(k => data.nodes[k])
+            .sort((n1, n2) => n1.position[1] > n2.position[1]);
     }
     
     read(inputs) {
@@ -41,15 +41,15 @@ export class ModuleManager {
     
     getInputs(data) {
         return Module.extractNodes(data, this.titlesInput)
-                .map(n => ({ title: n.title, name: n.data.name }));
+            .map(n => ({ title: n.title, name: n.data.name }));
     }
     
     getOutputs(data) {
         return Module
-                .extractNodes(data, this.titlesOutput)
-                .map(n => {
-                    return {title: n.title, name: n.data.name};
-                });
+            .extractNodes(data, this.titlesOutput)
+            .map(n => {
+                return {title: n.title, name: n.data.name};
+            });
     }
     
     async workerModule(node, inputs, outputs) {
