@@ -29,8 +29,8 @@ export class Task {
     async run(data, needReset = true, garbage = []) {
         garbage.push(this);
 
-        var inputs = Promise.all(this.getOutputs().map(async input => {
-            return Promise.all(input.map(async con => {
+        var inputs = await Promise.all(this.getOutputs().map(async input => {
+            return await Promise.all(input.map(async con => {
                 if (con) {
                     await con.run(data, false, garbage);
                     return con.get();
