@@ -7,7 +7,8 @@
     "lint": "eslint src --fix",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
     "prepublishOnly": "npm run lint && npm run build",
-    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
+    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register",
+    "postinstall": "opencollective postinstall"
   },
   "repository": {
     "type": "git",
@@ -49,6 +50,12 @@
   },
   "dependencies": {
     "alight": "^0.14.1",
-    "d3": "^4.12.2"
+    "d3": "^4.12.2",
+    "opencollective": "^1.0.3"
+  },
+  "collective": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/d3-node-editor",
+    "logo": "https://opencollective.com/d3-node-editor/logo.txt"
   }
 }
