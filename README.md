@@ -1,4 +1,4 @@
-D3 Node Editor [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+D3 Node Editor  [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Backers on Open Collective](https://opencollective.com/d3-node-editor/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/d3-node-editor/sponsors/badge.svg)](#sponsors)
 ====
 #### JavaScript library for visual programming
 
@@ -42,3 +42,32 @@ Bitcoin: 1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf
 <!--- [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor)
 [![Gratipay](https://img.shields.io/gratipay/project/D3-Node-Editor.svg)](https://gratipay.com/d3-node-editor/)
 --->
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="graphs/contributors"><img src="https://opencollective.com/d3-node-editor/contributors.svg?width=890" /></a>
+
+
+## Backers
+
+Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/d3-node-editor#backer)]
+
+<a href="https://opencollective.com/d3-node-editor#backers" target="_blank"><img src="https://opencollective.com/d3-node-editor/backers.svg?width=890"></a>
+
+
+## Sponsors
+
+Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/d3-node-editor#sponsor)]
+
+<a href="https://opencollective.com/d3-node-editor/sponsor/0/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/0/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/1/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/1/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/2/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/2/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/3/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/3/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/4/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/4/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/5/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/5/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/6/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/6/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/7/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/7/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/8/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/8/avatar.svg"></a>
+<a href="https://opencollective.com/d3-node-editor/sponsor/9/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/9/avatar.svg"></a>
+
+
