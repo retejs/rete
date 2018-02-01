@@ -1,4 +1,4 @@
-D3 Node Editor  [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Backers on Open Collective](https://opencollective.com/d3-node-editor/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/d3-node-editor/sponsors/badge.svg)](#sponsors)
+D3 Node Editor  [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ====
 #### JavaScript library for visual programming
 
@@ -30,18 +30,10 @@ License
 ----
 [MIT](http://opensource.org/licenses/MIT)
 
-Donate
+Donate [![Patreon](https://img.shields.io/badge/patreon-become%20a%20patron-red.svg)](https://www.patreon.com/ni55an)
 ----
 ![Bitcoin QR](https://raw.githubusercontent.com/Ni55aN/ni55an.github.io/master/img/1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf.png)
 
-Bitcoin: 1MQUz8Y2ux1TN2q3w6oKCCqyA4TAmZyQDf
-
-[![Patreon](https://img.shields.io/badge/patreon-become%20a%20patron-red.svg)](https://www.patreon.com/ni55an)
-[![Open Collective](https://img.shields.io/badge/open%20collective-become%20a%20backer-red.svg)](https://opencollective.com/d3-node-editor)
-
-<!--- [![Beerpay](https://beerpay.io/Ni55aN/D3-Node-Editor/badge.svg?style=flat)](https://beerpay.io/Ni55aN/D3-Node-Editor)
-[![Gratipay](https://img.shields.io/gratipay/project/D3-Node-Editor.svg)](https://gratipay.com/d3-node-editor/)
---->
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
@@ -69,5 +61,3 @@ Support this project by becoming a sponsor. Your logo will show up here with a l
 <a href="https://opencollective.com/d3-node-editor/sponsor/7/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/7/avatar.svg"></a>
 <a href="https://opencollective.com/d3-node-editor/sponsor/8/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/8/avatar.svg"></a>
 <a href="https://opencollective.com/d3-node-editor/sponsor/9/website" target="_blank"><img src="https://opencollective.com/d3-node-editor/sponsor/9/avatar.svg"></a>
-
-
