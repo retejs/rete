@@ -10,14 +10,14 @@ const zoomMargin = 0.9;
 
 export class EditorView {
 
-    constructor(editor: NodeEditor, container: HTMLElement, menu: ContextMenu) {
+    constructor(editor: NodeEditor, container: HTMLElement, menu: ?ContextMenu) {
         this.editor = editor;
         this.pickedOutput = null;
         this.container = d3.select(container).attr('tabindex', 1);
         this.mouse = [0, 0];
         this.transform = d3.zoomIdentity;
 
-        this.contextMenu = menu;
+        this.contextMenu = menu || new ContextMenu({}, true, true);
 
         this.container
             .on('click', () => {

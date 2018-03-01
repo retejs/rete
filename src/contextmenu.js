@@ -3,8 +3,9 @@ import template from './templates/menu.pug';
 
 export class ContextMenu {
 
-    constructor(items: Object, searchBar: boolean = true) {
+    constructor(items: Object, searchBar: boolean = true, disabled = false) {
         this.visible = false;
+        this.disabled = disabled;
         this.x = 0;
         this.y = 0;
         this.default = {
@@ -58,6 +59,8 @@ export class ContextMenu {
     }
 
     show(x: number, y: number, items: ?Object = null, searchBar: ?boolean = null, onClick = null) {
+        if (this.disabled) return;
+        
         this.visible = true;
         this.items = items || this.default.items;
         this.searchBar = searchBar || this.default.searchBar;

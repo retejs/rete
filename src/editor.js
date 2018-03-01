@@ -13,7 +13,7 @@ import { Utils } from './utils';
 
 export class NodeEditor {
 
-    constructor(id: string, container: HTMLElement, components: Component[], menu: ContextMenu) {
+    constructor(id: string, container: HTMLElement, components: Component[], menu: ?ContextMenu) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  
