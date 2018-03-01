@@ -108,7 +108,7 @@ declare namespace D3NE {
     persistent: boolean;
 
     constructor();
-    on(names: string, handler: () => {}): EventListener;
+    on(names: string, handler: (param?: any, persistent?: boolean) => any): EventListener;
     trigger(name: string, param?: any): any;
   }
 
