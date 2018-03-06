@@ -72,6 +72,8 @@ export class EditorView {
             return c.name === node.title
         });
 
+        if (!component) throw new Error(`Component not found. Make sure you have defined the component with the "${node.title}" name`);
+
         return component.template;
     }
 
