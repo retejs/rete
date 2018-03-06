@@ -16,10 +16,42 @@ export class Engine {
         this.data = null;
         this.state = State.AVALIABLE;
         this.onAbort = () => { };
+        this.onError = (message, data) => { console.error(message, data); };
     }
 
     clone() {
         return new Engine(this.id, this.components);
+    }
+
+    async throwError (message, data = null) {
+        await this.abort();
+        this.onError(message, data);
+        this.processDone();
+
+        return 'error';
+    }
+
+    extractInputNodes(node, nodes) {
+        return node.inputs.reduce((a, inp) => {
+            return [...a, ...(inp.connections || []).reduce((b, c) => [...b, nodes[c.node]], [])]
+        }, []);
+    }
+
+    detectRecursions(nodes) {
+        const nodesArr = Object.keys(nodes).map(id => nodes[id]);
+        const findSelf = (node, inputNodes) => {
+            if (inputNodes.some(n => n === node))
+                return node;
+            
+            for (var i = 0; i < inputNodes.length; i++) {
+                if (findSelf(node, this.extractInputNodes(inputNodes[i], nodes)))
+                    return node;    
+            }
+
+            return null;
+        }
+
+        return nodesArr.map(node => findSelf(node, this.extractInputNodes(node, nodes))).filter(r => r !== null);
     }
 
     processStart() {
@@ -86,8 +118,9 @@ export class Engine {
         return await Promise.all(node.inputs.map(async (input) => {
             var conns = input.connections;
             let connData = await Promise.all(conns.map(async (c) => {
+                const prevNode = this.data.nodes[c.node];
 
-                let outputs = await this.processNode(this.data.nodes[c.node]);
+                let outputs = await this.processNode(prevNode);
 
                 if (!outputs) 
                     this.abort();
@@ -120,7 +153,7 @@ export class Engine {
                 console.warn(e);
             }
             if (node.outputData.length !== node.outputs.length)
-                throw new Error('Output data does not correspond to number of outputs');
+                await this.throwError('Output data does not correspond to number of outputs');
             
         }
 
@@ -129,14 +162,16 @@ export class Engine {
     }
 
     async forwardProcess(node) {
-        
         if (this.state === State.ABORT)
             return null;
 
         return await Promise.all(node.outputs.map(async (output) => {
             return await Promise.all(output.connections.map(async (c) => {
-                await this.processNode(this.data.nodes[c.node]);
-                await this.forwardProcess(this.data.nodes[c.node]);
+                const nextNode = this.data.nodes[c.node];
+
+                console.log(nextNode.outputData);
+                await this.processNode(nextNode);
+                await this.forwardProcess(nextNode);
             }));
         }));
     }
@@ -151,22 +186,32 @@ export class Engine {
         return data;
     }
 
-    async process(data: Object, startId: ?number = null, ...args) {
-        if (!this.processStart()) return;
-        
+    async validate(data) {
         var checking = Utils.validate(this.id, data);
 
         if (!checking.success)
-            throw new Error(checking.msg);  
+            return await this.throwError(checking.msg);  
+        
+        var recurentNodes = this.detectRecursions(data.nodes);
+
+        if (recurentNodes.length > 0)
+            return await this.throwError('Recursion detected', recurentNodes);      
+         
+        return true;
+    }
+
+    async process(data: Object, startId: ?number = null, ...args) {
+        if (!this.processStart()) return;
+        if (!this.validate(data)) return;    
         
         this.data = this.copy(data);
         this.args = args;
-        
+
         if (startId) {
             let startNode = this.data.nodes[startId];
 
             if (!startNode)
-                throw new Error('Node with such id not found');   
+                return await this.throwError('Node with such id not found');   
             
             await this.processNode(startNode);
             await this.forwardProcess(startNode);
