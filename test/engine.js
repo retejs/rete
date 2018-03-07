@@ -1,6 +1,6 @@
 import './utils/domReady';
 import assert from 'assert';
-import throwsAsync from './utils/throwsAsync';
+import recursiveData from './data/recursive'
 
 describe('Engine', () => {
     
@@ -18,10 +18,15 @@ describe('Engine', () => {
         assert.throws(() => new D3NE.Engine('test@0.1', trueComponents), Error, 'wrong id');
     });
 
-    it('process', async () => {
-
-        assert.doesNotThrow(() => createValidEngine().process(data), Error, 'valid data');
-        await throwsAsync(async () => await createValidEngine().process({ id: 'test@1.0.0', nodes: {}, groups: {} }), 'wrong id');
-        await throwsAsync(async () => await createValidEngine().process({ id, groups: {} }), 'no nodes');
+    describe('process', async () => {
+        it('data', async () => {
+            assert.equal(await createValidEngine().process(data), 'success');
+            assert.notEqual(await createValidEngine().process({ id: 'test@1.0.0', nodes: {}, groups: {} }), 'success', 'wrong id');
+            assert.notEqual(await createValidEngine().process({ id, groups: {} }), 'success', 'no nodes');
+        });
+    
+        it('validation', async () => {
+            assert.notEqual(await createValidEngine().process(recursiveData), 'success', 'recursive data');
+        });    
     });
 });
