@@ -1,6 +1,6 @@
 {
   "name": "d3-node-editor",
-  "version": "0.6.9",
+  "version": "0.6.10",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "jsdom": "^11.5.1",
     "mocha": "^5.0.1",
     "npm-sass": "^2.2.1",
-    "pug": "^2.0.0-rc.4",
+    "pug": "^2.0.0",
     "rollup": "^0.56.3",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-minify": "^1.0.3",
