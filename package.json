@@ -3,6 +3,7 @@
   "version": "0.6.10",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
     "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
