@@ -169,7 +169,6 @@ export class Engine {
             return await Promise.all(output.connections.map(async (c) => {
                 const nextNode = this.data.nodes[c.node];
 
-                console.log(nextNode.outputData);
                 await this.processNode(nextNode);
                 await this.forwardProcess(nextNode);
             }));
