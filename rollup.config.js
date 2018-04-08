@@ -6,7 +6,7 @@ import regenerator from 'rollup-plugin-regenerator';
 const { name, version } = require('./package.json');
 const banner = `/*!
 * ${name} v${version}
-* (c) 2017 Vitaliy Stoliarov
+* (c) 2018 Vitaliy Stoliarov
 * Released under the MIT License.
 */`;
 
@@ -15,10 +15,15 @@ export default {
     output: {
         file: 'build/d3-node-editor.js',
         sourcemap: true,
+        globals: {
+            d3: 'd3',
+            alight: 'alight'
+        },
         format: 'umd',
         name: 'D3NE',
         banner
     },
+    external: ['d3','alight'],
     plugins: [
         pug({
             pugRuntime: false

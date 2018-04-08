@@ -1,3 +1,5 @@
+import * as alight from 'alight';
+import * as d3 from 'd3';
 import { declareMenuDirectives } from './directives/index';
 import template from './templates/menu.pug';
 
@@ -22,8 +24,10 @@ export class ContextMenu {
         this.dom.node().setAttribute('tabindex', 1);
         this.dom.html(t);
 
-        declareMenuDirectives(this, alight);
-        this.$cd = alight(this.dom.node(), {contextMenu: this});
+        const alightInstance = alight.makeInstance();
+        
+        declareMenuDirectives(this, alightInstance);
+        this.$cd = alightInstance(this.dom.node(), {contextMenu: this});
     }
 
     searchItems(filter: ?string) {

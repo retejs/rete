@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 import { Group } from '../group';
 
 export function Node(scope, el, expression, env) {

@@ -1,3 +1,4 @@
+import * as d3 from 'd3';
 import { Component } from './component';
 import { Connection } from './connection';
 import { ContextMenu } from './contextmenu';

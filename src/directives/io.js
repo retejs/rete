@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 export function PickInput(scope, el, expression, env) {
     var input = env.changeDetector.locals.input;
 

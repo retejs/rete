@@ -1,3 +1,5 @@
+import * as d3 from 'd3';
+
 export function Group(scope, el, expression, env) {
     var group = env.changeDetector.locals.group;
     
