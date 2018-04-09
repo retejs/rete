@@ -2,7 +2,6 @@ import './utils/domReady';
 import assert from 'assert';
 
 describe('Editor', () => {
-
     var c = document.querySelector('#d3ne');
     var menu = new D3NE.ContextMenu({});
 
@@ -37,14 +36,14 @@ describe('Editor', () => {
                 
             }
         }),
-            new D3NE.Component('Return', {
-                builder(node) {
-                    node.addInput(new D3NE.Input('Name', socketNum));
-                },
-                worker() {
+        new D3NE.Component('Return', {
+            builder(node) {
+                node.addInput(new D3NE.Input('Name', socketNum));
+            },
+            worker() {
                     
-                }
-            })
+            }
+        })
         ];
 
         var editor = new D3NE.NodeEditor('test@0.0.2', c, comps, menu);
