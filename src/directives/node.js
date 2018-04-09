@@ -4,6 +4,17 @@ import { Group } from '../group';
 export function Node(scope, el, expression, env) {
     var node = env.changeDetector.locals.node;
 
+    function setPosition(item, dx, dy) {
+        const extent = this.editor.view.translateExtent;
+        const minx = extent[0][0];
+        const miny = extent[0][1];
+        const maxx = extent[1][0];
+        const maxy = extent[1][1];
+
+        item.position[0] = Math.min(maxx, Math.max(minx, item.position[0] + dx));
+        item.position[1] = Math.min(maxy, Math.max(miny, item.position[1] + dy));
+    }
+        
     node.el = el;
     env.watch('node.style', () => {
         Object.assign(el.style, node.style);
@@ -22,8 +33,7 @@ export function Node(scope, el, expression, env) {
             var dy = d3.event.dy / k;
 
             this.editor.selected.each(item => {
-                item.position[0] += dx;
-                item.position[1] += dy;
+                setPosition.call(this, item, dx, dy);
             });
 
             this.editor.selected.eachGroup(item => {
@@ -33,8 +43,7 @@ export function Node(scope, el, expression, env) {
                     if (this.editor.selected.contains(_node))
                         continue;    
 
-                    _node.position[0] += dx;
-                    _node.position[1] += dy;
+                    setPosition.call(this, _node, dx, dy);
                 }
             });
             

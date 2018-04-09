@@ -220,11 +220,13 @@ export class EditorView {
     }
 
     setScaleExtent(scaleMin: number, scaleMax: number) {
-        this.zoom.scaleExtent([scaleMin, scaleMax]);
+        this.scaleExtent = [scaleMin, scaleMax];
+        this.zoom.scaleExtent(this.scaleExtent);
     }
 
     setTranslateExtent(left: number, top: number, right: number, bottom: number) {
-        this.zoom.translateExtent([[left, top], [right, bottom]]);
+        this.translateExtent = [[left, top], [right, bottom]];
+        this.zoom.translateExtent(this.translateExtent);
     }
 
     destroy() {
