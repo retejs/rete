@@ -47,7 +47,8 @@ export class ContextMenu {
                     });
                 }
             }
-            else if (regex.test(key))
+            
+            if (regex.test(key))
                 items[key] = item;
         });
 
