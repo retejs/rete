@@ -1,5 +1,7 @@
 type ComponentBuilder = (node : Node) => any;
 type ComponentWorker = (node : any, inputs : any[][], outputs : any[]) => any;
+type ComponentCreated = (node : any) => any;
+type ComponentDestroyed = (node : any) => any;
 type EngineState = {
   AVALIABLE: 0,
   PROCESSED: 1,
@@ -16,6 +18,8 @@ type ComponentProps = {
   template?: string;
   builder: ComponentBuilder;
   worker: ComponentWorker;
+  created?: ComponentCreated;
+  destroyed?: ComponentDestroyed;
 }
 
 declare class Module {
@@ -302,6 +306,8 @@ export class Component {
   template : string;
   builder : ComponentBuilder;
   worker : ComponentWorker;
+  created: ComponentCreated;
+  destroyed: ComponentDestroyed;
 
   constructor(name : string, props : ComponentProps);
 

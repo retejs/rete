@@ -38,6 +38,7 @@ export class NodeEditor {
             if (mousePlaced)
                 node.position = this.view.mouse;
             this.nodes.push(node);
+            this.findComponent(node).created(node);
             this.eventListener.trigger('change');
             
             this.history.add(this.addNode.bind(this),
@@ -62,6 +63,7 @@ export class NodeEditor {
             node.getConnections().forEach(c => this.removeConnection(c));
 
             this.nodes.splice(index, 1);
+            this.findComponent(node).destroyed(node);
             this.eventListener.trigger('change');
 
             this.history.add(this.removeNode.bind(this),
@@ -163,6 +165,16 @@ export class NodeEditor {
         }
     }
 
+    findComponent(node) {
+        const component = this.components.find(c => {
+            return c.name === node.title
+        });
+
+        if (!component) throw `Component ${node.title} was not found`;
+
+        return component;
+    }
+
     clear() {
         this.nodes.splice(0, this.nodes.length);
         this.groups.splice(0, this.groups.length);
@@ -199,11 +211,7 @@ export class NodeEditor {
         try {
             await Promise.all(Object.keys(json.nodes).map(async id => {
                 var node = json.nodes[id];
-                var component = this.components.find(c => {
-                    return c.name === node.title
-                });
-
-                if (!component) throw `Component ${node.title} was not found`;
+                var component = this.findComponent(node);
 
                 nodes[id] = await Node.fromJSON(component, node);
                 this.addNode(nodes[id]);

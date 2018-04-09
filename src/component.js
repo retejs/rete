@@ -9,6 +9,8 @@ export class Component {
         this.template = props.template || defaultTemplate;
         this.builder = props.builder;
         this.worker = props.worker;
+        this.created = props.created || function () { }
+        this.destroyed = props.destroyed || function () { }
     }
 
     newNode() {
