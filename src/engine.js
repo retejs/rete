@@ -45,13 +45,15 @@ export class Engine {
             
             for (var i = 0; i < inputNodes.length; i++) {
                 if (findSelf(node, this.extractInputNodes(inputNodes[i], nodes)))
-                    return node;    
+                    return node;
             }
 
             return null;
         }
 
-        return nodesArr.map(node => findSelf(node, this.extractInputNodes(node, nodes))).filter(r => r !== null);
+        return nodesArr.map(node => {
+            return findSelf(node, this.extractInputNodes(node, nodes))
+        }).filter(r => r !== null);
     }
 
     processStart() {
@@ -64,7 +66,8 @@ export class Engine {
             return false;
         }
 
-        console.warn('The process is busy and has not been restarted. Use abort() to force it to complete');
+        console.warn(`The process is busy and has not been restarted.
+                Use abort() to force it to complete`);
         return false;
     }
 
@@ -132,6 +135,21 @@ export class Engine {
         }));
     }
 
+    async processWorker(node) {
+        var inputData = await this.extractInputData(node);
+        var component = this.components.find(c => c.name === node.title);
+        var outputData = node.outputs.map(() => null);
+
+        try {
+            await component.worker(node, inputData, outputData, ...this.args);
+        } catch (e) {
+            this.abort();
+            console.warn(e);
+        }
+
+        return outputData;
+    }
+
     async processNode(node) {
         if (this.state === State.ABORT || !node)
             return null;
@@ -139,22 +157,7 @@ export class Engine {
         await this.lock(node);
 
         if (!node.outputData) {
-            let inputData = await this.extractInputData(node);
-
-            node.outputData = node.outputs.map(() => null);
-        
-            var key = node.title;
-            var component = this.components.find(c => c.name === key);
-
-            try {
-                await component.worker(node, inputData, node.outputData, ...this.args);
-            } catch (e) {
-                this.abort();
-                console.warn(e);
-            }
-            if (node.outputData.length !== node.outputs.length)
-                await this.throwError('Output data does not correspond to number of outputs');
-            
+            node.outputData = this.processWorker(node)
         }
 
         this.unlock(node);
@@ -199,15 +202,9 @@ export class Engine {
         return true;
     }
 
-    async process(data: Object, startId: ?number = null, ...args) {
-        if (!this.processStart()) return;
-        if (!this.validate(data)) return;    
-        
-        this.data = this.copy(data);
-        this.args = args;
-
-        if (startId) {
-            let startNode = this.data.nodes[startId];
+    async processStart(id) {
+        if (id) {
+            let startNode = this.data.nodes[id];
 
             if (!startNode)
                 return await this.throwError('Node with such id not found');   
@@ -215,7 +212,9 @@ export class Engine {
             await this.processNode(startNode);
             await this.forwardProcess(startNode);
         }
-        
+    }
+
+    async processUnreachable() {
         for (var i in this.data.nodes) // process nodes that have not been reached
             if (typeof this.data.nodes[i].outputData === 'undefined') {
                 var node = this.data.nodes[i];
@@ -223,6 +222,17 @@ export class Engine {
                 await this.processNode(node);
                 await this.forwardProcess(node);
             }
+    }
+
+    async process(data: Object, startId: ?number = null, ...args) {
+        if (!this.processStart()) return;
+        if (!this.validate(data)) return;    
+        
+        this.data = this.copy(data);
+        this.args = args;
+
+        this.processStart(startId);
+        this.processUnreachable();
         
         return this.processDone()?'success':'aborted';
     }

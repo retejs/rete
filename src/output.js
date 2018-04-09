@@ -1,7 +1,7 @@
 import { Connection } from './connection';
+import { IO } from './io';
 import { Input } from './input';
 import { Socket } from './socket';
-import { IO } from './io';
 
 export class Output extends IO {
   

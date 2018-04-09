@@ -21,6 +21,18 @@ export class EditorView {
 
         this.contextMenu = menu || new ContextMenu({}, true, true);
 
+        this.initView();
+        this.initial();
+    }
+
+    initial() {
+        this.setScaleExtent(0.1, 1);
+        var size = Math.pow(2, 12);
+
+        this.setTranslateExtent(-size, -size, size, size);
+    }
+
+    initView() {
         this.container
             .on('click', () => {
                 if (this.container.node() === d3.event.target)
@@ -41,13 +53,8 @@ export class EditorView {
 
         this.container.call(this.zoom);
 
-        this.setScaleExtent(0.1, 1);
-        var size = Math.pow(2, 12);
-
-        this.setTranslateExtent(-size, -size, size, size);
-
         d3.select(window)
-            .on('mousemove.d3ne' + editor._id, () => {
+            .on('mousemove.d3ne' + this.editor._id, () => {
                 
                 var k = this.transform.k;
                 var position = d3.mouse(this.view.node());
@@ -55,18 +62,21 @@ export class EditorView {
                 this.mouse = [position[0]/k, position[1]/k];
                 this.update();
             })
-            .on('keydown.d3ne' + editor._id, (e) => {
+            .on('keydown.d3ne' + this.editor._id, (e) => {
                 if (this.container.node() === document.activeElement)
-                    editor.keyDown(e);
+                    this.editor.keyDown(e);
             })
-            .on('resize.d3ne' + editor._id, this.resize.bind(this));
+            .on('resize.d3ne' + this.editor._id, this.resize.bind(this));
 
         this.view.html(template());
+        this.initAlight();
+    }
 
+    initAlight() {
         var al = alight.makeInstance();
 
         declareViewDirectives(this, al);
-        this.$cd = al(this.view.node(), {editor});
+        this.$cd = al(this.view.node(), { editor: this.editor });
     }
 
     getTemplate(node) {
@@ -74,7 +84,9 @@ export class EditorView {
             return c.name === node.title
         });
 
-        if (!component) throw new Error(`Component not found. Make sure you have defined the component with the "${node.title}" name`);
+        if (!component)
+            throw new Error(`Component not found. Make sure you have defined 
+                            the component with the "${node.title}" name`);
 
         return component.template;
     }
@@ -185,19 +197,14 @@ export class EditorView {
     zoomAt(nodes: Node[]) {
         if (nodes.length === 0) return;
 
-        var w = this.container.node().clientWidth;
-        var h = this.container.node().clientHeight;
+        var [w, h] = [this.container.node().clientWidth, this.container.node().clientHeight];
         var bbox = Utils.nodesBBox(nodes);
-        var kw = w / bbox.width;
-        var kh = h / bbox.height;
-        var k = Math.min(kh, kw, 1);
+        var [kw, kh] = [w / bbox.width, h / bbox.height]
+        var k = Math.min(kh, kw, 1) * zoomMargin;
 
         var center = bbox.getCenter();
-        var win = [w / 2, h / 2];
-        
-        k *= zoomMargin;
 
-        this.translate(win[0]-center[0]*k, win[1]-center[1]*k);
+        this.translate(w / 2 - center[0] * k, h / 2 - center[1] * k);
         this.scale(k);
     }
 

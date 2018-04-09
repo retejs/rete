@@ -3,21 +3,18 @@ import * as d3 from 'd3';
 export function PickInput(scope, el, expression, env) {
     var input = env.changeDetector.locals.input;
 
-    input.el = el;
-
-    d3.select(el).on('mousedown', () => {
-        if (this.editor.readOnly) return;
-
-        d3.event.preventDefault();
+    function interceptInput() {
         if (this.pickedOutput === null) {
             if (input.hasConnection()) {
                 this.pickedOutput = input.connections[0].output;
                 this.editor.removeConnection(input.connections[0]);
             }
             this.update();
-            return;
+            return true;
         }
-        
+    }
+
+    function prepareConnection() {
         if (!input.multipleConnections && input.hasConnection())
             this.editor.removeConnection(input.connections[0]);
         
@@ -31,8 +28,20 @@ export function PickInput(scope, el, expression, env) {
         }
 
         this.editor.connect(this.pickedOutput, input);
+    }
+
+    input.el = el;
+
+    d3.select(el).on('mousedown', () => {
+        if (this.editor.readOnly) return;
+
+        d3.event.preventDefault();
+
+        if (interceptInput.call(this)) return;
+        prepareConnection.call(this);
 
         this.pickedOutput = null;
+    
         this.update();
     });
 }

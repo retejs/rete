@@ -20,17 +20,23 @@ export class NodeEditor {
             throw new Error('ID should be valid to name@0.1.0 format');  
         
         this.id = id;
-        this._id = Math.random().toString(36).substr(2, 9);
         this.components = components;
+
+        this.init();
+
         this.view = new EditorView(this, container, menu);
+        this.view.resize();
+    }
+
+    init() {
+        this._id = Math.random().toString(36).substr(2, 9);
         this.eventListener = new EventListener();
         this.selected = new Selected();
         this.history = new History(this);
+        
         this.nodes = [];
         this.groups = [];
         this.readOnly = false;
-        
-        this.view.resize();
     }
 
     addNode(node: Node, mousePlaced = false) {
@@ -99,7 +105,6 @@ export class NodeEditor {
                     this.removeConnection.bind(this),
                     [connection]);
             } catch (e) {
-                console.warn(e);
                 this.eventListener.trigger('error', e);
             }
         }
@@ -150,18 +155,20 @@ export class NodeEditor {
         case 71:
             let nodes = this.selected.getNodes();
                 
-            if (nodes.length > 0) 
+            if (nodes.length > 0)
                 this.addGroup(new Group('Group', { nodes }));
             
             break;
         case 90:
             if (d3.event.ctrlKey && d3.event.shiftKey)
-                this.history.redo();  
-            else        
+                this.history.redo();
+            else
             if (d3.event.ctrlKey)
                 this.history.undo();
                 
-            break    
+            break;
+        default: break;
+            
         }
     }
 
@@ -194,18 +201,27 @@ export class NodeEditor {
         };
     }
 
-    async fromJSON(json: Object) {
+    beforeImport(json: Object) {
         var checking = Utils.validate(this.id, json);
         
         if (!checking.success) {
             this.eventListener.trigger('error', checking.msg);
-            console.warn(checking.msg);
             return false;
         }
         
         this.eventListener.persistent = false;
         
         this.clear();
+    }
+
+    afterImport() {
+        this.view.update();
+        this.eventListener.persistent = true;
+        return true;
+    }
+
+    async fromJSON(json: Object) {
+        if (!this.beforeImport(json)) return false;
         var nodes = {};
 
         try {
@@ -246,12 +262,9 @@ export class NodeEditor {
                 });
         }
         catch (e) {
-            console.warn(e);
             this.eventListener.trigger('error', e);
             return false;
         }
-        this.view.update();
-        this.eventListener.persistent = true;
-        return true;
+        return this.afterImport();
     }
 }

@@ -10,7 +10,7 @@ export class EventListener {
             connectionremove:[],
             nodeselect:[],
             groupselect: [],
-            error: [],
+            error: [console.warn],
             change: [],
             transform: []
         };

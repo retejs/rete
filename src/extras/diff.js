@@ -19,34 +19,37 @@ export class Diff {
         this.b = data2;
     }
 
-    compare() {
-        var a = this.a;
-        var b = this.b;
-
-        var k1 = Object.keys(a.nodes);
-        var k2 = Object.keys(b.nodes);
+    basicDiffs() {
+        var k1 = Object.keys(this.a.nodes);
+        var k2 = Object.keys(this.b.nodes);
 
         var removed = k1.filter(k => !k2.includes(k)).map(p);
         var added = k2.filter(k => !k1.includes(k)).map(p);
         var stayed = k1.filter(k => k2.includes(k)).map(p);
+        
+        return { removed, added, stayed };
+    }
+
+    compare() {
+        var { removed, added, stayed } = this.basicDiffs();
 
         var moved = stayed.filter(id => {
-            var p1 = a.nodes[id].position;
-            var p2 = b.nodes[id].position;
+            var p1 = this.a.nodes[id].position;
+            var p2 = this.b.nodes[id].position;
 
             return !eqArr(p1, p2)
         });
 
         var datachanged = stayed.filter(id => {
-            var d1 = a.nodes[id].data;
-            var d2 = b.nodes[id].data;
+            var d1 = this.a.nodes[id].data;
+            var d2 = this.b.nodes[id].data;
 
             return !eqObj(d1, d2);
         });
 
         var connects = stayed.reduce((arr, id) => {
-            var o1 = a.nodes[id].outputs;
-            var o2 = b.nodes[id].outputs;
+            var o1 = this.a.nodes[id].outputs;
+            var o2 = this.b.nodes[id].outputs;
 
             var output = o1.map((out, i) => {
                 return Object.assign({output: i}, diffCons(out.connections, o2[i].connections))
