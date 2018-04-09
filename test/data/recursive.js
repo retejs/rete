@@ -21,7 +21,7 @@ export default {
             'position': [
                 80, 200
             ],
-            'title': 'Number'
+            'title': 'name'
         },
         '2': {
             'id': 2,
@@ -43,7 +43,7 @@ export default {
             'position': [
                 105.55555555555556, 516.6666666666666
             ],
-            'title': 'Number'
+            'title': 'name'
         },
         '3': {
             'id': 3,

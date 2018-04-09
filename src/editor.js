@@ -210,8 +210,8 @@ export class NodeEditor {
         }
         
         this.eventListener.persistent = false;
-        
         this.clear();
+        return true;
     }
 
     afterImport() {

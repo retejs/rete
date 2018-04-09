@@ -202,7 +202,7 @@ export class Engine {
         return true;
     }
 
-    async processStart(id) {
+    async processStartNode(id) {
         if (id) {
             let startNode = this.data.nodes[id];
 
@@ -231,8 +231,8 @@ export class Engine {
         this.data = this.copy(data);
         this.args = args;
 
-        this.processStart(startId);
-        this.processUnreachable();
+        await this.processStartNode(startId);
+        await this.processUnreachable();
         
         return this.processDone()?'success':'aborted';
     }
