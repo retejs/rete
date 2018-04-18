@@ -3,6 +3,7 @@
   "version": "0.7.0",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
+  "module": "build/d3-node-editor.engine.js",
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",

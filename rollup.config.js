@@ -10,7 +10,7 @@ const banner = `/*!
 * Released under the MIT License.
 */`;
 
-export default {
+export default [{
     input: 'src/index.js',
     output: {
         file: 'build/d3-node-editor.js',
@@ -23,7 +23,7 @@ export default {
         name: 'D3NE',
         banner
     },
-    external: ['d3','alight'],
+    external: ['d3', 'alight'],
     plugins: [
         pug({
             pugRuntime: false
@@ -41,4 +41,18 @@ export default {
             }
         })
     ]
-};
+},
+{ /// engine bundle
+    input: 'src/engine.js',
+    output: {
+        file: 'build/d3-node-editor.engine.js',
+        format: 'cjs',
+        name: 'D3NE',
+        banner
+    },
+    plugins: [
+        babel(),
+        regenerator()
+    ]
+}
+];

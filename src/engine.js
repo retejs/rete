@@ -1,11 +1,13 @@
-import { Component } from './component';
-import { Utils } from './utils';
+import { ComponentWorker } from './component-worker';
+import { Utils } from './utils/common';
 
 var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
 
+export { ComponentWorker };
+
 export class Engine {
 
-    constructor(id: string, components: Component[]) {
+    constructor(id: string, components: ComponentWorker[]) {
 
         if (!Utils.isValidId(id))
             throw new Error('ID should be valid to name@0.1.0 format');  

@@ -1,10 +1,10 @@
 import * as alight from 'alight';
 import * as d3 from 'd3';
+import { Utils, ViewUtils } from './utils/index';
 import { Component } from './component';
 import { ContextMenu } from './contextmenu';
 import { Node } from './node';
 import { NodeEditor } from './editor';
-import { Utils } from './utils';
 import { declareViewDirectives } from './directives/index';
 import template from './templates/view.pug';
 
@@ -128,9 +128,9 @@ export class EditorView {
                 if (input.el) {
                     pathData.push({
                         connection: con,
-                        d: Utils.getConnectionPath(
-                            Utils.getOutputPosition(output),
-                            Utils.getInputPosition(input),
+                        d: ViewUtils.getConnectionPath(
+                            ViewUtils.getOutputPosition(output),
+                            ViewUtils.getInputPosition(input),
                             this.connectionProducer
                         )
                     });
@@ -144,8 +144,8 @@ export class EditorView {
 
             pathData.push({
                 selected: true,
-                d: Utils.getConnectionPath(
-                    Utils.getOutputPosition(output),
+                d: ViewUtils.getConnectionPath(
+                    ViewUtils.getOutputPosition(output),
                     input,
                     this.connectionProducer
                 )

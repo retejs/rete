@@ -10,7 +10,7 @@ import { Input } from './input';
 import { Node } from './node';
 import { Output } from './output';
 import { Selected } from './selected';
-import { Utils } from './utils';
+import { Utils } from './utils/common';
 
 export class NodeEditor {
 

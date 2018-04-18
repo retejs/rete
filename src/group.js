@@ -1,6 +1,6 @@
 import { Block } from './block';
 import { Node } from './node';
-import { Utils } from './utils';
+import { Utils } from './utils/common';
 
 export class Group extends Block {
 
