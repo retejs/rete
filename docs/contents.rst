@@ -10,6 +10,5 @@
   Events
   Extras
   Groups
-  Home
   Nodes
   Sockets
