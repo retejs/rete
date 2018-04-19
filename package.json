@@ -1,9 +1,8 @@
 {
   "name": "d3-node-editor",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
-  "module": "build/d3-node-editor.engine.js",
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
