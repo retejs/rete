@@ -10,7 +10,7 @@ Introduction
 
 Documentation
 ----
-Check the [wiki](https://github.com/Ni55aN/D3-Node-Editor/wiki) and learn about the components and capabilities.
+Check the [docs](https://d3-node-editor.readthedocs.io/en/latest/) and learn about the components and capabilities.
 
 Examples
 ----
