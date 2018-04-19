@@ -1,6 +1,3 @@
-Getting started
--
-
 ## Installing
 
 You can take latest build in [Releases](https://github.com/Ni55aN/D3-Node-Editor/releases). Add it and dependencies to your application.
@@ -18,6 +15,10 @@ npm install d3-node-editor
 Import as follows
 ```js
 import * as D3NE from "d3-node-editor";
+```
+Node.js (optionally, only for processing on the server)
+```js
+import { Engine, ComponentWorker } from "d3-node-editor/build/d3-node-editor.engine";
 ```
 
 ## Getting started
