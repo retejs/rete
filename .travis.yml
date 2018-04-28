@@ -6,7 +6,7 @@ before_script:
   - npm install
   - npm rebuild
 
-script: 
+script:
   - npm run lint
   - npm run build
   - npm run test
