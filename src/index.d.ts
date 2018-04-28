@@ -56,6 +56,10 @@ type DiffResult = {
 
 type TaskAction = (inputs : any[][], data : any) => any[];
 
+type EditorSelection = {
+  list: Node[];
+}
+
 export class Engine {
   readonly id : string;
   components : Component[]
@@ -121,6 +125,7 @@ export class EditorView {
   mouse : number[];
   transform : Object;
   contextMenu : ContextMenu;
+  selected : EditorSelection;
 
   container : Object
 
