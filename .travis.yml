@@ -6,7 +6,6 @@ before_script:
   - npm install
 
 script:
-  - sudo npm rebuild node-sass
   - npm run lint
   - npm run build
   - npm run test
