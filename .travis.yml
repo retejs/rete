@@ -4,6 +4,7 @@ node_js:
 
 before_script:
   - npm install
+  - npm rebuild
 
 script: 
   - npm run lint

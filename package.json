@@ -6,7 +6,7 @@
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
-    "build": "rollup -c && npm-sass src/styles/index.sass > build/d3-node-editor.css",
+    "build": "rollup -c && node-sass src/styles/index.sass build/d3-node-editor.css",
     "prepublishOnly": "npm run lint && npm run build",
     "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
   },
@@ -39,7 +39,7 @@
     "eslint": "^4.18.1",
     "jsdom": "^11.5.1",
     "mocha": "^5.0.1",
-    "npm-sass": "^2.2.1",
+    "node-sass": "^4.9.0",
     "pug": "^2.0.0",
     "rollup": "^0.56.3",
     "rollup-plugin-babel": "^3.0.3",
