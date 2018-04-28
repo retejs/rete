@@ -4,9 +4,9 @@ node_js:
 
 before_script:
   - npm install
-  - npm rebuild node-sass
 
-script: 
+script:
+  - npm rebuild node-sass
   - npm run lint
   - npm run build
   - npm run test
