@@ -22,8 +22,8 @@ export class ViewUtils {
         ]
     }
 
-    static getConnectionPath(a, b, produce) {
-        var { points, curve } = produce(...a, ...b);
+    static getConnectionPath(a, b, produce, pathInfo) {
+        var { points, curve } = produce(pathInfo, ...a, ...b);
 
         switch (curve) {
         case 'linear': curve = d3.curveLinear; break;

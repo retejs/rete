@@ -10,6 +10,14 @@ import template from './templates/view.pug';
 
 const zoomMargin = 0.9;
 
+export class PathInfo {
+  constructor(output, input){
+    this.connection = null;
+    this.input = input;
+    this.output = output;
+  }
+}
+
 export class EditorView {
 
     constructor(editor: NodeEditor, container: HTMLElement, menu: ?ContextMenu) {
@@ -126,12 +134,16 @@ export class EditorView {
                 let input = con.input;
 
                 if (input.el) {
+                    let pathInfo = new PathInfo(output, input);
+                    pathInfo.connection = con;
+
                     pathData.push({
                         connection: con,
                         d: ViewUtils.getConnectionPath(
                             ViewUtils.getOutputPosition(output),
                             ViewUtils.getInputPosition(input),
-                            this.connectionProducer
+                            this.connectionProducer,
+                            pathInfo
                         )
                     });
                 }
@@ -141,13 +153,15 @@ export class EditorView {
         if (this.pickedOutput !== null && this.pickedOutput.el) {
             let output = this.pickedOutput;
             let input = this.mouse;
+            let pathInfo = new PathInfo(output, input);
 
             pathData.push({
                 selected: true,
                 d: ViewUtils.getConnectionPath(
                     ViewUtils.getOutputPosition(output),
                     input,
-                    this.connectionProducer
+                    this.connectionProducer,
+                    pathInfo
                 )
             });
         }
