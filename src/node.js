@@ -13,6 +13,7 @@ export class Node extends Block {
         this.outputs = [];
         this.controls = [];
         this.data = {};
+        this.readOnly = false;
 
         this.title = title;
         [this.width, this.height] = [180, 100];
@@ -33,6 +34,7 @@ export class Node extends Block {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
         
+
         input.node = this;
 
         if (index !== null)

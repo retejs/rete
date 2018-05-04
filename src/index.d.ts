@@ -240,6 +240,7 @@ export class Node extends Block {
   controls : Control[];
   data : any;
   title : string;
+  readOnly : boolean;
 
   constructor(title : string);
 

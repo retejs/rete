@@ -20,15 +20,16 @@ export function Node(scope, el, expression, env) {
         Object.assign(el.style, node.style);
     }, { deep: true });
     
+
     d3.select(el).call(
         d3.drag().on('start', () => {
             d3.select(el).raise();
             if (!d3.event.sourceEvent.shiftKey)
                 this.editor.selectNode(node, d3.event.sourceEvent.ctrlKey);
         }).on('drag', () => {
-            if (this.editor.readOnly) return;
-            
-            var k = this.transform.k;            
+            if (this.editor.readOnly || node.readOnly) return;
+
+            var k = this.transform.k;
             var dx = d3.event.dx / k;
             var dy = d3.event.dy / k;
 
@@ -88,8 +89,9 @@ export function Node(scope, el, expression, env) {
     }
 
     d3.select(el).on('contextmenu', () => {
-        if (this.editor.readOnly) return;
-        
+        if (this.editor.readOnly || node.readOnly) return;
+
+
         var x = d3.event.clientX;
         var y = d3.event.clientY;
 
