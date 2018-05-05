@@ -11,11 +11,11 @@ import template from './templates/view.pug';
 const zoomMargin = 0.9;
 
 export class PathInfo {
-  constructor(output, input){
-    this.connection = null;
-    this.input = input;
-    this.output = output;
-  }
+    constructor(output, input) {
+        this.connection = null;
+        this.input = input;
+        this.output = output;
+    }
 }
 
 export class EditorView {
@@ -135,6 +135,7 @@ export class EditorView {
 
                 if (input.el) {
                     let pathInfo = new PathInfo(output, input);
+
                     pathInfo.connection = con;
 
                     pathData.push({
