@@ -6,11 +6,11 @@ type EngineState = {
 };
 
 interface ComponentWorkerProps {
-  name : string;
   worker: ComponentWorkerFunc;
 }
 
 export class ComponentWorker {
+  name : string;
   worker : ComponentWorkerFunc;
 
   constructor(name : string, props : ComponentWorkerProps);
