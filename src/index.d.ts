@@ -1,5 +1,6 @@
-type ComponentBuilder = (node : Node) => any;
-type ComponentWorker = (node : any, inputs : any[][], outputs : any[]) => any;
+import { Engine, ComponentWorkerProps, ComponentWorker } from './engine.d';
+
+type ComponentBuilder = (node: Node) => any;
 type ComponentCreated = (node : any) => any;
 type ComponentDestroyed = (node : any) => any;
 type EngineState = {
@@ -8,10 +9,9 @@ type EngineState = {
   ABORT: 2
 };
 
-type ComponentProps = {
+interface ComponentProps extends ComponentWorkerProps {
   template?: string;
   builder: ComponentBuilder;
-  worker: ComponentWorker;
   created?: ComponentCreated;
   destroyed?: ComponentDestroyed;
 }
@@ -49,35 +49,6 @@ type DiffResult = {
 }
 
 type TaskAction = (inputs : any[][], data : any) => any[];
-
-type EditorSelection = {
-  list: Node[];
-}
-
-export class Engine {
-  readonly id : string;
-  components : Component[]
-  args : any[];
-  data : Object;
-  state : EngineState;
-  onAbort : () => {};
-  constructor(id : string, components : Component[]);
-
-  clone() : Engine;
-  abort();
-
-  private processStart() : boolean;
-  private processDone() : boolean;
-
-  private lock(node);
-  private unlock(node);
-  private extractInputData(node);
-  private processNode(node);
-  private forwardProcess(node);
-  private copy(data);
-
-  process(data : Object, startId?: number, ...args);
-}
 
 export class Socket {
   constructor(id : string, name : string, hint : string);
@@ -131,7 +102,6 @@ export class EditorView {
   mouse : number[];
   transform : Object;
   contextMenu : ContextMenu;
-  selected : EditorSelection;
 
   container : Object
 
@@ -313,14 +283,10 @@ export class Control {
   putData(key : string, data : any);
 }
 
-export class Component {
-  name : string;
+export class Component extends ComponentWorker {
   template : string;
-  builder : ComponentBuilder;
-  worker : ComponentWorker;
-  created: ComponentCreated;
-  destroyed: ComponentDestroyed;
-
+  builder: ComponentBuilder;
+  
   constructor(name : string, props : ComponentProps);
 
   newNode() : Node;

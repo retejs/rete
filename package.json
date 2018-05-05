@@ -42,6 +42,7 @@
     "node-sass": "^4.9.0",
     "pug": "^2.0.0",
     "rollup": "^0.56.3",
+    "rollup-copy-plugin": "0.0.1",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-minify": "^1.0.3",
     "rollup-plugin-multi-entry": "^2.0.2",

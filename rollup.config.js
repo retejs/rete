@@ -2,7 +2,8 @@ import babel from 'rollup-plugin-babel';
 import pug from 'rollup-plugin-pug';
 import minify from 'rollup-plugin-minify'
 import regenerator from 'rollup-plugin-regenerator';
-
+import copy from 'rollup-copy-plugin';
+ 
 const { name, version } = require('./package.json');
 const banner = `/*!
 * ${name} v${version}
@@ -52,7 +53,10 @@ export default [{
     },
     plugins: [
         babel(),
-        regenerator()
+        regenerator(),
+        copy({
+            'src/engine.d.ts': 'build/d3-node-editor.engine.d.ts'
+        })
     ]
 }
 ];
