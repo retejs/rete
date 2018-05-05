@@ -48,8 +48,10 @@ export class Group extends Block {
         var bbox = Utils.nodesBBox(nodes);
 
         nodes.forEach(node => {
-            if (node.group !== null) node.group.removeNode(node.group);
-            self.addNode(node);
+            if(!node.readOnly){
+              if (node.group !== null) node.group.removeNode(node.group);
+              self.addNode(node);
+            }
         });
         this.position = [bbox.left - margin, bbox.top - 2 * margin];
         this.setWidth(bbox.right - bbox.left + 2 * margin);

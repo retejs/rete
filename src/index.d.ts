@@ -8,12 +8,6 @@ type EngineState = {
   ABORT: 2
 };
 
-type ConnectionProducerRet = {
-  points: number[][],
-  curve: string
-};
-type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number) => ConnectionProducerRet;
-
 type ComponentProps = {
   template?: string;
   builder: ComponentBuilder;
@@ -117,6 +111,18 @@ export class EventListener {
   on(names : string, handler : (param?: any, persistent?: boolean) => any) : EventListener;
   trigger(name : string, param?: any) : any;
 }
+
+type PathInfo = {
+  connection: Connection,
+  input: Input,
+  output: Output
+}
+type ConnectionProducerRet = {
+  pathInfo: PathInfo,
+  points: number[][],
+  curve: string
+};
+type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number) => ConnectionProducerRet;
 
 export class EditorView {
 
@@ -234,6 +240,7 @@ export class Node extends Block {
   controls : Control[];
   data : any;
   title : string;
+  readOnly : boolean;
 
   constructor(title : string);
 
