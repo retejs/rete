@@ -63,7 +63,7 @@ export class NodeEditor {
     }
 
     removeNode(node: Node) {
-        if(node.readOnly) return;
+        if (node.readOnly) return;
         var index = this.nodes.indexOf(node);
 
         if (this.eventListener.trigger('noderemove', node)) {

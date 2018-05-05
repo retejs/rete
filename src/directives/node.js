@@ -19,7 +19,6 @@ export function Node(scope, el, expression, env) {
     env.watch('node.style', () => {
         Object.assign(el.style, node.style);
     }, { deep: true });
-    
 
     d3.select(el).call(
         d3.drag().on('start', () => {
@@ -90,7 +89,6 @@ export function Node(scope, el, expression, env) {
 
     d3.select(el).on('contextmenu', () => {
         if (this.editor.readOnly || node.readOnly) return;
-
 
         var x = d3.event.clientX;
         var y = d3.event.clientY;

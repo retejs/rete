@@ -33,7 +33,6 @@ export class Node extends Block {
     addInput(input: Input, index: ?uint8 = null) {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
-        
 
         input.node = this;
 
