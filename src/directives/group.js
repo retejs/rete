@@ -15,7 +15,7 @@ export function Group(scope, el, expression, env) {
     }
 
     group.el = el;
-    env.watch('node.style', () => {
+    env.watch('group.style', () => {
         Object.assign(el.style, group.style);
     }, { deep: true });
 
