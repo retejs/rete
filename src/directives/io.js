@@ -32,11 +32,14 @@ export function PickInput(scope, el, expression, env) {
 
     input.el = el;
 
-    d3.select(el).on('mousedown', () => {
-        if (this.editor.readOnly) return;
+    let prevent = false;
 
+    d3.select(el).on('mouseleave', () => prevent = false);
+    d3.select(el).on('mousedown mouseup', () => {
+        if (this.editor.readOnly || prevent) return;
         d3.event.preventDefault();
-
+        d3.event.stopPropagation();
+        
         if (interceptInput.call(this)) return;
         prepareConnection.call(this);
 
@@ -44,6 +47,7 @@ export function PickInput(scope, el, expression, env) {
     
         this.update();
     });
+    d3.select(el).on('mousedown.prevent', () => prevent = true);
 }
 
 export function PickOutput(scope, el, expression, env) {
@@ -53,6 +57,7 @@ export function PickOutput(scope, el, expression, env) {
 
     d3.select(el).on('mousedown', () => {
         if (this.editor.readOnly) return;
+        d3.event.stopPropagation();
 
         this.pickedOutput = output;
     });
