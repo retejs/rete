@@ -260,6 +260,7 @@ export class Input extends IO {
   control : Control;
 
   constructor(title : string, socket : Socket, multiConns?: boolean);
+  el: HTMLElement;
   hasConnection();
   addConnection(connection : Connection);
   addControl(control : Control);
