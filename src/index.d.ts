@@ -1,5 +1,7 @@
 import { Engine, ComponentWorkerProps, ComponentWorker } from './engine.d';
 
+export { Engine, ComponentWorkerProps, ComponentWorker };
+
 type ComponentBuilder = (node: Node) => any;
 type ComponentCreated = (node : any) => any;
 type ComponentDestroyed = (node : any) => any;
@@ -83,17 +85,18 @@ export class EventListener {
   trigger(name : string, param?: any) : any;
 }
 
-type PathInfo = {
+export type PathInfo = {
   connection: Connection,
   input: Input,
   output: Output
 }
+
 type ConnectionProducerRet = {
-  pathInfo: PathInfo,
   points: number[][],
   curve: string
 };
-type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number) => ConnectionProducerRet;
+
+type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number, pathInfo: PathInfo) => ConnectionProducerRet;
 
 export class EditorView {
 
