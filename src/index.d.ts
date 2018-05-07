@@ -270,6 +270,7 @@ export class Input extends IO {
 export class Output extends IO {
 
   constructor(title : string, socket : Socket, multiConns?: boolean)
+  el: HTMLElement;
   hasConnection();
   connectTo(input : Input);
   connectedTo(input : Input);
