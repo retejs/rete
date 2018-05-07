@@ -206,7 +206,7 @@ export class Group extends Block {
 }
 
 export class Node extends Block {
-
+  el: HTMLElement;
   group : Group;
   inputs : Input[];
   outputs : Output[];
@@ -245,6 +245,7 @@ export class Selected {
 }
 
 export class IO {
+  el: HTMLElement;
   node : Node;
   multipleConnections : boolean;
   connections : Connection[];
@@ -259,8 +260,7 @@ export class IO {
 export class Input extends IO {
   control : Control;
 
-  constructor(title : string, socket : Socket, multiConns?: boolean);
-  el: HTMLElement;
+  constructor(title : string, socket : Socket, multiConns?: boolean);  
   hasConnection();
   addConnection(connection : Connection);
   addControl(control : Control);
@@ -271,7 +271,6 @@ export class Input extends IO {
 export class Output extends IO {
 
   constructor(title : string, socket : Socket, multiConns?: boolean)
-  el: HTMLElement;
   hasConnection();
   connectTo(input : Input);
   connectedTo(input : Input);
