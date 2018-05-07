@@ -8,6 +8,7 @@ export class Node extends Block {
    
     constructor(title: string) {
         super(Node);
+        this.el = null;
         this.group = null;
         this.inputs = [];
         this.outputs = [];

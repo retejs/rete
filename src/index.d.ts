@@ -1,5 +1,7 @@
 import { Engine, ComponentWorkerProps, ComponentWorker } from './engine.d';
 
+export { Engine, ComponentWorkerProps, ComponentWorker };
+
 type ComponentBuilder = (node: Node) => any;
 type ComponentCreated = (node : any) => any;
 type ComponentDestroyed = (node : any) => any;
@@ -83,17 +85,18 @@ export class EventListener {
   trigger(name : string, param?: any) : any;
 }
 
-type PathInfo = {
+export type PathInfo = {
   connection: Connection,
   input: Input,
   output: Output
 }
+
 type ConnectionProducerRet = {
-  pathInfo: PathInfo,
   points: number[][],
   curve: string
 };
-type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number) => ConnectionProducerRet;
+
+type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number, pathInfo: PathInfo) => ConnectionProducerRet;
 
 export class EditorView {
 
@@ -203,7 +206,7 @@ export class Group extends Block {
 }
 
 export class Node extends Block {
-
+  el: HTMLElement;
   group : Group;
   inputs : Input[];
   outputs : Output[];
@@ -242,6 +245,7 @@ export class Selected {
 }
 
 export class IO {
+  el: HTMLElement;
   node : Node;
   multipleConnections : boolean;
   connections : Connection[];
@@ -256,7 +260,7 @@ export class IO {
 export class Input extends IO {
   control : Control;
 
-  constructor(title : string, socket : Socket, multiConns?: boolean);
+  constructor(title : string, socket : Socket, multiConns?: boolean);  
   hasConnection();
   addConnection(connection : Connection);
   addControl(control : Control);
