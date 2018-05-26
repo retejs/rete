@@ -1,223 +1,126 @@
-import * as d3 from 'd3';
 import { Component } from './component';
 import { Connection } from './connection';
-import { ContextMenu } from './contextmenu';
-import { EditorView } from './editorview';
-import { EventListener } from './eventlistener';
-import { Group } from './group';
-import { History } from './history';
+import { Context } from './core/context';
+import { EditorEvents } from './events';
+import { EditorView } from './view/index';
 import { Input } from './input';
 import { Node } from './node';
 import { Output } from './output';
 import { Selected } from './selected';
-import { Utils } from './utils/common';
+import { Validator } from './core/validator';
 
-export class NodeEditor {
+export class NodeEditor extends Context {
 
-    constructor(id: string, container: HTMLElement, components: Component[], menu: ?ContextMenu) {
+    constructor(id: string, container: HTMLElement) {
+        super(id, new EditorEvents());
 
-        if (!Utils.isValidId(id))
-            throw new Error('ID should be valid to name@0.1.0 format');  
-        
-        this.id = id;
-        this.components = components;
-
-        this.init();
-
-        this.view = new EditorView(this, container, menu);
-        this.view.resize();
-    }
-
-    init() {
-        this._id = Math.random().toString(36).substr(2, 9);
-        this.eventListener = new EventListener();
-        this.selected = new Selected();
-        this.history = new History(this);
-        
         this.nodes = [];
-        this.groups = [];
-        this.readOnly = false;
+        this.components = new Map();
+
+        this.selected = new Selected();
+        this.view = new EditorView(container, this.components, this);
+
+        window.addEventListener('keydown', e => this.trigger('keydown', e));
+        window.addEventListener('keyup', e => this.trigger('keyup', e));
+        this.on('nodecreated', node => this.getComponent(node.name).created(node));
+        this.on('noderemoved', node => this.getComponent(node.name).destroyed(node));
+        this.on('selectnode', node => this.selectNode(node));
     }
 
-    addNode(node: Node, mousePlaced = false) {
-        if (this.eventListener.trigger('nodecreate', node)) {
-            if (mousePlaced)
-                node.position = this.view.mouse;
-            this.nodes.push(node);
-            this.findComponent(node).created(node);
-            this.eventListener.trigger('change');
-            
-            this.history.add(this.addNode.bind(this),
-                this.removeNode.bind(this),
-                [node]);
-        }
-    }
+    addNode(node: Node) {
+        if (!this.trigger('nodecreate', node)) return;
 
-    addGroup(group: Group) {
-        if (this.eventListener.trigger('groupcreate', group)) {
-            this.groups.push(group);
-            this.eventListener.trigger('change');
-        }
+        this.nodes.push(node);
+        this.view.addNode(node);
         
-        this.view.update();
+        this.trigger('nodecreated', node);
     }
 
     removeNode(node: Node) {
-        if (node.readOnly) return;
-        var index = this.nodes.indexOf(node);
+        if (!this.trigger('noderemove', node)) return;
 
-        if (this.eventListener.trigger('noderemove', node)) {
-            node.getConnections().forEach(c => this.removeConnection(c));
+        node.getConnections().forEach(c => this.removeConnection(c));
 
-            this.nodes.splice(index, 1);
-            this.findComponent(node).destroyed(node);
-            this.eventListener.trigger('change');
+        this.nodes.splice(this.nodes.indexOf(node), 1);
+        this.view.removeNode(node);
 
-            this.history.add(this.removeNode.bind(this),
-                this.addNode.bind(this),
-                [node]);
-        }
-
-        this.view.update();
+        this.trigger('noderemoved', node);
     }
 
-    removeGroup(group: Group) {
-        if (this.eventListener.trigger('groupremove', group)) {
-            group.remove();
-            this.groups.splice(this.groups.indexOf(group), 1);
-            this.eventListener.trigger('change');
-        }    
+    connect(output: Output, input: Input, data = {}) {
+        if (!this.trigger('connectioncreate', { output, input })) return;
 
-        this.view.update(); 
-    }
+        const connection = output.connectTo(input);
 
-    connect(output: Output | Connection, input: ?Input) {
-        if (output instanceof Connection) {
-            input = output.input;
-            output = output.output;
-        }
+        connection.data = data; 
+        this.view.addConnection(connection);
 
-        if (this.eventListener.trigger('connectioncreate', { output, input })) {
-            try {
-                var connection = output.connectTo(input);
-
-                this.eventListener.trigger('change');
-                this.history.add(this.connect.bind(this),
-                    this.removeConnection.bind(this),
-                    [connection]);
-            } catch (e) {
-                this.eventListener.trigger('error', e);
-            }
-        }
-        this.view.update(); 
+        this.trigger('connectioncreated', connection);
     }
 
     removeConnection(connection: Connection) {
-        if (this.eventListener.trigger('connectionremove', connection)) {
-            connection.remove();
-            this.eventListener.trigger('change');
+        if (!this.trigger('connectionremove', connection)) return;
+            
+        this.view.removeConnection(connection);
+        connection.remove();
 
-            this.history.add(this.removeConnection.bind(this),
-                this.connect.bind(this),
-                [connection]);
-        }
-        this.view.update(); 
+        this.trigger('connectionremoved', connection);
     }
 
     selectNode(node: Node, accumulate: boolean = false) {
         if (this.nodes.indexOf(node) === -1)
             throw new Error('Node not exist in list');
         
-        if (this.eventListener.trigger('nodeselect', node))
-            this.selected.add(node, accumulate);
+        if (!this.trigger('nodeselect', node)) return;
         
-        this.view.update();
+        this.selected.add(node, accumulate);
+
+        this.trigger('nodeselected', node);
     }
 
-    selectGroup(group: Group, accumulate: boolean = false) {
-        if (this.groups.indexOf(group) === -1)
-            throw new Error('Group not exist in list');
+    getComponent(name) {
+        const component = this.components.get(name);
+
+        if (!component)
+            throw `Component ${name} not found`;
         
-        if (this.eventListener.trigger('groupselect', group))
-            this.selected.add(group, accumulate);
-        
-        this.view.update();
-    }
-    
-    keyDown() {
-        if (this.readOnly) return;
-
-        switch (d3.event.keyCode) {
-        case 46:
-            this.selected.eachNode(this.removeNode.bind(this));
-            this.selected.eachGroup(this.removeGroup.bind(this));
-            this.view.update();
-            break;
-        case 71:
-            let nodes = this.selected.getNodes();
-                
-            if (nodes.length > 0)
-                this.addGroup(new Group('Group', { nodes }));
-            
-            break;
-        case 90:
-            if (d3.event.ctrlKey && d3.event.shiftKey)
-                this.history.redo();
-            else
-            if (d3.event.ctrlKey)
-                this.history.undo();
-                
-            break;
-        default: break;
-            
-        }
-    }
-
-    findComponent(node) {
-        const component = this.components.find(c => {
-            return c.name === node.title
-        });
-
-        if (!component) throw `Component ${node.title} was not found`;
-
         return component;
     }
 
+    register(component: Component) {
+        component.editor = this;
+        this.components.set(component.name, component);
+        this.trigger('componentregister', component)
+    }
+
     clear() {
-        this.nodes.splice(0, this.nodes.length);
-        this.groups.splice(0, this.groups.length);
+        this.nodes.map(node => this.removeNode(node));
     }
 
     toJSON() {
-        var nodes = {};
-        var groups = {};
-
-        this.nodes.forEach(node => nodes[node.id] = node.toJSON());
-        this.groups.forEach(group => groups[group.id] = group.toJSON());
-
-        return {
-            'id': this.id,
-            'nodes': nodes,
-            'groups': groups
-        };
+        const data = { id: this.id, nodes: {} };
+        
+        this.nodes.forEach(node => data.nodes[node.id] = node.toJSON());
+        this.trigger('export', data);
+        return data;
     }
 
     beforeImport(json: Object) {
-        var checking = Utils.validate(this.id, json);
+        var checking = Validator.validate(this.id, json);
         
         if (!checking.success) {
-            this.eventListener.trigger('error', checking.msg);
+            this.trigger('warn', checking.msg);
             return false;
         }
         
-        this.eventListener.persistent = false;
         this.clear();
+        this.silent = true;
+        this.trigger('import', json);
         return true;
     }
 
     afterImport() {
-        this.view.update();
-        this.eventListener.persistent = true;
+        this.silent = false;
         return true;
     }
 
@@ -228,9 +131,9 @@ export class NodeEditor {
         try {
             await Promise.all(Object.keys(json.nodes).map(async id => {
                 var node = json.nodes[id];
-                var component = this.findComponent(node);
+                var component = this.getComponent(node.name);
 
-                nodes[id] = await Node.fromJSON(component, node);
+                nodes[id] = await component.build(Node.fromJSON(node));
                 this.addNode(nodes[id]);
             }));
         
@@ -241,29 +144,18 @@ export class NodeEditor {
                 jsonNode.outputs.forEach((outputJson, i) => {
                     outputJson.connections.forEach(jsonConnection => {
                         var nodeId = jsonConnection.node;
+                        var data = jsonConnection.data;
                         var inputIndex = jsonConnection.input;
                         var targetInput = nodes[nodeId].inputs[inputIndex];
 
-                        this.connect(node.outputs[i], targetInput);
+                        this.connect(node.outputs[i], targetInput, data);
                     });
                 });
 
             });
-
-            if (typeof json.groups === 'object')
-                Object.keys(json.groups).forEach(id => {
-                    var group = Group.fromJSON(json.groups[id]);
-
-                    json.groups[id].nodes.forEach(nodeId => {
-                        var node = nodes[nodeId];
-
-                        group.addNode(node);
-                    })
-                    this.addGroup(group);
-                });
         }
         catch (e) {
-            this.eventListener.trigger('error', e);
+            this.trigger('warn', e);
             return false;
         }
         return this.afterImport();

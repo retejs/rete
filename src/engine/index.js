@@ -1,33 +1,40 @@
-import { ComponentWorker } from './component-worker';
-import { Utils } from './utils/common';
+import { Component } from './component';
+import { Context } from '../core/context';
+import { EngineEvents } from './events';
+import { Validator } from '../core/validator';
 
 var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
 
-export { ComponentWorker };
+export { Component };
 
-export class Engine {
+export class Engine extends Context {
 
-    constructor(id: string, components: ComponentWorker[]) {
+    constructor(id: string) {
+        super(id, new EngineEvents());
 
-        if (!Utils.isValidId(id))
-            throw new Error('ID should be valid to name@0.1.0 format');  
-        
-        this.id = id;
-        this.components = components;
+        this.components = [];
         this.args = [];
         this.data = null;
         this.state = State.AVALIABLE;
         this.onAbort = () => { };
-        this.onError = (message, data) => { console.error(message, data); };
     }
 
     clone() {
-        return new Engine(this.id, this.components);
+        const engine = new Engine(this.id);
+
+        this.components.map(c => engine.register(c));
+
+        return engine;
+    }
+
+    register(component: Component) {
+        this.components.push(component);
+        this.trigger('componentregister', component);
     }
 
     async throwError (message, data = null) {
         await this.abort();
-        this.onError(message, data);
+        this.trigger('error', { message, data });
         this.processDone();
 
         return 'error';
@@ -139,14 +146,14 @@ export class Engine {
 
     async processWorker(node) {
         var inputData = await this.extractInputData(node);
-        var component = this.components.find(c => c.name === node.title);
+        var component = this.components.find(c => c.name === node.name);
         var outputData = node.outputs.map(() => null);
 
         try {
             await component.worker(node, inputData, outputData, ...this.args);
         } catch (e) {
             this.abort();
-            console.warn(e);
+            this.trigger('warn', e);
         }
 
         return outputData;
@@ -191,7 +198,7 @@ export class Engine {
     }
 
     async validate(data) {
-        var checking = Utils.validate(this.id, data);
+        var checking = Validator.validate(this.id, data);
 
         if (!checking.success)
             return await this.throwError(checking.msg);  

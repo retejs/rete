@@ -2,10 +2,12 @@ import { Node } from './node';
 
 export class Control {
 
-    constructor(html: string, handler = () => { }) {
-        this.html = html;
+    constructor() {
+        if (this.constructor === Control)
+            throw new TypeError('Can not construct abstract class.');
+        
+        this.data = {};
         this.parent = null;
-        this.handler = handler;
     }
 
     getNode() {

@@ -1,9 +1,8 @@
 export class Socket {
 
-    constructor(id: string, name: string, hint: string) {
-        this.id = id;
+    constructor(name: string, data = {}) {
         this.name = name;
-        this.hint = hint;
+        this.data = data;
         this.compatible = [];
     }
 

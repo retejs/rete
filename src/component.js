@@ -1,19 +1,35 @@
-import { ComponentWorker } from './component-worker';
+import { Component as ComponentWorker } from './engine/component';
 import { Node } from './node';
-import template from './templates/node.pug';
-
-var defaultTemplate = template();
 
 export class Component extends ComponentWorker {
-    constructor(name, props) {
-        super(name, props);
-        this.template = props.template || defaultTemplate;
-        this.builder = props.builder;
-        this.created = props.created || function () { }
-        this.destroyed = props.destroyed || function () { }
+    constructor(name) {
+        super(name);
+        if (this.constructor === Component)
+            throw new TypeError('Can not construct abstract class.');
+
+        this.editor = null;
+        this.data = {};
     }
 
-    newNode() {
-        return new Node(this.name);
+    builder() { }
+
+    created() { }
+
+    destroyed() { }
+
+    async build(node: Node) {
+        //await this.editor.trigger('componentbuild', { component: this, node });
+        await this.builder(node);
+
+        return node;
+    }
+
+    async createNode(data = {}) {
+        const node = new Node(this.name);
+        
+        node.data = data;
+        await this.build(node);
+
+        return node;
     }
 }

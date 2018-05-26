@@ -3,7 +3,7 @@ export class Connection {
     constructor(output, input) {
         this.output = output;
         this.input = input;
-        this.style = {};
+        this.data = {};
 
         this.input.addConnection(this);
     }
