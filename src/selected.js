@@ -1,4 +1,3 @@
-import { Group } from './group';
 import { Node } from './node';
 
 export class Selected {
@@ -7,7 +6,7 @@ export class Selected {
         this.list = [];
     }
 
-    add(item: Node | Group, accumulate = false) {
+    add(item: Node, accumulate = false) {
         if (accumulate) {
             if (this.contains(item))
                 this.remove(item);
@@ -34,21 +33,5 @@ export class Selected {
 
     each(callback) {
         this.list.forEach(callback);
-    }
-
-    eachNode(callback) {
-        this.list.filter(item => item instanceof Node).forEach(callback);
-    }
-
-    eachGroup(callback) {
-        this.list.filter(item => item instanceof Group).forEach(callback);
-    }
-
-    getNodes() {
-        return this.list.filter(item => item instanceof Node);
-    }
-
-    getGroups() {
-        return this.list.filter(item => item instanceof Group);
     }
 }

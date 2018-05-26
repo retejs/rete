@@ -1,12 +1,12 @@
 {
   "name": "d3-node-editor",
-  "version": "0.7.4",
+  "version": "1.0.0-alpha.1",
   "description": "JavaScript library",
   "main": "build/d3-node-editor.js",
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
-    "build": "rollup -c && node-sass src/styles/index.sass build/d3-node-editor.css",
+    "build": "rollup -c",
     "prepublishOnly": "npm run lint && npm run build",
     "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
   },
@@ -31,6 +31,7 @@
     "babel-eslint": "^8.2.1",
     "babel-plugin-syntax-flow": "^6.18.0",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-plugin-typecheck": "^3.9.0",
     "babel-preset-es2015": "^6.24.1",
@@ -39,18 +40,12 @@
     "eslint": "^4.18.1",
     "jsdom": "^11.5.1",
     "mocha": "^5.0.1",
-    "node-sass": "^4.9.0",
-    "pug": "^2.0.0",
     "rollup": "^0.56.3",
     "rollup-copy-plugin": "0.0.1",
     "rollup-plugin-babel": "^3.0.3",
     "rollup-plugin-minify": "^1.0.3",
     "rollup-plugin-multi-entry": "^2.0.2",
-    "rollup-plugin-pug": "^0.1.6",
     "rollup-plugin-regenerator": "^0.5.4"
   },
-  "dependencies": {
-    "alight": "^0.14.1",
-    "d3": "^4.12.2"
-  }
+  "dependencies": {}
 }

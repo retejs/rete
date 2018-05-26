@@ -1,8 +1,7 @@
 import babel from 'rollup-plugin-babel';
-import pug from 'rollup-plugin-pug';
+import copy from 'rollup-copy-plugin';
 import minify from 'rollup-plugin-minify'
 import regenerator from 'rollup-plugin-regenerator';
-import copy from 'rollup-copy-plugin';
  
 const { name, version } = require('./package.json');
 const banner = `/*!
@@ -16,19 +15,11 @@ export default [{
     output: {
         file: 'build/d3-node-editor.js',
         sourcemap: true,
-        globals: {
-            d3: 'd3',
-            alight: 'alight'
-        },
         format: 'umd',
         name: 'D3NE',
         banner
     },
-    external: ['d3', 'alight'],
     plugins: [
-        pug({
-            pugRuntime: false
-        }),
         babel(),
         regenerator(),
         minify({
@@ -44,7 +35,7 @@ export default [{
     ]
 },
 { /// engine bundle
-    input: 'src/engine.js',
+    input: 'src/engine/index.js',
     output: {
         file: 'build/d3-node-editor.engine.js',
         format: 'cjs',
@@ -55,7 +46,7 @@ export default [{
         babel(),
         regenerator(),
         copy({
-            'src/engine.d.ts': 'build/d3-node-editor.engine.d.ts'
+            'src/engine/engine.d.ts': 'build/d3-node-editor.engine.d.ts'
         })
     ]
 }

@@ -1,4 +1,4 @@
-import { Engine, ComponentWorkerProps, ComponentWorker } from './engine.d';
+import { Engine, ComponentWorkerProps, ComponentWorker } from './engine./engine.d';
 
 export { Engine, ComponentWorkerProps, ComponentWorker };
 

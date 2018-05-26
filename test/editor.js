@@ -1,58 +1,70 @@
 import './utils/domReady';
 import assert from 'assert';
+import { renderMock } from './utils/render-mock';
 
 describe('Editor', () => {
     var c = document.querySelector('#d3ne');
-    var menu = new D3NE.ContextMenu({});
 
     it('init', () => {
-        assert.throws(() => new D3NE.NodeEditor('test@0.0.2', null, [], menu), Error, 'container');
-        assert.throws(() => new D3NE.NodeEditor('test@0.0.2', c, {}, menu), Error, 'components');
-        assert.throws(() => new D3NE.NodeEditor('test', c, [], menu), Error, 'id');
-        assert.throws(() => new D3NE.NodeEditor('test@5.5', c, [], menu), Error, 'id');
-        assert.throws(() => new D3NE.NodeEditor('test@0.1.2', c, [], {}), Error, 'menu');
+        assert.throws(() => new D3NE.NodeEditor('test@0.0.2', null), Error, 'container');
+        assert.throws(() => new D3NE.NodeEditor('test', c), Error, 'id');
+        assert.throws(() => new D3NE.NodeEditor('test@5.5', c), Error, 'id');
     })
 
     it('import/export', async () => {
-        var editor = new D3NE.NodeEditor('test@0.0.2', c, [], menu);
+        var editor = new D3NE.NodeEditor('test@0.0.2', c);
         var ret;
         
-        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {}, groups: {} });
+        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
         assert.equal(ret, false, 'can not be taken with another id');
         
-        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {}, groups: {} });
+        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
         assert.equal(ret, false, 'nodes are mandatory');
 
-        ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {}, groups: {} });
+        ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {} });
         assert.equal(ret, true, 'correct data');
     });
 
     it('connections', async () => {
-        var comps = [new D3NE.Component('Num', {
+        var socketNum = new D3NE.Socket('Number');
+
+        class Comp1 extends D3NE.Component {
+
+            constructor() {
+                super('Num');
+            }
+
             builder(node) {
                 node.addOutput(new D3NE.Output('Name', socketNum))
-            },
-            worker() {
-                
             }
-        }),
-        new D3NE.Component('Return', {
+
+            worker() { }
+        }
+
+        class Comp2 extends D3NE.Component {
+
+            constructor() {
+                super('Return');
+            }
+
             builder(node) {
                 node.addInput(new D3NE.Input('Name', socketNum));
-            },
-            worker() {
-                    
             }
-        })
-        ];
 
-        var editor = new D3NE.NodeEditor('test@0.0.2', c, comps, menu);
-        var socketNum = new D3NE.Socket('num', 'Number', '');
+            worker() { }
+        }
 
-        var n1, n2;
+        var editor = new D3NE.NodeEditor('test@0.0.2', c);
 
-        comps[0].builder(n1 = comps[0].newNode())
-        comps[1].builder(n2 = comps[1].newNode())
+        renderMock(editor);
+
+        var comps = [new Comp1(), new Comp2()]
+
+        editor.register(comps[0])
+        editor.register(comps[1])
+
+        const n1 = await comps[0].createNode();
+        const n2 = await comps[1].createNode();
 
         editor.addNode(n1);
         editor.addNode(n2);

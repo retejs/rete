@@ -38,7 +38,8 @@ export class Output extends IO {
             'connections': this.connections.map(c => {
                 return {
                     node: c.input.node.id,
-                    input: c.input.node.inputs.indexOf(c.input)
+                    input: c.input.node.inputs.indexOf(c.input),
+                    data: c.data
                 }
             })
         };
