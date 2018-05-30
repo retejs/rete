@@ -1,12 +1,12 @@
-D3 Node Editor  [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Rete.js  [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 ====
-#### JavaScript library for visual programming
+#### JavaScript framework for visual programming
 
-![d3ne logo](https://i.imgur.com/rydGu6B.png)
+![rete logo](https://i.imgur.com/rydGu6B.png)
 
 Introduction
 ----
-**D3 Node Editor** (D3NE) is a multipurpose library for visual programming. **D3NE** allows you to create node-based editor directly in the browser. You can define nodes and workers that allow users to create instructions for processing data in your editor without a single line of code.
+**Rete** is a modular framework for visual programming. **Rete** allows you to create node-based editor directly in the browser. You can define nodes and workers that allow users to create instructions for processing data in your editor without a single line of code.
 
 Documentation
 ----
