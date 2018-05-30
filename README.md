@@ -1,4 +1,5 @@
-Rete.js  [![Build Status](https://travis-ci.org/Ni55aN/d3-node-editor.svg?branch=master)](https://travis-ci.org/Ni55aN/d3-node-editor) [![Join the chat at https://gitter.im/D3-Node-Editor/Lobby](https://badges.gitter.im/D3-Node-Editor/Lobby.svg)](https://gitter.im/D3-Node-Editor/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+Rete.js  [![Build Status](https://travis-ci.org/retejs/rete.svg?branch=master)](https://travis-ci.org/retejs/rete) 
+[![Join the chat at https://gitter.im/retejs/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/retejs/Lobby)
 ====
 #### JavaScript framework for visual programming
 
