@@ -6,4 +6,4 @@ global.document = document;
 global.window = window;
 global.HTMLElement = window.HTMLElement;
 
-global.D3NE = require('../../build/d3-node-editor');
+global.D3NE = require('../../build/rete');

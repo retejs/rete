@@ -21,7 +21,7 @@ export default {
             'position': [
                 80, 200
             ],
-            'title': 'name'
+            'name': 'name'
         },
         '2': {
             'id': 2,
@@ -43,7 +43,7 @@ export default {
             'position': [
                 105.55555555555556, 516.6666666666666
             ],
-            'title': 'name'
+            'name': 'name'
         },
         '3': {
             'id': 3,
@@ -79,7 +79,7 @@ export default {
             'position': [
                 454.44444444444446, 108.88888888888889
             ],
-            'title': 'Add'
+            'name': 'Add'
         },
         '4': {
             'id': 4,
@@ -115,7 +115,7 @@ export default {
             'position': [
                 781.6666666666663, 260.0000000000001
             ],
-            'title': 'Add'
+            'name': 'Add'
         }
     },
     'groups' : {}
