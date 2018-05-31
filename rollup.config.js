@@ -13,7 +13,7 @@ const banner = `/*!
 export default [{
     input: 'src/index.js',
     output: {
-        file: 'build/d3-node-editor.js',
+        file: 'build/rete.js',
         sourcemap: true,
         format: 'umd',
         name: 'Rete',
