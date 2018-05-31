@@ -16,7 +16,7 @@ export default [{
         file: 'build/d3-node-editor.js',
         sourcemap: true,
         format: 'umd',
-        name: 'D3NE',
+        name: 'Rete',
         banner
     },
     plugins: [
@@ -24,7 +24,7 @@ export default [{
         regenerator(),
         minify({
             umd: {
-                dest: 'build/d3-node-editor.min.js',
+                dest: 'build/rete.min.js',
                 ie8: true,
                 output: {
                     beautify: false,
@@ -37,16 +37,16 @@ export default [{
 { /// engine bundle
     input: 'src/engine/index.js',
     output: {
-        file: 'build/d3-node-editor.engine.js',
+        file: 'build/rete.engine.js',
         format: 'cjs',
-        name: 'D3NE',
+        name: 'Rete',
         banner
     },
     plugins: [
         babel(),
         regenerator(),
         copy({
-            'src/engine/engine.d.ts': 'build/d3-node-editor.engine.d.ts'
+            'src/engine/engine.d.ts': 'build/rete.engine.d.ts'
         })
     ]
 }
