@@ -36,7 +36,7 @@ Anyone can file an expense. If the expense makes sense for the development of th
 
 ## Questions
 
-If you have any questions, create an [issue](issue) (protip: do a quick search first to see if someone else didn't ask the same question before!) or send a quick questions to [Gitter](https://gitter.im/rete/Lobby).
+If you have any questions, create an [issue](issue) (protip: do a quick search first to see if someone else didn't ask the same question before!) or send a quick questions to [Gitter](https://gitter.im/retejs/Lobby).
 You can also reach us at hello@rete.opencollective.com.
 
 ## Credits
