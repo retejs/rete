@@ -13,6 +13,8 @@ export class EditorView extends Emitter {
         this.container = container;
         this.components = components;
 
+        this.container.style.overflow = 'hidden';
+
         this.nodes = new Map();
         this.connections = new Map();
 
