@@ -94,7 +94,7 @@ export class NodeEditor extends Context {
     }
 
     clear() {
-        this.nodes.map(node => this.removeNode(node));
+        [...this.nodes].map(node => this.removeNode(node));
     }
 
     toJSON() {
