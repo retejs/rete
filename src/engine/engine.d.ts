@@ -1,29 +1,43 @@
-type ComponentWorkerFunc = (node : any, inputs : any[][], outputs : any[]) => any;
 type EngineState = {
   AVALIABLE: 0,
   PROCESSED: 1,
   ABORT: 2
 };
 
-interface ComponentWorkerProps {
-  worker: ComponentWorkerFunc;
+export class Emitter {
+  constructor();
+  on(names : string, handler : (param?: any) => any) : Emitter;
+  trigger(name : string, param?: any) : any;
 }
 
-export class ComponentWorker {
-  name : string;
-  worker : ComponentWorkerFunc;
+export class Events {
+  constructor(handlers : any);
+}
 
-  constructor(name : string, props : ComponentWorkerProps);
+export class Context extends Emitter {
+  constructor(id : string, events : Events);
+
+  use(plugin: any, options?: any);
+}
+
+export abstract class Component {
+  name : string;
+
+  constructor(name: string);
+  
+  worker(node : any, inputs : any[][], outputs : any[]): Promise<any> | any;
 }
 
 export class Engine {
   readonly id : string;
-  components : ComponentWorker[]
+  components : Component[]
   args : any[];
   data : Object;
   state : EngineState;
   onAbort : () => {};
-  constructor(id : string, components : ComponentWorker[]);
+  constructor(id : string);
+  
+  register(component: Component);
 
   clone() : Engine;
   abort();

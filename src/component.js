@@ -11,14 +11,13 @@ export class Component extends ComponentWorker {
         this.data = {};
     }
 
-    builder() { }
+    async builder() { }
 
     created() { }
 
     destroyed() { }
 
     async build(node: Node) {
-        //await this.editor.trigger('componentbuild', { component: this, node });
         await this.builder(node);
 
         return node;

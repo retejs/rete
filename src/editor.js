@@ -50,12 +50,16 @@ export class NodeEditor extends Context {
     connect(output: Output, input: Input, data = {}) {
         if (!this.trigger('connectioncreate', { output, input })) return;
 
-        const connection = output.connectTo(input);
+        try {
+            const connection = output.connectTo(input);
 
-        connection.data = data; 
-        this.view.addConnection(connection);
+            connection.data = data;
+            this.view.addConnection(connection);
 
-        this.trigger('connectioncreated', connection);
+            this.trigger('connectioncreated', connection);
+        } catch (e) {
+            this.trigger('warn', e)
+        }
     }
 
     removeConnection(connection: Connection) {

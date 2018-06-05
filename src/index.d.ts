@@ -1,325 +1,171 @@
-import { Engine, ComponentWorkerProps, ComponentWorker } from './engine./engine.d';
+import {Engine, Context, Events, Component as ComponentWorker, Emitter} from './engine/engine.d';
+export {Engine, ComponentWorker};
 
-export { Engine, ComponentWorkerProps, ComponentWorker };
-
-type ComponentBuilder = (node: Node) => any;
-type ComponentCreated = (node : any) => any;
-type ComponentDestroyed = (node : any) => any;
 type EngineState = {
   AVALIABLE: 0,
   PROCESSED: 1,
   ABORT: 2
 };
 
-interface ComponentProps extends ComponentWorkerProps {
-  template?: string;
-  builder: ComponentBuilder;
-  created?: ComponentCreated;
-  destroyed?: ComponentDestroyed;
-}
-
-declare class Module {
-  constructor(data : any, titlesInput : String[], titlesOutput : String[]);
-  static extractNodes(data : any, titles : String[]);
-  read(inputs : String[]);
-  write(outputs : String[]);
-}
-
-type ModuleWorker = (node : any, inputs : any[][], outputs : any[]) => any;
-type ModuleWorkerIO = (node : any, inputs : any[][], outputs : any[], module : Module) => any;
-
-type ControlHandler = (element : HTMLElement, control : Control) => any;
-
-type DiffOutput = {
-  node: Number,
-  input: Number
-}
-
-type DiffConnect = {
-  output: Number,
-  node: Number,
-  removed: DiffOutput[],
-  added: DiffOutput[]
-};
-
-type DiffResult = {
-  removed: Number[],
-  added: Number[],
-  moved: Number[],
-  datachanged: Number[],
-  connects: DiffConnect[]
-}
-
-type TaskAction = (inputs : any[][], data : any) => any[];
-
 export class Socket {
-  constructor(id : string, name : string, hint : string);
+  constructor(name: string, data?: any);
 
-  combineWith(socket : Socket);
-  compatibleWith(socket : Socket);
-}
-
-export class Block {
-  readonly id : number;
-  position : number[];
-  width : number;
-  height : number;
-  style : any;
-
-  constructor(Class);
-
-  private static incrementId(Class)
+  combineWith(socket: Socket);
+  compatibleWith(socket: Socket);
 }
 
 export class Connection {
-  private input : Input;
-  private output : Output;
+  private input: Input;
+  private output: Output;
 }
 
-export class EventListener {
-  private events : Object;
-  persistent : boolean;
+export class Area extends Emitter {
+  appendChild(el: HTMLElement);
+  removeChild(el: HTMLElement);
 
-  constructor();
-  on(names : string, handler : (param?: any, persistent?: boolean) => any) : EventListener;
-  trigger(name : string, param?: any) : any;
+  translate(x: number, y: number);
+  zoom(zoom: number, ox?: number, oy?: number);
 }
-
-export type PathInfo = {
-  connection: Connection,
-  input: Input,
-  output: Output
-}
-
-type ConnectionProducerRet = {
-  points: number[][],
-  curve: string
-};
-
-type ConnectionProducer = (x1 : number, y1 : number, x2 : number, y2 : number, pathInfo: PathInfo) => ConnectionProducerRet;
 
 export class EditorView {
 
-  editor : NodeEditor;
-  pickedOutput?: Output;
-  mouse : number[];
-  transform : Object;
-  contextMenu : ContextMenu;
+  emitter: Emitter;
+  components: any;
 
-  container : Object
+  nodes: Map<Node, any>;
+  connections: Map<Node, any>;
 
-  private view : Object;
-  private zoom : Object;
+  area: Area;
 
-  constructor(editor : NodeEditor, container : HTMLElement, menu : ContextMenu);
+  private view: Object;
+  private zoom: Object;
 
-  private getTemplate(node);
+  addNode(node: Node);
+  removeNode(node: Node);
+  addConnection(connection: Connection);
+  removeConnection(connection: Connection);
+  updateConnections(args: any);
 
   resize();
-  connectionProducer : ConnectionProducer;
-
-  updateConnections();
-  update();
-
-  private assignContextMenuHandler();
-  private areaClick();
-
-  zoomAt(nodes : Node[]);
-  translate(x : number, y : number);
-  scale(scale : number);
-  setScaleExtent(scaleMin : number, scaleMax : number);
-  setTranslateExtent(left : number, top : number, right : number, bottom : number);
+  click(e: MouseEvent);
 }
 
-export class NodeEditor {
+export class NodeEditor extends Context {
 
-  readonly id : string;
-  readonly _id : number;
-  components : Component[];
-  view : EditorView;
-  eventListener : EventListener;
-  private selected : Selected;
-  private history : History;
-  nodes : Node[];
-  groups : Group[];
-  readOnly : boolean;
-  constructor(id : string, container : HTMLElement, components : Component[], menu : ContextMenu);
+  components: Map<string, Component>;
+  selected: Selected;
+  view: EditorView;
+  nodes: Node[];
+  constructor(id: string, container: HTMLElement);
 
-  addNode(node : Node, mousePlaced?: boolean)
-  addGroup(group : Group);
-  removeNode(node : Node);
-  removeGroup(group : Group);
-  connect(output : Output | Connection, input?: Input);
-  removeConnection(connection : Connection);
-  selectNode(node : Node, accumulate?: boolean);
-  selectGroup(group : Group, accumulate?: boolean);
+  addNode(node: Node, mousePlaced?: boolean)
+  removeNode(node: Node);
+  connect(output: Output, input: Input, data?: any);
+  removeConnection(connection: Connection);
+  selectNode(node: Node, accumulate?: boolean);
 
-  keyDown();
+  getComponent(name: string);
+  register(component: Component);
+
   clear();
   toJSON();
-  fromJSON(json : any);
+  fromJSON(json: any);
 }
 
-export class History {
+export class Node {
+  readonly id: number;
+  name: string;
+  position: number[];
 
-  constructor(editor : NodeEditor);
-  add(exec, undo, args);
-  undo();
-  redo();
-}
+  inputs: Input[];
+  outputs: Output[];
+  controls: Control[];
+  data: any;
+  meta: any;
 
-export class ContextMenu {
-  visible : number;
-  x : number;
-  y : number;
+  constructor(name: string);
 
-  constructor(items : any, searchBar?: boolean)
+  private static incrementId(Class)
 
-  private bindTemplate(t);
-
-  private searchItems(filter?: string);
-  haveSubitems(item);
-  isVisible();
-  show(x : number, y : number, items?: any, searchBar?: boolean, onClick?: () => {});
-  hide();
-}
-
-export class Group extends Block {
-  title : string;
-
-  nodes : Node[];
-  constructor(title : string, params : any);
-
-  setMinSizes(width : number, height : number);
-  setWidth(w : number);
-  setHeight(h : number);
-  isCoverNode(node : Node);
-  coverNodes(nodes : Node[]);
-  containNode(node : Node);
-  addNode(node : Node);
-  removeNode(node : Node);
-  remove();
-
-  toJSON();
-
-  static fromJSON(json : any);
-}
-
-export class Node extends Block {
-  el: HTMLElement;
-  group : Group;
-  inputs : Input[];
-  outputs : Output[];
-  controls : Control[];
-  data : any;
-  title : string;
-  readOnly : boolean;
-
-  constructor(title : string);
-
-  addControl(control : Control, index?: number);
-  addInput(input : Input, index?: number);
-  addOutput(output : Output, index?: number);
+  addControl(control: Control, index?: number);
+  addInput(input: Input, index?: number);
+  addOutput(output: Output, index?: number);
   getConnections(type);
 
   inputsWithVisibleControl();
 
-  toJSON();
+  private static incrementId();
 
-  static fromJSON(component : Component, json : any)
+  toJSON();
+  static fromJSON(component: Component, json: any)
 }
 
 export class Selected {
 
   constructor();
 
-  add(item : Node | Group, accumulate?: boolean)
+  add(item: Node, accumulate?: boolean)
   clear();
-  remove(item : () => {});
-  contains(item : () => {});
-  each(callback : () => {});
-  eachNode(callback : () => {});
-  eachGroup(callback : () => {});
-  getNodes() : Node[];
-  getGroups() : Group[];
+  remove(item: () => {});
+  contains(item: () => {});
+  each(callback: () => {});
+  eachNode(callback: () => {});
+  getNodes(): Node[];
 }
 
 export class IO {
-  el: HTMLElement;
-  node : Node;
-  multipleConnections : boolean;
-  connections : Connection[];
+  node: Node;
+  multipleConnections: boolean;
+  connections: Connection[];
 
-  title : string;
-  socket : Socket;
+  title: string;
+  socket: Socket;
 
   constructor(title, socket, multiConns);
-  removeConnection(connection : Connection);
+  removeConnection(connection: Connection);
 }
 
 export class Input extends IO {
-  control : Control;
+  control: Control;
 
-  constructor(title : string, socket : Socket, multiConns?: boolean);  
+  constructor(title: string, socket: Socket, multiConns?: boolean);
   hasConnection();
-  addConnection(connection : Connection);
-  addControl(control : Control);
+  addConnection(connection: Connection);
+  addControl(control: Control);
   showControl();
   toJSON();
 }
 
 export class Output extends IO {
 
-  constructor(title : string, socket : Socket, multiConns?: boolean)
+  constructor(title: string, socket: Socket, multiConns?: boolean)
   hasConnection();
-  connectTo(input : Input);
-  connectedTo(input : Input);
+  connectTo(input: Input);
+  connectedTo(input: Input);
   toJSON();
 }
 
-export class Control {
+export abstract class Control {
 
-  constructor(html : string, handler?: ControlHandler);
+  parent: Input | Node;
+  constructor();
 
   getNode();
-  getData(key : string);
+  getData(key: string);
 
-  putData(key : string, data : any);
+  putData(key: string, data: any);
 }
 
-export class Component extends ComponentWorker {
-  template : string;
-  builder: ComponentBuilder;
+export abstract class Component extends ComponentWorker {
+
+  editor: NodeEditor;
+  engine: Engine;
+
+  constructor(name: string);
+
+  builder(node: Node): Promise<any> | any;
+  created(node: Node);
+  destroyed(node: Node);
   
-  constructor(name : string, props : ComponentProps);
-
-  newNode() : Node;
-}
-
-export class Diff {
-  constructor(data1 : any, data2 : any);
-  public compare() : DiffResult;
-}
-
-export class ModuleManager {
-  constructor(titlesInput : String[], titlesOutput : String[]);
-
-  getInputs(data : any);
-  getOutputs(data : any);
-
-  workerModule : ModuleWorker;
-  workerInputs : ModuleWorkerIO;
-  workerOutputs : ModuleWorkerIO;
-
-  setEngine(engine : Engine);
-}
-
-export class Task {
-  constructor(inputs : any[][], action : TaskAction);
-  private getOptions();
-  private getOutputs();
-  reset();
-  run(data : any);
-  option(index : Number);
-  output(index : Number);
+  createNode(data?: any): Promise<Node>;
 }
