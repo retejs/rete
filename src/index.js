@@ -8,7 +8,7 @@ import { NodeEditor } from './editor';
 import { Output } from './output';
 import { Socket } from './socket';
 
-export {
+export default {
     Component,
     Control,
     NodeEditor,
