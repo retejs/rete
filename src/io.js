@@ -14,4 +14,8 @@ export class IO {
     removeConnection(connection: Connection) {
         this.connections.splice(this.connections.indexOf(connection), 1);
     }
+
+    removeConnections() {
+        this.connections.map(connection => this.removeConnection(connection));
+    }
 }
