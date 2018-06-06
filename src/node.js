@@ -24,6 +24,11 @@ export class Node {
         return this;
     }
 
+    removeControl(control: Control) {
+        control.parent = null;
+        this.controls.splice(this.controls.indexOf(control), 1);
+    }
+
     addInput(input: Input, index: ?uint8 = this.inputs.length) {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
@@ -34,6 +39,12 @@ export class Node {
         return this;
     }
 
+    removeInput(input: Input) {
+        input.removeConnections();
+        input.node = null;
+        this.inputs.splice(this.inputs.indexOf(input), 1);
+    }
+
     addOutput(output: Output, index: ?uint8 = this.outputs.length) {
         if (output.node !== null)
             throw new Error('Output has already been added to the node');
@@ -42,6 +53,12 @@ export class Node {
 
         this.outputs.splice(index, 0, output);
         return this;
+    }
+
+    removeOutput(output: Output) {
+        output.removeConnections();
+        output.node = null;
+        this.outputs.splice(this.outputs.indexOf(output), 1);
     }
 
     getConnections() {
