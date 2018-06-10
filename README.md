@@ -15,17 +15,13 @@ Check the [docs](https://rete.readthedocs.io/en/latest/) and learn about the com
 
 Examples
 ----
-[Flow-based programming](https://codepen.io/Ni55aN/pen/jBEKBQ)
+[Flow-based programming](https://codepen.io/Ni55aN/pen/xzgQYq)
 
-[Event & conditions](https://codepen.io/Ni55aN/pen/MOYPEz)
+[Events (tasks)](https://codepen.io/Ni55aN/pen/MOYPEz)
 
 [Modules](https://codepen.io/Ni55aN/pen/QOEbEW)
 
-[Difference](https://codepen.io/Ni55aN/pen/POWEvm?editors=1010)
-
 [Programming a Messenger Bot](https://codepen.io/Ni55aN/pen/rpOKNb)
-
-[Allmatter - 3d materials authoring tool](https://github.com/Ni55aN/allmatter)
 
 License
 ----
