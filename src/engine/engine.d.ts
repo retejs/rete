@@ -28,7 +28,7 @@ export abstract class Component {
   worker(node : any, inputs : any[][], outputs : any[]): Promise<any> | any;
 }
 
-export class Engine {
+export class Engine extends Context {
   readonly id : string;
   components : Component[]
   args : any[];
