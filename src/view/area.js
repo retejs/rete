@@ -60,13 +60,16 @@ export class Area extends Emitter {
     }
 
     zoom(zoom, ox = 0, oy = 0) {
+        const k = this.transform.k;
         const params = { transform: this.transform, zoom };
 
         if (!this.trigger('zoom', params)) return;
         
+        const d = (k - params.zoom) / (k - zoom);
+
         this.transform.k = params.zoom;
-        this.transform.x += ox;
-        this.transform.y += oy;
+        this.transform.x += ox * d;
+        this.transform.y += oy * d;
 
         this.update();
         this.trigger('zoomed');

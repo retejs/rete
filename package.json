@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "JavaScript framework",
   "main": "build/rete.js",
   "types": "src/index.d.ts",
