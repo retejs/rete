@@ -117,8 +117,8 @@ export class NodeEditor extends Context {
             return false;
         }
         
-        this.clear();
         this.silent = true;
+        this.clear();
         this.trigger('import', json);
         return true;
     }
@@ -160,8 +160,7 @@ export class NodeEditor extends Context {
         }
         catch (e) {
             this.trigger('warn', e);
-            return false;
         }
-        return this.afterImport();
+        this.afterImport();
     }
 }
