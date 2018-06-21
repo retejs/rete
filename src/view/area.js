@@ -48,22 +48,28 @@ export class Area extends Emitter {
     }
 
     translate(x, y) {
-        if (!this.trigger('translate', { transform: this.transform, x, y })) return;
+        const params = { transform: this.transform, x, y };
 
-        this.transform.x = x;
-        this.transform.y = y;
+        if (!this.trigger('translate', params)) return;
+
+        this.transform.x = params.x;
+        this.transform.y = params.y;
 
         this.update();
+        this.trigger('translated');
     }
 
     zoom(zoom, ox = 0, oy = 0) {
-        if (!this.trigger('zoom', { transform: this.transform, zoom })) return;
+        const params = { transform: this.transform, zoom };
+
+        if (!this.trigger('zoom', params)) return;
         
-        this.transform.k = zoom;
+        this.transform.k = params.zoom;
         this.transform.x += ox;
         this.transform.y += oy;
-        
+
         this.update();
+        this.trigger('zoomed');
     }
 
     appendChild(el) {
