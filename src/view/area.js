@@ -15,8 +15,8 @@ export class Area extends Emitter {
 
         el.style.transformOrigin = '0 0';
 
-        this._drag = new Drag(container, this.onTranslate.bind(this));
         this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
+        this._drag = new Drag(container, this.onTranslate.bind(this));
         this.container.addEventListener('mousemove', this.mousemove.bind(this));
 
         this.update();
@@ -65,7 +65,7 @@ export class Area extends Emitter {
 
         if (!this.trigger('zoom', params)) return;
         
-        const d = (k - params.zoom) / (k - zoom);
+        const d = (k - params.zoom) / ((k - zoom) || 1);
 
         this.transform.k = params.zoom;
         this.transform.x += ox * d;
