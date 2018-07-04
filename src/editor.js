@@ -160,7 +160,9 @@ export class NodeEditor extends Context {
         }
         catch (e) {
             this.trigger('warn', e);
+            return !this.afterImport();
+        } finally {
+            return this.afterImport();
         }
-        this.afterImport();
     }
 }
