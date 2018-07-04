@@ -3,16 +3,16 @@ import assert from 'assert';
 import { renderMock } from './utils/render-mock';
 
 describe('Editor', () => {
-    var c = document.querySelector('#d3ne');
+    var c = document.querySelector('#Rete');
 
     it('init', () => {
-        assert.throws(() => new D3NE.NodeEditor('test@0.0.2', null), Error, 'container');
-        assert.throws(() => new D3NE.NodeEditor('test', c), Error, 'id');
-        assert.throws(() => new D3NE.NodeEditor('test@5.5', c), Error, 'id');
+        assert.throws(() => new Rete.NodeEditor('test@0.0.2', null), Error, 'container');
+        assert.throws(() => new Rete.NodeEditor('test', c), Error, 'id');
+        assert.throws(() => new Rete.NodeEditor('test@5.5', c), Error, 'id');
     })
 
     it('import/export', async () => {
-        var editor = new D3NE.NodeEditor('test@0.0.2', c);
+        var editor = new Rete.NodeEditor('test@0.0.2', c);
         var ret;
         
         ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
@@ -26,35 +26,35 @@ describe('Editor', () => {
     });
 
     it('connections', async () => {
-        var socketNum = new D3NE.Socket('Number');
+        var socketNum = new Rete.Socket('Number');
 
-        class Comp1 extends D3NE.Component {
+        class Comp1 extends Rete.Component {
 
             constructor() {
                 super('Num');
             }
 
             builder(node) {
-                node.addOutput(new D3NE.Output('Name', socketNum))
+                node.addOutput(new Rete.Output('Name', socketNum))
             }
 
             worker() { }
         }
 
-        class Comp2 extends D3NE.Component {
+        class Comp2 extends Rete.Component {
 
             constructor() {
                 super('Return');
             }
 
             builder(node) {
-                node.addInput(new D3NE.Input('Name', socketNum));
+                node.addInput(new Rete.Input('Name', socketNum));
             }
 
             worker() { }
         }
 
-        var editor = new D3NE.NodeEditor('test@0.0.2', c);
+        var editor = new Rete.NodeEditor('test@0.0.2', c);
 
         renderMock(editor);
 

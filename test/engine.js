@@ -4,7 +4,7 @@ import recursiveData from './data/recursive'
 
 describe('Engine', () => {
     
-    class Comp1 extends D3NE.Component {
+    class Comp1 extends Rete.Component {
 
         constructor() {
             super('Num');
@@ -20,7 +20,7 @@ describe('Engine', () => {
     var dataWithNode = { id, nodes: { 1: { id: 1, title: 'name' } } };
 
     var createValidEngine = () => {
-        let eng = new D3NE.Engine(id);
+        let eng = new Rete.Engine(id);
 
         eng.register(new Comp1());
         return eng;
@@ -33,7 +33,7 @@ describe('Engine', () => {
 
             eng.register({})
         }, Error, 'object instead of component');
-        assert.throws(() => new D3NE.Engine('test@0.1'), Error, 'wrong id');
+        assert.throws(() => new Rete.Engine('test@0.1'), Error, 'wrong id');
     });
 
     describe('process', async () => {
