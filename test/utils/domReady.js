@@ -8,4 +8,4 @@ global.HTMLElement = window.HTMLElement;
 
 console.error = function () {};
 console.warn = function () {};
-global.D3NE = require('../../build/rete');
+global.Rete = require('../../build/rete');
