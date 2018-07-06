@@ -35,5 +35,8 @@
     "mocha": "^5.2.0",
     "rete-cli": "^0.1.0",
     "rollup-copy-plugin": "0.0.1"
+  },
+  "babel": {
+    "presets": ["env"]
   }
 }
