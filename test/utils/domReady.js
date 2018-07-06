@@ -8,4 +8,4 @@ global.HTMLElement = window.HTMLElement;
 
 console.error = function () {};
 console.warn = function () {};
-global.Rete = require('../../build/rete');
+global.Rete = require('../../build/rete.min');
