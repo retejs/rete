@@ -6,7 +6,8 @@
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
-    "build": "rollup -c",
+    "build": "rete --build rete.config.js",
+    "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
     "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
   },
@@ -46,5 +47,8 @@
     "rollup-plugin-minify": "^1.0.3",
     "rollup-plugin-multi-entry": "^2.0.2",
     "rollup-plugin-regenerator": "^0.5.4"
+  },
+  "dependencies": {
+    "rete-cli": "file:../rete-cli"
   }
 }

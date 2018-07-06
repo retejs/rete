@@ -13,7 +13,7 @@ export class NodeEditor extends Context {
 
     constructor(id: string, container: HTMLElement) {
         super(id, new EditorEvents());
-
+        
         this.nodes = [];
         this.components = new Map();
 
