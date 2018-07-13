@@ -42,7 +42,7 @@ export class Zoom {
         if (e.touches.length < 2) return;
         
         let rect = this.el.getBoundingClientRect();
-        let {cx, cy, distance} = this.touches(e);
+        let { cx, cy, distance } = this.touches(e);
 
         if (this.distance !== null) {
             let delta = distance / this.distance - 1;

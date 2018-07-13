@@ -9,8 +9,8 @@ describe('Validator', () => {
 
     it('validate data', () => {
         
-        assert.ok(!Validator.isValidData({id: 'demo@0.0.0', nodes: null, goups: {} }));
-        assert.ok(!Validator.isValidData({id: 'demo@0.0.0', nodes: [], goups: {} }), 'nodes array');
+        assert.ok(!Validator.isValidData({ id: 'demo@0.0.0', nodes: null, goups: {} }));
+        assert.ok(!Validator.isValidData({ id: 'demo@0.0.0', nodes: [], goups: {} }), 'nodes array');
     });
 
     it('validate', () => {

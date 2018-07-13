@@ -50,7 +50,7 @@ export class Drag {
         this.onTranslate(delta[0] / zoom, delta[1] / zoom);
     }
 
-    up(e) {
+    up() {
         this.mouseStart = null;
 
         this.onDrag();
