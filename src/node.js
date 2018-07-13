@@ -1,4 +1,3 @@
-import { Component } from './component';
 import { Control } from './control';
 import { Input } from './input';
 import { Output } from './output';

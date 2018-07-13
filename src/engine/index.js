@@ -3,7 +3,7 @@ import { Context } from '../core/context';
 import { EngineEvents } from './events';
 import { Validator } from '../core/validator';
 
-var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2};
+var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2 };
 
 export { Component };
 
