@@ -15,9 +15,9 @@ export class Zoom {
 
     wheel(e) {
         e.preventDefault();
-
+        
         var rect = this.el.getBoundingClientRect();
-        var delta = e.wheelDelta / 120 * this.intensity;
+        var delta = (e.wheelDelta ? e.wheelDelta / 120 : - e.deltaY / 3) * this.intensity;
 
         var ox = (rect.left - e.pageX) * delta;
         var oy = (rect.top - e.pageY) * delta;
