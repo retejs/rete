@@ -35,7 +35,7 @@ describe('Editor', () => {
             }
 
             builder(node) {
-                node.addOutput(new Rete.Output('Name', socketNum))
+                node.addOutput(new Rete.Output('name', 'Name', socketNum))
             }
 
             worker() { }
@@ -48,7 +48,7 @@ describe('Editor', () => {
             }
 
             builder(node) {
-                node.addInput(new Rete.Input('Name', socketNum));
+                node.addInput(new Rete.Input('name', 'Name', socketNum));
             }
 
             worker() { }
