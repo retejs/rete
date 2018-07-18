@@ -41,8 +41,8 @@ export class Engine extends Context {
     }
 
     extractInputNodes(node, nodes) {
-        return node.inputs.reduce((a, inp) => {
-            return [...a, ...(inp.connections || []).reduce((b, c) => [...b, nodes[c.node]], [])]
+        return Object.keys(node.inputs).reduce((a, key) => {
+            return [...a, ...(node.inputs[key].connections || []).reduce((b, c) => [...b, nodes[c.node]], [])]
         }, []);
     }
 
@@ -127,7 +127,10 @@ export class Engine extends Context {
     }
 
     async extractInputData(node) {
-        return await Promise.all(node.inputs.map(async (input) => {
+        const obj = {};
+
+        for (let key of Object.keys(node.inputs)) {
+            let input = node.inputs[key];
             var conns = input.connections;
             let connData = await Promise.all(conns.map(async (c) => {
                 const prevNode = this.data.nodes[c.node];
@@ -140,14 +143,16 @@ export class Engine extends Context {
                     return outputs[c.output];
             }));
 
-            return connData;
-        }));
+            obj[key] = connData;
+        }
+
+        return obj;
     }
 
     async processWorker(node) {
         var inputData = await this.extractInputData(node);
         var component = this.components.find(c => c.name === node.name);
-        var outputData = node.outputs.map(() => null);
+        var outputData = {};
 
         try {
             await component.worker(node, inputData, outputData, ...this.args);
@@ -177,7 +182,9 @@ export class Engine extends Context {
         if (this.state === State.ABORT)
             return null;
 
-        return await Promise.all(node.outputs.map(async (output) => {
+        return await Promise.all(Object.keys(node.outputs).map(async (key) => {
+            const output = node.outputs[key];
+
             return await Promise.all(output.connections.map(async (c) => {
                 const nextNode = this.data.nodes[c.node];
 

@@ -5,8 +5,8 @@ import { Socket } from './socket';
 
 export class Input extends IO {
    
-    constructor(title: string, socket: Socket, multiConns: boolean = false) {
-        super(title, socket, multiConns);
+    constructor(key: string, title: string, socket: Socket, multiConns: boolean = false) {
+        super(key, title, socket, multiConns);
         this.control = null;
     }
 
@@ -34,7 +34,7 @@ export class Input extends IO {
             'connections': this.connections.map(c => {
                 return {
                     node: c.output.node.id,
-                    output: c.output.node.outputs.indexOf(c.output),
+                    output: c.output.key,
                     data: c.data
                 };
             })
