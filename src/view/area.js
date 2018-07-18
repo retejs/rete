@@ -33,7 +33,7 @@ export class Area extends Emitter {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const k = this.transform.k;
-            
+
         this.trigger('mousemove', { x: x / k, y: y / k });
     }
 
@@ -67,7 +67,7 @@ export class Area extends Emitter {
         
         const d = (k - params.zoom) / ((k - zoom) || 1);
 
-        this.transform.k = params.zoom;
+        this.transform.k = params.zoom || 1;
         this.transform.x += ox * d;
         this.transform.y += oy * d;
 

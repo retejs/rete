@@ -2,11 +2,12 @@ import { Connection } from './connection';
 
 export class IO {
 
-    constructor(name, socket, multiConns) {
+    constructor(key, name, socket, multiConns) {
 	    this.node = null;
         this.multipleConnections = multiConns;
         this.connections = [];
 	   
+        this.key = key;
         this.name = name;
         this.socket = socket;
     }

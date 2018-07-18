@@ -87,8 +87,8 @@ export class Node {
         return {
             'id': this.id,
             'data': this.data,
-            'inputs': this.inputs.map(input => input.toJSON()),
-            'outputs': this.outputs.map(output => output.toJSON()),
+            'inputs': this.inputs.reduce((obj, input) => (obj[input.key] = input.toJSON(), obj), {}),
+            'outputs': this.outputs.reduce((obj, output) => (obj[output.key] = output.toJSON(), obj), {}),
             'position': this.position,
             'name': this.name
         }

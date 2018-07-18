@@ -145,14 +145,16 @@ export class NodeEditor extends Context {
                 var jsonNode = json.nodes[id];
                 var node = nodes[id];
                 
-                jsonNode.outputs.forEach((outputJson, i) => {
+                Object.keys(jsonNode.outputs).forEach(key => {
+                    var outputJson = jsonNode.outputs[key];
+
                     outputJson.connections.forEach(jsonConnection => {
                         var nodeId = jsonConnection.node;
                         var data = jsonConnection.data;
-                        var inputIndex = jsonConnection.input;
-                        var targetInput = nodes[nodeId].inputs[inputIndex];
+                        var targetOutput = node.outputs.find(o => o.key === key);
+                        var targetInput = nodes[nodeId].inputs.find(i => i.key === jsonConnection.input);
 
-                        this.connect(node.outputs[i], targetInput, data);
+                        this.connect(targetOutput, targetInput, data);
                     });
                 });
 
