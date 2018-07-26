@@ -121,14 +121,14 @@ export class IO {
   title: string;
   socket: Socket;
 
-  constructor(title, socket, multiConns);
+  constructor(key, title, socket, multiConns);
   removeConnection(connection: Connection);
 }
 
 export class Input extends IO {
   control: Control;
 
-  constructor(title: string, socket: Socket, multiConns?: boolean);
+  constructor(key: string, title: string, socket: Socket, multiConns?: boolean);
   hasConnection();
   addConnection(connection: Connection);
   addControl(control: Control);
@@ -138,7 +138,7 @@ export class Input extends IO {
 
 export class Output extends IO {
 
-  constructor(title: string, socket: Socket, multiConns?: boolean)
+  constructor(key: string, title: string, socket: Socket, multiConns?: boolean)
   hasConnection();
   connectTo(input: Input);
   connectedTo(input: Input);
