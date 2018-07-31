@@ -9,70 +9,67 @@ export class Node {
         this.id = Node.incrementId();
         this.position = [0.0, 0.0];
 
-        this.inputs = [];
-        this.outputs = [];
-        this.controls = [];
+        this.inputs = new Map();
+        this.outputs = new Map();
+        this.controls = new Map();
         this.data = {};
         this.meta = {};
     }
 
-    addControl(control: Control, index: ?uint8 = this.controls.length) {
+    addControl(control: Control) {
         control.parent = this;
 
-        this.controls.splice(index, 0, control);
+        this.controls.set(control.key, control);
         return this;
     }
 
     removeControl(control: Control) {
         control.parent = null;
-        this.controls.splice(this.controls.indexOf(control), 1);
+
+        this.controls.delete(control.key);
     }
 
-    addInput(input: Input, index: ?uint8 = this.inputs.length) {
+    addInput(input: Input) {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
  
         input.node = this;
 
-        this.inputs.splice(index, 0, input);
+        this.inputs.set(input.key, input);
         return this;
     }
 
     removeInput(input: Input) {
         input.removeConnections();
         input.node = null;
-        this.inputs.splice(this.inputs.indexOf(input), 1);
+
+        this.inputs.delete(input.key);
     }
 
-    addOutput(output: Output, index: ?uint8 = this.outputs.length) {
+    addOutput(output: Output) {
         if (output.node !== null)
             throw new Error('Output has already been added to the node');
         
         output.node = this;
 
-        this.outputs.splice(index, 0, output);
+        this.outputs.set(output.key, output);
         return this;
     }
 
     removeOutput(output: Output) {
         output.removeConnections();
         output.node = null;
-        this.outputs.splice(this.outputs.indexOf(output), 1);
+
+        this.outputs.delete(output.key);
     }
 
     getConnections() {
-        const ios = [...this.inputs, ...this.outputs];
+        const ios = [...this.inputs.values(), ...this.outputs.values()];
         const connections = ios.reduce((arr, io) => {
             return [...arr, ...io.connections];
         }, []);
     
         return connections;
-    }
-
-    inputsWithVisibleControl() {
-        return this.inputs.filter((input)=> {
-            return input.showControl();
-        });
     }
 
     static incrementId() {
@@ -87,8 +84,8 @@ export class Node {
         return {
             'id': this.id,
             'data': this.data,
-            'inputs': this.inputs.reduce((obj, input) => (obj[input.key] = input.toJSON(), obj), {}),
-            'outputs': this.outputs.reduce((obj, output) => (obj[output.key] = output.toJSON(), obj), {}),
+            'inputs': Array.from(this.inputs).reduce((obj, [key, input]) => (obj[key] = input.toJSON(), obj), {}),
+            'outputs': Array.from(this.outputs).reduce((obj, [key, output]) => (obj[key] = output.toJSON(), obj), {}),
             'position': this.position,
             'name': this.name
         }
