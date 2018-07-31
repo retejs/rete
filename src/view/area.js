@@ -11,7 +11,7 @@ export class Area extends Emitter {
 
         this.container = container;
         this.transform = { k: 1, x: 0, y: 0 };
-        this.mouse = [0, 0];
+        this.mouse = { x: 0, y: 0 }
 
         el.style.transformOrigin = '0 0';
 
@@ -33,8 +33,9 @@ export class Area extends Emitter {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const k = this.transform.k;
-
-        this.trigger('mousemove', { x: x / k, y: y / k });
+        
+        this.mouse = { x: x / k, y: y / k };
+        this.trigger('mousemove', { ...this.mouse });
     }
 
     onTranslate(dx, dy) {
