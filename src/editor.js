@@ -151,8 +151,8 @@ export class NodeEditor extends Context {
                     outputJson.connections.forEach(jsonConnection => {
                         var nodeId = jsonConnection.node;
                         var data = jsonConnection.data;
-                        var targetOutput = node.outputs.find(o => o.key === key);
-                        var targetInput = nodes[nodeId].inputs.find(i => i.key === jsonConnection.input);
+                        var targetOutput = node.outputs.get(key);
+                        var targetInput = nodes[nodeId].inputs.get(jsonConnection.input);
 
                         this.connect(targetOutput, targetInput, data);
                     });

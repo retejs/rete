@@ -2,10 +2,11 @@ import { Node } from './node';
 
 export class Control {
 
-    constructor() {
+    constructor(key) {
         if (this.constructor === Control)
             throw new TypeError('Can not construct abstract class.');
         
+        this.key = key;
         this.data = {};
         this.parent = null;
     }
