@@ -18,7 +18,9 @@ export class Node extends Emitter {
         this.el.style.position = 'absolute';
 
         this.el.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, node: this.node }));
-        this.drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this));
+
+        this._startPosition = null;
+        this._drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this));
 
         this.trigger('rendernode', {
             el: this.el, 
@@ -27,7 +29,7 @@ export class Node extends Emitter {
             bindSocket: this.bindSocket.bind(this),
             bindControl: this.bindControl.bind(this)
         });
-        
+
         this.update();
     }
 
@@ -43,27 +45,29 @@ export class Node extends Emitter {
         return this.sockets.get(io).getPosition(this.node);
     }
 
-    onSelect() {
+    onSelect() {        
+        this._startPosition = [...this.node.position];
         this.trigger('selectnode', this.node);
     }
 
     onTranslate(dx, dy) {
-        const node = this.node;
-        const x = node.position[0] + dx;
-        const y = node.position[1] + dy;
+        const x = this._startPosition[0] + dx;
+        const y = this._startPosition[1] + dy;
 
-        if (!this.trigger('nodetranslate', { node, x, y })) return;
-            
         this.translate(x, y);
-
-        this.trigger('nodetranslated', { node });
     }
 
     translate(x, y) {
-        this.node.position[0] = x;
-        this.node.position[1] = y;
+        const node = this.node;
+        const params = { node, x, y };
+
+        if (!this.trigger('nodetranslate', params)) return;
+
+        this.node.position[0] = params.x;
+        this.node.position[1] = params.y;
 
         this.update();
+        this.trigger('nodetranslated', { node });
     }
 
     update() {
