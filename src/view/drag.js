@@ -45,8 +45,6 @@ export class Drag {
         let delta = [x - this.mouseStart[0], y - this.mouseStart[1]];
         let zoom = this.el.getBoundingClientRect().width / this.el.offsetWidth;
 
-        this.mouseStart = [x, y];
-
         this.onTranslate(delta[0] / zoom, delta[1] / zoom);
     }
 
