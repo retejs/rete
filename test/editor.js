@@ -69,15 +69,15 @@ describe('Editor', () => {
         editor.addNode(n1);
         editor.addNode(n2);
 
-        assert.throws(() => editor.connect(n1.outputs[1], n2.inputs[0]), Error, 'no output');
+        assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
         
-        editor.connect(n1.outputs[0], n2.inputs[0]);
-        assert.equal(n1.outputs[0].connections.length, 1, 'one connection');
+        editor.connect(n1.outputs.get('name'), n2.inputs.get('name'));
+        assert.equal(n1.outputs.get('name').connections.length, 1, 'one connection');
         
-        var connection = n1.outputs[0].connections[0];
+        var connection = n1.outputs.get('name').connections[0];
 
         assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
-        assert.equal(n1.outputs[0].connections.length, 0, 'no connections');
+        assert.equal(n1.outputs.get('name').connections.length, 0, 'no connections');
         
     });
 })
