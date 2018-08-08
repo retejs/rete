@@ -24,7 +24,7 @@ export class NodeEditor extends Context {
         window.addEventListener('keyup', e => this.trigger('keyup', e));
         this.on('nodecreated', node => this.getComponent(node.name).created(node));
         this.on('noderemoved', node => this.getComponent(node.name).destroyed(node));
-        this.on('selectnode', node => this.selectNode(node));
+        this.on('selectnode', ({ node, accumulate }) => this.selectNode(node, accumulate));
     }
 
     addNode(node: Node) {
@@ -72,13 +72,13 @@ export class NodeEditor extends Context {
     }
 
     selectNode(node: Node, accumulate: boolean = false) {
-        if (this.nodes.indexOf(node) === -1)
+        if (this.nodes.indexOf(node) === -1) 
             throw new Error('Node not exist in list');
         
         if (!this.trigger('nodeselect', node)) return;
-        
-        this.selected.add(node, accumulate);
 
+        this.selected.add(node, accumulate);
+        
         this.trigger('nodeselected', node);
     }
 
