@@ -45,9 +45,9 @@ export class Node extends Emitter {
         return this.sockets.get(io).getPosition(this.node);
     }
 
-    onSelect() {        
+    onSelect(e) {        
         this._startPosition = [...this.node.position];
-        this.trigger('selectnode', this.node);
+        this.trigger('selectnode', { node: this.node, accumulate: e.ctrlKey });
     }
 
     onTranslate(dx, dy) {
@@ -63,11 +63,13 @@ export class Node extends Emitter {
 
         if (!this.trigger('nodetranslate', params)) return;
 
-        this.node.position[0] = params.x;
-        this.node.position[1] = params.y;
+        const prev = [...node.position];
+
+        node.position[0] = params.x;
+        node.position[1] = params.y;
 
         this.update();
-        this.trigger('nodetranslated', { node });
+        this.trigger('nodetranslated', { node, prev });
     }
 
     update() {

@@ -33,7 +33,7 @@ export class Drag {
         e.stopPropagation();
         this.mouseStart = this.getCoords(e);
 
-        this.onStart();
+        this.onStart(e);
     }
 
     move(e) {
@@ -45,12 +45,13 @@ export class Drag {
         let delta = [x - this.mouseStart[0], y - this.mouseStart[1]];
         let zoom = this.el.getBoundingClientRect().width / this.el.offsetWidth;
 
-        this.onTranslate(delta[0] / zoom, delta[1] / zoom);
+        this.onTranslate(delta[0] / zoom, delta[1] / zoom, e);
     }
 
-    up() {
+    up(e) {
+        if (!this.mouseStart) return;
+        
         this.mouseStart = null;
-
-        this.onDrag();
+        this.onDrag(e);
     }
 }
