@@ -21,6 +21,7 @@ export class EditorEvents extends Events {
             rendersocket: [],
             rendercontrol: [],
             renderconnection: [],
+            updateconnection: [],
             componentregister: [],
             keydown: [],
             keyup: [],

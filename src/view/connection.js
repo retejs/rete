@@ -13,13 +13,25 @@ export class Connection extends Emitter {
         this.el.style.position = 'absolute';
         this.el.style.zIndex = '-1';
 
-        this.update();
+        this.trigger('renderconnection', { 
+            el: this.el, 
+            connection: this.connection, 
+            points: this.getPoints()
+        });
     }
 
-    update() {
+    getPoints() {
         const [x1, y1] = this.outputNode.getSocketPosition(this.connection.output);
         const [x2, y2] = this.inputNode.getSocketPosition(this.connection.input);
 
-        this.trigger('renderconnection', { el: this.el, connection: this.connection, x1, y1, x2, y2 });
+        return [x1, y1, x2, y2];
+    }
+
+    update() {
+        this.trigger('updateconnection', { 
+            el: this.el, 
+            connection: this.connection, 
+            points: this.getPoints()
+        });
     }
 }
