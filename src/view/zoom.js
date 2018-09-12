@@ -11,6 +11,7 @@ export class Zoom {
         container.addEventListener('touchmove', this.move.bind(this));
         container.addEventListener('touchend', this.end.bind(this));
         container.addEventListener('touchcancel', this.end.bind(this));
+        container.addEventListener('dblclick', this.dblclick.bind(this));
     }
 
     wheel(e) {
@@ -57,5 +58,17 @@ export class Zoom {
 
     end() {
         this.distance = null;
+    }
+
+    dblclick(e) {
+        e.preventDefault();
+        
+        var rect = this.el.getBoundingClientRect();
+        var delta = 4 * this.intensity;
+
+        var ox = (rect.left - e.clientX) * delta;
+        var oy = (rect.top - e.clientY) * delta;
+
+        this.onzoom(delta, ox, oy); 
     }
 }
