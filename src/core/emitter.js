@@ -25,4 +25,8 @@ export class Emitter {
             return (e(params) !== false) && r
         }, true); // return false if at least one event is false        
     }
+
+    bind(name: string) {
+        this.events[name] = [];
+    }
 }
