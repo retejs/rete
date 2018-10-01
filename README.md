@@ -23,6 +23,8 @@ Examples
 
 [Programming a Messenger Bot](https://codepen.io/Ni55aN/pen/rpOKNb)
 
+[3D Car configurator](https://codesandbox.io/embed/9jp88p1jpy?view=preview)
+
 License
 ----
 [MIT](http://opensource.org/licenses/MIT)
