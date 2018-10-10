@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.0.0-alpha.10",
+  "version": "1.0.0-alpha.11",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
   "types": "src/index.d.ts",
@@ -33,10 +33,12 @@
     "eslint": "^4.19.1",
     "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
-    "rete-cli": "^0.1.0",
+    "rete-cli": "^0.2.0",
     "rollup-copy-plugin": "0.0.1"
   },
   "babel": {
-    "presets": ["env"]
+    "presets": [
+      "env"
+    ]
   }
 }
