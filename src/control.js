@@ -4,8 +4,10 @@ export class Control {
 
     constructor(key) {
         if (this.constructor === Control)
-            throw new TypeError('Can not construct abstract class.');
-        
+            throw new TypeError('Can not construct abstract class');
+        if (!key)
+            throw new Error('The key parameter is missing in super() of Control ');
+
         this.key = key;
         this.data = {};
         this.parent = null;
