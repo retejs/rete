@@ -148,7 +148,7 @@ export class Output extends IO {
 export abstract class Control {
 
   parent: Input | Node;
-  constructor();
+  constructor(key: string);
 
   getNode();
   getData(key: string);
