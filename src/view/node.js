@@ -46,11 +46,19 @@ export class Node extends Emitter {
     }
 
     onSelect(e) {        
-        this._startPosition = [...this.node.position];
+        this.onStart();
         this.trigger('selectnode', { node: this.node, accumulate: e.ctrlKey });
     }
 
+    onStart() {
+        this._startPosition = [...this.node.position];
+    }
+
     onTranslate(dx, dy) {
+        this.trigger('translatenode', { node: this.node, dx, dy });
+    }
+
+    onDrag(dx, dy) {
         const x = this._startPosition[0] + dx;
         const y = this._startPosition[1] + dy;
 

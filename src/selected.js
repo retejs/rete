@@ -7,14 +7,10 @@ export class Selected {
     }
 
     add(item: Node, accumulate = false) {
-        if (accumulate) {
-            if (this.contains(item))
-                this.remove(item);
-            else
-                this.list.push(item);
-        }
-        else
-            this.list = [item];    
+        if (!accumulate)
+            this.list = [item]; 
+        else if (!this.contains(item))
+            this.list.push(item);   
     }
 
     clear() {
