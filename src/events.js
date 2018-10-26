@@ -12,6 +12,7 @@ export class EditorEvents extends Events {
             connectioncreated: [],
             connectionremove: [],
             connectionremoved: [],
+            translatenode: [],
             nodetranslate: [],
             nodetranslated: [],
             selectnode: [],
