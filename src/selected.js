@@ -14,9 +14,7 @@ export class Selected {
     }
 
     clear() {
-        this.each(item => {
-            this.remove(item);
-        });
+        this.list = [];
     }
 
     remove(item) {
