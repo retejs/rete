@@ -15,6 +15,7 @@ export class EditorEvents extends Events {
             translatenode: [],
             nodetranslate: [],
             nodetranslated: [],
+            nodedraged: [],
             selectnode: [],
             nodeselect: [],
             nodeselected: [],
