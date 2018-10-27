@@ -20,7 +20,9 @@ export class Node extends Emitter {
         this.el.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, node: this.node }));
 
         this._startPosition = null;
-        this._drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this));
+        this._drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => {
+            this.trigger('nodedraged', node);
+        });
 
         this.trigger('rendernode', {
             el: this.el, 
