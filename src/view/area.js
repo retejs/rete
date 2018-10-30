@@ -47,8 +47,8 @@ export class Area extends Emitter {
         this.translate(this._startPosition.x + dx, this._startPosition.y + dy)
     }
 
-    onZoom(delta, ox, oy) {
-        this.zoom(this.transform.k * (1 + delta), ox, oy);
+    onZoom(delta, ox, oy, source) {
+        this.zoom(this.transform.k * (1 + delta), ox, oy, source);
 
         this.update();
     }
@@ -65,9 +65,9 @@ export class Area extends Emitter {
         this.trigger('translated');
     }
 
-    zoom(zoom, ox = 0, oy = 0) {
+    zoom(zoom, ox = 0, oy = 0, source) {
         const k = this.transform.k;
-        const params = { transform: this.transform, zoom };
+        const params = { transform: this.transform, zoom, source };
 
         if (!this.trigger('zoom', params)) return;
         
@@ -78,7 +78,7 @@ export class Area extends Emitter {
         this.transform.y += oy * d;
 
         this.update();
-        this.trigger('zoomed');
+        this.trigger('zoomed', { source });
     }
 
     appendChild(el) {
