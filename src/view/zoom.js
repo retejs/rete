@@ -23,11 +23,10 @@ export class Zoom {
         var ox = (rect.left - e.clientX) * delta;
         var oy = (rect.top - e.clientY) * delta;
 
-        this.onzoom(delta, ox, oy);
+        this.onzoom(delta, ox, oy, 'wheel');
     }
 
     touches(e) {
-        
         let [x1, y1] = [e.touches[0].clientX, e.touches[0].clientY];
         let [x2, y2] = [e.touches[1].clientX, e.touches[1].clientY];
         let distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
@@ -51,7 +50,7 @@ export class Zoom {
             var ox = (rect.left - cx) * delta;
             var oy = (rect.top - cy) * delta;
 
-            this.onzoom(delta, ox, oy);
+            this.onzoom(delta, ox, oy, 'touch');
         }
         this.distance = distance;
     }
@@ -69,6 +68,6 @@ export class Zoom {
         var ox = (rect.left - e.clientX) * delta;
         var oy = (rect.top - e.clientY) * delta;
 
-        this.onzoom(delta, ox, oy); 
+        this.onzoom(delta, ox, oy, 'dblclick'); 
     }
 }
