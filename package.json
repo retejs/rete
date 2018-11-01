@@ -9,7 +9,8 @@
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
-    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
+    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register",
+    "test:ms": "set BABEL_ENV=test && mocha --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",
