@@ -1,6 +1,6 @@
 export class Zoom {
 
-    constructor(container, el, intensity, onzoom) {
+    constructor(container: HTMLElement, el, intensity, onzoom) {
         this.el = el;
         this.intensity = intensity;
         this.onzoom = onzoom;

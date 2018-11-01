@@ -87,10 +87,14 @@ export class Node {
 
   private static incrementId(Class)
 
-  addControl(control: Control);
-  addInput(input: Input);
+  addControl(control: Control): Node;
+  addInput(input: Input): Node;
   addOutput(output: Output);
   getConnections(type);
+
+  removeControl(control: Control): void;
+  removeOutput(output: Output): void;
+  removeInput(input: Input): void;
 
   inputsWithVisibleControl();
 
