@@ -93,7 +93,7 @@ export class Node {
   getConnections(type);
 
   removeControl(control: Control): void;
-  removeOutput(output: Output): void;
+  removeOutput(output: Output | string): void;
   removeInput(input: Input): void;
 
   inputsWithVisibleControl();

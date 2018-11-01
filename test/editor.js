@@ -80,4 +80,57 @@ describe('Editor', () => {
         assert.equal(n1.outputs.get('name').connections.length, 0, 'no connections');
         
     });
+
+    it('connections - remove node', async () => {
+        var socketNum = new Rete.Socket('Number');
+
+        class Comp11 extends Rete.Component {
+
+            constructor() {
+                super('Num');
+            }
+
+            builder(node) {
+                node.addOutput(new Rete.Output('name', 'Name', socketNum))
+            }
+
+            worker() { }
+        }
+
+        class Comp22 extends Rete.Component {
+
+            constructor() {
+                super('Return');
+            }
+
+            builder(node) {
+                node.addInput(new Rete.Input('name', 'Name', socketNum));
+            }
+
+            worker() { }
+        }
+
+        var editor = new Rete.NodeEditor('test@0.0.2', c);
+
+        renderMock(editor);
+
+        var comps = [new Comp11(), new Comp22()]
+
+        editor.register(comps[0])
+        editor.register(comps[1])
+
+        const n1 = await comps[0].createNode();
+        const n2 = await comps[1].createNode();
+
+        editor.addNode(n1);
+        editor.addNode(n2);
+
+        assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
+        
+        editor.connect(n1.outputs.get('name'), n2.inputs.get('name'));
+        assert.equal(n1.outputs.get('name').connections.length, 1, 'one connection');        
+
+        n1.removeOutput('name');
+        assert.equal(n1.outputs.size, 0, 'no outputs');
+    });
 })

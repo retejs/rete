@@ -26,8 +26,8 @@ export class Node extends Emitter {
 
         this.trigger('rendernode', {
             el: this.el, 
-            node, 
-            component: component.data, 
+            node,
+            component: component.data,
             bindSocket: this.bindSocket.bind(this),
             bindControl: this.bindControl.bind(this)
         });
@@ -47,7 +47,7 @@ export class Node extends Emitter {
         return this.sockets.get(io).getPosition(this.node);
     }
 
-    onSelect(e) {        
+    onSelect(e) {
         this.onStart();
         this.trigger('selectnode', { node: this.node, accumulate: e.ctrlKey });
     }

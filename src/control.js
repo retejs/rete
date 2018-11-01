@@ -26,5 +26,5 @@ export class Control {
 
     putData(key, data) {
         this.getNode().data[key] = data;
-    }  
+    }
 }

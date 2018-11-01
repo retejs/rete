@@ -3,7 +3,7 @@ import { Input } from './input';
 import { Output } from './output';
 
 export class Node {
-   
+
     constructor(name: string) {
         this.name = name;
         this.id = Node.incrementId();
@@ -32,7 +32,7 @@ export class Node {
     addInput(input: Input) {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
- 
+
         input.node = this;
 
         this.inputs.set(input.key, input);
@@ -49,18 +49,26 @@ export class Node {
     addOutput(output: Output) {
         if (output.node !== null)
             throw new Error('Output has already been added to the node');
-        
+
         output.node = this;
 
         this.outputs.set(output.key, output);
         return this;
     }
 
-    removeOutput(output: Output) {
-        output.removeConnections();
-        output.node = null;
-
-        this.outputs.delete(output.key);
+    removeOutput(output: Output | string) {
+        if (output instanceof Output) {
+            output.removeConnections();
+            output.node = null;
+            this.outputs.delete(output.key);
+        } else if (typeof output === 'string' && this.outputs.has(output)) {
+            const auxOutput = this.outputs.get(output);
+            auxOutput.removeConnections();
+            auxOutput.node = null;
+            this.outputs.delete(auxOutput.key);
+        } else {
+            throw new Error('Output does not exist in this node.');
+        }
     }
 
     getConnections() {
@@ -68,7 +76,7 @@ export class Node {
         const connections = ios.reduce((arr, io) => {
             return [...arr, ...io.connections];
         }, []);
-    
+
         return connections;
     }
 
