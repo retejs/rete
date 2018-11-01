@@ -77,9 +77,9 @@ export class Node {
   name: string;
   position: number[];
 
-  inputs: Input[];
-  outputs: Output[];
-  controls: Control[];
+  inputs: Map<string, Input>;
+  outputs: Map<string, Output>;
+  controls: Map<string, Control>;
   data: any;
   meta: any;
 
@@ -87,9 +87,9 @@ export class Node {
 
   private static incrementId(Class)
 
-  addControl(control: Control, index?: number);
-  addInput(input: Input, index?: number);
-  addOutput(output: Output, index?: number);
+  addControl(control: Control);
+  addInput(input: Input);
+  addOutput(output: Output);
   getConnections(type);
 
   inputsWithVisibleControl();
@@ -148,6 +148,7 @@ export class Output extends IO {
 export abstract class Control {
 
   parent: Input | Node;
+  key: string;
   constructor(key: string);
 
   getNode();
