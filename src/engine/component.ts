@@ -1,3 +1,5 @@
+import { KeyValue } from "../interfaces/generic";
+
 export class Component {
     data: any;
     engine: any;
@@ -10,5 +12,5 @@ export class Component {
         this.engine = null;
     }
 
-    worker() { }
+    worker(node: any, inputData: KeyValue<any>, outputData: {}, args?: any[]) { }
 }

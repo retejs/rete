@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import './utils/domReady';
 import assert from 'assert';
 import recursiveData from './data/recursive'
@@ -17,7 +18,7 @@ describe('Engine', () => {
 
     var id = 'test@0.0.1';
     var data = { id, nodes: {} };
-    var dataWithNode = { id, nodes: { 1: { id: 1, title: 'name' } } };
+    // var dataWithNode = { id, nodes: { 1: { id: 1, title: 'name' } } };
 
     var createValidEngine = () => {
         let eng = new Rete.Engine(id);
@@ -29,7 +30,7 @@ describe('Engine', () => {
     it('init', async () => {
         assert.doesNotThrow(createValidEngine, Error, 'valid');
         assert.throws(() => {
-            let eng = createValidEngine(); 
+            const eng = createValidEngine();
 
             eng.register({})
         }, Error, 'object instead of component');

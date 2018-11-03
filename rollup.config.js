@@ -1,7 +1,3 @@
-// import copy from 'rollup-copy-plugin';
-// import typescript from 'rollup-plugin-typescript2';
-// import typescript2 from 'typescript';
-
 // export default [{
 //     input: 'src/index.ts',
 //     name: 'Rete'
@@ -19,9 +15,9 @@
 //     ]
 // }];
 
+import clear from 'rollup-plugin-clear'
 import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
-import clear from 'rollup-plugin-clear'
 
 export default {
     input: 'src/index.ts',
@@ -31,8 +27,10 @@ export default {
         name: 'Rete',
         format: 'umd'
     }, {
-        file: pkg.module,
-        format: 'es'
+        file: pkg.engine,
+        sourcemap: true,
+        name: 'ReteEngine',
+        format: 'umd'
     }],
     external: [
         ...Object.keys(pkg.dependencies || {}),
@@ -43,7 +41,7 @@ export default {
             // required, point out which directories should be clear.
             targets: ['build'],
             // optional, whether clear the directores when rollup recompile on --watch mode.
-            watch: true, // default: false
+            watch: false // default: false
         }),
         typescript({
             typescript: require('typescript')

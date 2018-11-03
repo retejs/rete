@@ -1,17 +1,20 @@
 export class Drag {
 
-    constructor(el, onTranslate = () => {}, onStart = () => {}, onDrag = () => {}) {
-        this.mouseStart = null;
+    mouseStart: any = null;
 
-        this.el = el;
-        this.onTranslate = onTranslate;
-        this.onStart = onStart;
-        this.onDrag = onDrag;
+    constructor(public el: HTMLElement,
+        public onTranslate = (a: number, b: number, e: any) => {},
+        public onStart = (e: any) => {},
+        public onDrag = (e: any) => {}
+    ) {
+        // this.onTranslate = onTranslate;
+        // this.onStart = onStart;
+        // this.onDrag = onDrag;
 
         this.initEvents(el);
     }
 
-    initEvents(el) {
+    initEvents(el: HTMLElement) {
         el.addEventListener('mousedown', this.down.bind(this));
         window.addEventListener('mousemove', this.move.bind(this));
         window.addEventListener('mouseup', this.up.bind(this));
@@ -23,20 +26,20 @@ export class Drag {
         window.addEventListener('touchend', this.up.bind(this));
     }
 
-    getCoords(e) {
+    getCoords(e: any) {
         const props = e.touches ? e.touches[0] : e;
 
         return [props.pageX, props.pageY];
     }
 
-    down(e) {
+    down(e: any) {
         e.stopPropagation();
         this.mouseStart = this.getCoords(e);
 
         this.onStart(e);
     }
 
-    move(e) {
+    move(e: Event) {
         if (!this.mouseStart) return;
         e.preventDefault();
         e.stopPropagation();
@@ -48,7 +51,7 @@ export class Drag {
         this.onTranslate(delta[0] / zoom, delta[1] / zoom, e);
     }
 
-    up(e) {
+    up(e: any) {
         if (!this.mouseStart) return;
         
         this.mouseStart = null;

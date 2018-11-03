@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import assert from 'assert';
 
 describe('Socket', () => {

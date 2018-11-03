@@ -1,16 +1,16 @@
 export class Validator {
 
-    static isValidData(data) {
+    static isValidData(data: any) {
         return typeof data.id === 'string' &&
             this.isValidId(data.id) &&
             data.nodes instanceof Object && !(data.nodes instanceof Array);
     }
 
-    static isValidId(id) {
+    static isValidId(id: string) {
         return /^[\w-]{3,}@[0-9]+\.[0-9]+\.[0-9]+$/.test(id);
     }
 
-    static validate(id, data) {
+    static validate(id: string, data: any) {
         var msg = '';
         var id1 = id.split('@');
         var id2 = data.id.split('@');

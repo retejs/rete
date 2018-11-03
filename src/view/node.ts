@@ -41,7 +41,7 @@ export class Node extends Emitter {
     }
 
     bindSocket(el: HTMLElement, type: string, io: IO) {
-        this.sockets.set(io, new ViewSocket(el, type, io, this.node, this));
+        this.sockets.set(io, new ViewSocket(el, type, io, this.node as any, this));
     }
 
     bindControl(el: HTMLElement, control: Control) {

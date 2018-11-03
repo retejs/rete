@@ -53,7 +53,7 @@ export class NodeEditor extends Context {
         this.trigger('noderemoved', node);
     }
 
-    connect(output: Output, input: Input, data = {}) {
+    connect(output: Output, input: Input, data = {}): boolean {
         if (!this.trigger('connectioncreate', { output, input })) return;
 
         try {
@@ -63,8 +63,10 @@ export class NodeEditor extends Context {
             this.view.addConnection(connection);
 
             this.trigger('connectioncreated', connection);
+            return true;
         } catch (e) {
             this.trigger('warn', e)
+            return false;
         }
     }
 

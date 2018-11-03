@@ -1,4 +1,8 @@
+/* eslint-disable no-undef */
+/* eslint-disable max-statements */
+
 import './utils/domReady';
+
 import assert from 'assert';
 import { renderMock } from './utils/render-mock';
 
@@ -69,7 +73,7 @@ describe('Editor', () => {
         editor.addNode(n1);
         editor.addNode(n2);
 
-        assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
+        assert.equal(editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), false, 'no output');
         
         editor.connect(n1.outputs.get('name'), n2.inputs.get('name'));
         assert.equal(n1.outputs.get('name').connections.length, 1, 'one connection');
@@ -78,7 +82,6 @@ describe('Editor', () => {
 
         assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
         assert.equal(n1.outputs.get('name').connections.length, 0, 'no connections');
-        
     });
 
     it('connections - remove node', async () => {
@@ -110,6 +113,9 @@ describe('Editor', () => {
             worker() { }
         }
 
+        /**
+         * @type {NodeEditor} editor
+         */
         var editor = new Rete.NodeEditor('test@0.0.2', c);
 
         renderMock(editor);
@@ -124,8 +130,8 @@ describe('Editor', () => {
 
         editor.addNode(n1);
         editor.addNode(n2);
-
-        assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
+        
+        assert.equal(editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), false, 'no output');
         
         editor.connect(n1.outputs.get('name'), n2.inputs.get('name'));
         assert.equal(n1.outputs.get('name').connections.length, 1, 'one connection');        

@@ -4,6 +4,7 @@ import { Emitter } from '../core/emitter';
 import { Node } from './node';
 import { Connection as ViewConnection } from './connection';
 import { Node as ViewNode } from './node';
+import { Component } from '../engine/index';
 
 export class EditorView extends Emitter {
 
@@ -14,11 +15,8 @@ export class EditorView extends Emitter {
     connections = new Map();
     area: any;
 
-    constructor(public container: HTMLElement, public components: Object, public emitter: Emitter) {
+    constructor(public container: HTMLElement, public components: Map<string, any>, public emitter: Emitter) {
         super(emitter);
-
-        // this.container = container;
-        // this.components = components;
 
         this.container.style.overflow = 'hidden';
         this.container.addEventListener('click', this.click.bind(this));
@@ -38,7 +36,7 @@ export class EditorView extends Emitter {
         this.area.appendChild(nodeView.el);
     }
 
-    removeNode(node: Node) {
+    removeNode(node: any) {
         const nodeView = this.nodes.get(node);
 
         this.nodes.delete(node);

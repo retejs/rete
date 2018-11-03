@@ -2,9 +2,9 @@ import { Node } from './node';
 
 export class Selected {
 
-    constructor() {
-        this.list = [];
-    }
+    list: any[] = [];
+
+    constructor() {}
 
     add(item: Node, accumulate = false) {
         if (!accumulate)
@@ -17,15 +17,15 @@ export class Selected {
         this.list = [];
     }
 
-    remove(item) {
+    remove(item: any) {
         this.list.splice(this.list.indexOf(item), 1);
     }
 
-    contains(item) {
+    contains(item: any) {
         return this.list.indexOf(item) !== -1;
     }
 
-    each(callback: Function) {
-        this.list.forEach(callback);
+    each(cb: any) {
+        this.list.forEach(cb);
     }
 }
