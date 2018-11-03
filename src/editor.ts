@@ -9,24 +9,28 @@ import { Output } from './output';
 import { Selected } from './selected';
 import { Validator } from './core/validator';
 
+type KeyValue = { [key: string]: any};
+
 export class NodeEditor extends Context {
 
-    constructor(id: string, container: HTMLElement) {
+    public nodes: Node[] = [];
+    components = new Map<string, Component>();
+    selected: Selected;
+    view: EditorView;
+
+    constructor(public id: string, public container: HTMLElement) {
         super(id, new EditorEvents());
-        
-        this.nodes = [];
-        this.components = new Map();
 
         this.selected = new Selected();
         this.view = new EditorView(container, this.components, this);
 
         window.addEventListener('keydown', e => this.trigger('keydown', e));
         window.addEventListener('keyup', e => this.trigger('keyup', e));
-        this.on('nodecreated', node => this.getComponent(node.name).created(node));
-        this.on('noderemoved', node => this.getComponent(node.name).destroyed(node));
-        this.on('selectnode', ({ node, accumulate }) => this.selectNode(node, accumulate));
-        this.on('nodeselected', () => this.selected.each(n => this.view.nodes.get(n).onStart()));
-        this.on('translatenode', ({ dx, dy }) => this.selected.each(n => this.view.nodes.get(n).onDrag(dx, dy)));
+        this.on('nodecreated', (node: Node) => this.getComponent(node.name).created(node));
+        this.on('noderemoved', (node: Node) => this.getComponent(node.name).destroyed(node));
+        this.on('selectnode', ({ node, accumulate }: { node: Node, accumulate: any }) => this.selectNode(node, accumulate));
+        this.on('nodeselected', () => this.selected.each((n: Node) => this.view.nodes.get(n).onStart()));
+        this.on('translatenode', ({ dx, dy }: { dx: number, dy: number }) => this.selected.each((n: Node) => this.view.nodes.get(n).onDrag(dx, dy)));
     }
 
     addNode(node: Node) {
@@ -34,14 +38,14 @@ export class NodeEditor extends Context {
 
         this.nodes.push(node);
         this.view.addNode(node);
-        
+
         this.trigger('nodecreated', node);
     }
 
     removeNode(node: Node) {
         if (!this.trigger('noderemove', node)) return;
 
-        node.getConnections().forEach(c => this.removeConnection(c));
+        node.getConnections().forEach((c: Connection) => this.removeConnection(c));
 
         this.nodes.splice(this.nodes.indexOf(node), 1);
         this.view.removeNode(node);
@@ -66,7 +70,7 @@ export class NodeEditor extends Context {
 
     removeConnection(connection: Connection) {
         if (!this.trigger('connectionremove', connection)) return;
-            
+
         this.view.removeConnection(connection);
         connection.remove();
 
@@ -74,22 +78,22 @@ export class NodeEditor extends Context {
     }
 
     selectNode(node: Node, accumulate: boolean = false) {
-        if (this.nodes.indexOf(node) === -1) 
+        if (this.nodes.indexOf(node) === -1)
             throw new Error('Node not exist in list');
-        
+
         if (!this.trigger('nodeselect', node)) return;
 
         this.selected.add(node, accumulate);
-        
+
         this.trigger('nodeselected', node);
     }
 
-    getComponent(name) {
+    getComponent(name: string) {
         const component = this.components.get(name);
 
         if (!component)
             throw `Component ${name} not found`;
-        
+
         return component;
     }
 
@@ -104,8 +108,8 @@ export class NodeEditor extends Context {
     }
 
     toJSON() {
-        const data = { id: this.id, nodes: {} };
-        
+        const data: KeyValue = { id: this.id, nodes: {} };
+
         this.nodes.forEach(node => data.nodes[node.id] = node.toJSON());
         this.trigger('export', data);
         return data;
@@ -113,12 +117,12 @@ export class NodeEditor extends Context {
 
     beforeImport(json: Object) {
         var checking = Validator.validate(this.id, json);
-        
+
         if (!checking.success) {
             this.trigger('warn', checking.msg);
             return false;
         }
-        
+
         this.silent = true;
         this.clear();
         this.trigger('import', json);
@@ -130,9 +134,9 @@ export class NodeEditor extends Context {
         return true;
     }
 
-    async fromJSON(json: Object) {
+    async fromJSON(json: any) {
         if (!this.beforeImport(json)) return false;
-        var nodes = {};
+        var nodes: KeyValue = {};
 
         try {
             await Promise.all(Object.keys(json.nodes).map(async id => {
@@ -142,15 +146,15 @@ export class NodeEditor extends Context {
                 nodes[id] = await component.build(Node.fromJSON(node));
                 this.addNode(nodes[id]);
             }));
-        
+
             Object.keys(json.nodes).forEach(id => {
                 var jsonNode = json.nodes[id];
                 var node = nodes[id];
-                
+
                 Object.keys(jsonNode.outputs).forEach(key => {
                     var outputJson = jsonNode.outputs[key];
 
-                    outputJson.connections.forEach(jsonConnection => {
+                    outputJson.connections.forEach((jsonConnection: any) => {
                         var nodeId = jsonConnection.node;
                         var data = jsonConnection.data;
                         var targetOutput = node.outputs.get(key);

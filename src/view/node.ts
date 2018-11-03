@@ -3,23 +3,28 @@ import { Drag } from './drag';
 import { Emitter } from '../core/emitter';
 import { IO } from '../io';
 import { Control as ViewControl } from './control';
-import { Socket as ViewSocket } from './socket';
+import { Socket as ViewSocket, Socket } from './socket';
+import { Component } from '../engine/index';
 
 export class Node extends Emitter {
 
-    constructor(node, component, emitter) {
+    public sockets = new Map<any, any>();
+    controls = new Map<any, any>();
+    el: HTMLDivElement;
+    private _startPosition: any = null;
+    private _drag: Drag;
+    position: any;
+
+    constructor(public node: Node, public component: Component, emitter: Emitter) {
         super(emitter);
 
-        this.node = node;
-        this.component = component;
-        this.sockets = new Map();
-        this.controls = new Map();
+        // this.node = node;
+        // this.component = component;
         this.el = document.createElement('div');
         this.el.style.position = 'absolute';
 
         this.el.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, node: this.node }));
 
-        this._startPosition = null;
         this._drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => {
             this.trigger('nodedraged', node);
         });
@@ -43,11 +48,11 @@ export class Node extends Emitter {
         this.controls.set(control, new ViewControl(el, control, this));
     }
 
-    getSocketPosition(io) {
+    getSocketPosition(io: IO) {
         return this.sockets.get(io).getPosition(this.node);
     }
 
-    onSelect(e) {
+    onSelect(e: any) {
         this.onStart();
         this.trigger('selectnode', { node: this.node, accumulate: e.ctrlKey });
     }
@@ -56,18 +61,18 @@ export class Node extends Emitter {
         this._startPosition = [...this.node.position];
     }
 
-    onTranslate(dx, dy) {
+    onTranslate(dx: number, dy: number) {
         this.trigger('translatenode', { node: this.node, dx, dy });
     }
 
-    onDrag(dx, dy) {
+    onDrag(dx: number, dy: number) {
         const x = this._startPosition[0] + dx;
         const y = this._startPosition[1] + dy;
 
         this.translate(x, y);
     }
 
-    translate(x, y) {
+    translate(x: number, y: number) {
         const node = this.node;
         const params = { node, x, y };
 

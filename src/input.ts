@@ -4,10 +4,11 @@ import { IO } from './io';
 import { Socket } from './socket';
 
 export class Input extends IO {
+
+    control: Control;
    
-    constructor(key: string, title: string, socket: Socket, multiConns: boolean = false) {
+    constructor(key: string, public title: string, socket: Socket, multiConns: boolean = false) {
         super(key, title, socket, multiConns);
-        this.control = null;
     }
 
     hasConnection() {

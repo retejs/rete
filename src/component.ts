@@ -2,7 +2,11 @@ import { Component as ComponentWorker } from './engine/component';
 import { Node } from './node';
 
 export class Component extends ComponentWorker {
-    constructor(name) {
+
+    public data: any;
+    public editor: any;
+
+    constructor(public name: string) {
         super(name);
         if (this.constructor === Component)
             throw new TypeError('Can not construct abstract class.');
@@ -11,11 +15,11 @@ export class Component extends ComponentWorker {
         this.data = {};
     }
 
-    async builder() { }
+    async builder(node: Node) { }
 
-    created() { }
+    created(some: any) { }
 
-    destroyed() { }
+    destroyed(node: Node) { }
 
     async build(node: Node) {
         await this.builder(node);

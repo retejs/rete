@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "declaration": true,
+        "declarationDir": "./dist",
+        "module": "es6",
+        "noImplicitAny": true,
+        "sourceMap": true,
+        "outDir": "./dist",
+        "target": "es5",
+        "downlevelIteration": true,
+        "lib": [
+            "dom",
+            "es2017"
+        ]
+    },
+    "include": [
+        "src/**/*", "rollup.config.js"
+    ],
+    "exclude": ["node_modules"]
+}

@@ -25,7 +25,7 @@ export class Selected {
         return this.list.indexOf(item) !== -1;
     }
 
-    each(callback) {
+    each(callback: Function) {
         this.list.forEach(callback);
     }
 }

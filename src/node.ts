@@ -4,8 +4,17 @@ import { Output } from './output';
 
 export class Node {
 
-    constructor(name: string) {
-        this.name = name;
+    id: string;
+    position: number[];
+    inputs: Map<string, Input>;
+    outputs: Map<string, Output>;
+    controls: Map<string, Control>;
+    data: any;
+    meta: any;
+    static latestId: any;
+
+    constructor(public name: string) {
+        // this.name = name;
         this.id = Node.incrementId();
         this.position = [0.0, 0.0];
 
@@ -63,6 +72,7 @@ export class Node {
             this.outputs.delete(output.key);
         } else if (typeof output === 'string' && this.outputs.has(output)) {
             const auxOutput = this.outputs.get(output);
+
             auxOutput.removeConnections();
             auxOutput.node = null;
             this.outputs.delete(auxOutput.key);
@@ -92,15 +102,15 @@ export class Node {
         return {
             'id': this.id,
             'data': this.data,
-            'inputs': Array.from(this.inputs).reduce((obj, [key, input]) => (obj[key] = input.toJSON(), obj), {}),
-            'outputs': Array.from(this.outputs).reduce((obj, [key, output]) => (obj[key] = output.toJSON(), obj), {}),
+            'inputs': Array.from(this.inputs).reduce((obj: any, [key, input]) => (obj[key] = input.toJSON(), obj), {}),
+            'outputs': Array.from(this.outputs).reduce((obj: any, [key, output]) => (obj[key] = output.toJSON(), obj), {}),
             'position': this.position,
             'name': this.name
         }
     }
 
-    static fromJSON(json: Object) {
-        const node = new Node(json.name);
+    static fromJSON(json: any) {
+        const node: any = new Node(json.name);
 
         node.id = json.id;
         node.data = json.data;

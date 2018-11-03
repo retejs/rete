@@ -2,12 +2,17 @@ import { Events } from './events';
 
 export class Emitter {
 
+    public events: Emitter | Events | any;
+    public silent = false;
+
     constructor(events: Events | Emitter) {
-        this.events = events instanceof Emitter ? events.events : events.handlers;
-        this.silent = false;
+        this.events = (events instanceof Emitter ? events.events : events.handlers) || [];
     }
 
-    on(names: string, handler: () => {}) {
+    public on(names: string, handler: Function) {
+        if (typeof handler !== 'function') {
+            throw new Error('Handler is not a function.');
+        }
         names.split(' ').forEach(name => {
             if (!this.events[name])
                 throw new Error(`The event ${name} does not exist`);
@@ -17,16 +22,16 @@ export class Emitter {
         return this;
     }
 
-    trigger(name: string, params) {
+    public trigger(name: string, params: any = null) {
         if (!(name in this.events))
             throw new Error(`The event ${name} cannot be triggered`);
 
-        return this.events[name].reduce((r, e) => {
+        return this.events[name].reduce((r: any, e: any) => {
             return (e(params) !== false) && r
         }, true); // return false if at least one event is false        
     }
 
-    bind(name: string) {
+    public bind(name: string) {
         this.events[name] = [];
     }
 }

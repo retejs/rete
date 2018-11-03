@@ -1,10 +1,8 @@
 export class Socket {
 
-    constructor(name: string, data = {}) {
-        this.name = name;
-        this.data = data;
-        this.compatible = [];
-    }
+    private compatible: Socket[] = [];
+
+    constructor(public name: string, public data = {}) {}
 
     combineWith(socket: Socket) {
         this.compatible.push(socket);

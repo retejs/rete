@@ -1,13 +1,13 @@
 import { Emitter } from '../core/emitter';
 import { Node as ViewNode } from './node';
+import { Connection as Connection2 } from "../connection";
 
 export class Connection extends Emitter {
 
-    constructor(connection, inputNode: ViewNode, outputNode: ViewNode, emitter) {
+    public el: HTMLDivElement;
+
+    constructor(public connection: Connection2, public inputNode: ViewNode, public outputNode: ViewNode, public emitter: Emitter) {
         super(emitter);
-        this.connection = connection;
-        this.inputNode = inputNode;
-        this.outputNode = outputNode;
 
         this.el = document.createElement('div');
         this.el.style.position = 'absolute';

@@ -1,34 +1,37 @@
 import { Area } from './area';
 import { Connection } from '../connection';
 import { Emitter } from '../core/emitter';
-import { Node } from '../node';
+import { Node } from './node';
 import { Connection as ViewConnection } from './connection';
 import { Node as ViewNode } from './node';
 
 export class EditorView extends Emitter {
 
-    constructor(container: HTMLElement, components: Object, emitter: Emitter) {
+    trigger(arg0: string, arg1: any): any {}
+    on(arg0: string, arg1: any): any {}
+
+    nodes = new Map();
+    connections = new Map();
+    area: any;
+
+    constructor(public container: HTMLElement, public components: Object, public emitter: Emitter) {
         super(emitter);
 
-        this.container = container;
-        this.components = components;
+        // this.container = container;
+        // this.components = components;
 
         this.container.style.overflow = 'hidden';
-
-        this.nodes = new Map();
-        this.connections = new Map();
-
         this.container.addEventListener('click', this.click.bind(this));
         this.container.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, view: this }));
         window.addEventListener('resize', this.resize.bind(this));
 
         this.on('nodetranslated', this.updateConnections.bind(this));
             
-        this.area = new Area(container, this);
+        this.area = new Area(container, this as Emitter);
         this.container.appendChild(this.area.el);
     }
 
-    addNode(node: Node) {
+    addNode(node: any) {
         const nodeView = new ViewNode(node, this.components.get(node.name), this);
 
         this.nodes.set(node, nodeView);
@@ -58,8 +61,8 @@ export class EditorView extends Emitter {
         this.area.removeChild(connView.el);
     }
 
-    updateConnections({ node }) {
-        node.getConnections().map(conn => {
+    updateConnections(param: any) {
+        param.node.getConnections().map((conn: any) => {
             this.connections.get(conn).update();
         });
     }
@@ -73,7 +76,7 @@ export class EditorView extends Emitter {
         container.style.height = height + 'px';
     }
 
-    click(e) {
+    click(e: any) {
         const container = this.container;
         
         if (container !== e.target) return;

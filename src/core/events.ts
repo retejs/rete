@@ -1,6 +1,6 @@
 export class Events {
 
-    constructor(handlers) {
+    constructor(public handlers: any) {
         this.handlers = {
             warn: [console.warn],
             error: [console.error],

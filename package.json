@@ -3,8 +3,11 @@
   "version": "1.0.0-beta.5",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
+  "module": "build/index.es.js",
   "types": "src/index.d.ts",
   "scripts": {
+    "build:2": "rollup -c",
+    "watch": "rollup -cw",
     "lint": "eslint src --fix",
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
@@ -29,17 +32,23 @@
   },
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
+    "babel-eslint": "^10.0.1",
     "babel-register": "^6.26.0",
-    "eslint": "^4.19.1",
-    "jsdom": "^11.11.0",
+    "eslint": "^5.8.0",
+    "jsdom": "^13.0.0",
     "mocha": "^5.2.0",
     "rete-cli": "^0.2.0",
-    "rollup-copy-plugin": "0.0.1"
+    "rollup": "^0.66.6",
+    "rollup-copy-plugin": "0.1.0",
+    "rollup-plugin-typescript2": "^0.17.2",
+    "typescript": "^3.1.6"
   },
   "babel": {
     "presets": [
       "env"
     ]
+  },
+  "dependencies": {
+    "rollup-plugin-clear": "^2.0.7"
   }
 }
