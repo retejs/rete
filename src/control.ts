@@ -11,7 +11,6 @@ export class Control {
         if (!key)
             throw new Error('The key parameter is missing in super() of Control ');
 
-        // this.key = key;
         this.data = {};
         this.parent = null;
     }

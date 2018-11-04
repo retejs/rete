@@ -16,7 +16,6 @@ export class Area extends Emitter {
 
         const el = this.el = document.createElement('div');
 
-        // this.container = container;
         el.style.transformOrigin = '0 0';
         this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
         this._drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
@@ -64,7 +63,7 @@ export class Area extends Emitter {
         this.transform.y = params.y;
 
         this.update();
-        this.trigger('translated');
+        this.trigger('translated', null);
     }
 
     zoom(zoom: any, ox = 0, oy = 0, source: any) {

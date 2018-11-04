@@ -1,8 +1,9 @@
 import { Emitter } from '../core/emitter';
+import { Throw } from '../helpers/throw';
 
-export class Control extends Emitter {
+export class ControlView extends Emitter {
 
-    constructor(public el: HTMLElement, public control: any, emitter: Emitter) {
+    constructor(el: HTMLElement, control: any = Throw.required('Control'), emitter: Emitter) {
         super(emitter);
         this.trigger('rendercontrol', { el, control });
     }

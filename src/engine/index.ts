@@ -41,13 +41,12 @@ export class Engine extends Context {
         await this.abort();
         this.trigger('error', { message, data });
         this.processDone();
-
         return 'error';
     }
 
-    extractInputNodes(node: Node, nodes: Node[]) {
+    extractInputNodes(node: any, nodes: Node[]) {
         return Object.keys(node.inputs).reduce((a, key) => {
-            return [...a, ...(node.inputs.get(key).connections || []).reduce((b, c: any) => [...b, nodes[c.node]], [])]
+            return [...a, ...(node.inputs[key].connections || []).reduce((b: any, c: any) => [...b, nodes[c.node]], [])]
         }, []);
     }
 

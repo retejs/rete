@@ -5,9 +5,9 @@ import { Socket } from './socket';
 
 export class Input extends IO {
 
-    control: Control;
+    control: Control = null;
    
-    constructor(key: string, public title: string, socket: Socket, multiConns: boolean = false) {
+    constructor(key: string, title: string, socket: Socket, multiConns: boolean = false) {
         super(key, title, socket, multiConns);
     }
 

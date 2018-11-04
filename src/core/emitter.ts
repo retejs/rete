@@ -22,7 +22,7 @@ export class Emitter {
         return this;
     }
 
-    public trigger(name: string, params: any = null) {
+    trigger(name: string, params: any) {
         if (!(name in this.events))
             throw new Error(`The event ${name} cannot be triggered`);
 

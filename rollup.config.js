@@ -26,11 +26,6 @@ export default {
         sourcemap: true,
         name: 'Rete',
         format: 'umd'
-    }, {
-        file: pkg.engine,
-        sourcemap: true,
-        name: 'ReteEngine',
-        format: 'umd'
     }],
     external: [
         ...Object.keys(pkg.dependencies || {}),
