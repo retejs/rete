@@ -21,6 +21,10 @@ export class NodeEditor extends Context {
     constructor(public id: string, public container: HTMLElement) {
         super(id, new EditorEvents());
 
+        if (!container && !(container instanceof HTMLElement)) {
+            throw new Error(`Invalid container element.`);
+        }
+
         this.selected = new Selected();
         this.view = new EditorView(container, this.components, this);
 

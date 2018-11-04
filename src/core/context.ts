@@ -2,7 +2,7 @@ import { Emitter } from './emitter'
 import { Validator } from './validator'
 
 export class Context extends Emitter {
-    plugins = new Map<string, any>();
+    private plugins = new Map<string, any>();
 
     constructor(public id: string, events: any) {
         super(events);

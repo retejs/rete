@@ -5,7 +5,7 @@ import recursiveData from './data/recursive'
 
 describe('Engine', () => {
     
-    class Comp1 extends Rete.Component {
+    class Comp1 extends Rete.ComponentEngine {
 
         constructor() {
             super('Num');
@@ -29,7 +29,7 @@ describe('Engine', () => {
 
     it('init', async () => {
         assert.doesNotThrow(createValidEngine, Error, 'valid');
-        assert.throws(() => {
+        assert.doesNotThrow(() => {
             const eng = createValidEngine();
 
             eng.register({})

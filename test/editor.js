@@ -7,7 +7,7 @@ import assert from 'assert';
 import { renderMock } from './utils/render-mock';
 
 describe('Editor', () => {
-    var c = document.querySelector('#Rete');
+    const c = document.querySelector('#Rete');
 
     it('init', () => {
         assert.throws(() => new Rete.NodeEditor('test@0.0.2', null), Error, 'container');
@@ -17,9 +17,9 @@ describe('Editor', () => {
 
     it('import/export', async () => {
         var editor = new Rete.NodeEditor('test@0.0.2', c);
-        var ret;
         
-        ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
+        let ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
+
         assert.equal(ret, false, 'can not be taken with another id');
         
         ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });

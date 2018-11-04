@@ -1,7 +1,7 @@
-import { Component as ComponentWorker } from './engine/component';
+import { ComponentEngine } from './engine/component_engine';
 import { Node } from './node';
 
-export class Component extends ComponentWorker {
+export class Component extends ComponentEngine {
 
     public data: any;
     public editor: any;

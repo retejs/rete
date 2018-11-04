@@ -4,7 +4,7 @@ import { Emitter } from '../core/emitter';
 import { IO } from '../io';
 import { Control as ViewControl } from './control';
 import { Socket as ViewSocket, Socket } from './socket';
-import { Component } from '../engine/index';
+import { ComponentEngine } from '../engine/index';
 
 export class Node extends Emitter {
 
@@ -15,7 +15,7 @@ export class Node extends Emitter {
     private _drag: Drag;
     position: any;
 
-    constructor(public node: Node, public component: Component, emitter: Emitter) {
+    constructor(public node: Node, public component: ComponentEngine, emitter: Emitter) {
         super(emitter);
 
         // this.node = node;

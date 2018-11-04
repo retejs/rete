@@ -4,7 +4,7 @@ import { Emitter } from '../core/emitter';
 import { Node } from './node';
 import { Connection as ViewConnection } from './connection';
 import { Node as ViewNode } from './node';
-import { Component } from '../engine/index';
+import { ComponentEngine } from '../engine/index';
 
 export class EditorView extends Emitter {
 

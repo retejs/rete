@@ -21,6 +21,5 @@ describe('Socket', () => {
         assert.ok(s3.compatibleWith(s1));
         assert.ok(!s1.compatibleWith(s3));
         assert.ok(!s3.compatibleWith(s2));
-        
     });
 });    

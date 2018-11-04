@@ -1,10 +1,10 @@
 import { KeyValue } from "../interfaces/generic";
 
-export class Component {
+export class ComponentEngine {
     data: any;
     engine: any;
     constructor(public name: string) {
-        if (this.constructor === Component)
+        if (this.constructor === ComponentEngine)
             throw new TypeError('Can not construct abstract class.');
         
         // this.name = name;

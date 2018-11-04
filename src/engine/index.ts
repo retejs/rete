@@ -1,4 +1,4 @@
-import { Component } from './component';
+import { ComponentEngine } from './component_engine';
 import { Context } from '../core/context';
 import { EngineEvents } from './events';
 import { Validator } from '../core/validator';
@@ -11,11 +11,11 @@ const enum State {
     ABORT = 2
 };
 
-export { Component };
+export { ComponentEngine };
 
 export class Engine extends Context {
 
-    components: Component[] = [];
+    components: ComponentEngine[] = [];
     args: any[] = [];
     data: any;
     private state = State.AVALIABLE;
@@ -32,7 +32,7 @@ export class Engine extends Context {
         return engine;
     }
 
-    register(component: Component) {
+    register(component: ComponentEngine) {
         this.components.push(component);
         this.trigger('componentregister', component);
     }
