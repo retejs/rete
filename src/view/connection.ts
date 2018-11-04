@@ -6,16 +6,16 @@ export class Connection extends Emitter {
 
     public el: HTMLDivElement;
 
-    constructor(public connection: Connection2, public inputNode: ViewNode, public outputNode: ViewNode, public emitter: Emitter) {
+    constructor(public connection: Connection2, public inputNode: ViewNode, public outputNode: ViewNode, emitter: Emitter) {
         super(emitter);
 
         this.el = document.createElement('div');
         this.el.style.position = 'absolute';
         this.el.style.zIndex = '-1';
 
-        this.trigger('renderconnection', { 
-            el: this.el, 
-            connection: this.connection, 
+        this.trigger('renderconnection', {
+            el: this.el,
+            connection: this.connection,
             points: this.getPoints()
         });
     }
@@ -28,9 +28,14 @@ export class Connection extends Emitter {
     }
 
     update() {
-        this.trigger('updateconnection', { 
-            el: this.el, 
-            connection: this.connection, 
+        console.log('Update connextion', {
+            el: this.el,
+            connection: this.connection,
+            points: this.getPoints()
+        })
+        this.trigger('updateconnection', {
+            el: this.el,
+            connection: this.connection,
             points: this.getPoints()
         });
     }

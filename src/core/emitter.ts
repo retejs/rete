@@ -2,11 +2,11 @@ import { Events } from './events';
 
 export class Emitter {
 
-    public events: Emitter | Events | any;
+    private events: Emitter | Events | any = {};
     public silent = false;
 
     constructor(events: Events | Emitter) {
-        this.events = (events instanceof Emitter ? events.events : events.handlers) || [];
+        this.events = events instanceof Emitter ? events.events : events.handlers;
     }
 
     public on(names: string, handler: Function) {
@@ -14,15 +14,15 @@ export class Emitter {
             throw new Error('Handler is not a function.');
         }
         names.split(' ').forEach(name => {
-            if (!this.events[name])
-                throw new Error(`The event ${name} does not exist`);
+            if (!this.events[name]) throw new Error(`The event ${name} does not exist`);
+
             this.events[name].push(handler);
         });
 
         return this;
     }
 
-    trigger(name: string, params: any) {
+    trigger(name: string, params?: any) {
         if (!(name in this.events))
             throw new Error(`The event ${name} cannot be triggered`);
 
@@ -31,7 +31,7 @@ export class Emitter {
         }, true); // return false if at least one event is false        
     }
 
-    public bind(name: string) {
+    bind(name: string) {
         this.events[name] = [];
     }
 }

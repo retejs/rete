@@ -10,6 +10,7 @@
         "target": "es5",
         "composite": true,
         "downlevelIteration": true,
+        "moduleResolution": "node",
         "lib": [
             "dom",
             "es2017"

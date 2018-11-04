@@ -1,21 +1,16 @@
 import { Area } from './area';
 import { Connection } from '../connection';
 import { Emitter } from '../core/emitter';
-import { Node } from './node';
 import { Connection as ViewConnection } from './connection';
 import { Node as ViewNode } from './node';
-import { ComponentEngine } from '../engine/index';
 
 export class EditorView extends Emitter {
-
-    trigger(arg0: string, arg1: any): any {}
-    on(arg0: string, arg1: any): any {}
 
     nodes = new Map();
     connections = new Map();
     area: any;
 
-    constructor(public container: HTMLElement, public components: Map<string, any>, public emitter: Emitter) {
+    constructor(public container: HTMLElement, public components: Map<string, any>, emitter: Emitter) {
         super(emitter);
 
         this.container.style.overflow = 'hidden';
@@ -25,7 +20,7 @@ export class EditorView extends Emitter {
 
         this.on('nodetranslated', this.updateConnections.bind(this));
             
-        this.area = new Area(container, this as Emitter);
+        this.area = new Area(container, this);
         this.container.appendChild(this.area.el);
     }
 
