@@ -8,3 +8,4 @@ export * from './output';
 export * from './socket';
 export * from './core/validator';
 export * from './engine/index';
+export * from './connection';

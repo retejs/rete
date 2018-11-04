@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.0.0-beta.8",
+  "version": "1.0.0-beta.9",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
   "engine": "build/engine.min.js",
