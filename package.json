@@ -1,15 +1,16 @@
 {
   "name": "rete",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0-beta.8",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
   "engine": "build/engine.min.js",
-  "types": "src/index.d.ts",
+  "types": "build/src/index.d.ts",
   "scripts": {
     "build": "rollup -c && npm run compress",
     "watch": "rollup -cw",
     "lint": "eslint src --fix",
     "compress": "terser --compress -o build/rete.min.js -- build/rete.min.js",
+    "build:prod": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
     "test": "BABEL_ENV=test mocha --compilers js:babel-core/register",
@@ -19,6 +20,9 @@
     "type": "git",
     "url": "git+https://github.com/retejs/rete.git"
   },
+  "files": [
+    "build"
+  ],
   "keywords": [
     "dataflow",
     "visual programming",
@@ -26,6 +30,11 @@
     "js"
   ],
   "author": "Ni55aN",
+  "contributors": [{
+    "email": "anlijudavid@hotmail.com",
+    "name": "anlijudavid",
+    "url": "https://github.com/juliandavidmr"
+  }],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/retejs/rete/issues"

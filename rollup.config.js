@@ -38,13 +38,11 @@ export default {
     ],
     plugins: [
         clear({
-            // required, point out which directories should be clear.
-            targets: ['build'],
-            // optional, whether clear the directores when rollup recompile on --watch mode.
-            watch: false // default: false
+            targets: ['build']
         }),
         typescript({
-            typescript: require('typescript')
+            typescript: require('typescript'),
+            clean: true
         })
     ]
 }

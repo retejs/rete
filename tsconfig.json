@@ -1,16 +1,21 @@
 {
     "compilerOptions": {
         "declaration": true,
+        "resolveJsonModule": true,
         "declarationDir": "./dist",
-        "module": "es6",
+        "module": "es2015",
         "noImplicitAny": true,
         "sourceMap": true,
         "outDir": "./dist",
         "target": "es5",
+        "composite": true,
         "downlevelIteration": true,
         "lib": [
             "dom",
             "es2017"
+        ],
+        "typeRoots": [
+            "build/**/*.d.ts"
         ]
     },
     "include": [

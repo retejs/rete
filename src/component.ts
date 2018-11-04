@@ -1,6 +1,7 @@
 import { ComponentEngine } from './engine/component_engine';
 import { Node } from './node';
 
+
 export class Component extends ComponentEngine {
 
     public data: any;
@@ -15,7 +16,9 @@ export class Component extends ComponentEngine {
         this.data = {};
     }
 
-    async builder(node: Node) { }
+    public async builder(node: Node): Promise<Node> {
+        return node;
+    }
 
     created(some: any) { }
 
