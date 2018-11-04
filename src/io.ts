@@ -7,8 +7,8 @@ export class IO {
     connections: Connection[] = [];
     node: Node = null;
 
-    constructor(public key: string, public name: string, public socket: Socket, public multipleConnections: boolean) {}
-    
+    constructor(public key: string, public name: string, public socket: Socket, public multipleConnections: boolean) { }
+
     removeConnection(connection: Connection) {
         this.connections.splice(this.connections.indexOf(connection), 1);
     }

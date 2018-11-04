@@ -3,14 +3,10 @@ export class Drag {
     mouseStart: any = null;
 
     constructor(public el: HTMLElement,
-        public onTranslate = (a: number, b: number, e: any) => {},
-        public onStart = (e: any) => {},
-        public onDrag = (e: any) => {}
+        public onTranslate = (a: number, b: number, e: any) => { },
+        public onStart = (e: any) => { },
+        public onDrag = (e: any) => { }
     ) {
-        // this.onTranslate = onTranslate;
-        // this.onStart = onStart;
-        // this.onDrag = onDrag;
-
         this.initEvents(el);
     }
 
@@ -53,7 +49,7 @@ export class Drag {
 
     up(e: any) {
         if (!this.mouseStart) return;
-        
+
         this.mouseStart = null;
         this.onDrag(e);
     }

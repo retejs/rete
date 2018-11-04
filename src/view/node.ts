@@ -87,5 +87,5 @@ export class Node extends Emitter {
         this.el.style.transform = `translate(${this.node.position[0]}px, ${this.node.position[1]}px)`;
     }
 
-    remove() {}
+    remove() { }
 }

@@ -29,11 +29,13 @@
     "js"
   ],
   "author": "Ni55aN",
-  "contributors": [{
-    "email": "anlijudavid@hotmail.com",
-    "name": "anlijudavid",
-    "url": "https://github.com/juliandavidmr"
-  }],
+  "contributors": [
+    {
+      "email": "anlijudavid@hotmail.com",
+      "name": "anlijudavid",
+      "url": "https://github.com/juliandavidmr"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/retejs/rete/issues"
@@ -43,7 +45,6 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
     "babel-polyfill": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-register": "^6.26.0",
     "eslint": "^5.8.0",

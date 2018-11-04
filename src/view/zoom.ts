@@ -1,6 +1,6 @@
 export class Zoom {
-    
-    distance: any = null;
+
+    distance: number;
 
     constructor(public container: HTMLElement, public el: HTMLElement, public intensity: number, public onzoom: Function) {
         container.addEventListener('wheel', this.wheel.bind(this));
@@ -12,7 +12,7 @@ export class Zoom {
 
     wheel(e: any) {
         e.preventDefault();
-        
+
         var rect = this.el.getBoundingClientRect();
         var delta = (e.wheelDelta ? e.wheelDelta / 120 : - e.deltaY / 3) * this.intensity;
 
@@ -28,21 +28,21 @@ export class Zoom {
         let distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
         return {
-            cx: (x1 + x2)/2,
-            cy: (y1 + y2)/2,
+            cx: (x1 + x2) / 2,
+            cy: (y1 + y2) / 2,
             distance
         };
     }
 
     move(e: any) {
         if (e.touches.length < 2) return;
-        
+
         let rect = this.el.getBoundingClientRect();
         let { cx, cy, distance } = this.touches(e);
 
         if (this.distance !== null) {
             let delta = distance / this.distance - 1;
-    
+
             var ox = (rect.left - cx) * delta;
             var oy = (rect.top - cy) * delta;
 
@@ -57,13 +57,13 @@ export class Zoom {
 
     dblclick(e: any) {
         e.preventDefault();
-        
+
         var rect = this.el.getBoundingClientRect();
         var delta = 4 * this.intensity;
 
         var ox = (rect.left - e.clientX) * delta;
         var oy = (rect.top - e.clientY) * delta;
 
-        this.onzoom(delta, ox, oy, 'dblclick'); 
+        this.onzoom(delta, ox, oy, 'dblclick');
     }
 }

@@ -12,11 +12,11 @@ export class Validator {
 
     static validate(id: string, data: any) {
         var msg = '';
-        var id1 = id.split('@');
-        var id2 = data.id.split('@');
+        const id1 = id.split('@');
+        const id2 = data.id.split('@');
 
         if (!this.isValidData(data))
-            msg += 'Data is not suitable. '; 
+            msg += 'Data is not suitable. ';
         if (id !== data.id)
             msg += 'IDs not equal. ';
         if (id1[0] !== id2[0])
@@ -24,6 +24,6 @@ export class Validator {
         if (id1[1] !== id2[1])
             msg += 'Versions don\'t match';
 
-        return { success: msg ==='', msg };
+        return { success: msg === '', msg };
     }
 }

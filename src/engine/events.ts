@@ -6,5 +6,5 @@ export class EngineEvents extends Events {
         super({
             componentregister: []
         });
-    }    
+    }
 }

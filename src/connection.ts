@@ -3,7 +3,7 @@ import { Input } from "./input";
 
 export class Connection {
 
-    data: any = {};
+    data = {};
 
     constructor(public output: Output, public input: Input) {
         this.input.addConnection(this);

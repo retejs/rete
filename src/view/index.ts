@@ -19,7 +19,7 @@ export class EditorView extends Emitter {
         window.addEventListener('resize', this.resize.bind(this));
 
         this.on('nodetranslated', this.updateConnections.bind(this));
-            
+
         this.area = new Area(container, this);
         this.container.appendChild(this.area.el);
     }
@@ -50,12 +50,13 @@ export class EditorView extends Emitter {
     removeConnection(connection: Connection) {
         const connView = this.connections.get(connection);
 
-        this.connections.delete(connection);
+        const response = this.connections.delete(connection);
         this.area.removeChild(connView.el);
+        return response;
     }
 
     updateConnections(param: any) {
-        param.node.getConnections().map((conn: any) => {
+        param.node.getConnections().map((conn: Connection) => {
             this.connections.get(conn).update();
         });
     }
@@ -71,7 +72,7 @@ export class EditorView extends Emitter {
 
     click(e: any) {
         const container = this.container;
-        
+
         if (container !== e.target) return;
         if (!this.trigger('click', { e, container })) return;
     }

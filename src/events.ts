@@ -38,5 +38,5 @@ export class EditorEvents extends Events {
             export: [],
             process: []
         });
-    }    
+    }
 }

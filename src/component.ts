@@ -1,19 +1,17 @@
 import { ComponentEngine } from './engine/component_engine';
 import { Node } from './node';
+import { NodeEditor } from './editor';
 
 
 export class Component extends ComponentEngine {
 
-    public data: any;
-    public editor: any;
+    public data: any = {};
+    public editor: NodeEditor = null;
 
     constructor(public name: string) {
         super(name);
         if (this.constructor === Component)
             throw new TypeError('Can not construct abstract class.');
-
-        this.editor = null;
-        this.data = {};
     }
 
     public async builder(node: Node): Promise<Node> {
@@ -32,7 +30,7 @@ export class Component extends ComponentEngine {
 
     async createNode(data = {}) {
         const node = new Node(this.name);
-        
+
         node.data = data;
         await this.build(node);
 

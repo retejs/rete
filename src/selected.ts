@@ -6,9 +6,9 @@ export class Selected {
 
     add(item: Node, accumulate = false) {
         if (!accumulate)
-            this.list = [item]; 
+            this.list = [item];
         else if (!this.contains(item))
-            this.list.push(item);   
+            this.list.push(item);
     }
 
     clear() {

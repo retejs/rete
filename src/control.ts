@@ -15,10 +15,10 @@ export class Control {
         this.parent = null;
     }
 
-    getNode() {
+    getNode(): Node {
         if (this.parent === null)
-            throw new Error("Control isn't added to Node/Input");   
-        
+            throw new Error("Control isn't added to Node/Input");
+
         return this.parent instanceof Node ? this.parent : this.parent.node;
     }
 

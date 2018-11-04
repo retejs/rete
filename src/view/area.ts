@@ -1,15 +1,16 @@
 import { Drag } from './drag';
 import { Emitter } from '../core/emitter';
 import { Zoom } from './zoom';
+import { KeyValue } from '../interfaces/generic';
 
 export class Area extends Emitter {
 
-    el: any;
-    transform = { k: 1, x: 0, y: 0 };
+    el: HTMLElement;
+    private transform: KeyValue<number> = { k: 1, x: 0, y: 0 };
     mouse = { x: 0, y: 0 };
-    _startPosition: any;
-    _zoom: Zoom;
-    _drag: Drag;
+    private _startPosition: any;
+    private _zoom_: Zoom;
+    private _drag_: Drag;
 
     constructor(public container: HTMLElement, emitter: Emitter) {
         super(emitter);
@@ -17,8 +18,8 @@ export class Area extends Emitter {
         const el = this.el = document.createElement('div');
 
         el.style.transformOrigin = '0 0';
-        this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
-        this._drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
+        this._zoom_ = new Zoom(container, el, 0.1, this.onZoom.bind(this));
+        this._drag_ = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
         this.container.addEventListener('mousemove', this.mousemove.bind(this));
 
         this.update();

@@ -9,7 +9,7 @@ import { Output } from './output';
 import { Selected } from './selected';
 import { Validator } from './core/validator';
 
-type KeyValue = { [key: string]: any};
+type KeyValue = { [key: string]: any };
 
 export class NodeEditor extends Context {
 
