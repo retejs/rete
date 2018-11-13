@@ -108,8 +108,8 @@ export class Selected {
   clear();
   remove(item: () => {});
   contains(item: () => {});
-  each(callback: () => {});
-  eachNode(callback: () => {});
+  each(callbackfn: (value: Node, index?: number, array?: Node[]) => void, thisArg?: any);
+  // eachNode(callback: () => {}); //# Not exists
   getNodes(): Node[];
 }
 
