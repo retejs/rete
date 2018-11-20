@@ -1,4 +1,5 @@
 import {Engine, Context, Events, Component as ComponentWorker, Emitter} from './engine/engine.d';
+import {Connection} from './view/index';
 export {Engine, ComponentWorker};
 
 type EngineState = {
@@ -8,15 +9,18 @@ type EngineState = {
 };
 
 export class Socket {
-  constructor(name: string, data?: any);
+  name: string;
+  data: {};
+
+  constructor(name: string, data?: object);
 
   combineWith(socket: Socket);
   compatibleWith(socket: Socket);
 }
 
 export class Connection {
-  private input: Input;
-  private output: Output;
+  input: Input;
+  output: Output;
 }
 
 export class Area extends Emitter {
@@ -64,7 +68,7 @@ export class NodeEditor extends Context {
   removeConnection(connection: Connection);
   selectNode(node: Node, accumulate?: boolean);
 
-  getComponent(name: string);
+  getComponent(name: string): Component;
   register(component: Component);
 
   clear();
@@ -89,7 +93,9 @@ export class Node {
 
   addControl(control: Control);
   addInput(input: Input);
+  removeInput(input: Input);
   addOutput(output: Output);
+  removeOutput(output: Output);
   getConnections(type);
 
   inputsWithVisibleControl();
@@ -97,7 +103,7 @@ export class Node {
   private static incrementId();
 
   toJSON();
-  static fromJSON(component: Component, json: any)
+  static fromJSON(json: any)
 }
 
 export class Selected {
@@ -106,11 +112,9 @@ export class Selected {
 
   add(item: Node, accumulate?: boolean)
   clear();
-  remove(item: () => {});
-  contains(item: () => {});
+  remove(item: Node);
+  contains(item: Node);
   each(callbackfn: (value: Node, index?: number, array?: Node[]) => void, thisArg?: any);
-  // eachNode(callback: () => {}); //# Not exists
-  getNodes(): Node[];
 }
 
 export class IO {
@@ -119,10 +123,12 @@ export class IO {
   connections: Connection[];
 
   title: string;
+  key: string;
   socket: Socket;
 
   constructor(key, title, socket, multiConns);
   removeConnection(connection: Connection);
+  removeConnections();
 }
 
 export class Input extends IO {
@@ -165,8 +171,9 @@ export abstract class Component extends ComponentWorker {
   constructor(name: string);
 
   builder(node: Node): Promise<any> | any;
+  build(node: Node): Promise<Node>;
   created(node: Node);
   destroyed(node: Node);
-  
+
   createNode(data?: any): Promise<Node>;
 }
