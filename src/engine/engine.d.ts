@@ -5,9 +5,10 @@ type EngineState = {
 };
 
 export class Emitter {
-  constructor();
+  constructor(events: Events | Emitter);
   on(names : string, handler : (param?: any) => any) : Emitter;
   trigger(name : string, param?: any) : any;
+  bind(name: string);
 }
 
 export class Events {
