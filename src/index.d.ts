@@ -1,5 +1,4 @@
 import {Engine, Context, Events, Component as ComponentWorker, Emitter} from './engine/engine.d';
-import {Connection} from './view/index';
 export {Engine, ComponentWorker};
 
 type EngineState = {
