@@ -100,6 +100,7 @@ export class Node {
   inputsWithVisibleControl();
 
   private static incrementId();
+  public static resetId();
 
   toJSON();
   static fromJSON(json: any)
