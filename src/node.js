@@ -3,7 +3,7 @@ import { Input } from './input';
 import { Output } from './output';
 
 export class Node {
-   
+
     constructor(name: string) {
         this.name = name;
         this.id = Node.incrementId();
@@ -32,7 +32,7 @@ export class Node {
     addInput(input: Input) {
         if (input.node !== null)
             throw new Error('Input has already been added to the node');
- 
+
         input.node = this;
 
         this.inputs.set(input.key, input);
@@ -49,7 +49,7 @@ export class Node {
     addOutput(output: Output) {
         if (output.node !== null)
             throw new Error('Output has already been added to the node');
-        
+
         output.node = this;
 
         this.outputs.set(output.key, output);
@@ -68,7 +68,7 @@ export class Node {
         const connections = ios.reduce((arr, io) => {
             return [...arr, ...io.connections];
         }, []);
-    
+
         return connections;
     }
 
@@ -80,6 +80,10 @@ export class Node {
         else
             this.latestId++
         return this.latestId
+    }
+
+    static resetId() {
+        this.latestId = 0;
     }
 
     toJSON() {
