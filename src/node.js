@@ -72,6 +72,8 @@ export class Node {
         return connections;
     }
 
+    update() {}
+
     static incrementId() {
         if (!this.latestId)
             this.latestId = 1
