@@ -1,3 +1,6 @@
 {
-  "extends": "./node_modules/rete-cli/.eslintrc"
+  "extends": "./node_modules/rete-cli/.eslintrc",
+  "env": {
+    "es6": true
+  }
 }
