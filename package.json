@@ -1,8 +1,9 @@
 {
   "name": "rete",
-  "version": "1.0.0-beta.5",
+  "version": "1.0.0",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
+  "module": "build/rete.debug.js",
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
