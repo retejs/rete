@@ -27,6 +27,13 @@ export class Emitter {
     }
 
     bind(name: string) {
+        if (this.events[name])
+            throw new Error(`The event ${name} is already bound`);
+
         this.events[name] = [];
+    }
+
+    exist(name: string) {
+        return Array.isArray(this.events[name]);
     }
 }
