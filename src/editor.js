@@ -22,8 +22,6 @@ export class NodeEditor extends Context {
 
         window.addEventListener('keydown', e => this.trigger('keydown', e));
         window.addEventListener('keyup', e => this.trigger('keyup', e));
-        this.on('nodecreated', node => this.getComponent(node.name).created(node));
-        this.on('noderemoved', node => this.getComponent(node.name).destroyed(node));
         this.on('selectnode', ({ node, accumulate }) => this.selectNode(node, accumulate));
         this.on('nodeselected', () => this.selected.each(n => this.view.nodes.get(n).onStart()));
         this.on('translatenode', ({ dx, dy }) => this.selected.each(n => this.view.nodes.get(n).onDrag(dx, dy)));

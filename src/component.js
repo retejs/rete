@@ -13,10 +13,6 @@ export class Component extends ComponentWorker {
 
     async builder() { }
 
-    created() { }
-
-    destroyed() { }
-
     async build(node: Node) {
         await this.builder(node);
 
