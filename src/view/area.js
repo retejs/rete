@@ -19,6 +19,7 @@ export class Area extends Emitter {
         this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
         this._drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
         this.container.addEventListener('mousemove', this.mousemove.bind(this));
+        this.container.addEventListener('touchmove', this.mousemove.bind(this));
 
         this.update();
     }
@@ -30,9 +31,10 @@ export class Area extends Emitter {
     }
 
     mousemove(e) {
+        const { clientX, clientY } = e instanceof TouchEvent ? e.touches[0] : e;
         const rect = this.el.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
         const k = this.transform.k;
         
         this.mouse = { x: x / k, y: y / k };
