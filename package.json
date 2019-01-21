@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
   "module": "build/rete.debug.js",
