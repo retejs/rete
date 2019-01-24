@@ -1,9 +1,9 @@
 {
   "name": "rete",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "JavaScript framework",
   "main": "build/rete.min.js",
-  "module": "build/rete.debug.js",
+  "module": "build/rete.esm.js",
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
@@ -34,7 +34,7 @@
     "eslint": "^4.19.1",
     "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
-    "rete-cli": "^0.2.0",
+    "rete-cli": "^0.4.2",
     "rollup-copy-plugin": "0.0.1"
   },
   "babel": {
