@@ -2,7 +2,7 @@
   "name": "rete",
   "version": "1.0.2",
   "description": "JavaScript framework",
-  "main": "build/rete.min.js",
+  "main": "build/rete.common.js",
   "module": "build/rete.esm.js",
   "types": "src/index.d.ts",
   "scripts": {
@@ -34,12 +34,7 @@
     "eslint": "^4.19.1",
     "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
-    "rete-cli": "^0.4.2",
+    "rete-cli": "^0.5.0",
     "rollup-copy-plugin": "0.0.1"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
   }
 }
