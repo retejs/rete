@@ -1,9 +1,9 @@
 {
   "name": "rete",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "JavaScript framework",
-  "main": "build/rete.min.js",
-  "module": "build/rete.debug.js",
+  "main": "build/rete.common.js",
+  "module": "build/rete.esm.js",
   "types": "src/index.d.ts",
   "scripts": {
     "lint": "eslint src --fix",
@@ -11,7 +11,7 @@
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
     "prepare": "npm run build",
-    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
+    "test": "BABEL_ENV=test mocha --compilers js:@babel/register"
   },
   "repository": {
     "type": "git",
@@ -30,17 +30,12 @@
   },
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
-    "babel-register": "^6.26.0",
-    "eslint": "^4.19.1",
+    "babel-eslint": "^10.0.1",
+    "@babel/register": "^7.0.0",
+    "@babel/preset-env": "^7.3.1",
+    "eslint": "^5.12.1",
     "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
-    "rete-cli": "^0.2.0",
-    "rollup-copy-plugin": "0.0.1"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "rete-cli": "^0.5.0"
   }
 }

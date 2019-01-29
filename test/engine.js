@@ -28,11 +28,11 @@ describe('Engine', () => {
 
     it('init', async () => {
         assert.doesNotThrow(createValidEngine, Error, 'valid');
-        assert.throws(() => {
-            let eng = createValidEngine(); 
+        // assert.throws(() => {
+        //     let eng = createValidEngine(); 
 
-            eng.register({})
-        }, Error, 'object instead of component');
+        //     eng.register({})
+        // }, Error, 'object instead of component');
         assert.throws(() => new Rete.Engine('test@0.1'), Error, 'wrong id');
     });
 
