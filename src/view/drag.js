@@ -1,7 +1,7 @@
 export class Drag {
 
     constructor(el, onTranslate = () => {}, onStart = () => {}, onDrag = () => {}) {
-        this.mouseStart = null;
+        this.pointerStart = null;
 
         this.el = el;
         this.onTranslate = onTranslate;
@@ -12,46 +12,35 @@ export class Drag {
     }
 
     initEvents(el) {
-        el.addEventListener('mousedown', this.down.bind(this));
-        window.addEventListener('mousemove', this.move.bind(this));
-        window.addEventListener('mouseup', this.up.bind(this));
+        el.style.touchAction = 'none';
 
-        el.addEventListener('touchstart', this.down.bind(this));
-        window.addEventListener('touchmove', this.move.bind(this), {
-            passive: false
-        });
-        window.addEventListener('touchend', this.up.bind(this));
-    }
-
-    getCoords(e) {
-        const props = e.touches ? e.touches[0] : e;
-
-        return [props.pageX, props.pageY];
+        el.addEventListener('pointerdown', this.down.bind(this));
+        window.addEventListener('pointermove', this.move.bind(this));
+        window.addEventListener('pointerup', this.up.bind(this));
     }
 
     down(e) {
         e.stopPropagation();
-        this.mouseStart = this.getCoords(e);
+        this.pointerStart = [e.pageX, e.pageY]
 
         this.onStart(e);
     }
 
     move(e) {
-        if (!this.mouseStart) return;
+        if (!this.pointerStart) return;
         e.preventDefault();
-        e.stopPropagation();
 
-        let [x, y] = this.getCoords(e);
-        let delta = [x - this.mouseStart[0], y - this.mouseStart[1]];
+        let [x, y] = [e.pageX, e.pageY]
+        let delta = [x - this.pointerStart[0], y - this.pointerStart[1]];
         let zoom = this.el.getBoundingClientRect().width / this.el.offsetWidth;
 
         this.onTranslate(delta[0] / zoom, delta[1] / zoom, e);
     }
 
     up(e) {
-        if (!this.mouseStart) return;
+        if (!this.pointerStart) return;
         
-        this.mouseStart = null;
+        this.pointerStart = null;
         this.onDrag(e);
     }
 }
