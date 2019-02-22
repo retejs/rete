@@ -21,7 +21,7 @@ export class Output extends IO {
         if (!this.multipleConnections && this.hasConnection())
             throw new Error('Output already has one connection');
 
-        var connection = new Connection(this, input);
+        const connection = new Connection(this, input);
 
         this.connections.push(connection);
         return connection;

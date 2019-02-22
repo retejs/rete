@@ -1,9 +1,8 @@
 import { Component } from './component';
 import { Context } from '../core/context';
 import { EngineEvents } from './events';
+import { State } from './state';
 import { Validator } from '../core/validator';
-
-var State = { AVALIABLE:0, PROCESSED: 1, ABORT: 2 };
 
 export { Component };
 
@@ -12,24 +11,18 @@ export class Engine extends Context {
     constructor(id: string) {
         super(id, new EngineEvents());
 
-        this.components = [];
         this.args = [];
         this.data = null;
-        this.state = State.AVALIABLE;
+        this.state = State.AVAILABLE;
         this.onAbort = () => { };
     }
 
     clone() {
         const engine = new Engine(this.id);
 
-        this.components.map(c => engine.register(c));
+        this.components.forEach(c => engine.register(c));
 
         return engine;
-    }
-
-    register(component: Component) {
-        this.components.push(component);
-        this.trigger('componentregister', component);
     }
 
     async throwError (message, data = null) {
@@ -52,7 +45,7 @@ export class Engine extends Context {
             if (inputNodes.some(n => n === node))
                 return node;
             
-            for (var i = 0; i < inputNodes.length; i++) {
+            for (let i = 0; i < inputNodes.length; i++) {
                 if (findSelf(node, this.extractInputNodes(inputNodes[i], nodes)))
                     return node;
             }
@@ -66,7 +59,7 @@ export class Engine extends Context {
     }
 
     processStart() {
-        if (this.state === State.AVALIABLE) {  
+        if (this.state === State.AVAILABLE) {  
             this.state = State.PROCESSED;
             return true;
         }
@@ -81,9 +74,9 @@ export class Engine extends Context {
     }
 
     processDone() {
-        var success = this.state !== State.ABORT;
+        const success = this.state !== State.ABORT;
 
-        this.state = State.AVALIABLE;
+        this.state = State.AVAILABLE;
         
         if (!success) {
             this.onAbort();
@@ -130,12 +123,12 @@ export class Engine extends Context {
         const obj = {};
 
         for (let key of Object.keys(node.inputs)) {
-            let input = node.inputs[key];
-            var conns = input.connections;
-            let connData = await Promise.all(conns.map(async (c) => {
+            const input = node.inputs[key];
+            const conns = input.connections;
+            const connData = await Promise.all(conns.map(async (c) => {
                 const prevNode = this.data.nodes[c.node];
 
-                let outputs = await this.processNode(prevNode);
+                const outputs = await this.processNode(prevNode);
 
                 if (!outputs) 
                     this.abort();
@@ -150,9 +143,9 @@ export class Engine extends Context {
     }
 
     async processWorker(node) {
-        var inputData = await this.extractInputData(node);
-        var component = this.components.find(c => c.name === node.name);
-        var outputData = {};
+        const inputData = await this.extractInputData(node);
+        const component = this.components.get(node.name);
+        const outputData = {};
 
         try {
             await component.worker(node, inputData, outputData, ...this.args);
@@ -205,12 +198,12 @@ export class Engine extends Context {
     }
 
     async validate(data) {
-        var checking = Validator.validate(this.id, data);
+        const checking = Validator.validate(this.id, data);
 
         if (!checking.success)
             return await this.throwError(checking.msg);  
         
-        var recurentNodes = this.detectRecursions(data.nodes);
+        const recurentNodes = this.detectRecursions(data.nodes);
 
         if (recurentNodes.length > 0)
             return await this.throwError('Recursion detected', recurentNodes);      
@@ -231,9 +224,9 @@ export class Engine extends Context {
     }
 
     async processUnreachable() {
-        for (var i in this.data.nodes) // process nodes that have not been reached
+        for (let i in this.data.nodes) // process nodes that have not been reached
             if (typeof this.data.nodes[i].outputData === 'undefined') {
-                var node = this.data.nodes[i];
+                const node = this.data.nodes[i];
 
                 await this.processNode(node);
                 await this.forwardProcess(node);
