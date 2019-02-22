@@ -16,10 +16,18 @@ export class Node {
         this.meta = {};
     }
 
-    addControl(control: Control) {
-        control.parent = this;
+    _add(list, item, prop) {
+        if (list.has(item.key))
+            throw new Error(`Item with key '${item.key}' already been added to the node`);
+        if (item[prop] !== null)
+            throw new Error('Item has already been added to some node');
+        
+        item[prop] = this;
+        list.set(item.key, item);
+    }
 
-        this.controls.set(control.key, control);
+    addControl(control: Control) {
+        this._add(this.controls, control, 'parent');
         return this;
     }
 
@@ -30,12 +38,7 @@ export class Node {
     }
 
     addInput(input: Input) {
-        if (input.node !== null)
-            throw new Error('Input has already been added to the node');
-
-        input.node = this;
-
-        this.inputs.set(input.key, input);
+        this._add(this.inputs, input, 'node');
         return this;
     }
 
@@ -47,12 +50,7 @@ export class Node {
     }
 
     addOutput(output: Output) {
-        if (output.node !== null)
-            throw new Error('Output has already been added to the node');
-
-        output.node = this;
-
-        this.outputs.set(output.key, output);
+        this._add(this.outputs, output, 'node');
         return this;
     }
 
