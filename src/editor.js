@@ -15,7 +15,6 @@ export class NodeEditor extends Context {
         super(id, new EditorEvents());
         
         this.nodes = [];
-        this.components = new Map();
 
         this.selected = new Selected();
         this.view = new EditorView(container, this.components, this);
@@ -92,9 +91,8 @@ export class NodeEditor extends Context {
     }
 
     register(component: Component) {
+        super.register(component)
         component.editor = this;
-        this.components.set(component.name, component);
-        this.trigger('componentregister', component)
     }
 
     clear() {
@@ -110,7 +108,7 @@ export class NodeEditor extends Context {
     }
 
     beforeImport(json: Object) {
-        var checking = Validator.validate(this.id, json);
+        const checking = Validator.validate(this.id, json);
         
         if (!checking.success) {
             this.trigger('warn', checking.msg);
@@ -130,29 +128,29 @@ export class NodeEditor extends Context {
 
     async fromJSON(json: Object) {
         if (!this.beforeImport(json)) return false;
-        var nodes = {};
+        const nodes = {};
 
         try {
             await Promise.all(Object.keys(json.nodes).map(async id => {
-                var node = json.nodes[id];
-                var component = this.getComponent(node.name);
+                const node = json.nodes[id];
+                const component = this.getComponent(node.name);
 
                 nodes[id] = await component.build(Node.fromJSON(node));
                 this.addNode(nodes[id]);
             }));
         
             Object.keys(json.nodes).forEach(id => {
-                var jsonNode = json.nodes[id];
-                var node = nodes[id];
+                const jsonNode = json.nodes[id];
+                const node = nodes[id];
                 
                 Object.keys(jsonNode.outputs).forEach(key => {
-                    var outputJson = jsonNode.outputs[key];
+                    const outputJson = jsonNode.outputs[key];
 
                     outputJson.connections.forEach(jsonConnection => {
-                        var nodeId = jsonConnection.node;
-                        var data = jsonConnection.data;
-                        var targetOutput = node.outputs.get(key);
-                        var targetInput = nodes[nodeId].inputs.get(jsonConnection.input);
+                        const nodeId = jsonConnection.node;
+                        const data = jsonConnection.data;
+                        const targetOutput = node.outputs.get(key);
+                        const targetInput = nodes[nodeId].inputs.get(jsonConnection.input);
 
                         this.connect(targetOutput, targetInput, data);
                     });

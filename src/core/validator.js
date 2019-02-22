@@ -11,19 +11,19 @@ export class Validator {
     }
 
     static validate(id, data) {
-        var msg = '';
-        var id1 = id.split('@');
-        var id2 = data.id.split('@');
+        const id1 = id.split('@');
+        const id2 = data.id.split('@');
+        let msg = [];
 
         if (!this.isValidData(data))
-            msg += 'Data is not suitable. '; 
+            msg.push('Data is not suitable'); 
         if (id !== data.id)
-            msg += 'IDs not equal. ';
+            msg.push('IDs not equal');
         if (id1[0] !== id2[0])
-            msg += 'Names don\'t match. ';
+            msg.push('Names don\'t match');
         if (id1[1] !== id2[1])
-            msg += 'Versions don\'t match';
+            msg.push('Versions don\'t match');
 
-        return { success: msg ==='', msg };
+        return { success: Boolean(!msg.length), msg: msg.join('. ') };
     }
 }

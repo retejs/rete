@@ -11,6 +11,7 @@ export class Context extends Emitter {
         
         this.id = id;
         this.plugins = new Map();
+        this.components = new Map();
     }
 
     use(plugin, options = {}) {
@@ -18,5 +19,13 @@ export class Context extends Emitter {
 
         plugin.install(this, options);
         this.plugins.set(plugin.name, options)
+    }
+
+    register(component) {
+        if (this.components.has(component.name))
+            throw new Error(`Component ${component.name} already registered`);
+
+        this.components.set(component.name, component);
+        this.trigger('componentregister', component);
     }
 }

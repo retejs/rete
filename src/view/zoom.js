@@ -17,11 +17,11 @@ export class Zoom {
     wheel(e) {
         e.preventDefault();
         
-        var rect = this.el.getBoundingClientRect();
-        var delta = (e.wheelDelta ? e.wheelDelta / 120 : - e.deltaY / 3) * this.intensity;
+        const rect = this.el.getBoundingClientRect();
+        const delta = (e.wheelDelta ? e.wheelDelta / 120 : - e.deltaY / 3) * this.intensity;
 
-        var ox = (rect.left - e.clientX) * delta;
-        var oy = (rect.top - e.clientY) * delta;
+        const ox = (rect.left - e.clientX) * delta;
+        const oy = (rect.top - e.clientY) * delta;
 
         this.onzoom(delta, ox, oy, 'wheel');
     }
@@ -47,8 +47,8 @@ export class Zoom {
         if (this.distance !== null) {
             let delta = distance / this.distance - 1;
     
-            var ox = (rect.left - cx) * delta;
-            var oy = (rect.top - cy) * delta;
+            const ox = (rect.left - cx) * delta;
+            const oy = (rect.top - cy) * delta;
 
             this.onzoom(delta, ox, oy, 'touch');
         }
@@ -62,11 +62,11 @@ export class Zoom {
     dblclick(e) {
         e.preventDefault();
         
-        var rect = this.el.getBoundingClientRect();
-        var delta = 4 * this.intensity;
+        const rect = this.el.getBoundingClientRect();
+        const delta = 4 * this.intensity;
 
-        var ox = (rect.left - e.clientX) * delta;
-        var oy = (rect.top - e.clientY) * delta;
+        const ox = (rect.left - e.clientX) * delta;
+        const oy = (rect.top - e.clientY) * delta;
 
         this.onzoom(delta, ox, oy, 'dblclick'); 
     }
