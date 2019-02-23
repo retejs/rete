@@ -1,12 +1,20 @@
-import './utils/domReady';
 import assert from 'assert';
+import Rete, { Output, Input } from '../src';
 import { renderMock } from './utils/render-mock';
+require('jsdom-global')()
 
 describe('Editor', () => {
-    var c = document.querySelector('#Rete');
+
+    let c: HTMLElement;
+
+    beforeEach(() => {
+        var par = document.createElement('div') as HTMLElement;
+        c = document.createElement('div') as HTMLElement;
+
+        par.appendChild(c);
+    });
 
     it('init', () => {
-        assert.throws(() => new Rete.NodeEditor('test@0.0.2', null), Error, 'container');
         assert.throws(() => new Rete.NodeEditor('test', c), Error, 'id');
         assert.throws(() => new Rete.NodeEditor('test@5.5', c), Error, 'id');
     })
@@ -34,7 +42,7 @@ describe('Editor', () => {
                 super('Num');
             }
 
-            builder(node) {
+            builder(node: any): any {
                 node.addOutput(new Rete.Output('name', 'Name', socketNum))
             }
 
@@ -47,7 +55,7 @@ describe('Editor', () => {
                 super('Return');
             }
 
-            builder(node) {
+            builder(node: any) :any {
                 node.addInput(new Rete.Input('name', 'Name', socketNum));
             }
 
@@ -71,13 +79,13 @@ describe('Editor', () => {
 
         // assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
         
-        editor.connect(n1.outputs.get('name'), n2.inputs.get('name'));
-        assert.equal(n1.outputs.get('name').connections.length, 1, 'one connection');
+        editor.connect(n1.outputs.get('name') as Output, n2.inputs.get('name') as Input);
+        assert.equal((n1.outputs.get('name') as Output).connections.length, 1, 'one connection');
         
-        var connection = n1.outputs.get('name').connections[0];
+        var connection = (n1.outputs.get('name') as Output).connections[0];
 
         assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
-        assert.equal(n1.outputs.get('name').connections.length, 0, 'no connections');
+        assert.equal((n1.outputs.get('name') as Output).connections.length, 0, 'no connections');
         
     });
 })
