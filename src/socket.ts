@@ -1,5 +1,9 @@
 export class Socket {
 
+    name: string;
+    data: any;
+    compatible: Socket[] = [];
+
     constructor(name: string, data = {}) {
         this.name = name;
         this.data = data;

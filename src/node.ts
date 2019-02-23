@@ -1,22 +1,28 @@
 import { Control } from './control';
 import { Input } from './input';
 import { Output } from './output';
+import { Connection } from './connection';
+import { Node as NodeData } from './core/data';
 
 export class Node {
 
+    name: string;
+    id: number;
+    position = [0.0, 0.0];
+    inputs = new Map<string, Input>();
+    outputs = new Map<string, Output>();
+    controls = new Map<string, Control>();
+    data: any = {};
+    meta: any = {};
+
+    static latestId = 0;
+    
     constructor(name: string) {
         this.name = name;
         this.id = Node.incrementId();
-        this.position = [0.0, 0.0];
-
-        this.inputs = new Map();
-        this.outputs = new Map();
-        this.controls = new Map();
-        this.data = {};
-        this.meta = {};
     }
 
-    _add(list, item, prop) {
+    _add(list: Map<string, any>, item: any, prop: string) {
         if (list.has(item.key))
             throw new Error(`Item with key '${item.key}' already been added to the node`);
         if (item[prop] !== null)
@@ -65,7 +71,7 @@ export class Node {
         const ios = [...this.inputs.values(), ...this.outputs.values()];
         const connections = ios.reduce((arr, io) => {
             return [...arr, ...io.connections];
-        }, []);
+        }, [] as Connection[]);
 
         return connections;
     }
@@ -88,14 +94,14 @@ export class Node {
         return {
             'id': this.id,
             'data': this.data,
-            'inputs': Array.from(this.inputs).reduce((obj, [key, input]) => (obj[key] = input.toJSON(), obj), {}),
-            'outputs': Array.from(this.outputs).reduce((obj, [key, output]) => (obj[key] = output.toJSON(), obj), {}),
+            'inputs': Array.from(this.inputs).reduce((obj, [key, input]) => (obj[key] = input.toJSON(), obj), {} as any),
+            'outputs': Array.from(this.outputs).reduce((obj, [key, output]) => (obj[key] = output.toJSON(), obj), {} as any),
             'position': this.position,
             'name': this.name
         }
     }
 
-    static fromJSON(json: Object) {
+    static fromJSON(json: NodeData) {
         const node = new Node(json.name);
 
         node.id = json.id;

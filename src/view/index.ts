@@ -4,19 +4,23 @@ import { Emitter } from '../core/emitter';
 import { Node } from '../node';
 import { Connection as ViewConnection } from './connection';
 import { Node as ViewNode } from './node';
+import { Component } from '../engine/component';
 
 export class EditorView extends Emitter {
 
-    constructor(container: HTMLElement, components: Object, emitter: Emitter) {
+    container: HTMLElement;
+    components: Map<string, Component>;
+    nodes = new Map<Node, ViewNode>();
+    connections = new Map<Connection, ViewConnection>();
+    area: Area;
+
+    constructor(container: HTMLElement, components: Map<string, Component>, emitter: Emitter) {
         super(emitter);
 
         this.container = container;
         this.components = components;
 
         this.container.style.overflow = 'hidden';
-
-        this.nodes = new Map();
-        this.connections = new Map();
 
         this.container.addEventListener('click', this.click.bind(this));
         this.container.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, view: this }));
@@ -29,7 +33,11 @@ export class EditorView extends Emitter {
     }
 
     addNode(node: Node) {
-        const nodeView = new ViewNode(node, this.components.get(node.name), this);
+        const component = this.components.get(node.name);
+
+        if(!component) throw new Error(`Component ${node.name} not found`);
+        
+        const nodeView = new ViewNode(node, component, this);
 
         this.nodes.set(node, nodeView);
         this.area.appendChild(nodeView.el);
@@ -39,12 +47,20 @@ export class EditorView extends Emitter {
         const nodeView = this.nodes.get(node);
 
         this.nodes.delete(node);
-        this.area.removeChild(nodeView.el);
+        if(nodeView)
+            this.area.removeChild(nodeView.el);
     }
 
     addConnection(connection: Connection) {
+        if(!connection.input.node || !connection.output.node)
+            throw new Error('Connection input or output not added to node');
+
         const viewInput = this.nodes.get(connection.input.node);
         const viewOutput = this.nodes.get(connection.output.node);
+
+        if(!viewInput || !viewOutput)
+            throw new Error('View node not fount for input or output');
+
         const connView = new ViewConnection(connection, viewInput, viewOutput, this);
 
         this.connections.set(connection, connView);
@@ -55,17 +71,26 @@ export class EditorView extends Emitter {
         const connView = this.connections.get(connection);
 
         this.connections.delete(connection);
-        this.area.removeChild(connView.el);
+        if(connView)
+            this.area.removeChild(connView.el);
     }
 
-    updateConnections({ node }) {
+    updateConnections({ node } : { node: Node }) {
         node.getConnections().map(conn => {
-            this.connections.get(conn).update();
+            let connView = this.connections.get(conn);
+
+            if(!connView) throw new Error('Connection view not found');
+
+            connView.update();
         });
     }
 
     resize() {
         const { container } = this;
+
+        if(!container.parentElement)
+            throw new Error('Container doesn\'t have parent element');
+
         const width = container.parentElement.clientWidth;
         const height = container.parentElement.clientHeight;
 
@@ -73,7 +98,7 @@ export class EditorView extends Emitter {
         container.style.height = height + 'px';
     }
 
-    click(e) {
+    click(e: Event) {
         const container = this.container;
         
         if (container !== e.target) return;

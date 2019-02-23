@@ -4,21 +4,28 @@ import { EngineEvents } from './events';
 import { Recursion } from './recursion';
 import { State } from './state';
 import { Validator } from '../core/validator';
+import { Data, Node } from '../core/data';
 
 export { Component, Recursion };
 
+interface EngineNode extends Node {
+    busy: boolean;
+    unlockPool: any[];
+    outputData: any;
+}
+
 export class Engine extends Context {
+
+    args: any[] = [];
+    data: Data | null = null;
+    state = State.AVAILABLE;
+    onAbort = () => { };
 
     constructor(id: string) {
         super(id, new EngineEvents());
-
-        this.args = [];
-        this.data = null;
-        this.state = State.AVAILABLE;
-        this.onAbort = () => { };
     }
 
-    clone() {
+    public clone() {
         const engine = new Engine(this.id);
 
         this.components.forEach(c => engine.register(c));
@@ -26,7 +33,7 @@ export class Engine extends Context {
         return engine;
     }
 
-    async throwError (message, data = null) {
+    async throwError (message: string, data: any = null) {
         await this.abort();
         this.trigger('error', { message, data });
         this.processDone();
@@ -34,7 +41,7 @@ export class Engine extends Context {
         return 'error';
     }
 
-    processStart() {
+    private processStart() {
         if (this.state === State.AVAILABLE) {  
             this.state = State.PROCESSED;
             return true;
@@ -49,7 +56,7 @@ export class Engine extends Context {
         return false;
     }
 
-    processDone() {
+    private processDone() {
         const success = this.state !== State.ABORT;
 
         this.state = State.AVAILABLE;
@@ -62,7 +69,7 @@ export class Engine extends Context {
         return success;
     }
 
-    async abort() {
+    private async abort() {
         return new Promise(ret => {
             if (this.state === State.PROCESSED) {
                 this.state = State.ABORT;
@@ -77,7 +84,7 @@ export class Engine extends Context {
         });
     }
 
-    async lock(node) {
+    private async lock(node: EngineNode) {
         return new Promise(res => {
             node.unlockPool = node.unlockPool || [];
             if (node.busy && !node.outputData)
@@ -89,22 +96,22 @@ export class Engine extends Context {
         });    
     }
 
-    unlock(node) {
+    unlock(node: EngineNode) {
         node.unlockPool.forEach(a => a());
         node.unlockPool = [];
         node.busy = false;
     }
 
-    async extractInputData(node) {
-        const obj = {};
+    private async extractInputData(node: Node) {
+        const obj: {[id: string]: any} = {};
 
         for (let key of Object.keys(node.inputs)) {
             const input = node.inputs[key];
             const conns = input.connections;
             const connData = await Promise.all(conns.map(async (c) => {
-                const prevNode = this.data.nodes[c.node];
+                const prevNode = (this.data as Data).nodes[c.node];
 
-                const outputs = await this.processNode(prevNode);
+                const outputs = await this.processNode(prevNode as EngineNode);
 
                 if (!outputs) 
                     this.abort();
@@ -118,9 +125,9 @@ export class Engine extends Context {
         return obj;
     }
 
-    async processWorker(node) {
+    private async processWorker(node: Node) {
         const inputData = await this.extractInputData(node);
-        const component = this.components.get(node.name);
+        const component = this.components.get(node.name) as Component;
         const outputData = {};
 
         try {
@@ -133,7 +140,7 @@ export class Engine extends Context {
         return outputData;
     }
 
-    async processNode(node) {
+    private async processNode(node: EngineNode) {
         if (this.state === State.ABORT || !node)
             return null;
         
@@ -147,23 +154,23 @@ export class Engine extends Context {
         return node.outputData;
     }
 
-    async forwardProcess(node) {
+    private async forwardProcess(node: Node) {
         if (this.state === State.ABORT)
             return null;
 
         return await Promise.all(Object.keys(node.outputs).map(async (key) => {
             const output = node.outputs[key];
-
+            
             return await Promise.all(output.connections.map(async (c) => {
-                const nextNode = this.data.nodes[c.node];
+                const nextNode = (this.data as Data).nodes[c.node];
 
-                await this.processNode(nextNode);
+                await this.processNode(nextNode as EngineNode);
                 await this.forwardProcess(nextNode);
             }));
         }));
     }
 
-    copy(data) {
+    copy(data: Data) {
         data = Object.assign({}, data);
         data.nodes = Object.assign({}, data.nodes);
         
@@ -173,7 +180,7 @@ export class Engine extends Context {
         return data;
     }
 
-    async validate(data) {
+    async validate(data: Data) {
         const checking = Validator.validate(this.id, data);
         const recursion = new Recursion(data.nodes);
 
@@ -188,35 +195,38 @@ export class Engine extends Context {
         return true;
     }
 
-    async processStartNode(id) {
-        if (id) {
-            let startNode = this.data.nodes[id];
+    private async processStartNode(id: string | number | null) {
+        if (!id) return;
 
-            if (!startNode)
-                return await this.throwError('Node with such id not found');   
-            
-            await this.processNode(startNode);
-            await this.forwardProcess(startNode);
-        }
+        let startNode = (this.data as Data).nodes[id];
+
+        if (!startNode)
+            return await this.throwError('Node with such id not found');   
+        
+        await this.processNode(startNode as EngineNode);
+        await this.forwardProcess(startNode);
     }
 
-    async processUnreachable() {
-        for (let i in this.data.nodes) // process nodes that have not been reached
-            if (typeof this.data.nodes[i].outputData === 'undefined') {
-                const node = this.data.nodes[i];
+    private async processUnreachable() {
+        const data = this.data as Data;
 
+        for (let i in data.nodes) { // process nodes that have not been reached
+            const node = data.nodes[i] as EngineNode;
+
+            if (typeof node.outputData === 'undefined') {
                 await this.processNode(node);
                 await this.forwardProcess(node);
             }
+        }
     }
 
-    async process(data: Object, startId: ?number = null, ...args) {
+    async process(data: Data, startId: number | string | null = null, ...args: []) {
         if (!this.processStart()) return;
         if (!this.validate(data)) return;    
         
         this.data = this.copy(data);
         this.args = args;
-
+        
         await this.processStartNode(startId);
         await this.processUnreachable();
         

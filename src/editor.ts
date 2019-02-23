@@ -8,22 +8,32 @@ import { Node } from './node';
 import { Output } from './output';
 import { Selected } from './selected';
 import { Validator } from './core/validator';
+import { Data } from './core/data';
 
 export class NodeEditor extends Context {
+
+    nodes: Node[] = [];
+    selected = new Selected();
+    view: EditorView;
 
     constructor(id: string, container: HTMLElement) {
         super(id, new EditorEvents());
         
-        this.nodes = [];
-
-        this.selected = new Selected();
         this.view = new EditorView(container, this.components, this);
 
         window.addEventListener('keydown', e => this.trigger('keydown', e));
         window.addEventListener('keyup', e => this.trigger('keyup', e));
         this.on('selectnode', ({ node, accumulate }) => this.selectNode(node, accumulate));
-        this.on('nodeselected', () => this.selected.each(n => this.view.nodes.get(n).onStart()));
-        this.on('translatenode', ({ dx, dy }) => this.selected.each(n => this.view.nodes.get(n).onDrag(dx, dy)));
+        this.on('nodeselected', () => this.selected.each(n => {
+            const nodeView = this.view.nodes.get(n);
+
+            nodeView && nodeView.onStart()
+        }));
+        this.on('translatenode', ({ dx, dy }) => this.selected.each(n => {
+            const nodeView = this.view.nodes.get(n);
+
+            nodeView && nodeView.onDrag(dx, dy)
+        }));
     }
 
     addNode(node: Node) {
@@ -81,13 +91,13 @@ export class NodeEditor extends Context {
         this.trigger('nodeselected', node);
     }
 
-    getComponent(name) {
+    getComponent(name: string) {
         const component = this.components.get(name);
 
         if (!component)
             throw `Component ${name} not found`;
         
-        return component;
+        return component as Component;
     }
 
     register(component: Component) {
@@ -100,14 +110,14 @@ export class NodeEditor extends Context {
     }
 
     toJSON() {
-        const data = { id: this.id, nodes: {} };
+        const data: Data = { id: this.id, nodes: {} };
         
         this.nodes.forEach(node => data.nodes[node.id] = node.toJSON());
         this.trigger('export', data);
         return data;
     }
 
-    beforeImport(json: Object) {
+    beforeImport(json: Data) {
         const checking = Validator.validate(this.id, json);
         
         if (!checking.success) {
@@ -126,9 +136,9 @@ export class NodeEditor extends Context {
         return true;
     }
 
-    async fromJSON(json: Object) {
+    async fromJSON(json: Data) {
         if (!this.beforeImport(json)) return false;
-        const nodes = {};
+        const nodes: any = {};
 
         try {
             await Promise.all(Object.keys(json.nodes).map(async id => {

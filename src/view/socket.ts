@@ -1,8 +1,15 @@
 import { Emitter } from '../core/emitter';
+import { IO } from '../io';
+import { Node } from '../node';
 
 export class Socket extends Emitter {
 
-    constructor(el, type, io, node, emitter) {
+    el: HTMLElement;
+    type: string;
+    io: IO;
+    node: Node;
+
+    constructor(el: HTMLElement, type: string, io: IO, node: Node, emitter: Emitter) {
         super(emitter);
         this.el = el;
         this.type = type;
@@ -12,7 +19,7 @@ export class Socket extends Emitter {
         this.trigger('rendersocket', { el, [type]: this.io, socket: io.socket });
     }
 
-    getPosition({ position }) {
+    getPosition({ position } : { position: number[] }) {
         const el = this.el;
 
         return [
