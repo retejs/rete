@@ -1,10 +1,11 @@
 import { Component } from './component';
 import { Context } from '../core/context';
 import { EngineEvents } from './events';
+import { Recursion } from './recursion';
 import { State } from './state';
 import { Validator } from '../core/validator';
 
-export { Component };
+export { Component, Recursion };
 
 export class Engine extends Context {
 
@@ -31,31 +32,6 @@ export class Engine extends Context {
         this.processDone();
 
         return 'error';
-    }
-
-    extractInputNodes(node, nodes) {
-        return Object.keys(node.inputs).reduce((a, key) => {
-            return [...a, ...(node.inputs[key].connections || []).reduce((b, c) => [...b, nodes[c.node]], [])]
-        }, []);
-    }
-
-    detectRecursions(nodes) {
-        const nodesArr = Object.keys(nodes).map(id => nodes[id]);
-        const findSelf = (node, inputNodes) => {
-            if (inputNodes.some(n => n === node))
-                return node;
-            
-            for (let i = 0; i < inputNodes.length; i++) {
-                if (findSelf(node, this.extractInputNodes(inputNodes[i], nodes)))
-                    return node;
-            }
-
-            return null;
-        }
-
-        return nodesArr.map(node => {
-            return findSelf(node, this.extractInputNodes(node, nodes))
-        }).filter(r => r !== null);
     }
 
     processStart() {
@@ -199,14 +175,15 @@ export class Engine extends Context {
 
     async validate(data) {
         const checking = Validator.validate(this.id, data);
+        const recursion = new Recursion(data.nodes);
 
         if (!checking.success)
             return await this.throwError(checking.msg);  
         
-        const recurentNodes = this.detectRecursions(data.nodes);
+        const recurrentNode = recursion.detect();
 
-        if (recurentNodes.length > 0)
-            return await this.throwError('Recursion detected', recurentNodes);      
+        if (recurrentNode)
+            return await this.throwError('Recursion detected', recurrentNode);      
          
         return true;
     }
