@@ -69,7 +69,7 @@ export class Engine extends Context {
         return success;
     }
 
-    private async abort() {
+    public async abort() {
         return new Promise(ret => {
             if (this.state === State.PROCESSED) {
                 this.state = State.ABORT;
