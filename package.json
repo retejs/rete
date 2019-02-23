@@ -1,17 +1,18 @@
 {
   "name": "rete",
-  "version": "1.2.0-rc.3",
+  "version": "1.2.0-rc.4",
   "description": "JavaScript framework",
   "main": "build/rete.common.js",
   "module": "build/rete.esm.js",
-  "types": "src/index.ts",
+  "types": "types/index.d.ts",
   "scripts": {
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
-    "prebuild": "npm run lint & npm test",
+    "prebuild": "npm run lint & npm test && npm run types",
     "lint": "tsc && eslint src",
-    "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts"
+    "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts",
+    "types": "tsc src/index.ts --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
   },
   "repository": {
     "type": "git",
