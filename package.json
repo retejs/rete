@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.2.0-rc.2",
+  "version": "1.2.0-rc.3",
   "description": "JavaScript framework",
   "main": "build/rete.common.js",
   "module": "build/rete.esm.js",
@@ -10,7 +10,7 @@
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
     "prebuild": "npm run lint & npm test",
-    "lint": "tsc && eslint src --fix",
+    "lint": "tsc && eslint src",
     "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts"
   },
   "repository": {
