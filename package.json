@@ -9,9 +9,9 @@
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
-    "prebuild": "npm run lint",
+    "prebuild": "npm run lint & npm test",
     "lint": "tsc && eslint src --fix",
-    "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts & mocha --compilers js:@babel/register"
+    "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts"
   },
   "repository": {
     "type": "git",
@@ -30,10 +30,12 @@
   },
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
+    "@types/jsdom": "^12.2.2",
     "@types/mocha": "^5.2.6",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.12.1",
-    "jsdom": "^11.11.0",
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^5.2.0",
     "rete-cli": "0.6.0-rc.2",
     "ts-node": "^8.0.2",
