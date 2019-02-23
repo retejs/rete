@@ -4,12 +4,13 @@
   "description": "JavaScript framework",
   "main": "build/rete.common.js",
   "module": "build/rete.esm.js",
-  "types": "src/index.d.ts",
+  "types": "src/index.ts",
   "scripts": {
-    "lint": "eslint src --fix",
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
+    "prebuild": "npm run lint",
+    "lint": "tsc && eslint src --fix",
     "test": "BABEL_ENV=test mocha --compilers js:@babel/register"
   },
   "repository": {
@@ -30,11 +31,10 @@
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
     "babel-eslint": "^10.0.1",
-    "@babel/register": "^7.0.0",
-    "@babel/preset-env": "^7.3.1",
     "eslint": "^5.12.1",
     "jsdom": "^11.11.0",
     "mocha": "^5.2.0",
-    "rete-cli": "^0.5.0"
+    "rete-cli": "0.6.0-rc.2",
+    "typescript": "^3.3.3333"
   }
 }

@@ -1,4 +1,4 @@
-import { Validator } from '../src/core/validator';
+import { Validator } from '../src/core/validator.ts';
 import assert from 'assert';
 
 describe('Validator', () => {

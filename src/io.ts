@@ -1,8 +1,18 @@
 import { Connection } from './connection';
+import { Socket } from './socket';
+import { Node } from './node';
 
 export class IO {
 
-    constructor(key, name, socket, multiConns) {
+    node: Node | null = null;
+    multipleConnections: boolean;
+    connections: Connection[] = [];
+   
+    key: string;
+    name: string;
+    socket: Socket;
+
+    constructor(key: string, name: string, socket: Socket, multiConns: boolean) {
 	    this.node = null;
         this.multipleConnections = multiConns;
         this.connections = [];

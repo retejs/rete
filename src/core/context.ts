@@ -1,9 +1,16 @@
 import { Emitter } from './emitter'
 import { Validator } from './validator'
+import { Events } from './events';
+import { Component } from '../engine/component';
+import { Plugin } from './plugin';
 
 export class Context extends Emitter {
 
-    constructor(id, events) {
+    id: string;
+    plugins: Map<string, object>;
+    components: Map<string, Component>;
+
+    constructor(id: string, events: Events) {
         super(events);
 
         if (!Validator.isValidId(id))
@@ -14,14 +21,14 @@ export class Context extends Emitter {
         this.components = new Map();
     }
 
-    use(plugin, options = {}) {
+    use(plugin: Plugin, options = {}) {
         if (plugin.name && this.plugins.has(plugin.name)) throw new Error(`Plugin ${plugin.name} already in use`)
 
         plugin.install(this, options);
         this.plugins.set(plugin.name, options)
     }
 
-    register(component) {
+    register(component: Component) {
         if (this.components.has(component.name))
             throw new Error(`Component ${component.name} already registered`);
 

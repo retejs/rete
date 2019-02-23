@@ -4,23 +4,30 @@ import { Emitter } from '../core/emitter';
 import { IO } from '../io';
 import { Control as ViewControl } from './control';
 import { Socket as ViewSocket } from './socket';
+import { Node as NodeEntity } from '../node';
+import { Component } from '../engine/component';
 
 export class Node extends Emitter {
 
-    constructor(node, component, emitter) {
+    node: NodeEntity;
+    component: Component;
+    sockets = new Map<IO, ViewSocket>();
+    controls = new Map<Control, ViewControl>();
+
+    el: HTMLElement;
+    private _startPosition: number[] = [];
+
+    constructor(node: NodeEntity, component: Component, emitter: Emitter) {
         super(emitter);
 
         this.node = node;
         this.component = component;
-        this.sockets = new Map();
-        this.controls = new Map();
         this.el = document.createElement('div');
         this.el.style.position = 'absolute';
 
         this.el.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, node: this.node }));
 
-        this._startPosition = null;
-        this._drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => {
+        new Drag(this.el, this.onTranslate.bind(this) as any, this.onSelect.bind(this) as any, () => {
             this.trigger('nodedraged', node);
         });
 
@@ -43,11 +50,15 @@ export class Node extends Emitter {
         this.controls.set(control, new ViewControl(el, control, this));
     }
 
-    getSocketPosition(io) {
-        return this.sockets.get(io).getPosition(this.node);
+    getSocketPosition(io: IO) {
+        const socket = this.sockets.get(io);
+
+        if(!socket) throw new Error(`Socket not fount for ${io.name} with key ${io.key}`);
+
+        return socket.getPosition(this.node);
     }
 
-    onSelect(e) {        
+    onSelect(e: MouseEvent) {        
         this.onStart();
         this.trigger('selectnode', { node: this.node, accumulate: e.ctrlKey });
     }
@@ -56,18 +67,18 @@ export class Node extends Emitter {
         this._startPosition = [...this.node.position];
     }
 
-    onTranslate(dx, dy) {
+    onTranslate(dx: number, dy: number) {
         this.trigger('translatenode', { node: this.node, dx, dy });
     }
 
-    onDrag(dx, dy) {
+    onDrag(dx: number, dy: number) {
         const x = this._startPosition[0] + dx;
         const y = this._startPosition[1] + dy;
 
         this.translate(x, y);
     }
 
-    translate(x, y) {
+    translate(x: number, y: number) {
         const node = this.node;
         const params = { node, x, y };
 

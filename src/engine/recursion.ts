@@ -1,26 +1,32 @@
-function intersect(array1, array2) {
+import { Node, Nodes } from "../core/data";
+
+function intersect(array1: any[], array2: any[]) {
     return array1.filter(value => -1 !== array2.indexOf(value));
 }
 
 export class Recursion {
-    constructor(nodes) {
+
+    nodes: Nodes;
+
+    constructor(nodes: Nodes) {
         this.nodes = nodes;
     }
     
-    extractInputNodes(node) {
-        return Object.keys(node.inputs).reduce((a, key) => {
-            return [...a, ...(node.inputs[key].connections || []).reduce((b, c) => [...b, this.nodes[c.node]], [])]
+    extractInputNodes(node: Node) : Node[] {
+        return Object.keys(node.inputs).reduce((a: any[], key: string) => {
+            return [...a, ...(node.inputs[key].connections || []).reduce((b: any[], c: any) => [...b, this.nodes[c.node]], [])]
         }, []);
     }
 
-    findSelf(list, inputNodes) {
+    findSelf(list: any[], inputNodes: Node[]) : Node | null {
         const inters = intersect(list, inputNodes);
 
         if (inters.length)
             return inters[0];
         
         for (let node of inputNodes) {
-            let inter = this.findSelf([node, ...list], this.extractInputNodes(node));
+            let l = [node, ...list];
+            let inter = this.findSelf(l, this.extractInputNodes(node));
 
             if (inter)
                 return inter;
@@ -29,7 +35,7 @@ export class Recursion {
         return null;
     }
 
-    detect() {
+    detect() : Node | null {
         const nodesArr = Object.keys(this.nodes).map(id => this.nodes[id]);
 
         for (let node of nodesArr) {
