@@ -2,8 +2,6 @@ import assert from 'assert';
 
 describe('Socket', () => {
     it('Socket arguments', () => {
-        // assert.throws(() => new Rete.Socket(), Error, 'null');
-        // assert.throws(() => new Rete.Socket(345), Error, 'number');
         assert.doesNotThrow(() => new Rete.Socket('valid name'), Error, 'valid string');
     });
 
