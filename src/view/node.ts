@@ -42,7 +42,16 @@ export class Node extends Emitter {
         this.update();
     }
 
+    clearSockets() {
+        const ios : IO[] = [ ...this.node.inputs.values(), ...this.node.outputs.values()];
+        
+        this.sockets.forEach(s => {
+            if(!ios.includes(s.io)) this.sockets.delete(s.io);
+        });
+    }
+
     bindSocket(el: HTMLElement, type: string, io: IO) {
+        this.clearSockets();
         this.sockets.set(io, new ViewSocket(el, type, io, this.node, this));
     }
 
