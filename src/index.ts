@@ -1,8 +1,10 @@
 import { Engine, Recursion } from './engine/index';
 import { Component } from './component';
 import { Control } from './control';
+import { Connection } from './connection';
 import { Emitter } from './core/emitter';
 import { Input } from './input';
+import { IO } from './io';
 import { Node } from './node';
 import { NodeEditor } from './editor';
 import { Output } from './output';
@@ -23,8 +25,10 @@ export default {
     Recursion,
     Component,
     Control,
+    Connection,
     Emitter,
     Input,
+    IO,
     Node,
     NodeEditor,
     Output,
