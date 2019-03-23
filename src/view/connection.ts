@@ -1,15 +1,16 @@
 import { Emitter } from '../core/emitter';
 import { Node as ViewNode } from './node';
 import { Connection as ConnectionEntity } from '../connection';
+import { EventsTypes } from '../events';
 
-export class Connection extends Emitter {
+export class Connection extends Emitter<EventsTypes> {
 
     connection: ConnectionEntity;
     inputNode: ViewNode;
     outputNode: ViewNode;
     el: HTMLElement;
 
-    constructor(connection: ConnectionEntity, inputNode: ViewNode, outputNode: ViewNode, emitter: Emitter) {
+    constructor(connection: ConnectionEntity, inputNode: ViewNode, outputNode: ViewNode, emitter: Emitter<EventsTypes>) {
         super(emitter);
         this.connection = connection;
         this.inputNode = inputNode;

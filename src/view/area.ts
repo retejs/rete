@@ -1,17 +1,22 @@
 import { Drag } from './drag';
 import { Emitter } from '../core/emitter';
 import { Zoom } from './zoom';
+import { EventsTypes } from '../events';
 
-export class Area extends Emitter {
+export type Transform = { k: number, x: number, y: number };
+export type Mouse = { x: number, y: number };
+export type ZoomSource = 'wheel' | 'touch' | 'dblclick';
+
+export class Area extends Emitter<EventsTypes> {
 
     el: HTMLElement;
     container: HTMLElement;
-    transform = { k: 1, x: 0, y: 0 };
-    mouse = { x: 0, y: 0 }
+    transform: Transform = { k: 1, x: 0, y: 0 };
+    mouse: Mouse = { x: 0, y: 0 }
 
     private _startPosition: any = null
 
-    constructor(container: HTMLElement, emitter: Emitter) {
+    constructor(container: HTMLElement, emitter: Emitter<EventsTypes>) {
         super(emitter);
         
         const el = this.el = document.createElement('div');
@@ -51,7 +56,7 @@ export class Area extends Emitter {
         this.translate(this._startPosition.x + dx, this._startPosition.y + dy)
     }
 
-    onZoom(delta: number, ox: number, oy: number, source: string) {
+    onZoom(delta: number, ox: number, oy: number, source: ZoomSource) {
         this.zoom(this.transform.k * (1 + delta), ox, oy, source);
 
         this.update();
@@ -69,7 +74,7 @@ export class Area extends Emitter {
         this.trigger('translated');
     }
 
-    zoom(zoom: number, ox = 0, oy = 0, source: string ) {
+    zoom(zoom: number, ox = 0, oy = 0, source: ZoomSource ) {
         const k = this.transform.k;
         const params = { transform: this.transform, zoom, source };
 

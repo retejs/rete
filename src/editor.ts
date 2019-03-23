@@ -9,8 +9,9 @@ import { Output } from './output';
 import { Selected } from './selected';
 import { Validator } from './core/validator';
 import { Data } from './core/data';
+import { EventsTypes } from './events';
 
-export class NodeEditor extends Context {
+export class NodeEditor extends Context<EventsTypes> {
 
     nodes: Node[] = [];
     selected = new Selected();

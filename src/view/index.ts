@@ -5,8 +5,9 @@ import { Node } from '../node';
 import { Connection as ViewConnection } from './connection';
 import { Node as ViewNode } from './node';
 import { Component } from '../engine/component';
+import { EventsTypes } from '../events';
 
-export class EditorView extends Emitter {
+export class EditorView extends Emitter<EventsTypes> {
 
     container: HTMLElement;
     components: Map<string, Component>;
@@ -14,7 +15,7 @@ export class EditorView extends Emitter {
     connections = new Map<Connection, ViewConnection>();
     area: Area;
 
-    constructor(container: HTMLElement, components: Map<string, Component>, emitter: Emitter) {
+    constructor(container: HTMLElement, components: Map<string, Component>, emitter: Emitter<EventsTypes>) {
         super(emitter);
 
         this.container = container;

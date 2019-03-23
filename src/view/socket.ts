@@ -1,15 +1,16 @@
 import { Emitter } from '../core/emitter';
 import { IO } from '../io';
 import { Node } from '../node';
+import { EventsTypes } from '../events';
 
-export class Socket extends Emitter {
+export class Socket extends Emitter<EventsTypes> {
 
     el: HTMLElement;
     type: string;
     io: IO;
     node: Node;
 
-    constructor(el: HTMLElement, type: string, io: IO, node: Node, emitter: Emitter) {
+    constructor(el: HTMLElement, type: string, io: IO, node: Node, emitter: Emitter<EventsTypes>) {
         super(emitter);
         this.el = el;
         this.type = type;
