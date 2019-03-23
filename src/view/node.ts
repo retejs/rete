@@ -6,8 +6,9 @@ import { Control as ViewControl } from './control';
 import { Socket as ViewSocket } from './socket';
 import { Node as NodeEntity } from '../node';
 import { Component } from '../engine/component';
+import { EventsTypes } from '../events';
 
-export class Node extends Emitter {
+export class Node extends Emitter<EventsTypes> {
 
     node: NodeEntity;
     component: Component;
@@ -17,7 +18,7 @@ export class Node extends Emitter {
     el: HTMLElement;
     private _startPosition: number[] = [];
 
-    constructor(node: NodeEntity, component: Component, emitter: Emitter) {
+    constructor(node: NodeEntity, component: Component, emitter: Emitter<EventsTypes>) {
         super(emitter);
 
         this.node = node;

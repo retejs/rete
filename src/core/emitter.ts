@@ -1,16 +1,16 @@
 import { Events } from './events';
 
-export class Emitter {
+export class Emitter<EventTypes> {
 
     events: any = {};
     silent = false;
 
-    constructor(events: Events | Emitter) {
+    constructor(events: Events | Emitter<EventTypes>) {
         this.events = events instanceof Emitter ? events.events : events.handlers;
     }
 
-    on(names: string, handler: (...args: any) => any) {
-        names.split(' ').forEach(name => {
+    on<K extends keyof EventTypes>(names: K, handler: (args: EventTypes[K]) => any) {
+        (names as string).split(' ').forEach(name => {
             if (!this.events[name])
                 throw new Error(`The event ${name} does not exist`);
             this.events[name].push(handler);
@@ -19,7 +19,7 @@ export class Emitter {
         return this;
     }
 
-    trigger(name: string, params: any = {}) {
+    trigger<K extends keyof EventTypes>(name: K, params: EventTypes[K] | {} = {}) {
         if (!(name in this.events))
             throw new Error(`The event ${name} cannot be triggered`);
 

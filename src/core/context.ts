@@ -3,8 +3,9 @@ import { Validator } from './validator'
 import { Events } from './events';
 import { Component } from '../engine/component';
 import { Plugin } from './plugin';
+import { EventsTypes as DefaultEvents } from './events';
 
-export class Context extends Emitter {
+export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
 
     id: string;
     plugins: Map<string, object>;

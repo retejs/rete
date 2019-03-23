@@ -5,6 +5,7 @@ import { Recursion } from './recursion';
 import { State } from './state';
 import { Validator } from '../core/validator';
 import { Data, Node } from '../core/data';
+import { EventsTypes } from './events';
 
 export { Component, Recursion };
 
@@ -14,7 +15,7 @@ interface EngineNode extends Node {
     outputData: any;
 }
 
-export class Engine extends Context {
+export class Engine extends Context<EventsTypes> {
 
     args: any[] = [];
     data: Data | null = null;
