@@ -8,6 +8,7 @@ import { Control } from './control';
 import { Transform, ZoomSource, Mouse } from './view/area';
 import { EditorView } from './view';
 import { Data } from './core/data';
+import { Component } from './component';
 
 export class EditorEvents extends Events {
 
@@ -51,6 +52,7 @@ export class EditorEvents extends Events {
 
 
 export interface EventsTypes {
+    componentregister: Component;
     nodecreate: Node;
     nodecreated: Node;
     noderemove: Node;
