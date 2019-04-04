@@ -25,7 +25,7 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
     use<T extends Plugin, O extends PluginParams<T>>(plugin: T, options?: O) {
         if (plugin.name && this.plugins.has(plugin.name)) throw new Error(`Plugin ${plugin.name} already in use`)
 
-        plugin.install(this, options);
+        plugin.install(this, options || {});
         this.plugins.set(plugin.name, options)
     }
 
