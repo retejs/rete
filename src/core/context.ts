@@ -2,13 +2,13 @@ import { Emitter } from './emitter'
 import { Validator } from './validator'
 import { Events } from './events';
 import { Component } from '../engine/component';
-import { Plugin } from './plugin';
+import { Plugin, PluginParams } from './plugin';
 import { EventsTypes as DefaultEvents } from './events';
 
 export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
 
     id: string;
-    plugins: Map<string, object>;
+    plugins: Map<string, any>;
     components: Map<string, Component>;
 
     constructor(id: string, events: Events) {
@@ -22,7 +22,7 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
         this.components = new Map();
     }
 
-    use(plugin: Plugin, options = {}) {
+    use<T extends Plugin, O extends PluginParams<T>>(plugin: T, options?: O) {
         if (plugin.name && this.plugins.has(plugin.name)) throw new Error(`Plugin ${plugin.name} already in use`)
 
         plugin.install(this, options);
