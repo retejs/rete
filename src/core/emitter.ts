@@ -9,8 +9,10 @@ export class Emitter<EventTypes> {
         this.events = events instanceof Emitter ? events.events : events.handlers;
     }
 
-    on<K extends keyof EventTypes>(names: K, handler: (args: EventTypes[K]) => any) {
-        (names as string).split(' ').forEach(name => {
+    on<K extends keyof EventTypes>(names: K | K[], handler: (args: EventTypes[K]) => any) {
+        const events = names instanceof Array ? names : (names as string).split(' ');
+
+        (events as Array<string>).forEach(name => {
             if (!this.events[name])
                 throw new Error(`The event ${name} does not exist`);
             this.events[name].push(handler);
