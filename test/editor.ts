@@ -86,6 +86,13 @@ describe('Editor', () => {
 
         assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
         assert.equal((n1.outputs.get('name') as Output).connections.length, 0, 'no connections');
-        
     });
+
+    it('events', () => {
+        var editor = new Rete.NodeEditor('test@0.0.2', c);
+
+        assert.doesNotThrow(() => editor.trigger('nodecreate'), Error, 'nodecreate events exist');
+        assert.throws(() => editor.on('wrngevent' as any, () => {}), Error, 'throw exception on non-exist event');
+        assert.doesNotThrow(() => editor.on(['nodecreate'], () => {}), Error, 'on events array');
+    })
 })
