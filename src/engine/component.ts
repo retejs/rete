@@ -1,7 +1,7 @@
 import { Engine } from './index';
 import { Node } from '../core/data';
 
-export type IOs = { [key: string]: any };
+export interface IOs { [key: string]: any }
 
 export abstract class Component {
 

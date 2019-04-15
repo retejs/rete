@@ -1,10 +1,10 @@
 import { Drag } from './drag';
 import { Emitter } from '../core/emitter';
-import { Zoom } from './zoom';
 import { EventsTypes } from '../events';
+import { Zoom } from './zoom';
 
-export type Transform = { k: number, x: number, y: number };
-export type Mouse = { x: number, y: number };
+export interface Transform { k: number; x: number; y: number }
+export interface Mouse { x: number; y: number }
 export type ZoomSource = 'wheel' | 'touch' | 'dblclick';
 
 export class Area extends Emitter<EventsTypes> {
@@ -74,7 +74,7 @@ export class Area extends Emitter<EventsTypes> {
         this.trigger('translated');
     }
 
-    zoom(zoom: number, ox = 0, oy = 0, source: ZoomSource ) {
+    zoom(zoom: number, ox = 0, oy = 0, source: ZoomSource) {
         const k = this.transform.k;
         const params = { transform: this.transform, zoom, source };
 

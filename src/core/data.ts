@@ -1,4 +1,4 @@
-export type Connection = {
+export interface Connection {
     node: number;
     data: any;
 }
@@ -10,28 +10,28 @@ export type OutputConnection = Connection & {
     input: string;
 } 
 
-export type Input = {
-    connections: InputConnection[]
+export interface Input {
+    connections: InputConnection[];
 }
-export type Output = {
-    connections: OutputConnection[]
+export interface Output {
+    connections: OutputConnection[];
 }
 
-export type Inputs = { [key: string]: Input };
-export type Outputs = { [key: string]: Output };
+export interface Inputs { [key: string]: Input }
+export interface Outputs { [key: string]: Output }
 
-export type Node = {
+export interface Node {
     id: number;
     name: string;
     inputs: Inputs;
     outputs: Outputs;
     data: any;
-    position: number[];
+    position: [number, number];
 }
 
-export type Nodes = { [id: string]: Node };
+export interface Nodes { [id: string]: Node }
 
-export type Data = {
+export interface Data {
     id: string;
     nodes: Nodes;
 }

@@ -1,9 +1,9 @@
 import { Emitter } from '../core/emitter';
+import { EventsTypes } from '../events';
 import { IO } from '../io';
 import { Node } from '../node';
-import { EventsTypes } from '../events';
 
-export class Socket extends Emitter<EventsTypes> {
+export class SocketView extends Emitter<EventsTypes> {
 
     el: HTMLElement;
     type: string;
@@ -20,7 +20,7 @@ export class Socket extends Emitter<EventsTypes> {
         this.trigger('rendersocket', { el, [type]: this.io, socket: io.socket });
     }
 
-    getPosition({ position } : { position: number[] }) {
+    getPosition({ position }: { position: number[] }): [number, number] {
         const el = this.el;
 
         return [

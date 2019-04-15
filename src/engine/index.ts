@@ -1,11 +1,10 @@
 import { Component } from './component';
 import { Context } from '../core/context';
-import { EngineEvents } from './events';
 import { Recursion } from './recursion';
 import { State } from './state';
 import { Validator } from '../core/validator';
 import { Data, Node } from '../core/data';
-import { EventsTypes } from './events';
+import { EngineEvents, EventsTypes } from './events';
 
 export { Component, Recursion };
 

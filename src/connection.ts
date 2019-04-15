@@ -1,5 +1,5 @@
-import { Output } from "./output";
-import { Input } from "./input";
+import { Input } from './input';
+import { Output } from './output';
 
 export class Connection {
 

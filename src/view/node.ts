@@ -1,24 +1,24 @@
+import { Component } from '../engine/component';
 import { Control } from '../control';
+import { ControlView } from './control';
 import { Drag } from './drag';
 import { Emitter } from '../core/emitter';
-import { IO } from '../io';
-import { Control as ViewControl } from './control';
-import { Socket as ViewSocket } from './socket';
-import { Node as NodeEntity } from '../node';
-import { Component } from '../engine/component';
 import { EventsTypes } from '../events';
+import { IO } from '../io';
+import { Node } from '../node';
+import { SocketView } from './socket';
 
-export class Node extends Emitter<EventsTypes> {
+export class NodeView extends Emitter<EventsTypes> {
 
-    node: NodeEntity;
+    node: Node;
     component: Component;
-    sockets = new Map<IO, ViewSocket>();
-    controls = new Map<Control, ViewControl>();
+    sockets = new Map<IO, SocketView>();
+    controls = new Map<Control, ControlView>();
 
     el: HTMLElement;
     private _startPosition: number[] = [];
 
-    constructor(node: NodeEntity, component: Component, emitter: Emitter<EventsTypes>) {
+    constructor(node: Node, component: Component, emitter: Emitter<EventsTypes>) {
         super(emitter);
 
         this.node = node;
@@ -44,26 +44,26 @@ export class Node extends Emitter<EventsTypes> {
     }
 
     clearSockets() {
-        const ios : IO[] = [ ...this.node.inputs.values(), ...this.node.outputs.values()];
+        const ios: IO[] = [ ...this.node.inputs.values(), ...this.node.outputs.values()];
         
         this.sockets.forEach(s => {
-            if(!ios.includes(s.io)) this.sockets.delete(s.io);
+            if (!ios.includes(s.io)) this.sockets.delete(s.io);
         });
     }
 
     bindSocket(el: HTMLElement, type: string, io: IO) {
         this.clearSockets();
-        this.sockets.set(io, new ViewSocket(el, type, io, this.node, this));
+        this.sockets.set(io, new SocketView(el, type, io, this.node, this));
     }
 
     bindControl(el: HTMLElement, control: Control) {
-        this.controls.set(control, new ViewControl(el, control, this));
+        this.controls.set(control, new ControlView(el, control, this));
     }
 
     getSocketPosition(io: IO) {
         const socket = this.sockets.get(io);
 
-        if(!socket) throw new Error(`Socket not fount for ${io.name} with key ${io.key}`);
+        if (!socket) throw new Error(`Socket not fount for ${io.name} with key ${io.key}`);
 
         return socket.getPosition(this.node);
     }
@@ -104,7 +104,9 @@ export class Node extends Emitter<EventsTypes> {
     }
 
     update() {
-        this.el.style.transform = `translate(${this.node.position[0]}px, ${this.node.position[1]}px)`;
+        const [x, y] = this.node.position;
+
+        this.el.style.transform = `translate(${x}px, ${y}px)`;
     }
 
     remove() {
