@@ -1,14 +1,14 @@
+import { Connection } from './connection';
 import { Control } from './control';
 import { Input } from './input';
-import { Output } from './output';
-import { Connection } from './connection';
 import { Node as NodeData } from './core/data';
+import { Output } from './output';
 
 export class Node {
 
     name: string;
     id: number;
-    position = [0.0, 0.0];
+    position: [number, number] = [0.0, 0.0];
     inputs = new Map<string, Input>();
     outputs = new Map<string, Output>();
     controls = new Map<string, Control>();
@@ -91,11 +91,15 @@ export class Node {
     }
 
     toJSON() {
+        const reduceIO = (list: Map<string, Input | Output>) => {
+            return Array.from(list).reduce((obj, [key, io]) => { obj[key] = io.toJSON(); return obj; }, {} as any)
+        }
+
         return {
             'id': this.id,
             'data': this.data,
-            'inputs': Array.from(this.inputs).reduce((obj, [key, input]) => (obj[key] = input.toJSON(), obj), {} as any),
-            'outputs': Array.from(this.outputs).reduce((obj, [key, output]) => (obj[key] = output.toJSON(), obj), {} as any),
+            'inputs': reduceIO(this.inputs),
+            'outputs': reduceIO(this.outputs),
             'position': this.position,
             'name': this.name
         }

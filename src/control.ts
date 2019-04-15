@@ -1,5 +1,5 @@
-import { Node } from './node';
 import { Input } from './input';
+import { Node } from './node';
 
 export class Control {
 
@@ -20,10 +20,10 @@ export class Control {
         if (this.parent === null)
             throw new Error('Control isn\'t added to Node/Input');   
         
-        if(this.parent instanceof Node)
+        if (this.parent instanceof Node)
             return this.parent;
             
-        if(!this.parent.node)
+        if (!this.parent.node)
             throw new Error('Control hasn\'t be added to Input or Node');
 
         return this.parent.node;

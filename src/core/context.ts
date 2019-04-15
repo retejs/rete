@@ -1,9 +1,8 @@
+import { Component } from '../engine/component';
 import { Emitter } from './emitter'
 import { Validator } from './validator'
-import { Events } from './events';
-import { Component } from '../engine/component';
+import { EventsTypes as DefaultEvents, Events } from './events';
 import { Plugin, PluginParams } from './plugin';
-import { EventsTypes as DefaultEvents } from './events';
 
 export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
 

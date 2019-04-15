@@ -1,6 +1,6 @@
 import { Connection } from './connection';
-import { Socket } from './socket';
 import { Node } from './node';
+import { Socket } from './socket';
 
 export class IO {
 
