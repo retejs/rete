@@ -8,6 +8,7 @@ before_script:
 
 script:
   - npm run build
+  - sonar-scanner
 
 cache:
   directories:
@@ -27,3 +28,9 @@ deploy:
     skip_cleanup: true
     on:
       tags: true
+
+addons:
+  sonarcloud:
+    organization: "retejs_rete"
+    token:
+      secure: $SONAR_TOKEN
