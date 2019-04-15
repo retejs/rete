@@ -10,7 +10,7 @@
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
     "prebuild": "npm run lint & npm test && npm run types",
-    "lint": "tsc && eslint src",
+    "lint": "tsc && eslint --ext .ts --ext .js src",
     "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts",
     "types": "tsc src/index.ts --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
   },
@@ -34,6 +34,8 @@
     "@babel/preset-typescript": "^7.3.3",
     "@types/jsdom": "^12.2.2",
     "@types/mocha": "^5.2.6",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.12.1",
     "jsdom": "^13.2.0",
