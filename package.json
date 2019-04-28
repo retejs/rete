@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.2.3",
+  "version": "1.3.0",
   "description": "JavaScript framework",
   "main": "build/rete.common.js",
   "module": "build/rete.esm.js",
