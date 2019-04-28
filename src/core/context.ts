@@ -35,4 +35,8 @@ export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
         this.components.set(component.name, component);
         this.trigger('componentregister', component);
     }
+
+    destroy() {
+        this.trigger('destroy');
+    }
 }
