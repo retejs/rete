@@ -107,10 +107,11 @@ export class Node {
 
     static fromJSON(json: NodeData) {
         const node = new Node(json.name);
+        const [x, y] = json.position;
 
         node.id = json.id;
         node.data = json.data;
-        node.position = json.position;
+        node.position = [x, y];
         node.name = json.name;
         Node.latestId = Math.max(node.id, Node.latestId);
 
