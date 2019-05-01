@@ -12,7 +12,7 @@ Introduction
 
 Documentation
 ----
-Check the [docs](https://rete.readthedocs.io/en/latest/) and learn about the components and capabilities.
+Check the [docs](https://rete.js.org/#/docs) and learn about the components and capabilities.
 
 Examples
 ----
