@@ -1,7 +1,7 @@
 import { Connection } from './connection';
 import { Control } from './control';
 import { Input } from './input';
-import { Node as NodeData } from './core/data';
+import { NodeData } from './core/data';
 import { Output } from './output';
 
 export class Node {
