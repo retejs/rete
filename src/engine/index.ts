@@ -3,12 +3,12 @@ import { Context } from '../core/context';
 import { Recursion } from './recursion';
 import { State } from './state';
 import { Validator } from '../core/validator';
-import { Data, Node } from '../core/data';
+import { Data, NodeData } from '../core/data';
 import { EngineEvents, EventsTypes } from './events';
 
 export { Component, Recursion };
 
-interface EngineNode extends Node {
+interface EngineNode extends NodeData {
     busy: boolean;
     unlockPool: any[];
     outputData: any;
@@ -102,7 +102,7 @@ export class Engine extends Context<EventsTypes> {
         node.busy = false;
     }
 
-    private async extractInputData(node: Node) {
+    private async extractInputData(node: NodeData) {
         const obj: {[id: string]: any} = {};
 
         for (let key of Object.keys(node.inputs)) {
@@ -125,7 +125,7 @@ export class Engine extends Context<EventsTypes> {
         return obj;
     }
 
-    private async processWorker(node: Node) {
+    private async processWorker(node: NodeData) {
         const inputData = await this.extractInputData(node);
         const component = this.components.get(node.name) as Component;
         const outputData = {};
@@ -154,7 +154,7 @@ export class Engine extends Context<EventsTypes> {
         return node.outputData;
     }
 
-    private async forwardProcess(node: Node) {
+    private async forwardProcess(node: NodeData) {
         if (this.state === State.ABORT)
             return null;
 
