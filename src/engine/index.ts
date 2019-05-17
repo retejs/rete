@@ -220,7 +220,7 @@ export class Engine extends Context<EventsTypes> {
         }
     }
 
-    async process(data: Data, startId: number | string | null = null, ...args: []) {
+    async process<T extends any[]>(data: Data, startId: number | string | null = null, ...args: T) {
         if (!this.processStart()) return;
         if (!this.validate(data)) return;    
         
