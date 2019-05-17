@@ -11,5 +11,5 @@ export abstract class Component {
         this.name = name;
     }
 
-    abstract worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs, ...args: any): any;
+    abstract worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs, ...args: any[]): any;
 }
