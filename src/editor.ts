@@ -106,7 +106,7 @@ export class NodeEditor extends Context<EventsTypes> {
     }
 
     clear() {
-        [...this.nodes].map(node => this.removeNode(node));
+        [...this.nodes].forEach(node => this.removeNode(node));
     }
 
     toJSON() {
@@ -167,12 +167,11 @@ export class NodeEditor extends Context<EventsTypes> {
                 });
 
             });
-        }
-        catch (e) {
+        } catch (e) {
             this.trigger('warn', e);
             return !this.afterImport();
-        } finally {
-            return this.afterImport();
         }
+
+        return this.afterImport();
     }
 }

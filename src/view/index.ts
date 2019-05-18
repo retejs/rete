@@ -77,7 +77,7 @@ export class EditorView extends Emitter<EventsTypes> {
     }
 
     updateConnections({ node }: { node: Node }) {
-        node.getConnections().map(conn => {
+        node.getConnections().forEach(conn => {
             let connView = this.connections.get(conn);
 
             if (!connView) throw new Error('Connection view not found');

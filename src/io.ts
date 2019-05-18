@@ -27,6 +27,6 @@ export class IO {
     }
 
     removeConnections() {
-        this.connections.map(connection => this.removeConnection(connection));
+        this.connections.forEach(connection => this.removeConnection(connection));
     }
 }
