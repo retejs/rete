@@ -1,5 +1,9 @@
 node_modules
 .idea/
 .vscode/
+.sonarlint
+.scannerwork
+coverage
+.nyc_output
 src
 test

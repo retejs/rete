@@ -8,7 +8,7 @@ before_script:
 
 script:
   - npm run build
-  - sonar-scanner
+  - npm run coverage && sonar-scanner
 
 cache:
   directories:
