@@ -1,27 +1,17 @@
+import { Comp1 } from './data/components';
+import { Engine } from '../src/engine';
 import assert from 'assert';
 import recursiveData from './data/recursive'
-import { Component } from '../src/component';
-import { Engine } from '../src/engine';
 
 describe('Engine', () => {
-    
-    class Comp1 extends Component {
-
-        constructor() {
-            super('Num');
-        }
-
-        builder():any { }
-
-        worker() { }
-    }
-
     var id = 'test@0.0.1';
     var data = { id, nodes: {} };
 
     var createValidEngine = () => {
         let eng = new Engine(id);
 
+        eng.events['warn'] = [];
+        eng.events['error'] = [];
         eng.register(new Comp1());
         return eng;
     };
