@@ -82,12 +82,6 @@ describe('Editor', () => {
             assert.equal((node1.outputs.get('num') as Output).connections.length, 0, 'no connections');
         });
 
-        it('events', () => {
-            assert.doesNotThrow(() => editor.trigger('nodecreate'), Error, 'nodecreate events exist');
-            assert.throws(() => editor.on('wrngevent' as any, () => {}), Error, 'throw exception on non-exist event');
-            assert.doesNotThrow(() => editor.on(['nodecreate'], () => {}), Error, 'on events array');
-        })
-
         it('nodes', async () => {
             const node1 = await comps[0].createNode();
             const node2 = await comps[0].createNode();
