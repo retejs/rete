@@ -1,72 +1,85 @@
 import assert from 'assert';
-import { Component, Input, NodeEditor, Output } from '../src';
+import { Component, Node, Input, NodeEditor, Output } from '../src';
 import { renderMock } from './utils/render-mock';
 import { Comp1, Comp2 } from './data/components';
+import addNumbersData from './data/add-numbers';
 require('jsdom-global')()
 
 describe('Editor', () => {
 
-    let c: HTMLElement;
+    let container: HTMLElement;
+    let editor: NodeEditor;
 
     beforeEach(() => {
         let par = document.createElement('div') as HTMLElement;
 
-        c = document.createElement('div') as HTMLElement;
-        par.appendChild(c);
+        container = document.createElement('div') as HTMLElement;
+        par.appendChild(container);
+
+        editor = new NodeEditor('test@0.0.1', container);
+        
+        editor.events['warn'] = [];
+        editor.events['error'] = [];
     });
 
     it('init', () => {
-        assert.throws(() => new NodeEditor('test', c), Error, 'id');
-        assert.throws(() => new NodeEditor('test@5.5', c), Error, 'id');
+        assert.throws(() => new NodeEditor('test', container), Error, 'id');
+        assert.throws(() => new NodeEditor('test@5.5', container), Error, 'id');
     })
 
+    it('component register', () => {
+        const comp = new Comp1();
+
+        assert.throws(() => Boolean(editor.getComponent('Number')), 'component not registered')
+
+        editor.register(comp)
+        assert.doesNotThrow(() => Boolean(editor.getComponent('Number')), 'component registered')
+    });
+
     describe('manage', () => {
-        let editor: NodeEditor;
+        let comps: Component[];
 
         beforeEach(() => {
-            editor = new NodeEditor('test@0.0.2', c);
-            editor.events['warn'] = [];
-            editor.events['error'] = [];
+            comps = [new Comp1(), new Comp2()]
+
+            comps.forEach(c => editor.register(c));
         })
 
-        it('import/export', async () => {
-            var ret;
-            
-            ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
+        it('import', async () => {
+            let ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {} });
+    
             assert.equal(ret, false, 'can not be taken with another id');
-            
-            ret = await editor.fromJSON({ id: 'test@0.0.1', nodes: {} });
-            assert.equal(ret, false, 'nodes are mandatory');
+        });
 
-            ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {} });
+        it('export', async () => {
+            renderMock(editor);
+            editor.events['warn'] = editor.events['error'] = [(err: any) => assert.fail(err)]
+
+            let ret = await editor.fromJSON(addNumbersData as any);
+
             assert.equal(ret, true, 'correct data');
 
-            assert.deepEqual(editor.toJSON(), { id: 'test@0.0.2', nodes: {} })
+            assert.deepEqual(editor.toJSON(), addNumbersData)
         });
 
         it('connections', async () => {
             renderMock(editor);
 
-            var comps: Component[] = [new Comp1(), new Comp2()]
+            const node1 = await comps[0].createNode();
+            const node2 = await comps[1].createNode();
 
-            editor.register(comps[0])
-            editor.register(comps[1])
-
-            const n1 = await comps[0].createNode();
-            const n2 = await comps[1].createNode();
-
-            editor.addNode(n1);
-            editor.addNode(n2);
+            editor.addNode(node1);
+            editor.addNode(node2);
 
             // assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
             
-            editor.connect(n1.outputs.get('name') as Output, n2.inputs.get('name') as Input);
-            assert.equal((n1.outputs.get('name') as Output).connections.length, 1, 'one connection');
+            editor.connect(node1.outputs.get('num') as Output, node2.inputs.get('num1') as Input);
+            assert.equal((node1.outputs.get('num') as Output).connections.length, 1, 'one connection');
             
-            var connection = (n1.outputs.get('name') as Output).connections[0];
+            var connection = (node1.outputs.get('num') as Output).connections[0];
 
             assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
-            assert.equal((n1.outputs.get('name') as Output).connections.length, 0, 'no connections');
+            assert.equal((node1.outputs.get('num') as Output).connections.length, 0, 'no connections');
         });
 
         it('events', () => {
@@ -75,21 +88,9 @@ describe('Editor', () => {
             assert.doesNotThrow(() => editor.on(['nodecreate'], () => {}), Error, 'on events array');
         })
 
-        it('component register', () => {
-            const comp = new Comp1();
-
-            assert.throws(() => Boolean(editor.getComponent('Number')), 'component not registered')
-
-            editor.register(comp)
-            assert.doesNotThrow(() => Boolean(editor.getComponent('Number')), 'component registered')
-        });
-
         it('nodes', async () => {
-            const comp = new Comp1();
-            const node1 = await comp.createNode();
-            const node2 = await comp.createNode();
-
-            editor.register(comp)
+            const node1 = await comps[0].createNode();
+            const node2 = await comps[0].createNode();
 
             assert.equal(editor.nodes.length, 0, 'No nodes')
             editor.addNode(node1)
