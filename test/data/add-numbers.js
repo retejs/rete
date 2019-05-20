@@ -64,6 +64,5 @@ export default {
             'position': [500, 240],
             'name': 'Add'
         }
-    },
-    'comments': []
+    }
 }
