@@ -114,5 +114,47 @@ describe('Editor', () => {
             editor.removeNode(node2)
             assert.equal(editor.nodes.length, 0, 'Second node removed')
         })
+
+        describe('prevent', () => {
+            let node: Node;
+            let node2: Node;
+
+            beforeEach(async () => {
+                node = await comps[0].createNode();
+                node2 = await comps[1].createNode();
+            })
+
+            it('adding node', () => {
+                editor.on('nodecreate', () => false);
+                editor.addNode(node);
+                assert.equal(editor.nodes.length, 0)
+            });
+
+            it('removing node', () => {
+                editor.on('noderemove', () => false);
+                editor.addNode(node);
+                editor.removeNode(node);
+                assert.equal(editor.nodes.length, 1)
+            });
+
+            it('connection', () => {
+                editor.on('connectioncreate', () => false);
+                editor.connect(node.outputs.get('num') as Output, node2.inputs.get('num1') as Input)
+                assert.equal((node.outputs.get('num') as Output).hasConnection(), false)
+            });
+
+            it('connection', () => {
+                const output = node.outputs.get('num') as Output;
+
+                editor.on('connectionremove', () => false);
+                editor.connect(output, node2.inputs.get('num1') as Input)
+
+                assert.equal(output.hasConnection(), true)
+
+                editor.removeConnection(output.connections[0]);
+
+                assert.equal(output.hasConnection(), true)
+            });
+        });
     });
 })
