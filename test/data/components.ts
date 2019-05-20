@@ -5,7 +5,7 @@ const socketNum = new Socket('Number');
 export class Comp1 extends Component {
 
     constructor() {
-        super('Num');
+        super('Number');
     }
 
     async builder(node: Node) {
@@ -18,7 +18,7 @@ export class Comp1 extends Component {
 export class Comp2 extends Component {
 
     constructor() {
-        super('Return');
+        super('Add');
     }
 
     async builder(node: Node) {

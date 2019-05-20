@@ -78,10 +78,10 @@ describe('Editor', () => {
         it('component register', () => {
             const comp = new Comp1();
 
-            assert.throws(() => Boolean(editor.getComponent('Num')), 'component not registered')
+            assert.throws(() => Boolean(editor.getComponent('Number')), 'component not registered')
 
             editor.register(comp)
-            assert.doesNotThrow(() => Boolean(editor.getComponent('Num')), 'component registered')
+            assert.doesNotThrow(() => Boolean(editor.getComponent('Number')), 'component registered')
         });
 
         it('nodes', async () => {
