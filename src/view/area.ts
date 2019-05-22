@@ -15,6 +15,7 @@ export class Area extends Emitter<EventsTypes> {
     mouse: Mouse = { x: 0, y: 0 }
 
     private _startPosition: any = null
+    private _lockTranslate: boolean = false;
 
     constructor(container: HTMLElement, emitter: Emitter<EventsTypes>) {
         super(emitter);
@@ -24,7 +25,7 @@ export class Area extends Emitter<EventsTypes> {
         this.container = container;
         el.style.transformOrigin = '0 0';
 
-        new Zoom(container, el, 0.1, this.onZoom.bind(this));
+        new Zoom(container, el, 0.1, this.onZoom.bind(this), (isLock: boolean) => this._lockTranslate = isLock);
         new Drag(container, this.onTranslate.bind(this) as any, this.onStart.bind(this));
         this.container.addEventListener('pointermove', this.pointermove.bind(this));
 
@@ -53,6 +54,7 @@ export class Area extends Emitter<EventsTypes> {
     }
 
     onTranslate(dx: number, dy: number) {
+        if (this._lockTranslate) return;
         this.translate(this._startPosition.x + dx, this._startPosition.y + dy)
     }
 
