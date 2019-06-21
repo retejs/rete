@@ -28,7 +28,10 @@ export class NodeView extends Emitter<EventsTypes> {
 
         this.el.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, node: this.node }));
 
-        const drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => this.trigger('nodedraged', node));
+        const drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => {
+            this.trigger('nodedraged', node);
+        });
+
         emitter.on('noderemoved', n => n.id === node.id && drag.destroy());
 
         this.trigger('rendernode', {
@@ -93,7 +96,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
         if (!this.trigger('nodetranslate', params)) return;
 
-        const [px ,py] = node.position;
+        const [px, py] = node.position;
         const prev: [number, number] = [px, py];
 
         node.position[0] = params.x;

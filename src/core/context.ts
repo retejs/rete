@@ -7,7 +7,7 @@ import { Plugin, PluginParams } from './plugin';
 export class Context<EventsTypes> extends Emitter<EventsTypes & DefaultEvents> {
 
     id: string;
-    plugins: Map<string, any>;
+    plugins: Map<string, unknown>;
     components: Map<string, Component>;
 
     constructor(id: string, events: Events) {

@@ -5,7 +5,7 @@ export class Connection {
 
     output: Output;
     input: Input;
-    data: any = {};
+    data: unknown = {};
 
     constructor(output: Output, input: Input) {
         this.output = output;

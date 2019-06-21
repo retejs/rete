@@ -15,9 +15,11 @@
     "@typescript-eslint/explicit-member-accessibility": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/interface-name-prefix": "off",
-    "@typescript-eslint/no-empty-interface": "off"
+    "@typescript-eslint/no-empty-interface": "off",
+    "@typescript-eslint/no-parameter-properties": "off"
   },
   "env": {
-    "es6": true
+    "es6": true,
+    "mocha": true
   }
 }

@@ -1,8 +1,8 @@
 import { Connection } from './connection';
 import { Control } from './control';
 import { Input } from './input';
-import { NodeData } from './core/data';
 import { Output } from './output';
+import { InputsData, NodeData, OutputsData } from './core/data';
 
 export class Node {
 
@@ -12,8 +12,8 @@ export class Node {
     inputs = new Map<string, Input>();
     outputs = new Map<string, Output>();
     controls = new Map<string, Control>();
-    data: any = {};
-    meta: any = {};
+    data: {[key: string]: unknown} = {};
+    meta: {[key: string]: unknown} = {};
 
     static latestId = 0;
     
@@ -22,7 +22,7 @@ export class Node {
         this.id = Node.incrementId();
     }
 
-    _add(list: Map<string, any>, item: any, prop: string) {
+    _add<T extends any>(list: Map<string, T>, item: T, prop: string) {
         if (list.has(item.key))
             throw new Error(`Item with key '${item.key}' already been added to the node`);
         if (item[prop] !== null)
@@ -90,16 +90,19 @@ export class Node {
         this.latestId = 0;
     }
 
-    toJSON() {
-        const reduceIO = (list: Map<string, Input | Output>) => {
-            return Array.from(list).reduce((obj, [key, io]) => { obj[key] = io.toJSON(); return obj; }, {} as any)
+    toJSON(): NodeData {
+        const reduceIO = <T extends any>(list: Map<string, Input | Output>) => {
+            return Array.from(list).reduce<T>((obj, [key, io]) => {
+                obj[key] = io.toJSON();
+                return obj;
+            }, {} as any)
         }
 
         return {
             'id': this.id,
             'data': this.data,
-            'inputs': reduceIO(this.inputs),
-            'outputs': reduceIO(this.outputs),
+            'inputs': reduceIO<InputsData>(this.inputs),
+            'outputs': reduceIO<OutputsData>(this.outputs),
             'position': this.position,
             'name': this.name
         }

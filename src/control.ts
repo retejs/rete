@@ -4,7 +4,7 @@ import { Node } from './node';
 export class Control {
 
     key: string;
-    data: any = {};
+    data: unknown = {};
     parent: Node | Input | null = null;
 
     constructor(key: string) {
@@ -33,7 +33,7 @@ export class Control {
         return this.getNode().data[key];
     }
 
-    putData(key: string, data: any) {
+    putData(key: string, data: unknown) {
         this.getNode().data[key] = data;
     }  
 }

@@ -1,6 +1,6 @@
-import { NodeData, NodesData } from '../core/data';
+import { InputConnectionData, NodeData, NodesData } from '../core/data';
 
-function intersect(array1: any[], array2: any[]) {
+function intersect<T>(array1: T[], array2: T[]) {
     return array1.filter(value => -1 !== array2.indexOf(value));
 }
 
@@ -13,15 +13,18 @@ export class Recursion {
     }
     
     extractInputNodes(node: NodeData): NodeData[] {
-        return Object.keys(node.inputs).reduce((a: any[], key: string) => {
+        return Object.keys(node.inputs).reduce((acc: NodeData[], key: string) => {
             const { connections } = node.inputs[key];
+            const nodesData = (connections || []).reduce((b: NodeData[], c: InputConnectionData) => {
+                return [...b, this.nodes[c.node]];
+            }, []);
 
-            return [...a, ...(connections || []).reduce((b: any[], c: any) => [...b, this.nodes[c.node]], [])]
+            return [...acc, ...nodesData]
         }, []);
     }
 
-    findSelf(list: any[], inputNodes: NodeData[]): NodeData | null {
-        const inters = intersect(list, inputNodes);
+    findSelf(list: NodeData[], inputNodes: NodeData[]): NodeData | null {
+        const inters = intersect<NodeData>(list, inputNodes);
 
         if (inters.length)
             return inters[0];

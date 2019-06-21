@@ -1,4 +1,4 @@
-export function listenWindow<K extends keyof WindowEventMap>(event: K, handler: (e: WindowEventMap[K]) => any) {
+export function listenWindow<K extends keyof WindowEventMap>(event: K, handler: (e: WindowEventMap[K]) => void) {
     window.addEventListener(event, handler);
     
     return () => {

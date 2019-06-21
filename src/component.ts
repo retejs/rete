@@ -1,16 +1,17 @@
 import { Component as ComponentWorker } from './engine/component';
 import { Node } from './node';
+import { NodeEditor } from './editor';
 
 export abstract class Component extends ComponentWorker {
 
-    editor: any = null;
-    data: any = {};
+    editor: NodeEditor | null = null;
+    data: unknown = {};
 
     constructor(name: string) {
         super(name);
     }
 
-    abstract async builder(node: Node): Promise<any>;
+    abstract async builder(node: Node): Promise<void>;
 
     async build(node: Node) {
         await this.builder(node);

@@ -3,11 +3,11 @@ import { Connection } from './connection';
 import { Control } from './control';
 import { Data } from './core/data';
 import { EditorView } from './view';
-import { Events, EventsTypes as DefaultEventsTypes } from './core/events';
 import { Input } from './input';
 import { Node } from './node';
 import { Output } from './output';
 import { Socket } from './socket';
+import { EventsTypes as DefaultEventsTypes, Events } from './core/events';
 import { Mouse, Transform, ZoomSource } from './view/area';
 
 export class EditorEvents extends Events {
