@@ -26,7 +26,10 @@ export class Area extends Emitter<EventsTypes> {
         el.style.transformOrigin = '0 0';
 
         new Zoom(container, el, 0.1, this.onZoom.bind(this), (isLock: boolean) => this._lockTranslate = isLock);
-        new Drag(container, this.onTranslate.bind(this) as any, this.onStart.bind(this));
+        
+        const drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
+        emitter.on('destroy', drag.destroy);
+
         this.container.addEventListener('pointermove', this.pointermove.bind(this));
 
         this.update();
