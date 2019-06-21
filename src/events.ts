@@ -3,7 +3,7 @@ import { Connection } from './connection';
 import { Control } from './control';
 import { Data } from './core/data';
 import { EditorView } from './view';
-import { Events } from './core/events';
+import { Events, EventsTypes as DefaultEventsTypes } from './core/events';
 import { Input } from './input';
 import { Node } from './node';
 import { Output } from './output';
@@ -50,7 +50,7 @@ export class EditorEvents extends Events {
     }    
 }
 
-export interface EventsTypes {
+export interface EventsTypes extends DefaultEventsTypes {
     componentregister: Component;
     nodecreate: Node;
     nodecreated: Node;
