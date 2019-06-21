@@ -3,20 +3,19 @@ import { Context } from '../core/context';
 import { Recursion } from './recursion';
 import { State } from './state';
 import { Validator } from '../core/validator';
-import { Data, NodeData } from '../core/data';
+import { Data, NodeData, WorkerOutputs } from '../core/data';
 import { EngineEvents, EventsTypes } from './events';
-
 export { Component, Recursion };
 
 interface EngineNode extends NodeData {
     busy: boolean;
-    unlockPool: any[];
-    outputData: any;
+    unlockPool: (() => void)[];
+    outputData: WorkerOutputs;
 }
 
 export class Engine extends Context<EventsTypes> {
 
-    args: any[] = [];
+    args: unknown[] = [];
     data: Data | null = null;
     state = State.AVAILABLE;
     onAbort = () => { };
@@ -33,7 +32,7 @@ export class Engine extends Context<EventsTypes> {
         return engine;
     }
 
-    async throwError (message: string, data: any = null) {
+    async throwError (message: string, data: unknown = null) {
         await this.abort();
         this.trigger('error', { message, data });
         this.processDone();
@@ -147,7 +146,7 @@ export class Engine extends Context<EventsTypes> {
         await this.lock(node);
 
         if (!node.outputData) {
-            node.outputData = this.processWorker(node)
+            node.outputData = await this.processWorker(node);
         }
 
         this.unlock(node);
@@ -220,7 +219,7 @@ export class Engine extends Context<EventsTypes> {
         }
     }
 
-    async process<T extends any[]>(data: Data, startId: number | string | null = null, ...args: T) {
+    async process<T extends unknown[]>(data: Data, startId: number | string | null = null, ...args: T) {
         if (!this.processStart()) return;
         if (!this.validate(data)) return;    
         

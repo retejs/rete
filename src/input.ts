@@ -1,6 +1,7 @@
 import { Connection } from './connection';
 import { Control } from './control';
 import { IO } from './io';
+import { InputData } from './core/data';
 import { Socket } from './socket';
 
 export class Input extends IO {
@@ -30,11 +31,13 @@ export class Input extends IO {
         return !this.hasConnection() && this.control !== null;
     }
 
-    toJSON() {
+    toJSON(): InputData {
         return {
             'connections': this.connections.map(c => {
+                if (!c.output.node) throw new Error('Node not added to Output');
+
                 return {
-                    node: c.output.node && c.output.node.id,
+                    node: c.output.node.id,
                     output: c.output.key,
                     data: c.data
                 };

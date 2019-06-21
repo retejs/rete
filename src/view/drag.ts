@@ -1,4 +1,4 @@
-import { listenWindow } from "./utils";
+import { listenWindow } from './utils';
 
 export class Drag {
 

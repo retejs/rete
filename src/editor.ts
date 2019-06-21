@@ -8,8 +8,8 @@ import { Node } from './node';
 import { Output } from './output';
 import { Selected } from './selected';
 import { Validator } from './core/validator';
-import { EditorEvents, EventsTypes } from './events';
 import { listenWindow } from './view/utils';
+import { EditorEvents, EventsTypes } from './events';
 
 export class NodeEditor extends Context<EventsTypes> {
 
@@ -58,7 +58,7 @@ export class NodeEditor extends Context<EventsTypes> {
         this.trigger('noderemoved', node);
     }
 
-    connect(output: Output, input: Input, data = {}) {
+    connect(output: Output, input: Input, data: unknown = {}) {
         if (!this.trigger('connectioncreate', { output, input })) return;
 
         try {
@@ -140,7 +140,7 @@ export class NodeEditor extends Context<EventsTypes> {
 
     async fromJSON(json: Data) {
         if (!this.beforeImport(json)) return false;
-        const nodes: any = {};
+        const nodes: {[key: string]: Node} = {};
 
         try {
             await Promise.all(Object.keys(json.nodes).map(async id => {
@@ -163,6 +163,10 @@ export class NodeEditor extends Context<EventsTypes> {
                         const data = jsonConnection.data;
                         const targetOutput = node.outputs.get(key);
                         const targetInput = nodes[nodeId].inputs.get(jsonConnection.input);
+
+                        if (!targetOutput || !targetInput) {
+                            return this.trigger('error', `IO not found for node ${node.id}`);
+                        }
 
                         this.connect(targetOutput, targetInput, data);
                     });

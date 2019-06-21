@@ -1,7 +1,7 @@
 export class Socket {
 
     name: string;
-    data: any;
+    data: unknown;
     compatible: Socket[] = [];
 
     constructor(name: string, data = {}) {

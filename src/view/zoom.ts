@@ -1,3 +1,5 @@
+interface DeltaWheelEvent { wheelDelta: number }
+
 export class Zoom {
 
     el: HTMLElement;
@@ -26,7 +28,7 @@ export class Zoom {
         e.preventDefault();
         
         const rect = this.el.getBoundingClientRect();
-        const wheelDelta = (e as any).wheelDelta as number;
+        const wheelDelta = (e as unknown as DeltaWheelEvent).wheelDelta;
         const delta = (wheelDelta ? wheelDelta / 120 : - e.deltaY / 3) * this.intensity;
 
         const ox = (rect.left - e.clientX) * delta;

@@ -23,7 +23,7 @@ export class Selected {
         return this.list.indexOf(item) !== -1;
     }
 
-    each(callback: (n: Node, index: number) => any) {
+    each(callback: (n: Node, index: number) => void) {
         this.list.forEach(callback);
     }
 }

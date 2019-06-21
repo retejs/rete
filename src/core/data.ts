@@ -1,6 +1,6 @@
 export interface ConnectionData {
     node: number;
-    data: any;
+    data: unknown;
 }
 
 export type InputConnectionData = ConnectionData & {
@@ -25,7 +25,7 @@ export interface NodeData {
     name: string;
     inputs: InputsData;
     outputs: OutputsData;
-    data: any;
+    data: {[key: string]: unknown};
     position: [number, number];
 }
 
@@ -36,6 +36,6 @@ export interface Data {
     nodes: NodesData;
 }
 
-export interface WorkerInputs { [key: string]: any[] }
+export interface WorkerInputs { [key: string]: unknown[] }
 
-export interface WorkerOutputs { [key: string]: any }
+export interface WorkerOutputs { [key: string]: unknown }
