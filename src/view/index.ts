@@ -6,6 +6,7 @@ import { Emitter } from '../core/emitter';
 import { EventsTypes } from '../events';
 import { Node } from '../node';
 import { NodeView } from './node';
+import { listenWindow } from './utils';
 
 export class EditorView extends Emitter<EventsTypes> {
 
@@ -25,8 +26,8 @@ export class EditorView extends Emitter<EventsTypes> {
 
         this.container.addEventListener('click', this.click.bind(this));
         this.container.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, view: this }));
-        window.addEventListener('resize', this.resize.bind(this));
-
+        emitter.on('destroy', listenWindow('resize', this.resize.bind(this)));
+  
         this.on('nodetranslated', this.updateConnections.bind(this));
             
         this.area = new Area(container, this);
