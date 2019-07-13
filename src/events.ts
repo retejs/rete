@@ -27,6 +27,7 @@ export class EditorEvents extends Events {
             nodetranslated: [],
             nodedraged: [],
             selectnode: [],
+            multiselectnode: [],
             nodeselect: [],
             nodeselected: [],
             rendernode: [],
@@ -67,6 +68,11 @@ export interface EventsTypes extends DefaultEventsTypes {
     selectnode: {
         node: Node;
         accumulate: boolean;
+    };
+    multiselectnode: {
+        node: Node;
+        accumulate: boolean;
+        e: MouseEvent;
     };
     nodeselect: Node;
     nodeselected: Node;
