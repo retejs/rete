@@ -70,9 +70,12 @@ export class NodeView extends Emitter<EventsTypes> {
         return socket.getPosition(this.node);
     }
 
-    onSelect(e: MouseEvent) {        
+    onSelect(e: MouseEvent) {
+        const payload = { node: this.node, accumulate: e.ctrlKey, e };
+    
         this.onStart();
-        this.trigger('selectnode', { node: this.node, accumulate: e.ctrlKey });
+        this.trigger('multiselectnode', payload);
+        this.trigger('selectnode', payload);
     }
 
     onStart() {
