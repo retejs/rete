@@ -1,15 +1,19 @@
 {
   "name": "rete",
-  "version": "1.0.0-beta.5",
+  "version": "1.4.1-rc.1",
   "description": "JavaScript framework",
-  "main": "build/rete.min.js",
-  "types": "src/index.d.ts",
+  "main": "build/rete.common.js",
+  "module": "build/rete.esm.js",
+  "types": "types/index.d.ts",
   "scripts": {
-    "lint": "eslint src --fix",
     "build": "rete --build rete.config.js",
     "build:dev": "rete --build rete.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
-    "test": "BABEL_ENV=test mocha --compilers js:babel-core/register"
+    "prebuild": "npm run lint & npm test && npm run types",
+    "lint": "tsc && eslint --ext .ts --ext .js src",
+    "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts",
+    "coverage": "nyc npm run test",
+    "types": "tsc src/index.ts --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
   },
   "repository": {
     "type": "git",
@@ -21,24 +25,26 @@
     "node editor",
     "js"
   ],
-  "author": "Ni55aN",
+  "author": "Vitaliy Stoliarov",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/retejs/rete/issues"
   },
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
-    "babel-eslint": "^8.2.3",
-    "babel-register": "^6.26.0",
-    "eslint": "^4.19.1",
-    "jsdom": "^11.11.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/jsdom": "^12.2.2",
+    "@types/mocha": "^5.2.6",
+    "@typescript-eslint/eslint-plugin": "^1.6.0",
+    "@typescript-eslint/parser": "^1.6.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.12.1",
+    "jsdom": "^13.2.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^5.2.0",
-    "rete-cli": "^0.2.0",
-    "rollup-copy-plugin": "0.0.1"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "nyc": "^14.1.1",
+    "rete-cli": "0.6.0-rc.5",
+    "ts-node": "^8.0.2",
+    "typescript": "^3.3.3333"
   }
 }
