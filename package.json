@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "1.4.1-rc.1",
+  "version": "1.4.1-rc.2",
   "description": "JavaScript framework",
   "main": "build/rete.common.js",
   "module": "build/rete.esm.js",
@@ -13,7 +13,7 @@
     "lint": "tsc && eslint --ext .ts --ext .js src",
     "test": "BABEL_ENV=test mocha -r ts-node/register test/**.ts",
     "coverage": "nyc npm run test",
-    "types": "tsc src/index.ts --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
+    "types": "tsc src/index.ts --target es5 --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
   },
   "repository": {
     "type": "git",
