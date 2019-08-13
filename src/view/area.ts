@@ -13,9 +13,10 @@ export class Area extends Emitter<EventsTypes> {
     container: HTMLElement;
     transform: Transform = { k: 1, x: 0, y: 0 };
     mouse: Mouse = { x: 0, y: 0 }
-
+    
     private _startPosition: Transform | null = null
-    private _lockTranslate: boolean = false;
+    private _zoom: Zoom;
+    private _drag: Drag;
 
     constructor(container: HTMLElement, emitter: Emitter<EventsTypes>) {
         super(emitter);
@@ -25,11 +26,13 @@ export class Area extends Emitter<EventsTypes> {
         this.container = container;
         el.style.transformOrigin = '0 0';
 
-        new Zoom(container, el, 0.1, this.onZoom.bind(this), (isLock: boolean) => this._lockTranslate = isLock);
-        
-        const drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
+        this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
+        this._drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
 
-        emitter.on('destroy', drag.destroy);
+        emitter.on('destroy', () => {
+            this._zoom.destroy();
+            this._drag.destroy();
+        });
 
         this.container.addEventListener('pointermove', this.pointermove.bind(this));
 
@@ -58,7 +61,7 @@ export class Area extends Emitter<EventsTypes> {
     }
 
     onTranslate(dx: number, dy: number) {
-        if (this._lockTranslate) return;
+        if (this._zoom.translating) return; // lock translation while zoom on multitouch
         if (this._startPosition) this.translate(this._startPosition.x + dx, this._startPosition.y + dy);
     }
 
