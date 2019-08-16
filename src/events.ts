@@ -46,7 +46,8 @@ export class EditorEvents extends Events {
             contextmenu: [],
             import: [],
             export: [],
-            process: []
+            process: [],
+            clear: []
         });
     }    
 }
@@ -132,4 +133,5 @@ export interface EventsTypes extends DefaultEventsTypes {
     import: Data;
     export: Data;
     process: void;
+    clear: void;
 }

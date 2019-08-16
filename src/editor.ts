@@ -109,6 +109,7 @@ export class NodeEditor extends Context<EventsTypes> {
 
     clear() {
         [...this.nodes].forEach(node => this.removeNode(node));
+        this.trigger('clear');
     }
 
     toJSON() {
