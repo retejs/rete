@@ -7,7 +7,7 @@ import { InputsData, NodeData, OutputsData } from './core/data';
 export class Node {
 
     name: string;
-    id: number;
+    id: number = 0;
     position: [number, number] = [0.0, 0.0];
     inputs = new Map<string, Input>();
     outputs = new Map<string, Output>();
@@ -15,11 +15,8 @@ export class Node {
     data: {[key: string]: unknown} = {};
     meta: {[key: string]: unknown} = {};
 
-    static latestId = 0;
-    
     constructor(name: string) {
         this.name = name;
-        this.id = Node.incrementId();
     }
 
     _add<T extends any>(list: Map<string, T>, item: T, prop: string) {
@@ -78,18 +75,6 @@ export class Node {
 
     update() {}
 
-    static incrementId() {
-        if (!this.latestId)
-            this.latestId = 1
-        else
-            this.latestId++
-        return this.latestId
-    }
-
-    static resetId() {
-        this.latestId = 0;
-    }
-
     toJSON(): NodeData {
         const reduceIO = <T extends any>(list: Map<string, Input | Output>) => {
             return Array.from(list).reduce<T>((obj, [key, io]) => {
@@ -116,7 +101,6 @@ export class Node {
         node.data = json.data;
         node.position = [x, y];
         node.name = json.name;
-        Node.latestId = Math.max(node.id, Node.latestId);
 
         return node;
     }

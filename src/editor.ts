@@ -16,6 +16,7 @@ export class NodeEditor extends Context<EventsTypes> {
     nodes: Node[] = [];
     selected = new Selected();
     view: EditorView;
+    latestId: number = 0;
 
     constructor(id: string, container: HTMLElement) {
         super(id, new EditorEvents());
@@ -38,8 +39,25 @@ export class NodeEditor extends Context<EventsTypes> {
         }));
     }
 
+    incrementId() {
+        if (!this.latestId)
+            this.latestId = 1;
+        else
+            this.latestId++;
+        return this.latestId;
+    }
+
+    resetId() {
+        this.latestId = 0;
+    }
+    
     addNode(node: Node) {
         if (!this.trigger('nodecreate', node)) return;
+
+        if (!node.id)
+            node.id = this.incrementId();
+        else
+            this.latestId = Math.max(node.id, this.latestId);
 
         this.nodes.push(node);
         this.view.addNode(node);
