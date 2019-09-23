@@ -15,17 +15,13 @@ export class Drag {
         this.pointerStart = null;
         this.el = el;
 
-        this.destroy = this.initEvents();
-    }
-
-    initEvents() {
         this.el.style.touchAction = 'none';
         this.el.addEventListener('pointerdown', this.down.bind(this));
 
         const destroyMove = listenWindow('pointermove', this.move.bind(this));
         const destroyUp = listenWindow('pointerup', this.up.bind(this));
 
-        return () => { destroyMove(); destroyUp(); }
+        this.destroy = () => { destroyMove(); destroyUp(); }
     }
 
     down(e: PointerEvent) {
