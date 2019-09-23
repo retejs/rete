@@ -1,3 +1,5 @@
+import { listenWindow } from './utils';
+
 interface DeltaWheelEvent { wheelDelta: number }
 
 export class Zoom {
@@ -5,23 +7,29 @@ export class Zoom {
     el: HTMLElement;
     intensity: number;
     onzoom: Function;
-    onlock: Function;
     previous: { cx: number; cy: number; distance: number } | null = null;
 
     pointers: PointerEvent[] = [];
+    destroy: () => void;
 
-    constructor(container: HTMLElement, el: HTMLElement, intensity: number, onzoom: Function, onlock: Function) {
+    constructor(container: HTMLElement, el: HTMLElement, intensity: number, onzoom: Function) {
         this.el = el;
         this.intensity = intensity;
         this.onzoom = onzoom;
-        this.onlock = onlock;
 
         container.addEventListener('wheel', this.wheel.bind(this));
         container.addEventListener('pointerdown', this.down.bind(this));
-        container.addEventListener('pointermove', this.move.bind(this));
-        container.addEventListener('pointerup', this.end.bind(this));
-        container.addEventListener('pointercancel', this.end.bind(this));
         container.addEventListener('dblclick', this.dblclick.bind(this));
+
+        const destroyMove = listenWindow('pointermove', this.move.bind(this));
+        const destroyUp = listenWindow('pointerup', this.end.bind(this));
+        const destroyCancel = listenWindow('pointercancel', this.end.bind(this));
+
+        this.destroy = () => { destroyMove(); destroyUp(); destroyCancel(); }
+    }
+
+    get translating() { // is translating while zoom (works on multitouch)
+        return this.pointers.length >= 2;
     }
 
     wheel(e: WheelEvent) {
@@ -53,14 +61,11 @@ export class Zoom {
 
     down(e: PointerEvent) {
         this.pointers.push(e);
-        if (this.pointers.length > 1) {
-            this.onlock(true);
-        }
     }
 
     move(e: PointerEvent) {
         this.pointers = this.pointers.map(p => p.pointerId === e.pointerId ? e : p)
-        if (this.pointers.length < 2) return;
+        if (!this.translating) return;
 
         let rect = this.el.getBoundingClientRect();
 
@@ -79,7 +84,6 @@ export class Zoom {
 
     end(e: PointerEvent) {
         this.previous = null;
-        this.onlock(false)
         this.pointers = this.pointers.filter(p => p.pointerId !== e.pointerId)
     }
 
