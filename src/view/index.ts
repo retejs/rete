@@ -52,7 +52,7 @@ export class EditorView extends Emitter<EventsTypes> {
         this.nodes.delete(node);
         if (nodeView) {
             this.area.removeChild(nodeView.el);
-            nodeView.destroy()
+            nodeView.destroy();
         }
     }
 

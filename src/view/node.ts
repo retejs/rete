@@ -17,7 +17,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     el: HTMLElement;
     private _startPosition: number[] = [];
-    private _drag: Drag
+    private _drag: Drag;
 
     constructor(node: Node, component: Component, emitter: Emitter<EventsTypes>) {
         super(emitter);
@@ -119,6 +119,6 @@ export class NodeView extends Emitter<EventsTypes> {
     }
 
     destroy() {
-        this._drag.destroy()
+        this._drag.destroy();
     }
 }
