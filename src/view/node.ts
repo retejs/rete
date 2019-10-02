@@ -17,6 +17,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     el: HTMLElement;
     private _startPosition: number[] = [];
+    private _drag: Drag
 
     constructor(node: Node, component: Component, emitter: Emitter<EventsTypes>) {
         super(emitter);
@@ -28,12 +29,9 @@ export class NodeView extends Emitter<EventsTypes> {
 
         this.el.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, node: this.node }));
 
-        const drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => {
+        this._drag = new Drag(this.el, this.onTranslate.bind(this), this.onSelect.bind(this), () => {
             this.trigger('nodedraged', node);
         });
-
-        emitter.on('noderemoved', n => n.id === node.id && drag.destroy());
-        emitter.on('destroy', () => drag.destroy());
 
         this.trigger('rendernode', {
             el: this.el, 
@@ -118,5 +116,9 @@ export class NodeView extends Emitter<EventsTypes> {
 
     remove() {
         
+    }
+
+    destroy() {
+        this._drag.destroy()
     }
 }
