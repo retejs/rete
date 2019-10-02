@@ -33,6 +33,7 @@ export class NodeView extends Emitter<EventsTypes> {
         });
 
         emitter.on('noderemoved', n => n.id === node.id && drag.destroy());
+        emitter.on('destroy', () => drag.destroy());
 
         this.trigger('rendernode', {
             el: this.el, 
