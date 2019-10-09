@@ -27,6 +27,7 @@ export class EditorView extends Emitter<EventsTypes> {
         this.container.addEventListener('click', this.click.bind(this));
         this.container.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, view: this }));
         emitter.on('destroy', listenWindow('resize', this.resize.bind(this)));
+        emitter.on('destroy', () => this.nodes.forEach(view => view.destroy()));
   
         this.on('nodetranslated', this.updateConnections.bind(this));
             
@@ -49,8 +50,10 @@ export class EditorView extends Emitter<EventsTypes> {
         const nodeView = this.nodes.get(node);
 
         this.nodes.delete(node);
-        if (nodeView)
+        if (nodeView) {
             this.area.removeChild(nodeView.el);
+            nodeView.destroy();
+        }
     }
 
     addConnection(connection: Connection) {
