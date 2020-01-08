@@ -33,6 +33,8 @@ export class Zoom {
     }
 
     wheel(e: WheelEvent) {
+        if (e.currentTarget !== e.target) return;
+
         e.preventDefault();
         
         const rect = this.el.getBoundingClientRect();
