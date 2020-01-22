@@ -18,6 +18,7 @@ export class Engine extends Context<EventsTypes> {
     args: unknown[] = [];
     data: Data | null = null;
     state = State.AVAILABLE;
+    forwarded = new Set();
     onAbort = () => { };
 
     constructor(id: string) {
@@ -156,15 +157,16 @@ export class Engine extends Context<EventsTypes> {
     private async forwardProcess(node: NodeData) {
         if (this.state === State.ABORT)
             return null;
-
+        
         return await Promise.all(Object.keys(node.outputs).map(async (key) => {
             const output = node.outputs[key];
-            
             return await Promise.all(output.connections.map(async (c) => {
                 const nextNode = (this.data as Data).nodes[c.node];
-
-                await this.processNode(nextNode as EngineNode);
-                await this.forwardProcess(nextNode);
+                if(!this.forwarded.has(nextNode)) {
+                    this.forwarded.add(nextNode);
+                    await this.processNode(nextNode as EngineNode);
+                    await this.forwardProcess(nextNode);
+                }
             }));
         }));
     }
@@ -225,6 +227,7 @@ export class Engine extends Context<EventsTypes> {
         
         this.data = this.copy(data);
         this.args = args;
+        this.forwarded = new Set();
         
         await this.processStartNode(startId);
         await this.processUnreachable();
