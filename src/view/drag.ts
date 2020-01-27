@@ -25,6 +25,7 @@ export class Drag {
     }
 
     down(e: PointerEvent) {
+        if ((e.pointerType === 'mouse') && (e.button !== 0)) return;
         e.stopPropagation();
         this.pointerStart = [e.pageX, e.pageY]
 
