@@ -8,7 +8,8 @@ before_script:
 
 script:
   - npm run build
-  - npm run coverage && sonar-scanner
+  - npm run coverage
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
 
 cache:
   directories:
