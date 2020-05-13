@@ -33,5 +33,4 @@ deploy:
 addons:
   sonarcloud:
     organization: "retejs"
-    token:
-      secure: $SONAR_TOKEN
+    token: $SONAR_TOKEN
