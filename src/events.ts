@@ -67,7 +67,7 @@ export interface EventsTypes extends DefaultEventsTypes {
     nodetranslate: { node: Node; x: number; y: number };
     nodetranslated: { node: Node; prev: [number, number] };
     nodedraged: Node;
-    nodedraged: Node;
+    nodedragged: Node;
     selectnode: {
         node: Node;
         accumulate: boolean;
