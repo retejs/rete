@@ -26,6 +26,7 @@ export class EditorEvents extends Events {
             nodetranslate: [],
             nodetranslated: [],
             nodedraged: [],
+            nodedragged: [],
             selectnode: [],
             multiselectnode: [],
             nodeselect: [],
@@ -65,6 +66,7 @@ export interface EventsTypes extends DefaultEventsTypes {
     translatenode: { node: Node; dx: number; dy: number };
     nodetranslate: { node: Node; x: number; y: number };
     nodetranslated: { node: Node; prev: [number, number] };
+    nodedraged: Node;
     nodedraged: Node;
     selectnode: {
         node: Node;
