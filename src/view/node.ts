@@ -65,7 +65,7 @@ export class NodeView extends Emitter<EventsTypes> {
     getSocketPosition(io: IO) {
         const socket = this.sockets.get(io);
 
-        if (!socket) throw new Error(`Socket not fount for ${io.name} with key ${io.key}`);
+        if (!socket) throw new Error(`Socket not found for ${io.name} with key ${io.key}`);
 
         return socket.getPosition(this.node);
     }
