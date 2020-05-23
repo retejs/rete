@@ -64,7 +64,7 @@ export class EditorView extends Emitter<EventsTypes> {
         const viewOutput = this.nodes.get(connection.output.node);
 
         if (!viewInput || !viewOutput)
-            throw new Error('View node not fount for input or output');
+            throw new Error('View node not found for input or output');
 
         const connView = new ConnectionView(connection, viewInput, viewOutput, this);
 
