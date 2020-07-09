@@ -17,7 +17,7 @@ describe('Editor', () => {
         par.appendChild(container);
 
         editor = new NodeEditor('test@0.0.1', container);
-        
+
         editor.events['warn'] = [];
         editor.events['error'] = [];
     });
@@ -47,7 +47,7 @@ describe('Editor', () => {
 
         it('import', async () => {
             let ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {} });
-    
+
             assert.equal(ret, false, 'can not be taken with another id');
         });
 
@@ -72,10 +72,10 @@ describe('Editor', () => {
             editor.addNode(node2);
 
             // assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
-            
+
             editor.connect(node1.outputs.get('num') as Output, node2.inputs.get('num1') as Input);
             assert.equal((node1.outputs.get('num') as Output).connections.length, 1, 'one connection');
-            
+
             var connection = (node1.outputs.get('num') as Output).connections[0];
 
             assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
@@ -108,6 +108,16 @@ describe('Editor', () => {
             editor.removeNode(node2)
             assert.equal(editor.nodes.length, 0, 'Second node removed')
         })
+
+        it('create node with data', async () => {
+            const data = {
+                some: 'data'
+            }
+            const node1 = await comps[0].createNode(data);
+
+            editor.addNode(node1)
+            assert.equal(editor.nodes[0].data, data)
+        });
 
         describe('prevent', () => {
             let node: Node;
