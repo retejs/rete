@@ -2,15 +2,12 @@
 
 ## Introduction
 
-First, thank you for considering contributing to `rete`! It's people like you that make the open source community such a great community! 😊
-
 We welcome any type of contribution, not only code. You can help with 
 - **QA**: file bug reports, the more details you can give the better (e.g. screenshots with the console open)
 - **Documentation**: correcting grammatical or spelling errors, improving existing explanations and adding new ones
 - **Marketing**: writing blog posts, howto's, printing stickers, ...
 - **Community**: presenting the project at meetups, organizing a dedicated meetup for the local community, ...
 - **Code**: take a look at the [open issues](issues). Even if you can't write code, commenting on them, showing that you care about a given issue matters. It helps us triage them.
-- **Money**: we welcome financial contributions in full transparency on [open collective](https://opencollective.com/rete) or [patreon](https://www.patreon.com/ni55an)
 
 ## Your First Contribution
 
@@ -27,46 +24,6 @@ It is also always helpful to have some context for your pull request. What was t
 
 ## Documentation
 
-The `docs/` folder contains documentation that deploys on [readthedocs.io](https://rete.readthedocs.io/en/latest/). All changes in this folder should be commited separately with prefix `[docs]`. It will also be submitted as a pull request.
-
-## Financial contributions
-
-We also welcome financial contributions in full transparency on our [open collective](https://opencollective.com/rete).
-Anyone can file an expense. If the expense makes sense for the development of the community, it will be "merged" in the ledger of our open collective by the core contributors and the person who filed the expense will be reimbursed.
-
-## Questions
-
-If you have any questions, create an [issue](issue) (protip: do a quick search first to see if someone else didn't ask the same question before!) or send a quick questions to [Gitter](https://gitter.im/retejs/Lobby).
-You can also reach us at hello@rete.opencollective.com.
-
-## Credits
-
-### Contributors
-
-Thank you to all the people who have already contributed to rete!
-<a href="graphs/contributors"><img src="https://opencollective.com/rete/contributors.svg?width=890" /></a>
-
-
-### Backers
-
-Thank you to all our backers! [[Become a backer](https://opencollective.com/rete#backer)]
-
-<a href="https://opencollective.com/rete#backers" target="_blank"><img src="https://opencollective.com/rete/backers.svg?width=890"></a>
-
-
-### Sponsors
-
-Thank you to all our sponsors! (please ask your company to also support this open source project by [becoming a sponsor](https://opencollective.com/rete#sponsor))
-
-<a href="https://opencollective.com/rete/sponsor/0/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/1/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/2/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/3/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/4/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/5/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/6/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/7/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/8/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/rete/sponsor/9/website" target="_blank"><img src="https://opencollective.com/rete/sponsor/9/avatar.svg"></a>
+The `docs/` folder contains documentation that deploys on [readthedocs.io](https://naetverk.readthedocs.io/en/latest/). All changes in this folder should be commited separately with prefix `[docs]`. It will also be submitted as a pull request.
 
 <!-- This `CONTRIBUTING.md` is based on @nayafia's template https://github.com/nayafia/contributing-template -->

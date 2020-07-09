@@ -1,13 +1,13 @@
 {
-  "name": "rete",
+  "name": "naetverk",
   "version": "1.4.4",
   "description": "JavaScript framework",
-  "main": "build/rete.common.js",
-  "module": "build/rete.esm.js",
+  "main": "build/naetverk.common.js",
+  "module": "build/naetverk.esm.js",
   "types": "types/index.d.ts",
   "scripts": {
-    "build": "rete --build rete.config.js",
-    "build:dev": "rete --build rete.config.js --watch",
+    "build": "rete --build naetverk.config.js",
+    "build:dev": "rete --build naetverk.config.js --watch",
     "prepublishOnly": "npm run lint && npm run build",
     "prebuild": "npm run lint & npm test && npm run types",
     "lint": "tsc && eslint --ext .ts --ext .js src",
@@ -17,20 +17,20 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/retejs/rete.git"
+    "url": "git+https://github.com/naetverkjs/naetverk.git"
   },
   "keywords": [
     "dataflow",
     "visual programming",
     "node editor",
-    "js"
+    "ts"
   ],
-  "author": "Vitaliy Stoliarov",
+  "author": "Konrad Koch",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/retejs/rete/issues"
+    "url": "https://github.com/naetverkjs/naetverk/issues"
   },
-  "homepage": "https://github.com/retejs/rete#readme",
+  "homepage": "https://github.com/naetverkjs/naetverk#readme",
   "devDependencies": {
     "@babel/preset-typescript": "^7.3.3",
     "@types/jsdom": "^12.2.2",

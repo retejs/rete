@@ -1,6 +1,6 @@
 export default {
     input: 'src/index.ts',
-    name: 'Rete',
+    name: 'Naetverk',
     babelPresets: [
         require('@babel/preset-typescript')
     ],
