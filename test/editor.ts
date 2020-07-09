@@ -90,7 +90,7 @@ describe('Editor', () => {
         'one connection'
       );
 
-      var connection = (node1.outputs.get('num') as Output).connections[0];
+      const connection = (node1.outputs.get('num') as Output).connections[0];
 
       assert.doesNotThrow(
         () => editor.removeConnection(connection),
