@@ -109,7 +109,7 @@ describe('Editor', () => {
             assert.equal(editor.nodes.length, 0, 'Second node removed')
         })
         
-       it('create node with data', async () => {
+        it('create node with data', async () => {
             const data = {
                 some: 'data'
             }
