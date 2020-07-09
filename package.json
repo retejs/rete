@@ -39,6 +39,7 @@
     "@typescript-eslint/parser": "^1.6.0",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.12.1",
+    "eslint-config-prettier": "^6.11.0",
     "jsdom": "^13.2.0",
     "jsdom-global": "^3.0.2",
     "mocha": "^5.2.0",
