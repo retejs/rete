@@ -12,6 +12,10 @@
 **Naetverk** is a modular framework for visual programming. **Naetverk** is heavily based on the fantastic [rete.js](https://github.com/retejs/rete) framework,
 that allows you to create node-based editor directly in the browser.
 
+**Why a different branch?** -  I have some ideas that will conflict with the original implementation.
+ 
+
+
 ## Documentation
 
 Check the [docs](https://naetverk.js.org/#/docs) and learn about the components and capabilities.
