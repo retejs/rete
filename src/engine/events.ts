@@ -1,10 +1,8 @@
 import { Events } from '../core/events';
 
 export class EngineEvents extends Events {
-
-    constructor() {
-        super({});
-    }    
+  constructor() {
+    super({});
+  }
 }
-export interface EventsTypes {
-}
+export interface EventsTypes {}

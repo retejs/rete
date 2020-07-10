@@ -57,7 +57,11 @@ describe('Engine', () => {
 
       assert.strictEqual(engineClone instanceof Engine, true, 'is instance');
       assert.strictEqual(engineClone.id, engine.id, 'id');
-      assert.deepStrictEqual(engineClone.components, engine.components, 'components');
+      assert.deepStrictEqual(
+        engineClone.components,
+        engine.components,
+        'components'
+      );
     });
 
     it('abort', done => {

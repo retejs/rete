@@ -1,41 +1,51 @@
 export interface ConnectionData {
-    node: number;
-    data: unknown;
+  node: number;
+  data: unknown;
 }
 
 export type InputConnectionData = ConnectionData & {
-    output: string;
-}
+  output: string;
+};
 export type OutputConnectionData = ConnectionData & {
-    input: string;
-} 
+  input: string;
+};
 
 export interface InputData {
-    connections: InputConnectionData[];
+  connections: InputConnectionData[];
 }
 export interface OutputData {
-    connections: OutputConnectionData[];
+  connections: OutputConnectionData[];
 }
 
-export interface InputsData { [key: string]: InputData }
-export interface OutputsData { [key: string]: OutputData }
+export interface InputsData {
+  [key: string]: InputData;
+}
+export interface OutputsData {
+  [key: string]: OutputData;
+}
 
 export interface NodeData {
-    id: number;
-    name: string;
-    inputs: InputsData;
-    outputs: OutputsData;
-    data: {[key: string]: unknown};
-    position: [number, number];
+  id: number;
+  name: string;
+  inputs: InputsData;
+  outputs: OutputsData;
+  data: { [key: string]: unknown };
+  position: [number, number];
 }
 
-export interface NodesData { [id: string]: NodeData }
+export interface NodesData {
+  [id: string]: NodeData;
+}
 
 export interface Data {
-    id: string;
-    nodes: NodesData;
+  id: string;
+  nodes: NodesData;
 }
 
-export interface WorkerInputs { [key: string]: unknown[] }
+export interface WorkerInputs {
+  [key: string]: unknown[];
+}
 
-export interface WorkerOutputs { [key: string]: unknown }
+export interface WorkerOutputs {
+  [key: string]: unknown;
+}
