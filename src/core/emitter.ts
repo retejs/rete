@@ -31,9 +31,10 @@ export class Emitter<EventTypes> {
     if (!(name in this.events))
       throw new Error(`The event ${name} cannot be triggered`);
 
+    // return false if at least one event is false
     return this.events[name as string].reduce((r: boolean, e: Function) => {
       return e(params) !== false && r;
-    }, true); // return false if at least one event is false
+    }, true);
   }
 
   bind(name: string) {

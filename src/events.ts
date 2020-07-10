@@ -2,7 +2,7 @@ import { Component } from './component';
 import { Connection } from './connection';
 import { Control } from './control';
 import { Data } from './core/data';
-import { EditorView } from './view';
+import { EditorView } from './view/editor-view';
 import { Input } from './input';
 import { Node } from './node';
 import { Output } from './output';

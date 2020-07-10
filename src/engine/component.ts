@@ -6,7 +6,7 @@ export abstract class Component {
   data: unknown = {};
   engine: Engine | null = null;
 
-  constructor(name: string) {
+  protected constructor(name: string) {
     this.name = name;
   }
 
