@@ -1,23 +1,22 @@
 import { Component } from '../engine/component';
 
 export class Events {
+  handlers: {};
 
-    handlers: {};
-
-    constructor(handlers: {}) {
-        this.handlers = {
-            warn: [console.warn],
-            error: [console.error],
-            componentregister: [],
-            destroy: [],
-            ...handlers
-        }
-    }
+  constructor(handlers: {}) {
+    this.handlers = {
+      warn: [console.warn],
+      error: [console.error],
+      componentregister: [],
+      destroy: [],
+      ...handlers
+    };
+  }
 }
 
 export interface EventsTypes {
-    warn: string | Error;
-    error: string | Error;
-    componentregister: Component;
-    destroy: void;
+  warn: string | Error;
+  error: string | Error;
+  componentregister: Component;
+  destroy: void;
 }
