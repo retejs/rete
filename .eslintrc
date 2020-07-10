@@ -26,6 +26,7 @@
     "@typescript-eslint/no-parameter-properties": "off"
   },
   "env": {
+    "browser": true,
     "es6": true,
     "mocha": true
   }
