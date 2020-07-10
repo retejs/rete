@@ -1,6 +1,6 @@
 language: node_js
 node_js:
-  - "10"
+  - '10'
 
 before_script:
   - npm install
@@ -13,7 +13,7 @@ script:
 
 cache:
   directories:
-    - "node_modules"
+    - 'node_modules'
 
 deploy:
   - provider: releases
@@ -32,5 +32,5 @@ deploy:
 
 addons:
   sonarcloud:
-    organization: "naetverkjs"
+    organization: 'naetverkjs'
     token: $SONAR_TOKEN

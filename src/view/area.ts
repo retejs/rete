@@ -3,107 +3,118 @@ import { Emitter } from '../core/emitter';
 import { EventsTypes } from '../events';
 import { Zoom } from './zoom';
 
-export interface Transform { k: number; x: number; y: number }
-export interface Mouse { x: number; y: number }
+export interface Transform {
+  k: number;
+  x: number;
+  y: number;
+}
+export interface Mouse {
+  x: number;
+  y: number;
+}
 export type ZoomSource = 'wheel' | 'touch' | 'dblclick';
 
 export class Area extends Emitter<EventsTypes> {
+  el: HTMLElement;
+  container: HTMLElement;
+  transform: Transform = { k: 1, x: 0, y: 0 };
+  mouse: Mouse = { x: 0, y: 0 };
 
-    el: HTMLElement;
-    container: HTMLElement;
-    transform: Transform = { k: 1, x: 0, y: 0 };
-    mouse: Mouse = { x: 0, y: 0 }
-    
-    private _startPosition: Transform | null = null
-    private _zoom: Zoom;
-    private _drag: Drag;
+  private _startPosition: Transform | null = null;
+  private _zoom: Zoom;
+  private _drag: Drag;
 
-    constructor(container: HTMLElement, emitter: Emitter<EventsTypes>) {
-        super(emitter);
-        
-        const el = this.el = document.createElement('div');
+  constructor(container: HTMLElement, emitter: Emitter<EventsTypes>) {
+    super(emitter);
 
-        this.container = container;
-        el.style.transformOrigin = '0 0';
+    const el = (this.el = document.createElement('div'));
 
-        this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
-        this._drag = new Drag(container, this.onTranslate.bind(this), this.onStart.bind(this));
+    this.container = container;
+    el.style.transformOrigin = '0 0';
 
-        emitter.on('destroy', () => {
-            this._zoom.destroy();
-            this._drag.destroy();
-        });
+    this._zoom = new Zoom(container, el, 0.1, this.onZoom.bind(this));
+    this._drag = new Drag(
+      container,
+      this.onTranslate.bind(this),
+      this.onStart.bind(this)
+    );
 
-        this.container.addEventListener('pointermove', this.pointermove.bind(this));
+    emitter.on('destroy', () => {
+      this._zoom.destroy();
+      this._drag.destroy();
+    });
 
-        this.update();
-    }
+    this.container.addEventListener('pointermove', this.pointermove.bind(this));
 
-    update() {
-        const t = this.transform;
+    this.update();
+  }
 
-        this.el.style.transform = `translate(${t.x}px, ${t.y}px) scale(${t.k})`;
-    }
+  update() {
+    const t = this.transform;
 
-    pointermove(e: PointerEvent) {
-        const { clientX, clientY } = e;
-        const rect = this.el.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-        const k = this.transform.k;
-        
-        this.mouse = { x: x / k, y: y / k };
-        this.trigger('mousemove', { ...this.mouse }); // TODO rename on `pointermove`
-    }
+    this.el.style.transform = `translate(${t.x}px, ${t.y}px) scale(${t.k})`;
+  }
 
-    onStart() {
-        this._startPosition = { ...this.transform };
-    }
+  pointermove(e: PointerEvent) {
+    const { clientX, clientY } = e;
+    const rect = this.el.getBoundingClientRect();
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const k = this.transform.k;
 
-    onTranslate(dx: number, dy: number) {
-        if (this._zoom.translating) return; // lock translation while zoom on multitouch
-        if (this._startPosition) this.translate(this._startPosition.x + dx, this._startPosition.y + dy);
-    }
+    this.mouse = { x: x / k, y: y / k };
+    this.trigger('mousemove', { ...this.mouse }); // TODO rename on `pointermove`
+  }
 
-    onZoom(delta: number, ox: number, oy: number, source: ZoomSource) {
-        this.zoom(this.transform.k * (1 + delta), ox, oy, source);
+  onStart() {
+    this._startPosition = { ...this.transform };
+  }
 
-        this.update();
-    }
+  onTranslate(dx: number, dy: number) {
+    if (this._zoom.translating) return; // lock translation while zoom on multitouch
+    if (this._startPosition)
+      this.translate(this._startPosition.x + dx, this._startPosition.y + dy);
+  }
 
-    translate(x: number, y: number) {
-        const params = { transform: this.transform, x, y };
+  onZoom(delta: number, ox: number, oy: number, source: ZoomSource) {
+    this.zoom(this.transform.k * (1 + delta), ox, oy, source);
 
-        if (!this.trigger('translate', params)) return;
+    this.update();
+  }
 
-        this.transform.x = params.x;
-        this.transform.y = params.y;
+  translate(x: number, y: number) {
+    const params = { transform: this.transform, x, y };
 
-        this.update();
-        this.trigger('translated');
-    }
+    if (!this.trigger('translate', params)) return;
 
-    zoom(zoom: number, ox = 0, oy = 0, source: ZoomSource) {
-        const k = this.transform.k;
-        const params = { transform: this.transform, zoom, source };
+    this.transform.x = params.x;
+    this.transform.y = params.y;
 
-        if (!this.trigger('zoom', params)) return;
-        
-        const d = (k - params.zoom) / ((k - zoom) || 1);
+    this.update();
+    this.trigger('translated');
+  }
 
-        this.transform.k = params.zoom || 1;
-        this.transform.x += ox * d;
-        this.transform.y += oy * d;
+  zoom(zoom: number, ox = 0, oy = 0, source: ZoomSource) {
+    const k = this.transform.k;
+    const params = { transform: this.transform, zoom, source };
 
-        this.update();
-        this.trigger('zoomed', { source });
-    }
+    if (!this.trigger('zoom', params)) return;
 
-    appendChild(el: HTMLElement) {
-        this.el.appendChild(el)
-    }
+    const d = (k - params.zoom) / (k - zoom || 1);
 
-    removeChild(el: HTMLElement) {
-        this.el.removeChild(el)
-    }
+    this.transform.k = params.zoom || 1;
+    this.transform.x += ox * d;
+    this.transform.y += oy * d;
+
+    this.update();
+    this.trigger('zoomed', { source });
+  }
+
+  appendChild(el: HTMLElement) {
+    this.el.appendChild(el);
+  }
+
+  removeChild(el: HTMLElement) {
+    this.el.removeChild(el);
+  }
 }

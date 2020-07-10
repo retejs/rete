@@ -1,55 +1,54 @@
 import { InputConnectionData, NodeData, NodesData } from '../core/data';
 
 function intersect<T>(array1: T[], array2: T[]) {
-    return array1.filter(value => -1 !== array2.indexOf(value));
+  return array1.filter(value => -1 !== array2.indexOf(value));
 }
 
 export class Recursion {
+  nodes: NodesData;
 
-    nodes: NodesData;
+  constructor(nodes: NodesData) {
+    this.nodes = nodes;
+  }
 
-    constructor(nodes: NodesData) {
-        this.nodes = nodes;
-    }
-    
-    extractInputNodes(node: NodeData): NodeData[] {
-        return Object.keys(node.inputs).reduce((acc: NodeData[], key: string) => {
-            const { connections } = node.inputs[key];
-            const nodesData = (connections || []).reduce((b: NodeData[], c: InputConnectionData) => {
-                return [...b, this.nodes[c.node]];
-            }, []);
+  extractInputNodes(node: NodeData): NodeData[] {
+    return Object.keys(node.inputs).reduce((acc: NodeData[], key: string) => {
+      const { connections } = node.inputs[key];
+      const nodesData = (connections || []).reduce(
+        (b: NodeData[], c: InputConnectionData) => {
+          return [...b, this.nodes[c.node]];
+        },
+        []
+      );
 
-            return [...acc, ...nodesData]
-        }, []);
-    }
+      return [...acc, ...nodesData];
+    }, []);
+  }
 
-    findSelf(list: NodeData[], inputNodes: NodeData[]): NodeData | null {
-        const inters = intersect<NodeData>(list, inputNodes);
+  findSelf(list: NodeData[], inputNodes: NodeData[]): NodeData | null {
+    const inters = intersect<NodeData>(list, inputNodes);
 
-        if (inters.length)
-            return inters[0];
-        
-        for (let node of inputNodes) {
-            let l = [node, ...list];
-            let inter = this.findSelf(l, this.extractInputNodes(node));
+    if (inters.length) return inters[0];
 
-            if (inter)
-                return inter;
-        }
+    for (let node of inputNodes) {
+      let l = [node, ...list];
+      let inter = this.findSelf(l, this.extractInputNodes(node));
 
-        return null;
+      if (inter) return inter;
     }
 
-    detect(): NodeData | null {
-        const nodesArr = Object.keys(this.nodes).map(id => this.nodes[id]);
+    return null;
+  }
 
-        for (let node of nodesArr) {
-            let inters = this.findSelf([node], this.extractInputNodes(node));
+  detect(): NodeData | null {
+    const nodesArr = Object.keys(this.nodes).map(id => this.nodes[id]);
 
-            if (inters)
-                return inters;
-        }
+    for (let node of nodesArr) {
+      let inters = this.findSelf([node], this.extractInputNodes(node));
 
-        return null;
+      if (inters) return inters;
     }
+
+    return null;
+  }
 }
