@@ -101,7 +101,8 @@ export class Engine extends Context<EventsTypes> {
     for (let key of Object.keys(node.inputs)) {
       const input = node.inputs[key];
       const conns = input.connections;
-      const connData = await Promise.all(
+
+      obj[key] = await Promise.all(
         conns.map(async c => {
           const prevNode = (this.data as Data).nodes[c.node];
 
@@ -111,8 +112,6 @@ export class Engine extends Context<EventsTypes> {
           else return outputs[c.output];
         })
       );
-
-      obj[key] = connData;
     }
 
     return obj;
@@ -205,11 +204,12 @@ export class Engine extends Context<EventsTypes> {
 
     for (let i in data.nodes) {
       // process nodes that have not been reached
-      const node = data.nodes[i] as EngineNode;
-
-      if (typeof node.outputData === 'undefined') {
-        await this.processNode(node);
-        await this.forwardProcess(node);
+      if (data.nodes.hasOwnProperty(i)) {
+        const node = data.nodes[i] as EngineNode;
+        if (typeof node.outputData === 'undefined') {
+          await this.processNode(node);
+          await this.forwardProcess(node);
+        }
       }
     }
   }

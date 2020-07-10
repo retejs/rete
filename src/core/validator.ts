@@ -2,12 +2,7 @@ import { Data } from './data';
 
 export class Validator {
   static isValidData(data: Data) {
-    return (
-      typeof data.id === 'string' &&
-      this.isValidId(data.id) &&
-      data.nodes instanceof Object &&
-      !(data.nodes instanceof Array)
-    );
+    return this.isValidId(data.id) && !(data.nodes instanceof Array);
   }
 
   static isValidId(id: string) {
