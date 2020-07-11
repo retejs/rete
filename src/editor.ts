@@ -28,7 +28,7 @@ export class NodeEditor extends Context<EventsTypes> {
         this.on('selectnode', ({ node, accumulate }) => {
             this.selectNode(node, accumulate);
             if(this.selected.list.length > 1){
-                this.trigger('multiselectnode', { node, accumulate });
+                this.trigger('multiselectnode', { nodes: this.selected, accumulate });
             }
         });
         this.on('nodeselected', () => this.selected.each(n => {
