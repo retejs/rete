@@ -61,10 +61,10 @@ describe('Core', () => {
         const window: any = {};
 
         editor.use(mockPlugin, { window })
-        assert.equal(window._globalVar, 1, 'global property assigned')
+        assert.strictEqual(window._globalVar, 1, 'global property assigned')
 
         editor.destroy();
-        assert.equal(typeof window._globalVar, 'undefined', 'global property deleted')
+        assert.strictEqual(typeof window._globalVar, 'undefined', 'global property deleted')
 
     });
 });

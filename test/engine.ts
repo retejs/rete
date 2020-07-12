@@ -36,7 +36,7 @@ describe('Engine', () => {
         })
 
         it('data', async () => {
-            assert.equal(await engine.process(data), 'success')
+            assert.strictEqual(await engine.process(data), 'success')
             assert.notEqual(await engine.process({ id: 'test@1.0.0', nodes: {} }), 'success', 'wrong id')
         });
     
@@ -47,19 +47,19 @@ describe('Engine', () => {
         it('clone', () => {
             const engineClone = engine.clone();
 
-            assert.equal(engineClone instanceof Engine, true, 'is instance')
-            assert.equal(engineClone.id, engine.id, 'id')
+            assert.strictEqual(engineClone instanceof Engine, true, 'is instance')
+            assert.strictEqual(engineClone.id, engine.id, 'id')
             assert.deepEqual(engineClone.components, engine.components, 'components')
         })
 
         it('abort', (done) => {
             engine.process(data as any).then(v => {
-                assert.equal(v, 'aborted', 'Check aborted process')
+                assert.strictEqual(v, 'aborted', 'Check aborted process')
             }).catch(done)
             engine.abort();
             
             engine.process(data as any).then(v => {
-                assert.equal(Boolean(v), false, 'Not aborted completely')
+                assert.strictEqual(Boolean(v), false, 'Not aborted completely')
             }).then(done)
         })
 
@@ -71,7 +71,7 @@ describe('Engine', () => {
             it('process warn', (done) => {
                 engine.process(data)
                 engine.process(data).then(r => {
-                    assert.equal(Boolean(r), false, 'cannot process simultaneously')
+                    assert.strictEqual(Boolean(r), false, 'cannot process simultaneously')
                 }).then(done).catch(done)
             })
         });
@@ -80,8 +80,8 @@ describe('Engine', () => {
             const correctId = Object.keys(addNumbersData.nodes)[0];
             const wrongId = Number.POSITIVE_INFINITY;
 
-            assert.equal(await engine.process(addNumbersData as any, correctId), 'success')
-            // assert.equal(await engine.process(addNumbersData as any, wrongId), 'error')
+            assert.strictEqual(await engine.process(addNumbersData as any, correctId), 'success')
+            // assert.strictEqual(await engine.process(addNumbersData as any, wrongId), 'error')
         });
     });
 });
