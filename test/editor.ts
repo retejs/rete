@@ -59,7 +59,7 @@ describe('Editor', () => {
 
             assert.strictEqual(ret, true, 'correct data');
 
-            assert.deepEqual(editor.toJSON(), addNumbersData)
+            assert.deepStrictEqual(editor.toJSON(), addNumbersData)
         });
 
         it('connections', async () => {

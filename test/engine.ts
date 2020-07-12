@@ -37,11 +37,11 @@ describe('Engine', () => {
 
         it('data', async () => {
             assert.strictEqual(await engine.process(data), 'success')
-            assert.notEqual(await engine.process({ id: 'test@1.0.0', nodes: {} }), 'success', 'wrong id')
+            assert.notStrictEqual(await engine.process({ id: 'test@1.0.0', nodes: {} }), 'success', 'wrong id')
         });
     
         it('validation', async () => {
-            assert.notEqual(await engine.process(recursiveData as any), 'success', 'recursive data')
+            assert.notStrictEqual(await engine.process(recursiveData as any), 'success', 'recursive data')
         });  
 
         it('clone', () => {
@@ -49,7 +49,7 @@ describe('Engine', () => {
 
             assert.strictEqual(engineClone instanceof Engine, true, 'is instance')
             assert.strictEqual(engineClone.id, engine.id, 'id')
-            assert.deepEqual(engineClone.components, engine.components, 'components')
+            assert.deepStrictEqual(engineClone.components, engine.components, 'components')
         })
 
         it('abort', (done) => {
