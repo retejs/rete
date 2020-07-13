@@ -1,4 +1,4 @@
-import { Socket } from '../src/socket';
+import { Socket } from '../src';
 import assert from 'assert';
 
 describe('Socket', () => {
@@ -7,9 +7,9 @@ describe('Socket', () => {
   });
 
   it('compatible', () => {
-    var s1 = new Socket('name1');
-    var s2 = new Socket('name2');
-    var s3 = new Socket('name3');
+    let s1 = new Socket('name1');
+    let s2 = new Socket('name2');
+    let s3 = new Socket('name3');
 
     assert.ok(s1.compatibleWith(s1));
     assert.ok(!s1.compatibleWith(s2));

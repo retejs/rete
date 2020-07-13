@@ -9,11 +9,20 @@ export class Socket {
     this.compatible = [];
   }
 
+  /**
+   * Add the selected socket to the list of comparable ones
+   * @param {Socket} socket
+   */
   combineWith(socket: Socket) {
     this.compatible.push(socket);
   }
 
-  compatibleWith(socket: Socket) {
+  /**
+   * Check of the socket is compatible with another.
+   * @param {Socket} socket
+   * @returns {boolean}
+   */
+  compatibleWith(socket: Socket): boolean {
     return this === socket || this.compatible.includes(socket);
   }
 }

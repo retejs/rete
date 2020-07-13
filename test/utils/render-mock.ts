@@ -1,5 +1,7 @@
-export function renderMock(editor) {
-  editor.on('rendernode', ({ node, bindSocket, bindControl }) => {
+import { NodeEditor } from '../../src';
+
+export function renderMock(editor: NodeEditor) {
+  editor.on('rendernode', ({ node, bindSocket }) => {
     Array.from(node.inputs.values()).forEach(i => {
       bindSocket(document.createElement('div'), 'input', i);
     });
