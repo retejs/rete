@@ -71,7 +71,7 @@ export class Area extends Emitter<EventsTypes> {
   }
 
   onTranslate(dx: number, dy: number) {
-    if (this._zoom.translating) return; // lock translation while zoom on multitouch
+    if (this._zoom.translating) return; // lock translation while zoom on multi-touch
     if (this._startPosition)
       this.translate(this._startPosition.x + dx, this._startPosition.y + dy);
   }
