@@ -1,7 +1,7 @@
 {
   "name": "naetverk",
-  "version": "1.4.4",
-  "description": "JavaScript framework",
+  "version": "0.8.1",
+  "description": "JavaScript framework for visual programming",
   "main": "build/naetverk.common.js",
   "module": "build/naetverk.esm.js",
   "types": "types/index.d.ts",
