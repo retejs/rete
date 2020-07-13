@@ -8,8 +8,8 @@ describe('Validator', () => {
   });
 
   it('validate', () => {
-    var id = 'demo@0.1.0';
-    var data = { id: 'demo@0.0.0', nodes: {} };
+    let id = 'demo@0.1.0';
+    let data = { id: 'demo@0.0.0', nodes: {} };
 
     assert.ok(!Validator.validate(id, data).success);
   });
