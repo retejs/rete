@@ -46,7 +46,7 @@
     "nyc": "^14.1.1",
     "prettier": "^2.0.5",
     "prettier-eslint": "^11.0.0",
-    "rete-cli": "0.6.0-rc.5",
+    "rete-cli": "0.6.0",
     "ts-node": "^8.0.2",
     "typescript": "^3.3.3333"
   }
