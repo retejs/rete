@@ -12,6 +12,7 @@
     "prebuild": "npm run lint & npm test && npm run types",
     "lint": "tsc && eslint --ext .ts --ext .js src",
     "test": "mocha -r ts-node/register test/**.ts",
+    "test:watch": "mocha -r ts-node/register test/**.ts  --watch",
     "coverage": "nyc npm run test",
     "types": "tsc src/index.ts --target es5 --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
   },
