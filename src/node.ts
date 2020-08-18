@@ -12,11 +12,12 @@ export class Node {
     inputs = new Map<string, Input>();
     outputs = new Map<string, Output>();
     controls = new Map<string, Control>();
-    data: {[key: string]: unknown} = {};
-    meta: {[key: string]: unknown} = {};
+    data: { [key: string]: unknown } = {};
+    meta: { [key: string]: unknown } = {};
+    selected = false;
 
     static latestId = 0;
-    
+
     constructor(name: string) {
         this.name = name;
         this.id = Node.incrementId();
@@ -27,7 +28,7 @@ export class Node {
             throw new Error(`Item with key '${item.key}' already been added to the node`);
         if (item[prop] !== null)
             throw new Error('Item has already been added to some node');
-        
+
         item[prop] = this;
         list.set(item.key, item);
     }
@@ -76,7 +77,7 @@ export class Node {
         return connections;
     }
 
-    update() {}
+    update() { }
 
     static incrementId() {
         if (!this.latestId)

@@ -35,9 +35,9 @@ export class NodeView extends Emitter<EventsTypes> {
         });
 
         this.trigger('rendernode', {
-            el: this.el, 
-            node, 
-            component: component.data, 
+            el: this.el,
+            node,
+            component: component.data,
             bindSocket: this.bindSocket.bind(this),
             bindControl: this.bindControl.bind(this)
         });
@@ -46,8 +46,8 @@ export class NodeView extends Emitter<EventsTypes> {
     }
 
     clearSockets() {
-        const ios: IO[] = [ ...this.node.inputs.values(), ...this.node.outputs.values()];
-        
+        const ios: IO[] = [...this.node.inputs.values(), ...this.node.outputs.values()];
+
         this.sockets.forEach(s => {
             if (!ios.includes(s.io)) this.sockets.delete(s.io);
         });
@@ -72,7 +72,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     onSelect(e: MouseEvent) {
         const payload = { node: this.node, accumulate: e.ctrlKey, e };
-    
+
         this.onStart();
         this.trigger('multiselectnode', payload);
         this.trigger('selectnode', payload);
@@ -80,6 +80,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     onStart() {
         this._startPosition = [...this.node.position];
+        this.resetLayer();
     }
 
     onTranslate(dx: number, dy: number) {
@@ -115,8 +116,13 @@ export class NodeView extends Emitter<EventsTypes> {
         this.el.style.transform = `translate(${x}px, ${y}px)`;
     }
 
+    resetLayer() {
+        this.el.className = this.node.selected ? 'selected' : '';
+        this.el.style.zIndex = this.node.selected ? '1' : '0';
+    }
+
     remove() {
-        
+
     }
 
     destroy() {
