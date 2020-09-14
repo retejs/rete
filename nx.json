@@ -31,6 +31,9 @@
     },
     "angular-renderer": {
       "tags": []
+    },
+    "naetverk": {
+      "tags": []
     }
   },
   "workspaceLayout": {

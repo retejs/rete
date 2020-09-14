@@ -163,6 +163,41 @@
           "style": "scss"
         }
       }
+    },
+    "naetverk": {
+      "root": "packages/naetverk",
+      "sourceRoot": "packages/naetverk/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/naetverk/tsconfig.lib.json",
+              "packages/naetverk/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!packages/naetverk/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/naetverk/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/naetverk",
+            "tsConfig": "packages/naetverk/tsconfig.lib.json",
+            "packageJson": "packages/naetverk/package.json",
+            "main": "packages/naetverk/src/index.ts",
+            "assets": ["packages/naetverk/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {
