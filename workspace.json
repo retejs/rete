@@ -66,6 +66,16 @@
             "jestConfig": "libs/naetverk/jest.config.js",
             "passWithNoTests": true
           }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/libs/naetverk",
+            "tsConfig": "libs/naetverk/tsconfig.lib.json",
+            "packageJson": "libs/naetverk/package.json",
+            "main": "libs/naetverk/src/index.ts",
+            "assets": ["libs/naetverk/*.md"]
+          }
         }
       }
     }

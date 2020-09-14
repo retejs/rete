@@ -17,7 +17,7 @@
     "baseUrl": ".",
     "paths": {
       "@naetverkjs/angular-renderer": ["libs/angular-renderer/src/index.ts"],
-      "@naetverkjs/naetverk": ["libs/naetverk/src/index.ts"]
+      "@naetverkjs/naetverk": ["dist/libs/naetverk/src/index.js"]
     }
   },
   "exclude": ["node_modules", "tmp"]

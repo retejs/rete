@@ -4,7 +4,7 @@
   "include": [],
   "references": [
     {
-      "path": "./../naetverk"
+      "path": "../naetverk-ts"
     },
     {
       "path": "./tsconfig.lib.json"
