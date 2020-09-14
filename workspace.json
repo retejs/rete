@@ -3,19 +3,19 @@
   "projects": {
     "angular-renderer": {
       "projectType": "library",
-      "root": "libs/angular-renderer",
-      "sourceRoot": "libs/angular-renderer/src",
+      "root": "packages/angular-renderer",
+      "sourceRoot": "packages/angular-renderer/src",
       "prefix": "naetverk",
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
           "options": {
-            "tsConfig": "libs/angular-renderer/tsconfig.lib.json",
-            "project": "libs/angular-renderer/ng-package.json"
+            "tsConfig": "packages/angular-renderer/tsconfig.lib.json",
+            "project": "packages/angular-renderer/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "libs/angular-renderer/tsconfig.lib.prod.json"
+              "tsConfig": "packages/angular-renderer/tsconfig.lib.prod.json"
             }
           }
         },
@@ -23,16 +23,16 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/angular-renderer/tsconfig.lib.json",
-              "libs/angular-renderer/tsconfig.spec.json"
+              "packages/angular-renderer/tsconfig.lib.json",
+              "packages/angular-renderer/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/angular-renderer/**/*"]
+            "exclude": ["**/node_modules/**", "!packages/angular-renderer/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/angular-renderer/jest.config.js",
+            "jestConfig": "packages/angular-renderer/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -44,8 +44,8 @@
       }
     },
     "naetverk": {
-      "root": "libs/naetverk",
-      "sourceRoot": "libs/naetverk/src",
+      "root": "packages/naetverk",
+      "sourceRoot": "packages/naetverk/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -54,27 +54,27 @@
           "options": {
             "linter": "eslint",
             "tsConfig": [
-              "libs/naetverk/tsconfig.lib.json",
-              "libs/naetverk/tsconfig.spec.json"
+              "packages/naetverk/tsconfig.lib.json",
+              "packages/naetverk/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/naetverk/**/*"]
+            "exclude": ["**/node_modules/**", "!packages/naetverk/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/naetverk/jest.config.js",
+            "jestConfig": "packages/naetverk/jest.config.js",
             "passWithNoTests": true
           }
         },
         "build": {
           "builder": "@nrwl/node:package",
           "options": {
-            "outputPath": "dist/libs/naetverk",
-            "tsConfig": "libs/naetverk/tsconfig.lib.json",
-            "packageJson": "libs/naetverk/package.json",
-            "main": "libs/naetverk/src/index.ts",
-            "assets": ["libs/naetverk/*.md"]
+            "outputPath": "dist/packages/naetverk",
+            "tsConfig": "packages/naetverk/tsconfig.lib.json",
+            "packageJson": "packages/naetverk/package.json",
+            "main": "packages/naetverk/src/index.ts",
+            "assets": ["packages/naetverk/*.md"]
           }
         }
       }

@@ -1,4 +1,4 @@
-import { Component } from '../engine/component';
+import { Component } from '../engine';
 import { Emitter } from './emitter';
 import { Validator } from './validator';
 import { EventsTypes as DefaultEvents, Events } from './events';

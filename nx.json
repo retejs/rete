@@ -31,5 +31,9 @@
     "naetverk": {
       "tags": []
     }
+  },
+  "workspaceLayout": {
+    "appsDir": "samples",
+    "libsDir": "packages"
   }
 }

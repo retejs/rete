@@ -1,4 +1,4 @@
-import { Emitter } from '../core/emitter';
+import { Emitter } from '../core';
 import { EventsTypes } from '../events';
 import { IO } from '../io';
 import { Node } from '../node';
