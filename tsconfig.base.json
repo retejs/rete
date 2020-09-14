@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@naetverkjs/naetverk": ["packages/naetverk/src/index.ts"]
+      "@naetverkjs/angular-renderer": ["libs/angular-renderer/src/index.ts"],
+      "@naetverkjs/naetverk": ["libs/naetverk/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
