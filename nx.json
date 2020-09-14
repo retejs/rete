@@ -32,5 +32,9 @@
     "angular-renderer": {
       "tags": []
     }
+  },
+  "workspaceLayout": {
+    "appsDir": "samples",
+    "libsDir": "packages"
   }
 }
