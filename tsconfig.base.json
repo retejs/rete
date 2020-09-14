@@ -15,7 +15,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@naetverkjs/naetverk": ["packages/naetverk/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
