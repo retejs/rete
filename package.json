@@ -29,6 +29,7 @@
   "dependencies": {
     "@angular/common": "^9.1.12",
     "@angular/core": "^9.1.12",
+    "@nrwl/node": "^10.2.0",
     "tslib": "^2.0.0"
   },
   "devDependencies": {
