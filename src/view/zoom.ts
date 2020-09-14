@@ -39,7 +39,7 @@ export class Zoom {
   }
 
   get translating() {
-    // is translating while zoom (works on multitouch)
+    // is translating while zoom (works on multi-touch)
     return this.pointers.length >= 2;
   }
 
