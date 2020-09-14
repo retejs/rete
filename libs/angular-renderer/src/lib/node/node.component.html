@@ -1,0 +1,13 @@
+<div class="node" [ngClass]="[selected(), node.name] | kebab">
+    <div class="title">{{node.name}}</div>
+    <div class="output" *ngFor="let output of outputs">
+        <div class="output-title">{{output.name}}</div>
+        <naetverk-socket nvk-socket [io]="output" [socket]="output.socket"></naetverk-socket>
+    </div>
+    <div class="control" *ngFor="let control of controls" [nvk-control]="control"></div>
+    <div class="input" *ngFor="let input of inputs">
+        <naetverk-socket nvk-socket [io]="input" [socket]="input.socket"></naetverk-socket>
+        <div class="input-title" *ngIf="!input.showControl()">{{input.name}}</div>
+        <div class="input-control" *ngIf="input.showControl()" [nvk-control]="input.control"></div>
+    </div>
+</div>

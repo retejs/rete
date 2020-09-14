@@ -1,9 +1,51 @@
 {
   "version": 1,
   "projects": {
+    "angular-renderer": {
+      "projectType": "library",
+      "root": "libs/angular-renderer",
+      "sourceRoot": "libs/angular-renderer/src",
+      "prefix": "naetverk",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/angular:package",
+          "options": {
+            "tsConfig": "libs/angular-renderer/tsconfig.lib.json",
+            "project": "libs/angular-renderer/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "libs/angular-renderer/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "libs/angular-renderer/tsconfig.lib.json",
+              "libs/angular-renderer/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!libs/angular-renderer/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/angular-renderer/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      },
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
+      }
+    },
     "naetverk": {
-      "root": "packages/naetverk",
-      "sourceRoot": "packages/naetverk/src",
+      "root": "libs/naetverk",
+      "sourceRoot": "libs/naetverk/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -12,16 +54,16 @@
           "options": {
             "linter": "eslint",
             "tsConfig": [
-              "packages/naetverk/tsconfig.lib.json",
-              "packages/naetverk/tsconfig.spec.json"
+              "libs/naetverk/tsconfig.lib.json",
+              "libs/naetverk/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!packages/naetverk/**/*"]
+            "exclude": ["**/node_modules/**", "!libs/naetverk/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "packages/naetverk/jest.config.js",
+            "jestConfig": "libs/naetverk/jest.config.js",
             "passWithNoTests": true
           }
         }
