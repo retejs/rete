@@ -30,6 +30,13 @@
     },
     "naetverk": {
       "tags": []
+    },
+    "angular": {
+      "tags": []
+    },
+    "angular-e2e": {
+      "tags": [],
+      "implicitDependencies": ["angular"]
     }
   },
   "workspaceLayout": {
