@@ -11,7 +11,7 @@ import {
   Input as ReteInput,
   Output as ReteOutput,
   Control as ReteControl,
-} from 'rete';
+} from '@naetverkjs/naetverk';
 import { NodeService } from '../node.service';
 
 @Component({

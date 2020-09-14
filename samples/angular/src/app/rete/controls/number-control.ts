@@ -1,6 +1,6 @@
 import { Component, Input, Type } from '@angular/core';
 import { AngularControl } from '@naetverkjs/angular-renderer';
-import { Control } from 'rete';
+import { Control } from '@naetverkjs/naetverk';
 
 @Component({
   template: `<input

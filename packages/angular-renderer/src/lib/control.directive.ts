@@ -1,5 +1,5 @@
 import { Directive, Input, ElementRef, OnInit } from '@angular/core';
-import { Control } from 'rete';
+import { Control } from '@naetverkjs/naetverk';
 import { NodeService } from './node.service';
 
 @Directive({

@@ -1,5 +1,5 @@
 import { Type } from '@angular/core';
-import { NodeEditor } from 'rete';
+import { NodeEditor } from '@naetverkjs/naetverk';
 import { AngularControl, ElementProps } from './interfaces';
 import { AngularComponentData } from './types';
 import { NodeComponent } from './node/node.component';
@@ -53,7 +53,7 @@ export function install(
   });
 }
 
-export { ReteModule } from './module';
+export { NaetverkModule } from './module';
 export * from './types';
 export { NodeService } from './node.service';
 export { NodeComponent } from './node/node.component';

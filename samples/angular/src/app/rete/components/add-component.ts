@@ -2,7 +2,7 @@ import {
   AngularComponent,
   AngularComponentData,
 } from '@naetverkjs/angular-renderer';
-import { Component, Input, Output } from 'rete';
+import { Component, Input, Output } from '@naetverkjs/naetverk';
 import { NumControl } from '../controls/number-control';
 import { numSocket } from '../sockets';
 import { MyNodeComponent } from './node/node.component';

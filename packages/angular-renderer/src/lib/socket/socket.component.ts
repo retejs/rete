@@ -1,5 +1,5 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { Socket, IO, Input as ReteInput } from 'rete';
+import { Socket, IO, Input as ReteInput } from '@naetverkjs/naetverk';
 import { SocketType } from '../types';
 
 @Component({
