@@ -1,7 +1,0 @@
-{
-    "compilerOptions": {
-      "experimentalDecorators": true,
-        "target": "es5",
-        "lib": [ "es2015" ]
-    }
-}

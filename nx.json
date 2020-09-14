@@ -1,10 +1,10 @@
 {
-  "npmScope": "naetverk",
+  "npmScope": "naetverkjs",
   "affected": {
     "defaultBase": "master"
   },
   "implicitDependencies": {
-    "workspace.json": "*",
+    "angular.json": "*",
     "package.json": {
       "dependencies": "*",
       "devDependencies": "*"
@@ -15,32 +15,22 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/nx-cloud",
+      "runner": "@nrwl/workspace/tasks-runners/default",
       "options": {
-        "accessToken": "Yjc0NGVkMmItMDA2Ni00YjdlLTk1MGQtN2IwYWUxYWM0M2U2fHJlYWQtd3JpdGU=",
-        "cacheableOperations": ["build", "test", "lint", "e2e"],
-        "canTrackAnalytics": false,
-        "showUsageWarnings": true
+        "cacheableOperations": ["build", "lint", "test", "e2e"]
       }
     }
   },
   "projects": {
-    "angular-renderer": {
-      "tags": []
-    },
-    "naetverk": {
-      "tags": []
-    },
     "angular": {
       "tags": []
     },
     "angular-e2e": {
       "tags": [],
       "implicitDependencies": ["angular"]
+    },
+    "angular-renderer": {
+      "tags": []
     }
-  },
-  "workspaceLayout": {
-    "appsDir": "samples",
-    "libsDir": "packages"
   }
 }
