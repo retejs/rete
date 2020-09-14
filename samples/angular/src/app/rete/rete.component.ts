@@ -22,7 +22,7 @@ export class ReteComponent implements AfterViewInit {
     const components = [new NumComponent(), new AddComponent()];
 
     const editor = new NodeEditor('demo@0.2.0', container);
-    editor.use(ConnectionPlugin);
+    ///editor.use(ConnectionPlugin);
     editor.use(AngularRenderPlugin); //, { component: MyNodeComponent });
     // editor.use(ContextMenuPlugin);
 
