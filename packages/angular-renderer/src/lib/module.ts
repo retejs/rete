@@ -30,7 +30,7 @@ import { CustomComponent } from './custom.component';
   ],
   entryComponents: [NodeComponent, SocketComponent, CustomComponent],
 })
-export class ReteModule {
+export class NaetverkModule {
   constructor(injector: Injector) {
     // StaticInjectorError due to 'npm link'
     const CustomElement = createCustomElement(CustomComponent, { injector });

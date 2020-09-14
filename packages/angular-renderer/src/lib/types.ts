@@ -1,5 +1,5 @@
 import { Component, Type } from '@angular/core';
-import { IO, Control } from 'rete';
+import { IO, Control } from '@naetverkjs/naetverk';
 
 export type SocketType = 'input' | 'output';
 export type BindSocket = (el: HTMLElement, type: SocketType, io: IO) => void;

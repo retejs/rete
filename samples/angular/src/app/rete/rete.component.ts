@@ -1,7 +1,7 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
 
-import { NodeEditor, Engine } from 'rete';
+import { NodeEditor, Engine } from '@naetverkjs/naetverk';
 import ConnectionPlugin from 'rete-connection-plugin';
 import { NumComponent } from './components/number-component';
 import { AddComponent } from './components/add-component';
