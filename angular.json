@@ -8,32 +8,32 @@
           "style": "scss"
         }
       },
-      "root": "apps/angular",
-      "sourceRoot": "apps/angular/src",
+      "root": "samples/angular",
+      "sourceRoot": "samples/angular/src",
       "prefix": "naetverkjs",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/angular",
-            "index": "apps/angular/src/index.html",
-            "main": "apps/angular/src/main.ts",
-            "polyfills": "apps/angular/src/polyfills.ts",
-            "tsConfig": "apps/angular/tsconfig.app.json",
+            "outputPath": "dist/samples/angular",
+            "index": "samples/angular/src/index.html",
+            "main": "samples/angular/src/main.ts",
+            "polyfills": "samples/angular/src/polyfills.ts",
+            "tsConfig": "samples/angular/tsconfig.app.json",
             "aot": true,
             "assets": [
-              "apps/angular/src/favicon.ico",
-              "apps/angular/src/assets"
+              "samples/angular/src/favicon.ico",
+              "samples/angular/src/assets"
             ],
-            "styles": ["apps/angular/src/styles.scss"],
+            "styles": ["samples/angular/src/styles.scss"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/angular/src/environments/environment.ts",
-                  "with": "apps/angular/src/environments/environment.prod.ts"
+                  "replace": "samples/angular/src/environments/environment.ts",
+                  "with": "samples/angular/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -80,31 +80,31 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "apps/angular/tsconfig.app.json",
-              "apps/angular/tsconfig.spec.json"
+              "samples/angular/tsconfig.app.json",
+              "samples/angular/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/angular/**/*"]
+            "exclude": ["**/node_modules/**", "!samples/angular/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "apps/angular/jest.config.js",
+            "jestConfig": "samples/angular/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
     "angular-e2e": {
-      "root": "apps/angular-e2e",
-      "sourceRoot": "apps/angular-e2e/src",
+      "root": "samples/angular-e2e",
+      "sourceRoot": "samples/angular-e2e/src",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/angular-e2e/cypress.json",
-            "tsConfig": "apps/angular-e2e/tsconfig.e2e.json",
+            "cypressConfig": "samples/angular-e2e/cypress.json",
+            "tsConfig": "samples/angular-e2e/tsconfig.e2e.json",
             "devServerTarget": "angular:serve"
           },
           "configurations": {
@@ -116,27 +116,27 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/angular-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/angular-e2e/**/*"]
+            "tsConfig": ["samples/angular-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!samples/angular-e2e/**/*"]
           }
         }
       }
     },
     "angular-renderer": {
       "projectType": "library",
-      "root": "libs/angular-renderer",
-      "sourceRoot": "libs/angular-renderer/src",
+      "root": "packages/angular-renderer",
+      "sourceRoot": "packages/angular-renderer/src",
       "prefix": "naetverkjs",
       "architect": {
         "build": {
           "builder": "@nrwl/angular:package",
           "options": {
-            "tsConfig": "libs/angular-renderer/tsconfig.lib.json",
-            "project": "libs/angular-renderer/ng-package.json"
+            "tsConfig": "packages/angular-renderer/tsconfig.lib.json",
+            "project": "packages/angular-renderer/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "libs/angular-renderer/tsconfig.lib.prod.json"
+              "tsConfig": "packages/angular-renderer/tsconfig.lib.prod.json"
             }
           }
         },
@@ -144,16 +144,16 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "libs/angular-renderer/tsconfig.lib.json",
-              "libs/angular-renderer/tsconfig.spec.json"
+              "packages/angular-renderer/tsconfig.lib.json",
+              "packages/angular-renderer/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/angular-renderer/**/*"]
+            "exclude": ["**/node_modules/**", "!packages/angular-renderer/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "libs/angular-renderer/jest.config.js",
+            "jestConfig": "packages/angular-renderer/jest.config.js",
             "passWithNoTests": true
           }
         }
