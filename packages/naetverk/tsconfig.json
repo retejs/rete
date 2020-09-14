@@ -1,6 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
   "files": [],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "allowJs": true
+  },
   "include": [],
   "references": [
     {

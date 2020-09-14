@@ -5,6 +5,12 @@ import { Output } from './output';
 import { InputsData, NodeData, OutputsData } from './core';
 
 export class Node {
+  constructor(name: string) {
+    this.name = name;
+    this.id = Node.incrementId();
+  }
+
+  static latestId = 0;
   name: string;
   id: number;
   position: [number, number] = [0.0, 0.0];
@@ -14,22 +20,41 @@ export class Node {
   data: { [key: string]: unknown } = {};
   meta: { [key: string]: unknown } = {};
 
-  static latestId = 0;
+  static incrementId() {
+    if (!this.latestId) this.latestId = 1;
+    else this.latestId++;
+    return this.latestId;
+  }
 
-  constructor(name: string) {
-    this.name = name;
-    this.id = Node.incrementId();
+  static resetId() {
+    this.latestId = 0;
+  }
+
+  static fromJSON(json: NodeData) {
+    const node = new Node(json.name);
+    const [x, y] = json.position;
+
+    node.id = json.id;
+    node.data = json.data;
+    node.position = [x, y];
+    node.name = json.name;
+    Node.latestId = Math.max(node.id, Node.latestId);
+
+    return node;
   }
 
   _add<T extends any>(list: Map<string, T>, item: T, prop: string) {
-    if (list.has(item.key))
-      throw new Error(
-        `Item with key '${item.key}' already been added to the node`
-      );
+    // @ts-ignore
+    if (list.has(item.key)) {
+      // @ts-ignore
+      const key = item.key;
+      throw new Error(`Item with key '${key}' already been added to the node`);
+    }
     if (item[prop] !== null)
       throw new Error('Item has already been added to some node');
 
     item[prop] = this;
+    // @ts-ignore
     list.set(item.key, item);
   }
 
@@ -77,16 +102,6 @@ export class Node {
 
   update() {}
 
-  static incrementId() {
-    if (!this.latestId) this.latestId = 1;
-    else this.latestId++;
-    return this.latestId;
-  }
-
-  static resetId() {
-    this.latestId = 0;
-  }
-
   toJSON(): NodeData {
     const reduceIO = <T extends any>(list: Map<string, Input | Output>) => {
       return Array.from(list).reduce<T>((obj, [key, io]) => {
@@ -103,18 +118,5 @@ export class Node {
       position: this.position,
       name: this.name,
     };
-  }
-
-  static fromJSON(json: NodeData) {
-    const node = new Node(json.name);
-    const [x, y] = json.position;
-
-    node.id = json.id;
-    node.data = json.data;
-    node.position = [x, y];
-    node.name = json.name;
-    Node.latestId = Math.max(node.id, Node.latestId);
-
-    return node;
   }
 }
