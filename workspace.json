@@ -1,6 +1,33 @@
 {
   "version": 1,
-  "projects": {},
+  "projects": {
+    "naetverk": {
+      "root": "packages/naetverk",
+      "sourceRoot": "packages/naetverk/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "packages/naetverk/tsconfig.lib.json",
+              "packages/naetverk/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!packages/naetverk/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/naetverk/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    }
+  },
   "cli": {
     "defaultCollection": "@nrwl/workspace"
   }
