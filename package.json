@@ -1,54 +1,41 @@
 {
   "name": "naetverk",
-  "version": "0.8.1",
-  "description": "JavaScript framework for visual programming",
-  "main": "build/naetverk.common.js",
-  "module": "build/naetverk.esm.js",
-  "types": "types/index.d.ts",
-  "scripts": {
-    "build": "rete --build naetverk.config.js",
-    "build:dev": "rete --build naetverk.config.js --watch",
-    "prepublishOnly": "npm run lint && npm run build",
-    "prebuild": "npm run lint & npm test && npm run types",
-    "lint": "tsc && eslint --ext .ts --ext .js src",
-    "test": "mocha -r ts-node/register test/**.ts",
-    "test:watch": "mocha -r ts-node/register test/**.ts  --watch",
-    "coverage": "nyc npm run test",
-    "types": "tsc src/index.ts --target es5 --declaration --outDir ./types --downlevelIteration --emitDeclarationOnly"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/naetverkjs/naetverk.git"
-  },
-  "keywords": [
-    "dataflow",
-    "visual programming",
-    "node editor",
-    "ts"
-  ],
-  "author": "Konrad Koch",
+  "version": "0.0.0",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/naetverkjs/naetverk/issues"
+  "scripts": {
+    "nx": "nx",
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test",
+    "lint": "nx workspace-lint && nx lint",
+    "e2e": "nx e2e",
+    "affected:apps": "nx affected:apps",
+    "affected:libs": "nx affected:libs",
+    "affected:build": "nx affected:build",
+    "affected:e2e": "nx affected:e2e",
+    "affected:test": "nx affected:test",
+    "affected:lint": "nx affected:lint",
+    "affected:dep-graph": "nx affected:dep-graph",
+    "affected": "nx affected",
+    "format": "nx format:write",
+    "format:write": "nx format:write",
+    "format:check": "nx format:check",
+    "update": "nx migrate latest",
+    "workspace-schematic": "nx workspace-schematic",
+    "dep-graph": "nx dep-graph",
+    "help": "nx help"
   },
-  "homepage": "https://github.com/naetverkjs/naetverk#readme",
+  "private": true,
+  "dependencies": {},
   "devDependencies": {
-    "@babel/preset-typescript": "^7.3.3",
-    "@types/jsdom": "^12.2.2",
-    "@types/mocha": "^5.2.6",
-    "@typescript-eslint/eslint-plugin": "^1.6.0",
-    "@typescript-eslint/parser": "^1.6.0",
-    "babel-eslint": "^10.0.1",
-    "eslint": "^5.12.1",
-    "eslint-config-prettier": "^6.11.0",
-    "jsdom": "^13.2.0",
-    "jsdom-global": "^3.0.2",
-    "mocha": "^5.2.0",
-    "nyc": "^14.1.1",
-    "prettier": "^2.0.5",
-    "prettier-eslint": "^11.0.0",
-    "rete-cli": "0.6.0",
-    "ts-node": "^8.0.2",
-    "typescript": "^3.3.3333"
+    "@nrwl/workspace": "10.2.0",
+    "@types/node": "~8.9.4",
+    "dotenv": "6.2.0",
+    "ts-node": "~7.0.0",
+    "tslint": "~6.0.0",
+    "eslint": "6.8.0",
+    "typescript": "~3.9.3",
+    "prettier": "2.0.4",
+    "@nrwl/nx-cloud": "latest"
   }
 }
