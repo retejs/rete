@@ -1,8 +1,8 @@
-import { Component } from '../engine/component';
+import { Component } from '../engine';
 import { Control } from '../control';
 import { ControlView } from './control';
 import { Drag } from './drag';
-import { Emitter } from '../core/emitter';
+import { Emitter } from '../core';
 import { EventsTypes } from '../events';
 import { IO } from '../io';
 import { Node } from '../node';
