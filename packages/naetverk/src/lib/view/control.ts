@@ -1,5 +1,5 @@
 import { Control } from '../control';
-import { Emitter } from '../core/emitter';
+import { Emitter } from '../core';
 import { EventsTypes } from '../events';
 
 export class ControlView extends Emitter<EventsTypes> {

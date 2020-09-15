@@ -19,7 +19,7 @@
       "@naetverkjs/angular-renderer": [
         "packages/angular-renderer/src/index.ts"
       ],
-      "@naetverkjs/naetverk": ["packages/naetverk/src/index.ts"],
+      // "@naetverkjs/naetverk": ["packages/naetverk/src/index.ts"],
       "@naetverkjs/connections": ["packages/connection-plugin/src/index.ts"]
     }
   },

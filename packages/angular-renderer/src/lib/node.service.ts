@@ -5,7 +5,7 @@ import { BindControl, BindSocket } from './types';
 export class NodeService {
   public bindSocket: BindSocket;
   public bindControl: BindControl;
-  
+
   setBindings(bindSocket, bindControl) {
     this.bindSocket = bindSocket;
     this.bindControl = bindControl;

@@ -1,4 +1,4 @@
-import { NodeEditor } from 'rete';
+import { NodeEditor } from '@naetverkjs/naetverk';
 import { Picker } from './picker';
 import {
   renderConnection,
@@ -10,7 +10,6 @@ import { Flow, FlowParams } from './flow';
 import './events';
 
 export function install(editor: NodeEditor) {
-  console.log('Register Connections');
   editor.bind('connectionpath');
   editor.bind('connectiondrop');
   editor.bind('connectionpick');

@@ -1,5 +1,5 @@
 import { Connection } from '../connection';
-import { Emitter } from '../core/emitter';
+import { Emitter } from '../core';
 import { EventsTypes } from '../events';
 import { NodeView } from './node';
 
@@ -27,7 +27,7 @@ export class ConnectionView extends Emitter<EventsTypes> {
     this.trigger('renderconnection', {
       el: this.el,
       connection: this.connection,
-      points: this.getPoints()
+      points: this.getPoints(),
     });
   }
 
@@ -42,7 +42,7 @@ export class ConnectionView extends Emitter<EventsTypes> {
     this.trigger('updateconnection', {
       el: this.el,
       connection: this.connection,
-      points: this.getPoints()
+      points: this.getPoints(),
     });
   }
 }

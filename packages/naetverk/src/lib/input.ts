@@ -1,7 +1,7 @@
 import { Connection } from './connection';
 import { Control } from './control';
 import { IO } from './io';
-import { InputData } from './core/data';
+import { InputData } from './core';
 import { Socket } from './socket';
 
 export class Input extends IO {

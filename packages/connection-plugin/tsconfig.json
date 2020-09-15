@@ -1,6 +1,15 @@
 {
   "extends": "../../tsconfig.base.json",
-
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "target": "es5",
+    "types": ["node"],
+    "esModuleInterop": true,
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": true
+  },
   "files": [],
   "include": [],
   "references": [

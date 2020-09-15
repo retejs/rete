@@ -1,5 +1,5 @@
 import { Drag } from './drag';
-import { Emitter } from '../core/emitter';
+import { Emitter } from '../core';
 import { EventsTypes } from '../events';
 import { Zoom } from './zoom';
 

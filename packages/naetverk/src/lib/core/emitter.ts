@@ -15,7 +15,7 @@ export class Emitter<EventTypes> {
     const events =
       names instanceof Array ? names : (names as string).split(' ');
 
-    (events as string[]).forEach(name => {
+    (events as string[]).forEach((name) => {
       if (!this.events[name])
         throw new Error(`The event ${name} does not exist`);
       this.events[name].push(handler);

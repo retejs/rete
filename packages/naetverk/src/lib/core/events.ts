@@ -9,7 +9,7 @@ export class Events {
       error: [console.error],
       componentregister: [],
       destroy: [],
-      ...handlers
+      ...handlers,
     };
   }
 }
