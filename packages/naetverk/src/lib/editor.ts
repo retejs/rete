@@ -1,14 +1,14 @@
 import { Component } from './component';
 import { Connection } from './connection';
-import { Context } from './core/context';
-import { Data } from './core/data';
-import { EditorView } from './view/editor-view';
+import { Context } from './core';
+import { Data } from './core';
+import { EditorView } from './view';
 import { Input } from './input';
 import { Node } from './node';
 import { Output } from './output';
 import { Selected } from './selected';
-import { Validator } from './core/validator';
-import { listenWindow } from './view/utils';
+import { Validator } from './core';
+import { listenWindow } from './view';
 import { EditorEvents, EventsTypes } from './events';
 
 export class NodeEditor extends Context<EventsTypes> {

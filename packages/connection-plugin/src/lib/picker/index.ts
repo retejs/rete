@@ -1,4 +1,4 @@
-import { NodeEditor, Input, Output, Connection } from 'rete';
+import { NodeEditor, Input, Output, Connection } from '@naetverkjs/naetverk';
 import { PickerView } from './view';
 
 export class Picker {

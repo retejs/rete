@@ -37,10 +37,8 @@
     "@angular/platform-browser": "^10.0.0",
     "@angular/platform-browser-dynamic": "^10.0.0",
     "@angular/router": "^10.0.0",
+    "@naetverkjs/naetverk": "^0.8.1",
     "@nrwl/angular": "10.2.0",
-    "rete": "^1.4.4",
-    "rete-connection-plugin": "^0.9.0",
-    "rete-context-menu-plugin": "^0.6.0-rc.1",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "^0.10.2"

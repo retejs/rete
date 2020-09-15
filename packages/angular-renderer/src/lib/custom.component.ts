@@ -1,9 +1,18 @@
-import { Component, Input, OnInit, Injector, ComponentFactoryResolver, ViewContainerRef, Type, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  Injector,
+  ComponentFactoryResolver,
+  ViewContainerRef,
+  Type,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { Props } from './types';
 
 @Component({
-    template: '',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomComponent implements OnInit {
   @Input() component!: Type<Component>;
@@ -16,15 +25,21 @@ export class CustomComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    const factory = this.factoryResolver.resolveComponentFactory(this.component);
+    const factory = this.factoryResolver.resolveComponentFactory(
+      this.component
+    );
     const componentRef = factory.create(this.injector);
     const { props } = this;
 
-    for(let key in props) {
+    for (const key in props) {
       Object.defineProperty(componentRef.instance, key, {
-        get() { return props[key]; },
-        set(val) { props[key] = val; }
-      })
+        get() {
+          return props[key];
+        },
+        set(val) {
+          props[key] = val;
+        },
+      });
     }
 
     this.vcr.insert(componentRef.hostView);

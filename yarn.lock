@@ -1482,6 +1482,11 @@
     merge-source-map "^1.1.0"
     schema-utils "^2.6.4"
 
+"@naetverkjs/naetverk@^0.8.1":
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/@naetverkjs/naetverk/-/naetverk-0.8.1.tgz#c38aa52457d03f8d27c637947fc6362460585ae9"
+  integrity sha512-6jNxVveXTcd28eEeiJCgPxdX/i2TAYTI/2x5Zeu88iaCvcwk8nVVevu7GgGuqm0rMtMd3k7XmtkCbk+CiqkEhQ==
+
 "@ngtools/webpack@10.0.8":
   version "10.0.8"
   resolved "https://registry.yarnpkg.com/@ngtools/webpack/-/webpack-10.0.8.tgz#c818415a150ff6d578b25311b97859220b9d5a10"
@@ -7178,11 +7183,6 @@ locate-path@^5.0.0:
   dependencies:
     p-locate "^4.1.0"
 
-lodash-es@^4.17.15:
-  version "4.17.15"
-  resolved "https://registry.yarnpkg.com/lodash-es/-/lodash-es-4.17.15.tgz#21bd96839354412f23d7a10340e5eac6ee455d78"
-  integrity sha512-rlrc3yU3+JNOpZ9zj5pQtxnx2THmvRykwL4Xlxoa8I9lHBlVbbyPhgyPMioxVZ4NqyxaVVtaJnzsyOidQIhyyQ==
-
 lodash.clonedeep@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
@@ -9536,24 +9536,6 @@ ret@~0.1.10:
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.15.tgz#b8a4825d5bdb1fc3f6f53c2bc33f81388681c7bc"
   integrity sha512-TTlYpa+OL+vMMNG24xSlQGEJ3B/RzEfUlLct7b5G/ytav+wPrplCpVMFuwzXbkecJrb6IYo1iFb0S9v37754mg==
 
-rete-connection-plugin@^0.9.0:
-  version "0.9.0"
-  resolved "https://registry.yarnpkg.com/rete-connection-plugin/-/rete-connection-plugin-0.9.0.tgz#3a6df36f55493a5c2ea021ae3147a0f0a6ada6ed"
-  integrity sha512-D+H1yAONBBFYXeMkz0sdpDm76XiqcF2N3FduaqMUqcoThocMaFB2O8TX3nJc76ksuYaLYqo/+OLXTxNa+5HQYQ==
-
-rete-context-menu-plugin@^0.6.0-rc.1:
-  version "0.6.0-rc.1"
-  resolved "https://registry.yarnpkg.com/rete-context-menu-plugin/-/rete-context-menu-plugin-0.6.0-rc.1.tgz#0e5ba94057952ec9c07c0efd0d2ab27e9cc683a1"
-  integrity sha512-pjDaLfg50lvwbEInciX2OOvVgmoerF5tYYhYlEjcJq0KYfhLAzhmRnPJc1Ymgd1SJZf26G4YnQjSepCEzTiaUA==
-  dependencies:
-    lodash-es "^4.17.15"
-    vue "^2.5.17"
-
-rete@^1.4.4:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/rete/-/rete-1.4.4.tgz#2b6e19320604e42ecc980f5200075c54e952fd9a"
-  integrity sha512-G08idymIcvv2jUMG1I6eS2j5Gg9jALOCX0nX3TwRidrGdHqwcS+rmqGcOarJKKt1KsUGZUZ3zJ7myLfdlor78w==
-
 retry@^0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
@@ -11282,11 +11264,6 @@ vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
-
-vue@^2.5.17:
-  version "2.6.12"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.12.tgz#f5ebd4fa6bd2869403e29a896aed4904456c9123"
-  integrity sha512-uhmLFETqPPNyuLLbsKz6ioJ4q7AZHzD8ZVFNATNyICSZouqP2Sz0rotWQC8UNBF6VGSCs5abnKJoStA6JbCbfg==
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"

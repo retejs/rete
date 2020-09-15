@@ -1,8 +1,8 @@
 import { Area } from './area';
-import { Component } from '../engine/component';
+import { Component } from '../engine';
 import { Connection } from '../connection';
 import { ConnectionView } from './connection';
-import { Emitter } from '../core/emitter';
+import { Emitter } from '../core';
 import { EventsTypes } from '../events';
 import { Node } from '../node';
 import { NodeView } from './node';
@@ -28,11 +28,11 @@ export class EditorView extends Emitter<EventsTypes> {
     this.container.style.overflow = 'hidden';
 
     this.container.addEventListener('click', this.click.bind(this));
-    this.container.addEventListener('contextmenu', e =>
+    this.container.addEventListener('contextmenu', (e) =>
       this.trigger('contextmenu', { e, view: this })
     );
     emitter.on('destroy', listenWindow('resize', this.resize.bind(this)));
-    emitter.on('destroy', () => this.nodes.forEach(view => view.destroy()));
+    emitter.on('destroy', () => this.nodes.forEach((view) => view.destroy()));
 
     this.on('nodetranslated', this.updateConnections.bind(this));
 
@@ -90,8 +90,8 @@ export class EditorView extends Emitter<EventsTypes> {
   }
 
   updateConnections({ node }: { node: Node }) {
-    node.getConnections().forEach(conn => {
-      let connView = this.connections.get(conn);
+    node.getConnections().forEach((conn) => {
+      const connView = this.connections.get(conn);
 
       if (!connView) throw new Error('Connection view not found');
 

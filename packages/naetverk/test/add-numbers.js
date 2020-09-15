@@ -4,7 +4,7 @@ export default {
     '1': {
       id: 1,
       data: {
-        num: 2
+        num: 2,
       },
       inputs: {},
       outputs: {
@@ -13,18 +13,18 @@ export default {
             {
               node: 3,
               input: 'num1',
-              data: {}
-            }
-          ]
-        }
+              data: {},
+            },
+          ],
+        },
       },
       position: [80, 200],
-      name: 'Number'
+      name: 'Number',
     },
     '2': {
       id: 2,
       data: {
-        num: 0
+        num: 0,
       },
       inputs: {},
       outputs: {
@@ -33,13 +33,13 @@ export default {
             {
               node: 3,
               input: 'num2',
-              data: {}
-            }
-          ]
-        }
+              data: {},
+            },
+          ],
+        },
       },
       position: [80, 400],
-      name: 'Number'
+      name: 'Number',
     },
     '3': {
       id: 3,
@@ -50,27 +50,27 @@ export default {
             {
               node: 1,
               output: 'num',
-              data: {}
-            }
-          ]
+              data: {},
+            },
+          ],
         },
         num2: {
           connections: [
             {
               node: 2,
               output: 'num',
-              data: {}
-            }
-          ]
-        }
+              data: {},
+            },
+          ],
+        },
       },
       outputs: {
         num: {
-          connections: []
-        }
+          connections: [],
+        },
       },
       position: [500, 240],
-      name: 'Add'
-    }
-  }
+      name: 'Add',
+    },
+  },
 };

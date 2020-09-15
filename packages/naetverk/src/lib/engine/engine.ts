@@ -26,7 +26,7 @@ export class Engine extends Context<EngineEventsTypes> {
   public clone() {
     const engine = new Engine(this.id);
 
-    this.components.forEach(c => engine.register(c));
+    this.components.forEach((c) => engine.register(c));
 
     return engine;
   }
@@ -68,7 +68,7 @@ export class Engine extends Context<EngineEventsTypes> {
   }
 
   public async abort() {
-    return new Promise(ret => {
+    return new Promise((ret) => {
       if (this.state === State.PROCESSED) {
         this.state = State.ABORT;
         this.onAbort = ret;
@@ -80,7 +80,7 @@ export class Engine extends Context<EngineEventsTypes> {
   }
 
   private async lock(node: EngineNode) {
-    return new Promise(res => {
+    return new Promise((res) => {
       node.unlockPool = node.unlockPool || [];
       if (node.busy && !node.outputData) node.unlockPool.push(res);
       else res();
@@ -90,7 +90,7 @@ export class Engine extends Context<EngineEventsTypes> {
   }
 
   unlock(node: EngineNode) {
-    node.unlockPool.forEach(a => a());
+    node.unlockPool.forEach((a) => a());
     node.unlockPool = [];
     node.busy = false;
   }
@@ -98,12 +98,12 @@ export class Engine extends Context<EngineEventsTypes> {
   private async extractInputData(node: NodeData) {
     const obj: { [id: string]: any } = {};
 
-    for (let key of Object.keys(node.inputs)) {
+    for (const key of Object.keys(node.inputs)) {
       const input = node.inputs[key];
       const conns = input.connections;
 
       obj[key] = await Promise.all(
-        conns.map(async c => {
+        conns.map(async (c) => {
           const prevNode = (this.data as Data).nodes[c.node];
 
           const outputs = await this.processNode(prevNode as EngineNode);
@@ -149,11 +149,11 @@ export class Engine extends Context<EngineEventsTypes> {
     if (this.state === State.ABORT) return null;
 
     return await Promise.all(
-      Object.keys(node.outputs).map(async key => {
+      Object.keys(node.outputs).map(async (key) => {
         const output = node.outputs[key];
 
         return await Promise.all(
-          output.connections.map(async c => {
+          output.connections.map(async (c) => {
             const nextNode = (this.data as Data).nodes[c.node];
 
             await this.processNode(nextNode as EngineNode);
@@ -168,7 +168,7 @@ export class Engine extends Context<EngineEventsTypes> {
     data = Object.assign({}, data);
     data.nodes = Object.assign({}, data.nodes);
 
-    Object.keys(data.nodes).forEach(key => {
+    Object.keys(data.nodes).forEach((key) => {
       data.nodes[key] = Object.assign({}, data.nodes[key]);
     });
     return data;
@@ -191,7 +191,7 @@ export class Engine extends Context<EngineEventsTypes> {
   private async processStartNode(id: string | number | null) {
     if (!id) return;
 
-    let startNode = (this.data as Data).nodes[id];
+    const startNode = (this.data as Data).nodes[id];
 
     if (!startNode) return await this.throwError('Node with such id not found');
 
@@ -202,7 +202,7 @@ export class Engine extends Context<EngineEventsTypes> {
   private async processUnreachable() {
     const data = this.data as Data;
 
-    for (let i in data.nodes) {
+    for (const i in data.nodes) {
       // process nodes that have not been reached
       if (data.nodes.hasOwnProperty(i)) {
         const node = data.nodes[i] as EngineNode;

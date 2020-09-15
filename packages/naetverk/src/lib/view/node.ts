@@ -26,7 +26,7 @@ export class NodeView extends Emitter<EventsTypes> {
     this.el = document.createElement('div');
     this.el.style.position = 'absolute';
 
-    this.el.addEventListener('contextmenu', e =>
+    this.el.addEventListener('contextmenu', (e) =>
       this.trigger('contextmenu', { e, node: this.node })
     );
 
@@ -45,7 +45,7 @@ export class NodeView extends Emitter<EventsTypes> {
       node,
       component: component.data,
       bindSocket: this.bindSocket.bind(this),
-      bindControl: this.bindControl.bind(this)
+      bindControl: this.bindControl.bind(this),
     });
 
     this.update();
@@ -54,10 +54,10 @@ export class NodeView extends Emitter<EventsTypes> {
   clearSockets() {
     const ios: IO[] = [
       ...this.node.inputs.values(),
-      ...this.node.outputs.values()
+      ...this.node.outputs.values(),
     ];
 
-    this.sockets.forEach(s => {
+    this.sockets.forEach((s) => {
       if (!ios.includes(s.io)) this.sockets.delete(s.io);
     });
   }

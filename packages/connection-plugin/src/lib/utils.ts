@@ -1,5 +1,5 @@
-import { Emitter, Connection } from 'rete';
-import { EventsTypes } from 'rete/types/events';
+import { Emitter, Connection } from '@naetverkjs/naetverk';
+import { EventsTypes } from '@naetverkjs/naetverk/types/events';
 
 function toTrainCase(str: string) {
   return str.toLowerCase().replace(/ /g, '-');

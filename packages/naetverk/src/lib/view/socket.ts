@@ -30,7 +30,7 @@ export class SocketView extends Emitter<EventsTypes> {
 
     return [
       position[0] + el.offsetLeft + el.offsetWidth / 2,
-      position[1] + el.offsetTop + el.offsetHeight / 2
+      position[1] + el.offsetTop + el.offsetHeight / 2,
     ];
   }
 }

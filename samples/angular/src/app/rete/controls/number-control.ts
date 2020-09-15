@@ -1,4 +1,4 @@
-import { Component, Input, Type } from '@angular/core';
+import { Component, Input, OnInit, Type } from '@angular/core';
 import { AngularControl } from '@naetverkjs/angular-renderer';
 import { Control } from '@naetverkjs/naetverk';
 
@@ -23,7 +23,7 @@ import { Control } from '@naetverkjs/naetverk';
     `,
   ],
 })
-export class NumberComponent {
+export class NumberComponent implements OnInit {
   @Input() value!: number;
   @Input() readonly!: boolean;
   @Input() change!: Function;

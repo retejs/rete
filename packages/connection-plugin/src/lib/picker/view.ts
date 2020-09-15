@@ -1,6 +1,6 @@
-import { Output, Input, Emitter } from 'rete';
-import { EditorView } from 'rete/types/view';
-import { EventsTypes } from 'rete/types/events';
+import { Output, Input, Emitter } from '@naetverkjs/naetverk';
+import { EventsTypes } from '@naetverkjs/naetverk/types/events';
+import { EditorView } from '@naetverkjs/naetverk/types/view';
 import { renderConnection, renderPathData, updateConnection } from '../utils';
 
 export class PickerView {

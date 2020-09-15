@@ -1,5 +1,5 @@
 import { Engine } from './engine';
-import { NodeData, WorkerInputs, WorkerOutputs } from '../core/data';
+import { NodeData, WorkerInputs, WorkerOutputs } from '../core';
 
 export abstract class Component {
   name: string;
