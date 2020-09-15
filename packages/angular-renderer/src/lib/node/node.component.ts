@@ -8,9 +8,9 @@ import {
 import {
   NodeEditor,
   Node,
-  Input as ReteInput,
-  Output as ReteOutput,
-  Control as ReteControl,
+  Input as NaetverkInput,
+  Output as NaetverkOutput,
+  Control as NaetverkControl,
 } from '@naetverkjs/naetverk';
 import { NodeService } from '../node.service';
 

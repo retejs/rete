@@ -3,10 +3,10 @@ import { Control } from '@naetverkjs/naetverk';
 import { NodeService } from './node.service';
 
 @Directive({
-  selector: '[rete-control]',
+  selector: '[nvk-control]',
 })
 export class ControlDirective implements OnInit {
-  @Input('rete-control') control!: Control;
+  @Input('nvk-control') control!: Control;
 
   constructor(private el: ElementRef, private service: NodeService) {}
 

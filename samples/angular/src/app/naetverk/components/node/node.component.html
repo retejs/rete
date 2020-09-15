@@ -2,24 +2,24 @@
   <div class="title">{{ node.name }}</div>
   <div class="output" *ngFor="let output of outputs">
     <div class="output-title">{{ output.name }}</div>
-    <rete-socket
-      rete-socket
+    <nvk-socket
+      nvk-socket
       [io]="output"
       [socket]="output.socket"
-    ></rete-socket>
+    ></nvk-socket>
   </div>
   <div
     class="control"
     *ngFor="let control of controls"
-    [rete-control]="control"
+    [nvk-control]="control"
   ></div>
   <div class="input" *ngFor="let input of inputs">
-    <rete-socket rete-socket [io]="input" [socket]="input.socket"></rete-socket>
+    <nvk-socket nvk-socket [io]="input" [socket]="input.socket"></nvk-socket>
     <div class="input-title" *ngIf="!input.showControl()">{{ input.name }}</div>
     <div
       class="input-control"
       *ngIf="input.showControl()"
-      [rete-control]="input.control"
+      [nvk-control]="input.control"
     ></div>
   </div>
 </div>
