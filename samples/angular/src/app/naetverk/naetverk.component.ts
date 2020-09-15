@@ -7,13 +7,14 @@ import { NumComponent } from './components/number-component';
 import { AddComponent } from './components/add-component';
 
 @Component({
-  selector: 'app-rete',
-  template: ` <div class="wrapper">
-    <div #nodeEditor class="node-editor"></div>
-  </div>`,
-  styleUrls: ['./rete.component.scss'],
+  selector: 'nvk-angular-sample',
+  template: `
+    <div class="wrapper">
+      <div #nodeEditor class="node-editor"></div>
+    </div>`,
+  styleUrls: ['./naetverk.component.scss'],
 })
-export class ReteComponent implements AfterViewInit {
+export class NaetverkComponent implements AfterViewInit {
   @ViewChild('nodeEditor', { static: true }) el: ElementRef;
 
   editor = null;
@@ -51,7 +52,7 @@ export class ReteComponent implements AfterViewInit {
     add.position = [500, 240];
 
     editor.on('connectiondrop', (io) /* Input or Output */ => {
-      console.log('DROP');
+      console.log('connectiondrop');
     });
 
     editor.addNode(n1);

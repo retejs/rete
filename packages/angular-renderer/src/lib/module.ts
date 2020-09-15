@@ -34,7 +34,7 @@ export class NaetverkModule {
   constructor(injector: Injector) {
     // StaticInjectorError due to 'npm link'
     const CustomElement = createCustomElement(CustomComponent, { injector });
-    if (!customElements.get('rete-element'))
-      customElements.define('rete-element', CustomElement);
+    if (!customElements.get('nvk-element'))
+      customElements.define('nvk-element', CustomElement);
   }
 }

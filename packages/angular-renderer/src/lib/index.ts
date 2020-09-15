@@ -15,7 +15,7 @@ export function install(
 
       if (ngComponent.render && ngComponent.render !== 'angular') return;
 
-      const element = document.createElement('rete-element');
+      const element = document.createElement('nvk-element');
       const props: ElementProps = element as any;
 
       props.component =
@@ -36,7 +36,7 @@ export function install(
 
     if (ngControl.render && ngControl.render !== 'angular') return;
 
-    const element = document.createElement('rete-element');
+    const element = document.createElement('nvk-element');
     const props: ElementProps = element as any;
 
     props.component = ngControl.component;

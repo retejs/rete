@@ -3,7 +3,8 @@
   "version": "0.8.1",
   "peerDependencies": {
     "@angular/common": "^10.0.14",
-    "@angular/core": "^10.0.14"
+    "@angular/core": "^10.0.14",
+    "@naetverkjs/naetverk": "0.8.1"
   },
   "dependencies": {
     "tslib": "^2.0.0"

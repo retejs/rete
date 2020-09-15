@@ -1,10 +1,10 @@
 import { Directive, Input, ElementRef, OnInit } from '@angular/core';
-import { IO, Input as ReteInput } from '@naetverkjs/naetverk';
+import { IO, Input as NaetverkInput } from '@naetverkjs/naetverk';
 import { NodeService } from './node.service';
 import { SocketType } from './types';
 
 @Directive({
-  selector: '[rete-socket]',
+  selector: '[nvk-socket]',
 })
 export class SocketDirective implements OnInit {
   @Input() io!: IO;
@@ -12,7 +12,7 @@ export class SocketDirective implements OnInit {
   constructor(private el: ElementRef, private service: NodeService) {}
 
   get type(): SocketType {
-    return this.io instanceof ReteInput ? 'input' : 'output';
+    return this.io instanceof NaetverkInput ? 'input' : 'output';
   }
 
   ngOnInit() {
