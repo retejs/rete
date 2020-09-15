@@ -1,9 +1,0 @@
-{
-  "extends": "rete-cli/tsconfig.json",
-  "compilerOptions": {
-    "target": "es5",
-    "downlevelIteration": true,
-    "isolatedModules": false
-  },
-  "include": ["src"]
-}

@@ -1,0 +1,7 @@
+{
+  "name": "@naetverkjs/connections",
+  "version": "0.8.1",
+  "peerDependencies": {
+    "@naetverkjs/naetverk": "0.8.1"
+  }
+}
