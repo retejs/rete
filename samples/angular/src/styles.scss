@@ -1,1 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
+.connection {
+  overflow: visible !important;
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+  > * {
+    pointer-events: all;
+  }
+
+  .main-path {
+    fill: none;
+    stroke-width: 5px;
+    stroke: steelblue;
+  }
+}
