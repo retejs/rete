@@ -9,6 +9,8 @@ before_script:
 script:
   - npm run affected:build
   - npm run affected:test
+  - npm run affected:lint
+  - npm run format
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
 
 cache:
