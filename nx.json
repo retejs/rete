@@ -34,6 +34,9 @@
     },
     "naetverk": {
       "tags": []
+    },
+    "connection-plugin": {
+      "tags": []
     }
   },
   "workspaceLayout": {

@@ -1,8 +1,10 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
+// import { ConnectionPlugin } from '@naetverkjs/connections';
+
+import ConnectionPlugin from 'rete-connection-plugin';
 
 import { NodeEditor, Engine } from '@naetverkjs/naetverk';
-import ConnectionPlugin from 'rete-connection-plugin';
 import { NumComponent } from './components/number-component';
 import { AddComponent } from './components/add-component';
 
@@ -22,7 +24,7 @@ export class ReteComponent implements AfterViewInit {
     const components = [new NumComponent(), new AddComponent()];
 
     const editor = new NodeEditor('demo@0.2.0', container);
-    ///editor.use(ConnectionPlugin);
+    editor.use(ConnectionPlugin);
     editor.use(AngularRenderPlugin); //, { component: MyNodeComponent });
     // editor.use(ContextMenuPlugin);
 
