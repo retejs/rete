@@ -1,0 +1,36 @@
+language: node_js
+node_js:
+  - '10'
+
+before_script:
+  - npm install
+  - npm rebuild
+
+script:
+  - npm run affeced:build
+  - npm run affeced:test
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
+
+cache:
+  directories:
+    - 'node_modules'
+
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file_glob: true
+    file: build/*
+    skip_cleanup: true
+    on:
+      tags: true
+  - provider: npm
+    email: $NPM_EMAIL
+    api_key: $NPM_TOKEN
+    skip_cleanup: true
+    on:
+      tags: true
+
+addons:
+  sonarcloud:
+    organization: 'naetverkjs'
+    token: $SONAR_TOKEN
