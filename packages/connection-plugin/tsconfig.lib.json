@@ -4,12 +4,7 @@
     "module": "commonjs",
     "outDir": "../../dist/out-tsc",
     "declaration": true,
-    "target": "es5",
-    "types": ["node"],
-    "esModuleInterop": true,
-    "noEmit": true,
-    "allowJs": true,
-    "checkJs": true
+    "types": ["node"]
   },
   "exclude": ["**/*.spec.ts"],
   "include": ["**/*.ts"]
