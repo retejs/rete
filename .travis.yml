@@ -7,10 +7,9 @@ before_script:
   - npm rebuild
 
 script:
-  - git pull origin master
-  - npm run affected:build
-  - npm run affected:test
-  - npm run affected:lint
+  - npm run affected:build -- --base=origin/master --parallel
+  - npm run affected:test -- --base=origin/master --parallel
+  - npm run affected:lint -- --base=origin/master --parallel
   - npm run format
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
 
