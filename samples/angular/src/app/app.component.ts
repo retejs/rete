@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-root',
+  selector: 'nvk-root',
   template: '<nvk-angular-sample></nvk-angular-sample>\n',
 })
 export class AppComponent {
