@@ -4,6 +4,7 @@ export { Engine, Recursion } from './lib/engine/index';
 export { Component } from './lib/component';
 export { Control } from './lib/control';
 export { Connection } from './lib/connection';
+export { EditorView } from './lib/view';
 export { Emitter } from './lib/core/emitter';
 export { Input } from './lib/input';
 export { IO } from './lib/io';

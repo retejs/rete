@@ -1,4 +1,4 @@
-import { NodeEditor } from '../../../naetverk/src';
+import { NodeEditor } from '@naetverkjs/naetverk';
 import { install } from './index';
 
 describe('Init', () => {

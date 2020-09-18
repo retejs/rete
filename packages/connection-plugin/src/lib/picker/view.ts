@@ -1,6 +1,6 @@
 import { Output, Input, Emitter } from '@naetverkjs/naetverk';
-import { EventsTypes } from '@naetverkjs/naetverk/types/events';
-import { EditorView } from '@naetverkjs/naetverk/types/view';
+import { EventsTypes } from '@naetverkjs/naetverk/src/lib/events';
+import { EditorView } from '@naetverkjs/naetverk';
 import { renderConnection, renderPathData, updateConnection } from '../utils';
 
 export class PickerView {
