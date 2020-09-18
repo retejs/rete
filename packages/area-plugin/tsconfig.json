@@ -2,9 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
-  "paths": {
-    "@naetverkjs/naetverk": ["../naetverk/src"]
-  },
   "references": [
     {
       "path": "./tsconfig.lib.json"
