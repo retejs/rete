@@ -1,6 +1,8 @@
 language: node_js
 node_js:
   - '10'
+git:
+  depth: false
 
 before_script:
   - git fetch origin master
