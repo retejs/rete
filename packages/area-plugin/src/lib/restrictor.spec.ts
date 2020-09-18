@@ -6,7 +6,7 @@ describe('Restrict', () => {
     const container = document.createElement('div');
     const editor = new NodeEditor('demo@0.2.0', container);
     const restrictor = new Restrictor(editor, true, true);
-    let data = { x: 2, y: 1, transform: { k: 3 } };
+    const data = { x: 2, y: 1, transform: { k: 3 } };
     restrictor.restrictTranslate(data);
     expect(editor.events.translate.length).toEqual(1);
   });
@@ -15,7 +15,7 @@ describe('Restrict', () => {
     const container = document.createElement('div');
     const editor = new NodeEditor('demo@0.2.0', container);
     const restrictor = new Restrictor(editor, true, false);
-    let data = { x: 2, y: 1, transform: { k: 3 } };
+    const data = { x: 2, y: 1, transform: { k: 3 } };
     restrictor.restrictTranslate(data);
     expect(editor.events.translate.length).toEqual(0);
   });
