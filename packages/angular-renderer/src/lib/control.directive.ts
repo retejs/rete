@@ -3,6 +3,7 @@ import { Control } from '@naetverkjs/naetverk';
 import { NodeService } from './node.service';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[nvk-control]',
 })
 export class ControlDirective implements OnInit {

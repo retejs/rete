@@ -4,6 +4,7 @@ import { NodeService } from './node.service';
 import { SocketType } from './types';
 
 @Directive({
+  // tslint:disable-next-line:directive-selector
   selector: '[nvk-socket]',
 })
 export class SocketDirective implements OnInit {

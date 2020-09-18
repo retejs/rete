@@ -1,4 +1,7 @@
 {
   "name": "@naetverkjs/area",
-  "version": "0.0.1"
+  "version": "0.0.1",
+  "devDependencies": {
+    "@naetverkjs/naetverk": "0.8.2-beta.1"
+  }
 }

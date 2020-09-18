@@ -7,6 +7,7 @@ import {
   ViewContainerRef,
   Type,
   ChangeDetectionStrategy,
+  OnDestroy,
 } from '@angular/core';
 import { Props } from './types';
 
@@ -14,7 +15,7 @@ import { Props } from './types';
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CustomComponent implements OnInit {
+export class CustomComponent implements OnInit, OnDestroy {
   @Input() component!: Type<Component>;
   @Input() props!: Props;
 
@@ -32,14 +33,16 @@ export class CustomComponent implements OnInit {
     const { props } = this;
 
     for (const key in props) {
-      Object.defineProperty(componentRef.instance, key, {
-        get() {
-          return props[key];
-        },
-        set(val) {
-          props[key] = val;
-        },
-      });
+      if (props[key]) {
+        Object.defineProperty(componentRef.instance, key, {
+          get() {
+            return props[key];
+          },
+          set(val) {
+            props[key] = val;
+          },
+        });
+      }
     }
 
     this.vcr.insert(componentRef.hostView);
