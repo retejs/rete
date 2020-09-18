@@ -32,7 +32,7 @@ export class Restrictor {
     else if (data.zoom > se.max) data.zoom = se.max;
   }
 
-  restrictTranslate(data) {
+  restrictTranslate(data: { x: number; y: number; transform: { k: number } }) {
     const te =
       typeof this.translateExtent === 'boolean'
         ? { width: 5000, height: 4000 }
