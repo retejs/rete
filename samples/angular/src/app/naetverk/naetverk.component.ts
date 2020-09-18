@@ -57,10 +57,6 @@ export class NaetverkComponent implements AfterViewInit {
     n2.position = [80, 400];
     add.position = [500, 240];
 
-    editor.on('connectiondrop', (io) /* Input or Output */ => {
-      console.log('connectiondrop');
-    });
-
     editor.addNode(n1);
     editor.addNode(n2);
     editor.addNode(add);

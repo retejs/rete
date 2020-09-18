@@ -1,0 +1,67 @@
+@import 'vars';
+
+.node {
+  font-family: 'Roboto', sans-serif;
+
+  font-size: small;
+  background: $node-color;
+  border: 1px solid rgb(189, 189, 189);
+  border-radius: 5px;
+  cursor: pointer;
+  min-width: $node-width;
+
+  color: #000c17;
+  height: auto;
+  padding-bottom: 6px;
+  box-sizing: content-box;
+  position: relative;
+  user-select: none;
+
+  -webkit-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background: lighten($node-color, 4%);
+  }
+
+  &.selected {
+    background: lighten($node-color, 4%);
+    border: 1px solid rgb(95, 95, 95);
+  }
+
+  .title {
+    background-color: #efefef;
+    color: $title-color;
+    font-size: 14px;
+    padding: 5px;
+  }
+  .output {
+    text-align: right;
+  }
+  .input {
+    text-align: left;
+  }
+  .input-title,
+  .output-title {
+    vertical-align: middle;
+    color: $title-color;
+    display: inline-block;
+    font-family: sans-serif;
+    font-size: 14px;
+    margin: $socket-margin;
+    line-height: $socket-size;
+  }
+  &[hidden] {
+    display: none;
+  }
+  .input-control {
+    z-index: 1;
+    width: calc(100% - #{$socket-size + 2 * $socket-margin});
+    vertical-align: middle;
+    display: inline-block;
+  }
+  .control {
+    padding: $socket-margin $socket-size/2 + $socket-margin;
+  }
+}
