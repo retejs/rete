@@ -11,7 +11,7 @@ before_script:
 
 script:
   - npm run affected:build -- --base=origin/master --parallel
-  - npm run affected:test -- --base=origin/master --parallel
+  - npm run affected:test -- --all --code-coverage
   - npm run affected:lint -- --base=origin/master --parallel
   - npm run format
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
