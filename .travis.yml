@@ -3,6 +3,7 @@ node_js:
   - '10'
 
 before_script:
+  - git fetch origin master
   - npm install
   - npm rebuild
 
