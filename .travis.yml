@@ -35,6 +35,6 @@ deploy:
       tags: true
 
 addons:
- sonarcloud:
-   organization: 'naetverkjs'
-   token: $SONAR_TOKEN
+  sonarcloud:
+    organization: 'naetverkjs'
+    token: $SONAR_TOKEN
