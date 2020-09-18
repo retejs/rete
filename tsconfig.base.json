@@ -19,8 +19,8 @@
       "@naetverkjs/angular-renderer": [
         "packages/angular-renderer/src/index.ts"
       ],
-      // "@naetverkjs/naetverk": ["packages/naetverk/src/index.ts"],
-      "@naetverkjs/connections": ["packages/connection-plugin/src/index.ts"]
+      "@naetverkjs/connections": ["packages/connection-plugin/src/index.ts"],
+      "@naetverkjs/area": ["packages/area-plugin/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -7,7 +7,7 @@ import { NodeComponent, NodeService } from '@naetverkjs/angular-renderer';
 
 @Component({
   templateUrl: './node.component.html',
-  styleUrls: ['./node.component.sass'],
+  styleUrls: ['./node.component.scss'],
   providers: [NodeService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -236,6 +236,41 @@
           }
         }
       }
+    },
+    "area-plugin": {
+      "root": "packages/area-plugin",
+      "sourceRoot": "packages/area-plugin/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/area-plugin/tsconfig.lib.json",
+              "packages/area-plugin/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!packages/area-plugin/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/area-plugin/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/area-plugin",
+            "tsConfig": "packages/area-plugin/tsconfig.lib.json",
+            "packageJson": "packages/area-plugin/package.json",
+            "main": "packages/area-plugin/src/index.ts",
+            "assets": ["packages/area-plugin/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {

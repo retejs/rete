@@ -1,7 +1,10 @@
 import { IO, Input, Output } from '@naetverkjs/naetverk';
 import { Picker } from './picker';
 
-export type FlowParams = { input?: Input; output?: Output };
+export interface FlowParams {
+  input?: Input;
+  output?: Output;
+}
 
 export class Flow {
   private picker: Picker;

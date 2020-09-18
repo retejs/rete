@@ -1,6 +1,6 @@
 import { Connection, Input, Output } from '@naetverkjs/naetverk';
 
-declare module '@naetverkjs/naetverk/types/events' {
+declare module '@naetverkjs/naetverk/src/lib/events' {
   export interface EventsTypes {
     connectionpath: {
       points: number[];

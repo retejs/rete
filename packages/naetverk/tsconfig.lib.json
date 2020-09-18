@@ -2,10 +2,12 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "module": "commonjs",
+    "lib": ["es2016", "dom"],
     "outDir": "../../dist/out-tsc",
     "declaration": true,
+    "sourceMap": true,
     "types": ["node"]
   },
-  "exclude": ["**/*.spec.ts"],
+  "exclude": ["**/*.spec.ts", "test"],
   "include": ["**/*.ts"]
 }

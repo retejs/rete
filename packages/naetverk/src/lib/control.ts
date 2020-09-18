@@ -11,7 +11,7 @@ export class Control {
       throw new TypeError('Can not construct abstract class');
     }
     if (!key) {
-      throw new Error('The key parameter is missing in super() of Control ');
+      throw new Error('The key parameter is missing in super() of Control');
     }
 
     this.key = key;

@@ -1,6 +1,7 @@
 import { Engine } from './engine';
 import { Comp1, Comp2 } from '../../../test/components';
 import recursiveData from '../../../test/recursive';
+import addNumbersData from '../../../test/add-numbers';
 
 describe('Engine', () => {
   const id = 'test@0.0.1';
@@ -30,7 +31,7 @@ describe('Engine', () => {
     );
   });
 
-  describe('instance', async () => {
+  describe('instance', () => {
     let engine: Engine;
 
     beforeEach(() => {
@@ -46,24 +47,6 @@ describe('Engine', () => {
 
     it('should return an error when validation fails', async () => {
       expect(await engine.process(recursiveData as any)).toEqual('aborted');
-
-      //  assert.notStrictEqual(
-      //    await engine.process(recursiveData as any),
-      //    'success',
-      //    'recursive data'
-      //  );
-    });
-
-    it('clone', () => {
-      const engineClone = engine.clone();
-
-      // assert.strictEqual(engineClone instanceof Engine, true, 'is instance');
-      // assert.strictEqual(engineClone.id, engine.id, 'id');
-      // assert.deepStrictEqual(
-      //   engineClone.components,
-      //   engine.components,
-      //   'components'
-      // );
     });
 
     it('abort', (done) => {
@@ -83,40 +66,44 @@ describe('Engine', () => {
         .then(done);
     });
 
-    /*
+    it('should clone a engine', () => {
+      const engineClone = engine.clone();
+      expect(engineClone instanceof Engine).toBe(true);
+      expect(engineClone.id).toEqual(engine.id);
+      expect(engineClone.components).toEqual(engine.components);
+    });
+
     describe('process without abort', () => {
-      let cw = console.warn;
-      before(() => (console.warn = () => {}));
-      after(() => (console.warn = cw));
+      const cw = console.warn;
+      beforeEach(() => (console.warn = () => {}));
+      afterEach(() => (console.warn = cw));
 
       it('process warn', (done) => {
         engine.process(data);
         engine
           .process(data)
           .then((r) => {
-            assert.strictEqual(
-              Boolean(r),
-              false,
-              'cannot process simultaneously'
-            );
+            expect(Boolean(r)).toBeFalsy();
           })
           .then(done)
           .catch(done);
       });
     });
-     */
 
-    /*
-    it('process start node', async () => {
+    it('should start a process with a valid id', async () => {
       const correctId = Object.keys(addNumbersData.nodes)[0];
-      const wrongId = Number.POSITIVE_INFINITY;
 
-      assert.strictEqual(
-        await engine.process(addNumbersData as any, correctId),
+      expect(await engine.process(addNumbersData as any, correctId)).toEqual(
         'success'
       );
-      // assert.strictEqual(await engine.process(addNumbersData as any, wrongId), 'error')
     });
-     */
+
+    it.skip('should abort a process with a invalid id', async () => {
+      const wrongId = 323;
+
+      expect(await engine.process(addNumbersData as any, wrongId)).toEqual(
+        'aborted'
+      );
+    });
   });
 });

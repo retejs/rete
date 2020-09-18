@@ -36,15 +36,19 @@ export class NodeEditor extends Context<EventsTypes> {
     this.on('nodeselected', () =>
       this.selected.each((n) => {
         const nodeView = this.view.nodes.get(n);
-
-        nodeView && nodeView.onStart();
+        // nodeView && nodeView.onStart();
+        if (nodeView) {
+          nodeView.onStart();
+        }
       })
     );
     this.on('translatenode', ({ dx, dy }) =>
       this.selected.each((n) => {
         const nodeView = this.view.nodes.get(n);
-
-        nodeView && nodeView.onDrag(dx, dy);
+        // nodeView && nodeView.onDrag(dx, dy);
+        if (nodeView) {
+          nodeView.onDrag(dx, dy);
+        }
       })
     );
   }
@@ -107,7 +111,7 @@ export class NodeEditor extends Context<EventsTypes> {
   getComponent(name: string) {
     const component = this.components.get(name);
 
-    if (!component) throw `Component ${name} not found`;
+    if (!component) throw Error(`Component ${name} not found`);
 
     return component as Component;
   }
