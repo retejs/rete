@@ -37,6 +37,9 @@
     },
     "connection-plugin": {
       "tags": []
+    },
+    "area-plugin": {
+      "tags": ["plugin"]
     }
   },
   "workspaceLayout": {

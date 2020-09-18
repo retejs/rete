@@ -1,4 +1,30 @@
 /* You can add global styles to this file, and also import other style files */
+
+$sockets: (
+  'integer': #2703a6,
+  'decimal': #141259,
+  'string': #f29f05,
+  'boolean': #f2b705,
+);
+
+.socket {
+  @each $name, $color in $sockets {
+    &.#{$name} {
+      background: $color !important;
+    }
+  }
+}
+
+@each $name, $color in $sockets {
+  svg.connection.socket-input-#{$name},
+  svg.connection.socket-output-#{$name} {
+    path.main-path {
+      stroke: $color;
+    }
+  }
+}
+
+/* You can add global styles to this file, and also import other style files */
 .connection {
   overflow: visible !important;
   position: absolute;
@@ -12,5 +38,33 @@
     fill: none;
     stroke-width: 5px;
     stroke: steelblue;
+  }
+}
+
+/**
+ * Theming of the area plugin
+ */
+
+$grid-color: #ccc;
+$grid-size: 32px;
+$grid-area: $grid-size * 10000;
+
+.designer-background {
+  display: table;
+  z-index: -1;
+  position: absolute;
+  top: -$grid-area;
+  left: -$grid-area;
+  width: 2 * $grid-area;
+  height: 2 * $grid-area;
+
+  &.default {
+    background-size: $grid-size $grid-size;
+    background-image: linear-gradient(
+        to right,
+        $grid-color 1px,
+        transparent 1px
+      ),
+      linear-gradient(to bottom, $grid-color 1px, transparent 1px);
   }
 }

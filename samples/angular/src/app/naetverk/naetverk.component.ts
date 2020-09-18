@@ -1,5 +1,6 @@
 import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
+import { AreaPlugin } from '@naetverkjs/area';
 import { ConnectionPlugin } from '@naetverkjs/connections';
 
 import { NodeEditor, Engine } from '@naetverkjs/naetverk';
@@ -8,10 +9,9 @@ import { AddComponent } from './components/add-component';
 
 @Component({
   selector: 'nvk-angular-sample',
-  template: `
-    <div class="wrapper">
-      <div #nodeEditor class="node-editor"></div>
-    </div>`,
+  template: ` <div class="wrapper">
+    <div #nodeEditor class="node-editor"></div>
+  </div>`,
   styleUrls: ['./naetverk.component.scss'],
 })
 export class NaetverkComponent implements AfterViewInit {
@@ -26,8 +26,14 @@ export class NaetverkComponent implements AfterViewInit {
 
     const editor = new NodeEditor('demo@0.2.0', container);
     editor.use(ConnectionPlugin);
-    editor.use(AngularRenderPlugin); //, { component: MyNodeComponent });
-    // editor.use(ContextMenuPlugin);
+    editor.use(AngularRenderPlugin);
+
+    editor.use(AreaPlugin, {
+      background: 'designer-background',
+      snap: { dynamic: true, size: 16 },
+      scaleExtent: { min: 0.1, max: 1 },
+      translateExtent: { width: 5000, height: 4000 },
+    });
 
     const engine = new Engine('demo@0.2.0');
 
