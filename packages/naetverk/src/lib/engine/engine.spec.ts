@@ -83,7 +83,6 @@ describe('Engine', () => {
         engine
           .process(data)
           .then((r) => {
-            console.log(r);
             expect(Boolean(r)).toBeFalsy();
           })
           .then(done)
