@@ -40,6 +40,9 @@
     },
     "area-plugin": {
       "tags": ["plugin"]
+    },
+    "lifecycle-plugin": {
+      "tags": []
     }
   },
   "workspaceLayout": {
