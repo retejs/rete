@@ -14,3 +14,13 @@
 that allows you to create node-based editor directly in the browser.
 
 **Why a different branch?** -  I have some ideas that I follow which are in conflict with the original implementation.
+
+| Name                          | Description                                                                                                  | Extends              | Readme / Docs        |
+|-------------------------------|--------------------------------------------------------------------------------------------------------------|----------------------|----------------------|
+| @naetverkjs/naetverk          | Base library that allows the creation of node-based editors for visually programming or sequential scripting | -                    | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/naetverk/README.md)          |
+| @naetverkjs/connections       | Plugin to render the connections between nodes                                                               | @naetverkjs/naetverk | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/area-plugin/README.md)       |
+| @naetverkjs/area              | Plugin to draw the network on a configurable background with limited zoom and grid snapping                  | @naetverkjs/naetverk | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/connection-plugin/README.md) |
+|                               |                                                                                                              |                      |                                                                                                   |
+| **Angular**                   |                                                                                                              |                      |                                                                                                   |
+| @naetverkjs/angular-renderer  | Angular to Render basic nodes                                                                                |                      | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/angular-renderer/README.md)  |                     |
+ 
