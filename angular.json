@@ -271,6 +271,41 @@
           }
         }
       }
+    },
+    "lifecycle-plugin": {
+      "root": "packages/lifecycle-plugin",
+      "sourceRoot": "packages/lifecycle-plugin/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/lifecycle-plugin/tsconfig.lib.json",
+              "packages/lifecycle-plugin/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!packages/lifecycle-plugin/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/lifecycle-plugin/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/lifecycle-plugin",
+            "tsConfig": "packages/lifecycle-plugin/tsconfig.lib.json",
+            "packageJson": "packages/lifecycle-plugin/package.json",
+            "main": "packages/lifecycle-plugin/src/index.ts",
+            "assets": ["packages/lifecycle-plugin/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {
