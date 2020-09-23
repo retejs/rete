@@ -32,7 +32,7 @@ export class CustomComponent implements OnInit, OnDestroy {
     const componentRef = factory.create(this.injector);
     const { props } = this;
 
-    for (const key in props) {
+    for (const key of Object.keys(props)) {
       Object.defineProperty(componentRef.instance, key, {
         get() {
           return props[key];
