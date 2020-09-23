@@ -1,12 +1,12 @@
-<div class="node" [ngClass]="[selected(), node.name] | kebab">
+<div
+  class="node"
+  id="{{'node-' + node.id}}"
+  [ngClass]="[selected(), node.name] | kebab"
+>
   <div class="title">{{ node.name }}</div>
   <div class="output" *ngFor="let output of outputs">
     <div class="output-title">{{ output.name }}</div>
-    <nvk-socket
-      nvk-socket
-      [io]="output"
-      [socket]="output.socket"
-    ></nvk-socket>
+    <nvk-socket nvk-socket [io]="output" [socket]="output.socket"></nvk-socket>
   </div>
   <div
     class="control"

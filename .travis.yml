@@ -4,20 +4,40 @@ node_js:
 git:
   depth: false
 
-before_script:
-  - git fetch origin master
-  - yarn install
-
-script:
-  - npm run affected:build -- --base=origin/master --parallel
-  - npm run affected:test -- --all --code-coverage --skip-nx-cache
-  - npm run affected:lint -- --base=origin/master --parallel
-  - npm run format
-  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
-
 cache:
   directories:
-    - 'node_modules'
+    - ~/.cache/yarn
+    - ~/.cache/Cypress
+
+install:
+  # install dependencies
+  - yarn install --frozen-lockfile
+  # just in case the install script skipped Cypress post-install hook for some reason
+  # call install ourselves. If there is binary already installed, it will quickly finish.
+  # By overriding the install step we make sure the NPM modules AND the Cypress binary
+  # are installed before the cache is saved
+  - yarn cypress install
+  # good idea to verify the binary so its status is saved in the cache as well
+  - yarn cypress verify
+
+
+# check that Cypress can run
+before_script:
+  # where is Cypress binary cached?
+  - yarn cypress cache path
+  # show me all versions of Cypress binary cached
+  - yarn cypress cache list
+
+
+script:
+  - yarn run affected:build -- --base=origin/master --parallel
+  - yarn run affected:test -- --all --code-coverage --skip-nx-cache
+  - yarn run affected:lint -- --base=origin/master --parallel
+  - yarn run e2e --headless
+  - yarn run format
+  - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
+
+
 
 deploy:
   - provider: releases
