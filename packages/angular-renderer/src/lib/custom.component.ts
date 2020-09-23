@@ -33,16 +33,14 @@ export class CustomComponent implements OnInit, OnDestroy {
     const { props } = this;
 
     for (const key in props) {
-      if (props[key]) {
-        Object.defineProperty(componentRef.instance, key, {
-          get() {
-            return props[key];
-          },
-          set(val) {
-            props[key] = val;
-          },
-        });
-      }
+      Object.defineProperty(componentRef.instance, key, {
+        get() {
+          return props[key];
+        },
+        set(val) {
+          props[key] = val;
+        },
+      });
     }
 
     this.vcr.insert(componentRef.hostView);
