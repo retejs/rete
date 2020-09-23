@@ -12,6 +12,7 @@ script:
   - npm run affected:build -- --base=origin/master --parallel
   - npm run affected:test -- --all --code-coverage --skip-nx-cache
   - npm run affected:lint -- --base=origin/master --parallel
+  - npm run e2e --headless
   - npm run format
   - 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then sonar-scanner; fi' # sonar only on non-PRs
 
