@@ -17,6 +17,7 @@ export class Engine extends Context<EngineEventsTypes> {
   args: unknown[] = [];
   data: Data | null = null;
   state = State.AVAILABLE;
+  forwarded = new Set();
   onAbort = () => {};
 
   constructor(id: string) {
@@ -156,8 +157,11 @@ export class Engine extends Context<EngineEventsTypes> {
           output.connections.map(async (c) => {
             const nextNode = (this.data as Data).nodes[c.node];
 
-            await this.processNode(nextNode as EngineNode);
-            await this.forwardProcess(nextNode);
+            if (!this.forwarded.has(nextNode)) {
+              this.forwarded.add(nextNode);
+              await this.processNode(nextNode as EngineNode);
+              await this.forwardProcess(nextNode);
+            }
           })
         );
       })
@@ -224,7 +228,7 @@ export class Engine extends Context<EngineEventsTypes> {
 
     this.data = this.copy(data);
     this.args = args;
-
+    this.forwarded = new Set();
     await this.processStartNode(startId);
     await this.processUnreachable();
 
