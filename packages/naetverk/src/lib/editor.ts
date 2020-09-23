@@ -30,9 +30,13 @@ export class NodeEditor extends Context<EventsTypes> {
       listenWindow('keyup', (e) => this.trigger('keyup', e))
     );
 
-    this.on('selectnode', ({ node, accumulate }) =>
-      this.selectNode(node, accumulate)
-    );
+    this.on('selectnode', ({ node, accumulate }) => {
+      this.selectNode(node, accumulate);
+      if (this.selected.list.length > 1) {
+        this.trigger('multiselectnode', { nodes: this.selected, accumulate });
+      }
+    });
+
     this.on('nodeselected', () =>
       this.selected.each((n) => {
         const nodeView = this.view.nodes.get(n);
