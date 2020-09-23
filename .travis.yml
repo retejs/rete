@@ -19,6 +19,8 @@ script:
 cache:
   directories:
     - 'node_modules'
+    - ~/.cache/Cypress
+
 
 deploy:
   - provider: releases
