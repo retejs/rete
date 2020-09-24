@@ -25,4 +25,8 @@ that allows you to create node-based editor directly in the browser.
 | @naetverkjs/keyboard         | Registers keyboard input and maps them to events                                                                         | @naetverkjs/naetverk | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/keyboard-plugin/README.md)   |
 |                              |                                                                                                              |                      |                                                                                                   |
 | **Angular**                  |                                                                                                              |                      |                                                                                                   |
-| @naetverkjs/angular-renderer | Angular to render basic nodes                                                                                |                      | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/angular-renderer/README.md)  |
+| @naetverkjs/angular-renderer | Angular Module to render basic nodes                                                                         |                      | [Readme](https://github.com/naetverkjs/naetverk/blob/master/packages/angular-renderer/README.md)  |
+
+## Documentation:
+
+https://naetverkjs.github.io/documentation/

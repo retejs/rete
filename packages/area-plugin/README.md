@@ -1,6 +1,8 @@
 # area-plugin
 
-### Install
+Plugin to draw the network on a configurable background with limited zoom and grid snapping
+
+### Installation
 
 **Import**
 
@@ -22,8 +24,8 @@ editor.use(AreaPlugin, {
 ```
 
 **Style Definition**
-Defines the background area grid
-
+Add the following scss to your component, it defines the background area grid.  
+You can also overwrite this if you want.
 ```scss
 $grid-color: #ccc;
 $grid-size: 32px;

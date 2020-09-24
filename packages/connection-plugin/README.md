@@ -1,12 +1,17 @@
 # connection-plugin
 
-### Install
+Plugin to render the connections between nodes  
+
+### Installation
 
 ```js
 import { ConnectionPlugin } from '@naetverkjs/connections';
 
 editor.use(ConnectionPlugin);
 ```
+
+### Styling
+To display the connections, add the following scss to your component. You can also overwrite this if you want. 
 
 ```scss
 .connection {
@@ -27,7 +32,7 @@ editor.use(ConnectionPlugin);
 ```
 
 ### Events
-
+The connections plugin adds events to the editor to render the connecting lines between the node sockets. 
 ```js
 editor.on('connectionpath', (data) => {
   const {
