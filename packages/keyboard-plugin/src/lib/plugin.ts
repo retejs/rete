@@ -12,8 +12,8 @@ function install(editor) {
         editor.selected.each((n) => editor.removeNode(n));
         break;
       case 'Space':
-        let rect = editor.view.container.getBoundingClientRect();
-        let event = new MouseEvent('contextmenu', {
+        const rect = editor.view.container.getBoundingClientRect();
+        const event = new MouseEvent('contextmenu', {
           clientX: rect.left + rect.width / 2,
           clientY: rect.top + rect.height / 2,
         });
