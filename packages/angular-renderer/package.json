@@ -1,6 +1,10 @@
 {
   "name": "@naetverkjs/angular-renderer",
   "version": "0.8.1",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/naetverkjs/naetverk.git"
+  },
   "peerDependencies": {
     "@angular/common": "^10.0.14",
     "@angular/core": "^10.0.14",
