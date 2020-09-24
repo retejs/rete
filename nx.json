@@ -43,6 +43,9 @@
     },
     "lifecycle-plugin": {
       "tags": []
+    },
+    "keyboard-plugin": {
+      "tags": ["plugin"]
     }
   },
   "workspaceLayout": {

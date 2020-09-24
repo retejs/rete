@@ -306,6 +306,41 @@
           }
         }
       }
+    },
+    "keyboard-plugin": {
+      "root": "packages/keyboard-plugin",
+      "sourceRoot": "packages/keyboard-plugin/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "packages/keyboard-plugin/tsconfig.lib.json",
+              "packages/keyboard-plugin/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!packages/keyboard-plugin/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "packages/keyboard-plugin/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "builder": "@nrwl/node:package",
+          "options": {
+            "outputPath": "dist/packages/keyboard-plugin",
+            "tsConfig": "packages/keyboard-plugin/tsconfig.lib.json",
+            "packageJson": "packages/keyboard-plugin/package.json",
+            "main": "packages/keyboard-plugin/src/index.ts",
+            "assets": ["packages/keyboard-plugin/*.md"]
+          }
+        }
+      }
     }
   },
   "cli": {

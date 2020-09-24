@@ -2,6 +2,7 @@ import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
 import { AreaPlugin } from '@naetverkjs/area';
 import { ConnectionPlugin } from '@naetverkjs/connections';
+import { KeyboardPlugin } from '@naetverkjs/keyboard';
 
 import { NodeEditor, Engine } from '@naetverkjs/naetverk';
 import { NumComponent } from './components/number-component';
@@ -26,6 +27,7 @@ export class NaetverkComponent implements AfterViewInit {
 
     const editor = new NodeEditor('demo@0.2.0', container);
     editor.use(ConnectionPlugin);
+    editor.use(KeyboardPlugin);
     editor.use(AngularRenderPlugin);
 
     editor.use(AreaPlugin, {
