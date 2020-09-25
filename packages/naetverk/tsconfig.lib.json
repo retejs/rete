@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES6",
     "lib": ["es2016", "dom"],
     "outDir": "../../dist/out-tsc",
     "declaration": true,
