@@ -16,5 +16,15 @@ editor.use(AutoArrangePlugin);
 The `arrange` call will order the nodes.
 
 ```typescript
-editor.arrange(node);
+editor.trigger('arrange', {});
+```
+
+**Configuration**
+
+```js
+editor.use(ArrangePlugin, {
+  margin: { x: 50, y: 50 }, // The Margin between the nodes
+  depth: null, // The node depth
+  vertical: false, // Vertical or horizontal arrangement
+});
 ```
