@@ -1,4 +1,3 @@
-import { install } from './index';
 import { AutoArrange } from './auto-arrange';
 
 export const AutoArrangePlugin = {

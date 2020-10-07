@@ -9,3 +9,17 @@
 .socket.number {
   background: #96b38a;
 }
+
+.menu-bar {
+  width: 100%;
+  button {
+    background-color: white;
+    padding: 0.5rem;
+    border: 1px solid gray;
+    margin: 0.5rem;
+    &:hover {
+      background-color: #cccccc;
+      cursor: pointer;
+    }
+  }
+}
