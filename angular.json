@@ -342,9 +342,9 @@
         }
       }
     },
-    "auto-arrange-plugin": {
-      "root": "packages/auto-arrange-plugin",
-      "sourceRoot": "packages/auto-arrange-plugin/src",
+    "arrange-plugin": {
+      "root": "packages/arrange-plugin",
+      "sourceRoot": "packages/arrange-plugin/src",
       "projectType": "library",
       "schematics": {},
       "architect": {
@@ -352,30 +352,30 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": [
-              "packages/auto-arrange-plugin/tsconfig.lib.json",
-              "packages/auto-arrange-plugin/tsconfig.spec.json"
+              "packages/arrange-plugin/tsconfig.lib.json",
+              "packages/arrange-plugin/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**",
-              "!packages/auto-arrange-plugin/**/*"
+              "!packages/arrange-plugin/**/*"
             ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
-            "jestConfig": "packages/auto-arrange-plugin/jest.config.js",
+            "jestConfig": "packages/arrange-plugin/jest.config.js",
             "passWithNoTests": true
           }
         },
         "build": {
           "builder": "@nrwl/node:package",
           "options": {
-            "outputPath": "dist/packages/auto-arrange-plugin",
-            "tsConfig": "packages/auto-arrange-plugin/tsconfig.lib.json",
-            "packageJson": "packages/auto-arrange-plugin/package.json",
-            "main": "packages/auto-arrange-plugin/src/index.ts",
-            "assets": ["packages/auto-arrange-plugin/*.md"]
+            "outputPath": "dist/packages/arrange-plugin",
+            "tsConfig": "packages/arrange-plugin/tsconfig.lib.json",
+            "packageJson": "packages/arrange-plugin/package.json",
+            "main": "packages/arrange-plugin/src/index.ts",
+            "assets": ["packages/arrange-plugin/*.md"]
           }
         }
       }

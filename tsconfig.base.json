@@ -23,7 +23,7 @@
       "@naetverkjs/area": ["packages/area-plugin/src/index.ts"],
       "@naetverkjs/lifecycle": ["packages/lifecycle-plugin/src/index.ts"],
       "@naetverkjs/keyboard": ["packages/keyboard-plugin/src/index.ts"],
-      "@naetverk/auto-arrange": ["packages/auto-arrange-plugin/src/index.ts"]
+      "@naetverk/auto-arrange": ["packages/arrange-plugin/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

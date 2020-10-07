@@ -1,4 +1,4 @@
-# auto-arrange-plugin
+# arrange-plugin
 
 Plugin to draw the network on a configurable background with limited zoom and grid snapping
 

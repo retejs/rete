@@ -47,7 +47,7 @@
     "keyboard-plugin": {
       "tags": ["plugin"]
     },
-    "auto-arrange-plugin": {
+    "arrange-plugin": {
       "tags": ["plugin"]
     }
   },
