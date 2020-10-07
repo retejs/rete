@@ -31,10 +31,10 @@ export class AutoArrange {
 
     board.add(depth, node);
 
-    this.getNodes(node, 'output').map((n) =>
+    this.getNodes(node, 'output').forEach((n) =>
       this.getNodesBoard(n, cache, board, depth + 1)
     );
-    this.getNodes(node, 'input').map((n) =>
+    this.getNodes(node, 'input').forEach((n) =>
       this.getNodesBoard(n, cache, board, depth - 1)
     );
 
