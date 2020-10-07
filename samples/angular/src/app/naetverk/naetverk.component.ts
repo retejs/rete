@@ -12,7 +12,7 @@ import { AddComponent } from './components/add-component';
 @Component({
   selector: 'nvk-angular-sample',
   template: `<div class="menu-bar">
-      <button (click)="arrange()">Arrange</button>
+      <button id="arrange" (click)="arrange()">Arrange</button>
     </div>
     <div class="wrapper">
       <div #nodeEditor class="node-editor"></div>
