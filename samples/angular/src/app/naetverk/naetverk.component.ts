@@ -3,6 +3,7 @@ import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
 import { AreaPlugin } from '@naetverkjs/area';
 import { ConnectionPlugin } from '@naetverkjs/connections';
 import { KeyboardPlugin } from '@naetverkjs/keyboard';
+import { AutoArrangePlugin } from '@naetverk/auto-arrange';
 
 import { NodeEditor, Engine } from '@naetverkjs/naetverk';
 import { NumComponent } from './components/number-component';
@@ -10,9 +11,12 @@ import { AddComponent } from './components/add-component';
 
 @Component({
   selector: 'nvk-angular-sample',
-  template: ` <div class="wrapper">
-    <div #nodeEditor class="node-editor"></div>
-  </div>`,
+  template: `<div class="menu-bar">
+      <button id="arrange" (click)="arrange()">Arrange</button>
+    </div>
+    <div class="wrapper">
+      <div #nodeEditor class="node-editor"></div>
+    </div>`,
   styleUrls: ['./naetverk.component.scss'],
 })
 export class NaetverkComponent implements AfterViewInit {
@@ -29,6 +33,7 @@ export class NaetverkComponent implements AfterViewInit {
     editor.use(ConnectionPlugin);
     editor.use(KeyboardPlugin);
     editor.use(AngularRenderPlugin);
+    editor.use(AutoArrangePlugin);
 
     editor.use(AreaPlugin, {
       background: 'designer-background',
@@ -83,5 +88,9 @@ export class NaetverkComponent implements AfterViewInit {
     editor.view.resize();
     editor.trigger('process');
     this.editor = editor;
+  }
+
+  arrange() {
+    this.editor.arrange();
   }
 }

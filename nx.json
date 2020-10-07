@@ -46,6 +46,9 @@
     },
     "keyboard-plugin": {
       "tags": ["plugin"]
+    },
+    "auto-arrange-plugin": {
+      "tags": ["plugin"]
     }
   },
   "workspaceLayout": {
