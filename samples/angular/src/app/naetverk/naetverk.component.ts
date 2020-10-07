@@ -3,7 +3,7 @@ import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
 import { AreaPlugin } from '@naetverkjs/area';
 import { ConnectionPlugin } from '@naetverkjs/connections';
 import { KeyboardPlugin } from '@naetverkjs/keyboard';
-import { AutoArrangePlugin } from '@naetverk/auto-arrange';
+import { AutoArrangePlugin } from '@naetverk/arrange';
 
 import { NodeEditor, Engine } from '@naetverkjs/naetverk';
 import { NumComponent } from './components/number-component';
