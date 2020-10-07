@@ -5,7 +5,9 @@ export class Cache {
   }
 
   track(value) {
-    if (this._map.has(value)) return true;
+    if (this._map.has(value)) {
+      return true;
+    }
     this._map.set(value, true);
   }
 }
