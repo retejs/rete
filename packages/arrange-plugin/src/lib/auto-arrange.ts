@@ -3,9 +3,9 @@ import { Cache } from './cache';
 
 export class AutoArrange {
   private readonly editor: any;
-  private readonly margin: any;
-  private readonly depth: any;
-  private readonly vertical: any;
+  private readonly margin: { x: number; y: number } | null;
+  private readonly depth: number | null;
+  private readonly vertical: boolean | null;
 
   constructor(editor, margin, depth, vertical) {
     this.editor = editor;
@@ -31,10 +31,10 @@ export class AutoArrange {
 
     board.add(depth, node);
 
-    this.getNodes(node, 'output').map((n) =>
+    this.getNodes(node, 'output').forEach((n) =>
       this.getNodesBoard(n, cache, board, depth + 1)
     );
-    this.getNodes(node, 'input').map((n) =>
+    this.getNodes(node, 'input').forEach((n) =>
       this.getNodesBoard(n, cache, board, depth - 1)
     );
 

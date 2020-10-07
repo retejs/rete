@@ -8,6 +8,7 @@
   "peerDependencies": {
     "@angular/common": "^10.0.14",
     "@angular/core": "^10.0.14",
+    "@angular/animations": "^10.0.14",
     "@angular/elements": "^10.1.1",
     "@naetverkjs/naetverk": "0.8.1"
   },

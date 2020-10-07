@@ -3,7 +3,7 @@ import { AngularRenderPlugin } from '@naetverkjs/angular-renderer';
 import { AreaPlugin } from '@naetverkjs/area';
 import { ConnectionPlugin } from '@naetverkjs/connections';
 import { KeyboardPlugin } from '@naetverkjs/keyboard';
-import { AutoArrangePlugin } from '@naetverk/auto-arrange';
+import { ArrangePlugin } from '@naetverk/arrange';
 
 import { NodeEditor, Engine } from '@naetverkjs/naetverk';
 import { NumComponent } from './components/number-component';
@@ -33,7 +33,11 @@ export class NaetverkComponent implements AfterViewInit {
     editor.use(ConnectionPlugin);
     editor.use(KeyboardPlugin);
     editor.use(AngularRenderPlugin);
-    editor.use(AutoArrangePlugin);
+    editor.use(ArrangePlugin, {
+      margin: { x: 50, y: 50 },
+      depth: null,
+      vertical: false,
+    });
 
     editor.use(AreaPlugin, {
       background: 'designer-background',
@@ -91,6 +95,6 @@ export class NaetverkComponent implements AfterViewInit {
   }
 
   arrange() {
-    this.editor.arrange();
+    this.editor.trigger('arrange', {});
   }
 }
