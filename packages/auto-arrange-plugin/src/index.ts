@@ -1,1 +1,1 @@
-export * from './lib/auto-arrange-plugin';
+export * from './lib/plugin';
