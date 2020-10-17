@@ -40,9 +40,9 @@ describe('Control', () => {
         assert.doesNotThrow(() => ctrl.getNode(), 'node should be added')
 
         node.data.testKey = 1;
-        assert.equal(ctrl.getData('testKey'), 1, 'data testKey exist')
+        assert.strictEqual(ctrl.getData('testKey'), 1, 'data testKey exist')
 
         assert.doesNotThrow(() => ctrl.putData('testKey2', 2), 'data added')
-        assert.equal(ctrl.getData('testKey2'), 2, 'data testKey2 exist')
+        assert.strictEqual(ctrl.getData('testKey2'), 2, 'data testKey2 exist')
     })
 })

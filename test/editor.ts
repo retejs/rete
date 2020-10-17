@@ -48,7 +48,7 @@ describe('Editor', () => {
         it('import', async () => {
             let ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {} });
     
-            assert.equal(ret, false, 'can not be taken with another id');
+            assert.strictEqual(ret, false, 'can not be taken with another id');
         });
 
         it('export', async () => {
@@ -57,9 +57,9 @@ describe('Editor', () => {
 
             let ret = await editor.fromJSON(addNumbersData as any);
 
-            assert.equal(ret, true, 'correct data');
+            assert.strictEqual(ret, true, 'correct data');
 
-            assert.deepEqual(editor.toJSON(), addNumbersData)
+            assert.deepStrictEqual(editor.toJSON(), addNumbersData)
         });
 
         it('connections', async () => {
@@ -74,39 +74,39 @@ describe('Editor', () => {
             // assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
             
             editor.connect(node1.outputs.get('num') as Output, node2.inputs.get('num1') as Input);
-            assert.equal((node1.outputs.get('num') as Output).connections.length, 1, 'one connection');
+            assert.strictEqual((node1.outputs.get('num') as Output).connections.length, 1, 'one connection');
             
             var connection = (node1.outputs.get('num') as Output).connections[0];
 
             assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
-            assert.equal((node1.outputs.get('num') as Output).connections.length, 0, 'no connections');
+            assert.strictEqual((node1.outputs.get('num') as Output).connections.length, 0, 'no connections');
         });
 
         it('nodes', async () => {
             const node1 = await comps[0].createNode();
             const node2 = await comps[0].createNode();
 
-            assert.equal(editor.nodes.length, 0, 'No nodes')
+            assert.strictEqual(editor.nodes.length, 0, 'No nodes')
             editor.addNode(node1)
-            assert.equal(editor.nodes.length, 1, 'One node exist')
+            assert.strictEqual(editor.nodes.length, 1, 'One node exist')
 
             editor.selectNode(node1)
-            assert.equal(editor.selected.contains(node1), true, 'Node selected')
+            assert.strictEqual(editor.selected.contains(node1), true, 'Node selected')
 
             assert.throws(() => editor.selectNode(node2), 'Unable to select not added node')
 
             editor.addNode(node2)
             editor.selectNode(node2, false)
-            assert.equal(editor.selected.contains(node1), false, 'Previous node unselected')
-            assert.equal(editor.selected.contains(node2), true, 'New node selected')
+            assert.strictEqual(editor.selected.contains(node1), false, 'Previous node unselected')
+            assert.strictEqual(editor.selected.contains(node2), true, 'New node selected')
 
             editor.selectNode(node1, true)
-            assert.equal(editor.selected.list.length, 2, 'Both nodes selected')
+            assert.strictEqual(editor.selected.list.length, 2, 'Both nodes selected')
 
             editor.removeNode(node1)
-            assert.equal(editor.nodes.length, 1, 'First node removed')
+            assert.strictEqual(editor.nodes.length, 1, 'First node removed')
             editor.removeNode(node2)
-            assert.equal(editor.nodes.length, 0, 'Second node removed')
+            assert.strictEqual(editor.nodes.length, 0, 'Second node removed')
         })
         
         it('create node with data', async () => {
@@ -131,20 +131,20 @@ describe('Editor', () => {
             it('adding node', () => {
                 editor.on('nodecreate', () => false);
                 editor.addNode(node);
-                assert.equal(editor.nodes.length, 0)
+                assert.strictEqual(editor.nodes.length, 0)
             });
 
             it('removing node', () => {
                 editor.on('noderemove', () => false);
                 editor.addNode(node);
                 editor.removeNode(node);
-                assert.equal(editor.nodes.length, 1)
+                assert.strictEqual(editor.nodes.length, 1)
             });
 
             it('connection', () => {
                 editor.on('connectioncreate', () => false);
                 editor.connect(node.outputs.get('num') as Output, node2.inputs.get('num1') as Input)
-                assert.equal((node.outputs.get('num') as Output).hasConnection(), false)
+                assert.strictEqual((node.outputs.get('num') as Output).hasConnection(), false)
             });
 
             it('connection', () => {
@@ -153,11 +153,11 @@ describe('Editor', () => {
                 editor.on('connectionremove', () => false);
                 editor.connect(output, node2.inputs.get('num1') as Input)
 
-                assert.equal(output.hasConnection(), true)
+                assert.strictEqual(output.hasConnection(), true)
 
                 editor.removeConnection(output.connections[0]);
 
-                assert.equal(output.hasConnection(), true)
+                assert.strictEqual(output.hasConnection(), true)
             });
         });
     });
