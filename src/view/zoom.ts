@@ -88,6 +88,8 @@ export class Zoom {
     }
 
     dblclick(e: MouseEvent) {
+        if(e.target !== e.currentTarget) return
+
         e.preventDefault();
         
         const rect = this.el.getBoundingClientRect();
