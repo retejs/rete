@@ -1,7 +1,5 @@
 import { listenWindow } from './utils';
 
-interface DeltaWheelEvent { wheelDelta: number }
-
 export class Zoom {
 
     el: HTMLElement;
@@ -34,11 +32,12 @@ export class Zoom {
 
     wheel(e: WheelEvent) {
         e.preventDefault();
-        
-        const rect = this.el.getBoundingClientRect();
-        const wheelDelta = (e as unknown as DeltaWheelEvent).wheelDelta;
-        const delta = (wheelDelta ? wheelDelta / 120 : - e.deltaY / 3) * this.intensity;
 
+        console.log('WHEEL', e);
+
+        const rect = this.el.getBoundingClientRect();
+        const isNegative = e.deltaY < 0;
+        const delta = isNegative ? this.intensity : - this.intensity;
         const ox = (rect.left - e.clientX) * delta;
         const oy = (rect.top - e.clientY) * delta;
 
@@ -73,7 +72,7 @@ export class Zoom {
 
         if (this.previous !== null) {
             let delta = distance / this.previous.distance - 1;
-    
+
             const ox = (rect.left - cx) * delta;
             const oy = (rect.top - cy) * delta;
 
@@ -89,13 +88,13 @@ export class Zoom {
 
     dblclick(e: MouseEvent) {
         e.preventDefault();
-        
+
         const rect = this.el.getBoundingClientRect();
         const delta = 4 * this.intensity;
 
         const ox = (rect.left - e.clientX) * delta;
         const oy = (rect.top - e.clientY) * delta;
 
-        this.onzoom(delta, ox, oy, 'dblclick'); 
+        this.onzoom(delta, ox, oy, 'dblclick');
     }
 }
