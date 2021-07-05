@@ -33,8 +33,6 @@ export class Zoom {
     wheel(e: WheelEvent) {
         e.preventDefault();
 
-        console.log('WHEEL', e);
-
         const rect = this.el.getBoundingClientRect();
         const isNegative = e.deltaY < 0;
         const delta = isNegative ? this.intensity : - this.intensity;
