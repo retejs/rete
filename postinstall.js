@@ -1,10 +1,7 @@
-// eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
-const chalk = require('chalk')
-
-function getRectangle(width, height) {
+function getRectangle(width, height, color) {
     const line = new Array(width).fill(' ').join('')
 
-    return new Array(height).fill(line).join('\n')
+    return new Array(height).fill(color(line)).join('\n')
 }
 
 function drawText(x, y, text) {
@@ -16,11 +13,26 @@ function drawText(x, y, text) {
     return `${save}${up(y)}${right(x)}${text}${restore}`
 }
 
+function black(text) {
+    return '\x1b[30m' + text + '\x1b[0m'
+}
+
+function white(text) {
+    return '\x1b[37m' + text + '\x1b[0m'
+}
+
+function bgBlue(text) {
+    return '\x1b[44m' + text + '\x1b[0m'
+}
+
+function bgYellow(text) {
+    return '\x1b[43m' + text + '\x1b[0m'
+}
+
 const topText = 'Stand with Ukraine'
 const bottomText = 'Please check the Rete.js\'s README for details'
 
-const top = chalk.bgBlue(getRectangle(50, 5))
-const bottom = chalk.bgYellow(getRectangle(50, 5))
+const top = getRectangle(50, 5, bgBlue)
+const bottom = getRectangle(50, 5, bgYellow)
 
-
-console.log(`${top}\n${drawText(16, 3, chalk.white.bgBlue(topText))}${bottom}\n${drawText(2, 3, chalk.black.bgYellow(bottomText))}`)
+console.log(`${top}\n${drawText(16, 3, white(bgBlue(topText)))}${bottom}\n${drawText(2, 3, black(bgYellow(bottomText)))}`)
