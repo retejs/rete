@@ -1,10 +1,20 @@
-Rete.js  [![Build Status](https://travis-ci.org/retejs/rete.svg?branch=master)](https://travis-ci.org/retejs/rete) 
+Rete.js  [![Build Status](https://travis-ci.org/retejs/rete.svg?branch=master)](https://travis-ci.org/retejs/rete)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retejs_rete&metric=alert_status)](https://sonarcloud.io/dashboard?id=retejs_rete)
 [![Join the chat at https://gitter.im/retejs/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/retejs/Lobby)
 ====
 #### JavaScript framework for visual programming
 
 ![rete logo](https://i.imgur.com/rydGu6B.png)
+
+#StandWithUkraine 💛💙
+----
+
+#RussiaInvadedUkraine on 24 of February 2022, at 5.00 AM the armed forces of the Russian Federation  attacked Ukraine. Please, Stand with Ukraine, stay tuned for updates on Ukraine’s official sources and channels in English and support Ukraine in its fight for freedom and democracy in Europe.
+
+Help to defend Ukraine — donate to [Ukraine’s main charity fund](https://savelife.in.ua/en/donate/)
+
+Help to defend Ukraine — donate to the [fund of the National Bank of Ukraine](https://ukraine.ua/news/donate-to-the-nbu-fund/)
+
 
 Introduction
 ----
