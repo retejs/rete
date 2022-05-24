@@ -1,4 +1,4 @@
-Rete.js  [![Build Status](https://travis-ci.org/retejs/rete.svg?branch=master)](https://travis-ci.org/retejs/rete)
+Rete.js  [![Build Status](https://app.travis-ci.com/retejs/rete.svg?branch=master)](https://app.travis-ci.com/retejs/rete)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retejs_rete&metric=alert_status)](https://sonarcloud.io/dashboard?id=retejs_rete)
 [![Join the chat at https://gitter.im/retejs/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/retejs/Lobby)
 ====
