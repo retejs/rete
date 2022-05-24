@@ -67,6 +67,11 @@ export class Node {
         this.outputs.delete(output.key);
     }
 
+    setMeta (meta: {[key: string]: unknown}) {
+        this.meta = meta;
+        return this;
+    }
+
     getConnections() {
         const ios = [...this.inputs.values(), ...this.outputs.values()];
         const connections = ios.reduce((arr, io) => {
