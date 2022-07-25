@@ -16,6 +16,7 @@ export class EditorView extends Emitter<EventsTypes> {
     connections = new Map<Connection, ConnectionView>();
     area: Area;
 
+    // eslint-disable-next-line max-statements
     constructor(container: HTMLElement, components: Map<string, Component>, emitter: Emitter<EventsTypes>) {
         super(emitter);
 
@@ -28,9 +29,19 @@ export class EditorView extends Emitter<EventsTypes> {
         this.container.addEventListener('contextmenu', e => this.trigger('contextmenu', { e, view: this }));
         emitter.on('destroy', listenWindow('resize', this.resize.bind(this)));
         emitter.on('destroy', () => this.nodes.forEach(view => view.destroy()));
-  
+
         this.on('nodetranslated', this.updateConnections.bind(this));
-            
+        this.on('rendersocket', ({ socket }) => {
+            const connections = Array.from(this.connections.entries())
+            const relatedConnections = connections.filter(([connection]) => {
+                const { input, output } = connection
+
+                return [input.socket, output.socket].includes(socket)
+            })
+
+            relatedConnections.forEach(([_, view]) => requestAnimationFrame(() => view.update()))
+        })
+
         this.area = new Area(container, this);
         this.container.appendChild(this.area.el);
     }
@@ -39,7 +50,7 @@ export class EditorView extends Emitter<EventsTypes> {
         const component = this.components.get(node.name);
 
         if (!component) throw new Error(`Component ${node.name} not found`);
-        
+
         const nodeView = new NodeView(node, component, this);
 
         this.nodes.set(node, nodeView);
@@ -105,7 +116,7 @@ export class EditorView extends Emitter<EventsTypes> {
 
     click(e: Event) {
         const container = this.container;
-        
+
         if (container !== e.target) return;
         if (!this.trigger('click', { e, container })) return;
     }

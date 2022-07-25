@@ -20,6 +20,7 @@
   },
   "env": {
     "es6": true,
-    "mocha": true
+    "mocha": true,
+    "browser": true
   }
 }

@@ -20,24 +20,30 @@ export class ConnectionView extends Emitter<EventsTypes> {
         this.el.style.position = 'absolute';
         this.el.style.zIndex = '-1';
 
-        this.trigger('renderconnection', { 
-            el: this.el, 
-            connection: this.connection, 
+        this.trigger('renderconnection', {
+            el: this.el,
+            connection: this.connection,
             points: this.getPoints()
         });
     }
 
     getPoints() {
-        const [x1, y1] = this.outputNode.getSocketPosition(this.connection.output);
-        const [x2, y2] = this.inputNode.getSocketPosition(this.connection.input);
+        const { input, output } = this.connection
 
-        return [x1, y1, x2, y2];
+        if (this.inputNode.hasSocket(input) && this.outputNode.hasSocket(output)) {
+            const [x1, y1] = this.outputNode.getSocketPosition(output);
+            const [x2, y2] = this.inputNode.getSocketPosition(input);
+
+            return [x1, y1, x2, y2];
+        }
+
+        return [0, 0, 0, 0]
     }
 
     update() {
-        this.trigger('updateconnection', { 
-            el: this.el, 
-            connection: this.connection, 
+        this.trigger('updateconnection', {
+            el: this.el,
+            connection: this.connection,
             points: this.getPoints()
         });
     }

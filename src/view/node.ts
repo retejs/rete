@@ -35,9 +35,9 @@ export class NodeView extends Emitter<EventsTypes> {
         });
 
         this.trigger('rendernode', {
-            el: this.el, 
-            node, 
-            component: component.data, 
+            el: this.el,
+            node,
+            component: component.data,
             bindSocket: this.bindSocket.bind(this),
             bindControl: this.bindControl.bind(this)
         });
@@ -47,7 +47,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     clearSockets() {
         const ios: IO[] = [ ...this.node.inputs.values(), ...this.node.outputs.values()];
-        
+
         this.sockets.forEach(s => {
             if (!ios.includes(s.io)) this.sockets.delete(s.io);
         });
@@ -62,6 +62,10 @@ export class NodeView extends Emitter<EventsTypes> {
         this.controls.set(control, new ControlView(el, control, this));
     }
 
+    hasSocket(io: IO) {
+        return this.sockets.has(io)
+    }
+
     getSocketPosition(io: IO) {
         const socket = this.sockets.get(io);
 
@@ -72,7 +76,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     onSelect(e: MouseEvent) {
         const payload = { node: this.node, accumulate: e.ctrlKey, e };
-    
+
         this.onStart();
         this.trigger('multiselectnode', payload);
         this.trigger('selectnode', payload);
@@ -116,7 +120,7 @@ export class NodeView extends Emitter<EventsTypes> {
     }
 
     remove() {
-        
+
     }
 
     destroy() {
