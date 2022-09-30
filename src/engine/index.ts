@@ -42,7 +42,7 @@ export class Engine extends Context<EventsTypes> {
     }
 
     private processStart() {
-        if (this.state === State.AVAILABLE) {  
+        if (this.state === State.AVAILABLE) {
             this.state = State.PROCESSED;
             return true;
         }
@@ -60,17 +60,17 @@ export class Engine extends Context<EventsTypes> {
         const success = this.state !== State.ABORT;
 
         this.state = State.AVAILABLE;
-        
+
         if (!success) {
             this.onAbort();
             this.onAbort = () => { }
-        }    
+        }
 
         return success;
     }
 
     public async abort() {
-        return new Promise(ret => {
+        return new Promise<void>(ret => {
             if (this.state === State.PROCESSED) {
                 this.state = State.ABORT;
                 this.onAbort = ret;
@@ -85,15 +85,15 @@ export class Engine extends Context<EventsTypes> {
     }
 
     private async lock(node: EngineNode) {
-        return new Promise(res => {
+        return new Promise<void>(res => {
             node.unlockPool = node.unlockPool || [];
             if (node.busy && !node.outputData)
                 node.unlockPool.push(res);
-            else 
+            else
                 res();
-            
+
             node.busy = true;
-        });    
+        });
     }
 
     unlock(node: EngineNode) {
@@ -105,7 +105,7 @@ export class Engine extends Context<EventsTypes> {
     private async extractInputData(node: NodeData) {
         const obj: {[id: string]: any} = {};
 
-        for (let key of Object.keys(node.inputs)) {
+        for (const key of Object.keys(node.inputs)) {
             const input = node.inputs[key];
             const conns = input.connections;
             const connData = await Promise.all(conns.map(async (c) => {
@@ -113,7 +113,7 @@ export class Engine extends Context<EventsTypes> {
 
                 const outputs = await this.processNode(prevNode as EngineNode);
 
-                if (!outputs) 
+                if (!outputs)
                     this.abort();
                 else
                     return outputs[c.output];
@@ -134,7 +134,7 @@ export class Engine extends Context<EventsTypes> {
             await component.worker(node, inputData, outputData, ...this.args);
         } catch (e) {
             this.abort();
-            this.trigger('warn', e);
+            this.trigger('warn', e as Error);
         }
 
         return outputData;
@@ -143,7 +143,7 @@ export class Engine extends Context<EventsTypes> {
     private async processNode(node: EngineNode) {
         if (this.state === State.ABORT || !node)
             return null;
-        
+
         await this.lock(node);
 
         if (!node.outputData) {
@@ -157,7 +157,7 @@ export class Engine extends Context<EventsTypes> {
     private async forwardProcess(node: NodeData) {
         if (this.state === State.ABORT)
             return null;
-        
+
         return await Promise.all(Object.keys(node.outputs).map(async (key) => {
             const output = node.outputs[key];
             return await Promise.all(output.connections.map(async (c) => {
@@ -174,7 +174,7 @@ export class Engine extends Context<EventsTypes> {
     copy(data: Data) {
         data = Object.assign({}, data);
         data.nodes = Object.assign({}, data.nodes);
-        
+
         Object.keys(data.nodes).forEach(key => {
             data.nodes[key] = Object.assign({}, data.nodes[key])
         });
@@ -186,24 +186,24 @@ export class Engine extends Context<EventsTypes> {
         const recursion = new Recursion(data.nodes);
 
         if (!checking.success)
-            return await this.throwError(checking.msg);  
-        
+            return await this.throwError(checking.msg);
+
         const recurrentNode = recursion.detect();
 
         if (recurrentNode)
-            return await this.throwError('Recursion detected', recurrentNode);      
-         
+            return await this.throwError('Recursion detected', recurrentNode);
+
         return true;
     }
 
     private async processStartNode(id: string | number | null) {
         if (!id) return;
 
-        let startNode = (this.data as Data).nodes[id];
+        const startNode = (this.data as Data).nodes[id];
 
         if (!startNode)
-            return await this.throwError('Node with such id not found');   
-        
+            return await this.throwError('Node with such id not found');
+
         await this.processNode(startNode as EngineNode);
         await this.forwardProcess(startNode);
     }
@@ -211,7 +211,7 @@ export class Engine extends Context<EventsTypes> {
     private async processUnreachable() {
         const data = this.data as Data;
 
-        for (let i in data.nodes) { // process nodes that have not been reached
+        for (const i in data.nodes) { // process nodes that have not been reached
             const node = data.nodes[i] as EngineNode;
 
             if (typeof node.outputData === 'undefined') {
@@ -223,15 +223,15 @@ export class Engine extends Context<EventsTypes> {
 
     async process<T extends unknown[]>(data: Data, startId: number | string | null = null, ...args: T) {
         if (!this.processStart()) return;
-        if (!this.validate(data)) return;    
-        
+        if (!this.validate(data)) return;
+
         this.data = this.copy(data);
         this.args = args;
         this.forwarded = new Set();
-        
+
         await this.processStartNode(startId);
         await this.processUnreachable();
-        
+
         return this.processDone()?'success':'aborted';
     }
 }

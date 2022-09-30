@@ -11,7 +11,7 @@ export abstract class Component extends ComponentWorker {
         super(name);
     }
 
-    abstract async builder(node: Node): Promise<void>;
+    abstract builder(node: Node): Promise<void>;
 
     async build(node: Node) {
         await this.builder(node);
@@ -21,7 +21,7 @@ export abstract class Component extends ComponentWorker {
 
     async createNode(data = {}) {
         const node = new Node(this.name);
-        
+
         node.data = data;
         await this.build(node);
 

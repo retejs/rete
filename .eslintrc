@@ -16,11 +16,16 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/no-empty-interface": "off",
-    "@typescript-eslint/no-parameter-properties": "off"
+    "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-empty-function": "warn"
   },
   "env": {
     "es6": true,
     "mocha": true,
     "browser": true
+  },
+  "globals": {
+    "WindowEventMap": true
   }
 }

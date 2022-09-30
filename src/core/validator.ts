@@ -15,10 +15,10 @@ export class Validator {
     static validate(id: string, data: Data) {
         const id1 = id.split('@');
         const id2 = data.id.split('@');
-        let msg = [];
+        const msg = [];
 
         if (!this.isValidData(data))
-            msg.push('Data is not suitable'); 
+            msg.push('Data is not suitable');
         if (id !== data.id)
             msg.push('IDs not equal');
         if (id1[0] !== id2[0])

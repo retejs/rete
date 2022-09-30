@@ -11,7 +11,7 @@ export class Recursion {
     constructor(nodes: NodesData) {
         this.nodes = nodes;
     }
-    
+
     extractInputNodes(node: NodeData): NodeData[] {
         return Object.keys(node.inputs).reduce((acc: NodeData[], key: string) => {
             const { connections } = node.inputs[key];
@@ -28,10 +28,10 @@ export class Recursion {
 
         if (inters.length)
             return inters[0];
-        
-        for (let node of inputNodes) {
-            let l = [node, ...list];
-            let inter = this.findSelf(l, this.extractInputNodes(node));
+
+        for (const node of inputNodes) {
+            const l = [node, ...list];
+            const inter = this.findSelf(l, this.extractInputNodes(node));
 
             if (inter)
                 return inter;
@@ -43,8 +43,8 @@ export class Recursion {
     detect(): NodeData | null {
         const nodesArr = Object.keys(this.nodes).map(id => this.nodes[id]);
 
-        for (let node of nodesArr) {
-            let inters = this.findSelf([node], this.extractInputNodes(node));
+        for (const node of nodesArr) {
+            const inters = this.findSelf([node], this.extractInputNodes(node));
 
             if (inters)
                 return inters;

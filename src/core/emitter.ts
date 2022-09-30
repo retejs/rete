@@ -23,11 +23,11 @@ export class Emitter<EventTypes> {
 
     trigger<K extends keyof EventTypes>(name: K, params: EventTypes[K] | {} = {}) {
         if (!(name in this.events))
-            throw new Error(`The event ${name} cannot be triggered`);
+            throw new Error(`The event ${String(name)} cannot be triggered`);
 
         return this.events[name as string].reduce((r: boolean, e: Function) => {
             return (e(params) !== false) && r
-        }, true); // return false if at least one event is false        
+        }, true); // return false if at least one event is false
     }
 
     bind(name: string) {

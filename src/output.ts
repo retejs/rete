@@ -5,11 +5,11 @@ import { OutputData } from './core/data';
 import { Socket } from './socket';
 
 export class Output extends IO {
-  
-    constructor(key: string, title: string, socket: Socket, multiConns: boolean = true) {
+
+    constructor(key: string, title: string, socket: Socket, multiConns = true) {
         super(key, title, socket, multiConns);
     }
-    
+
     hasConnection() {
         return this.connections.length > 0;
     }

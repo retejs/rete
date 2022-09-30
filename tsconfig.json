@@ -3,7 +3,8 @@
     "compilerOptions": {
         "target": "es5",
         "downlevelIteration": true,
-	"isolatedModules": false
+	    "isolatedModules": false,
+        "skipLibCheck": true
     },
     "include": ["src"]
 }

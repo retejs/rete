@@ -21,7 +21,7 @@ describe('Engine', () => {
     it('init', async () => {
         assert.doesNotThrow(createValidEngine, Error, 'valid')
         // assert.throws(() => {
-        //     let eng = createValidEngine(); 
+        //     let eng = createValidEngine();
 
         //     eng.register({})
         // }, Error, 'object instead of component');
@@ -39,10 +39,10 @@ describe('Engine', () => {
             assert.strictEqual(await engine.process(data), 'success')
             assert.notStrictEqual(await engine.process({ id: 'test@1.0.0', nodes: {} }), 'success', 'wrong id')
         });
-    
+
         it('validation', async () => {
             assert.notStrictEqual(await engine.process(recursiveData as any), 'success', 'recursive data')
-        });  
+        });
 
         it('clone', () => {
             const engineClone = engine.clone();
@@ -57,7 +57,7 @@ describe('Engine', () => {
                 assert.strictEqual(v, 'aborted', 'Check aborted process')
             }).catch(done)
             engine.abort();
-            
+
             engine.process(data as any).then(v => {
                 assert.strictEqual(Boolean(v), false, 'Not aborted completely')
             }).then(done)
@@ -78,10 +78,8 @@ describe('Engine', () => {
 
         it('process start node', async () => {
             const correctId = Object.keys(addNumbersData.nodes)[0];
-            const wrongId = Number.POSITIVE_INFINITY;
 
             assert.strictEqual(await engine.process(addNumbersData as any, correctId), 'success')
-            // assert.strictEqual(await engine.process(addNumbersData as any, wrongId), 'error')
         });
     });
 });

@@ -5,10 +5,10 @@ import { InputData } from './core/data';
 import { Socket } from './socket';
 
 export class Input extends IO {
-   
+
     control: Control | null = null;
 
-    constructor(key: string, title: string, socket: Socket, multiConns: boolean = false) {
+    constructor(key: string, title: string, socket: Socket, multiConns = false) {
         super(key, title, socket, multiConns);
     }
 

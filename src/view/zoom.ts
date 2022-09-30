@@ -43,11 +43,11 @@ export class Zoom {
     }
 
     touches() {
-        let e = { touches: this.pointers }
-        let [x1, y1] = [e.touches[0].clientX, e.touches[0].clientY];
-        let [x2, y2] = [e.touches[1].clientX, e.touches[1].clientY];
+        const e = { touches: this.pointers }
+        const [x1, y1] = [e.touches[0].clientX, e.touches[0].clientY];
+        const [x2, y2] = [e.touches[1].clientX, e.touches[1].clientY];
 
-        let distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+        const distance = Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
 
         return {
             cx: (x1 + x2)/2,
@@ -64,12 +64,12 @@ export class Zoom {
         this.pointers = this.pointers.map(p => p.pointerId === e.pointerId ? e : p)
         if (!this.translating) return;
 
-        let rect = this.el.getBoundingClientRect();
+        const rect = this.el.getBoundingClientRect();
 
-        let { cx, cy, distance } = this.touches();
+        const { cx, cy, distance } = this.touches();
 
         if (this.previous !== null) {
-            let delta = distance / this.previous.distance - 1;
+            const delta = distance / this.previous.distance - 1;
 
             const ox = (rect.left - cx) * delta;
             const oy = (rect.top - cy) * delta;
