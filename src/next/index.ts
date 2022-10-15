@@ -1,12 +1,4 @@
-
-export enum ElementType {
-  Node = 'node',
-  Edge = 'edge'
-}
-
-export function createTsSchema<T>() {
-  return null as T
-}
+import { Scope } from './scope'
 
 type NodeId = string
 type PortId = string
@@ -73,13 +65,22 @@ export class Connection implements ConnectionBase {
   }
 }
 
-export class NodeEditor<NodeData extends NodeBase = NodeBase, ConnectionData extends ConnectionBase = ConnectionBase> {
+export type Root<NodeData, ConnectionData> =
+  | { type: 'nodecreate', data: NodeData }
+  | { type: 'connectioncreate', data: ConnectionData }
+
+export * from './scope'
+
+export class NodeEditor<
+  NodeData extends NodeBase = NodeBase,
+  ConnectionData extends ConnectionBase = ConnectionBase
+> extends Scope<Root<NodeData, ConnectionData>> {
   public nodes: NodeData[] = []
   public connections: ConnectionData[] = []
 
-  constructor(container: HTMLElement, schemas?: { [ElementType.Node]?: NodeData, [ElementType.Edge]?: ConnectionData }) {
+  constructor(container: HTMLElement) {
+    super('NodeEditor')
     container
-    schemas
   }
 
   addNode(data: NodeData) {
@@ -105,46 +106,5 @@ export class NodeEditor<NodeData extends NodeBase = NodeBase, ConnectionData ext
 
   export() {
     1
-  }
-}
-
-type Pipe<T> = (data: T) => Promise<undefined | T> | undefined | T
-
-class Signal<T> {
-  pipes: Pipe<T>[] = []
-
-  addPipe(pipe: Pipe<T>) {
-    this.pipes.push(pipe)
-  }
-
-  async emit<Context extends T>(context: Context): Promise<Context | undefined> {
-    let current: Context | undefined = context
-
-    for (const pipe of this.pipes) {
-      current = await pipe(current) as Context
-
-      if (typeof current === 'undefined') return
-    }
-    return current
-  }
-}
-
-export class Scope<Signals> {
-  signal = new Signal<Signals>()
-
-  constructor(public name: string) {}
-
-  addPipe(middleware: Pipe<Signals>) {
-    this.signal.addPipe(middleware)
-  }
-
-  use<T>(plugin: Scope<T | Signals>) {
-    this.addPipe(context => {
-      return plugin.signal.emit<Signals>(context)
-    })
-  }
-
-  emit(context: Signals) {
-    return this.signal.emit(context)
   }
 }
