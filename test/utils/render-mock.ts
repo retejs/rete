@@ -1,5 +1,5 @@
 export function renderMock(editor) {
-    editor.on('rendernode', ({ node, bindSocket, bindControl }) => {
+    editor.on('rendernode', ({ node, bindSocket }) => {
         Array.from(node.inputs.values()).forEach(i => {
             bindSocket(document.createElement('div'), 'input', i);
         });

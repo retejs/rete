@@ -28,7 +28,7 @@ describe('Engine', () => {
         assert.throws(() => new Engine('test@0.1'), Error, 'wrong id')
     });
 
-    describe('instance', async () => {
+    describe('instance', () => {
         let engine: Engine;
 
         beforeEach(() => {
@@ -65,8 +65,8 @@ describe('Engine', () => {
 
         describe('process without abort', () => {
             let cw = console.warn;
-            before(() => console.warn = () => {})
-            after(() => console.warn = cw)
+            beforeEach(() => console.warn = () => {})
+            afterEach(() => console.warn = cw)
 
             it('process warn', (done) => {
                 engine.process(data)

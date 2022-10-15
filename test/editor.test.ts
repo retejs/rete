@@ -1,9 +1,11 @@
+/**
+ * @jest-environment jsdom
+ */
 import assert from 'assert';
 import { Component, Node, Input, NodeEditor, Output } from '../src';
 import { renderMock } from './utils/render-mock';
 import { Comp1, Comp2 } from './data/components';
 import addNumbersData from './data/add-numbers';
-require('jsdom-global')()
 
 describe('Editor', () => {
 
@@ -17,7 +19,7 @@ describe('Editor', () => {
         par.appendChild(container);
 
         editor = new NodeEditor('test@0.0.1', container);
-        
+
         editor.events['warn'] = [];
         editor.events['error'] = [];
     });
@@ -47,7 +49,7 @@ describe('Editor', () => {
 
         it('import', async () => {
             let ret = await editor.fromJSON({ id: 'test@0.0.2', nodes: {} });
-    
+
             assert.strictEqual(ret, false, 'can not be taken with another id');
         });
 
@@ -72,10 +74,10 @@ describe('Editor', () => {
             editor.addNode(node2);
 
             // assert.throws(() => editor.connect(n1.outputs.get('none'), n2.inputs.get('name')), Error, 'no output');
-            
+
             editor.connect(node1.outputs.get('num') as Output, node2.inputs.get('num1') as Input);
             assert.strictEqual((node1.outputs.get('num') as Output).connections.length, 1, 'one connection');
-            
+
             var connection = (node1.outputs.get('num') as Output).connections[0];
 
             assert.doesNotThrow(() => editor.removeConnection(connection), Error, 'remove connection');
@@ -108,7 +110,7 @@ describe('Editor', () => {
             editor.removeNode(node2)
             assert.strictEqual(editor.nodes.length, 0, 'Second node removed')
         })
-        
+
         it('create node with data', async () => {
             const data = {
                 some: 'data'

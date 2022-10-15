@@ -15,7 +15,7 @@ export class Validator {
     static validate(id: string, data: Data) {
         const id1 = id.split('@');
         const id2 = data.id.split('@');
-        const msg = [];
+        const msg: string[] = [];
 
         if (!this.isValidData(data))
             msg.push('Data is not suitable');

@@ -1,15 +1,10 @@
 {
-  "extends": ["./node_modules/rete-cli/.eslintrc", "plugin:@typescript-eslint/recommended"],
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint"],
+  "extends": ["./node_modules/rete-cli/.eslintrc"],
   "parserOptions": {
     "sourceType": "module"
   },
   "rules": {
     "no-undef": "error",
-    "sort-imports": ["warn", {
-      "memberSyntaxSortOrder": ["single", "all", "multiple", "none"]
-    }],
     "no-new": "off",
     "max-len": ["warn", 120],
     "@typescript-eslint/explicit-member-accessibility": "off",
@@ -18,7 +13,10 @@
     "@typescript-eslint/no-empty-interface": "off",
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/ban-types": "off",
-    "@typescript-eslint/no-empty-function": "warn"
+    "@typescript-eslint/no-empty-function": "warn",
+    "no-unused-vars": "off",
+    "no-shadow": "off",
+    "indent": ["warn", 2]
   },
   "env": {
     "es6": true,

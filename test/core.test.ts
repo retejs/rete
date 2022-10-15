@@ -1,3 +1,6 @@
+/**
+ * @jest-environment jsdom
+ */
 import { Comp1 } from './data/components';
 import { NodeEditor } from '../src';
 import { Plugin } from '../src/core/plugin';
