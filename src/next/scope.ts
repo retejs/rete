@@ -20,18 +20,18 @@ export class Signal<T> {
   }
 }
 
-export class Scope<Signals> {
-  signal = new Signal<Signals>()
+export class Scope<Signals, Parent = never> {
+  signal = new Signal<Signals | Parent>()
 
   constructor(public name: string) {}
 
-  addPipe(middleware: Pipe<Signals>) {
+  addPipe(middleware: Pipe<Signals | Parent>) {
     this.signal.addPipe(middleware)
   }
 
-  use<T>(plugin: Scope<T | Signals>) {
+  use<T>(plugin: Scope<T, Signals | Parent>) {
     this.addPipe(context => {
-      return plugin.signal.emit<Signals>(context)
+      return plugin.signal.emit<Signals | Parent>(context)
     })
   }
 

@@ -1,6 +1,6 @@
 
-export type NodeId = string | number
-export type ConnectionId = string | number
+export type NodeId = string
+export type ConnectionId = string
 
 export type NodeBase = { id: NodeId }
 export type ConnectionBase = { id: ConnectionId, source: NodeId, target: NodeId }
