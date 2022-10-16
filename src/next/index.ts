@@ -1,92 +1,28 @@
 import { Scope } from './scope'
+import { BaseSchemes, NodeEditorData } from './types'
 
-type NodeId = string
-type PortId = string
-type ConnectionId = string
-
-export type NodeBase = { id: NodeId }
-export type ConnectionBase = { id: ConnectionId, source: NodeId, target: NodeId }
-
-function getUID() {
-  const typedArray = new Uint8Array(10)
-  const randomValues = window.crypto.getRandomValues(typedArray)
-
-  return randomValues.join('');
-}
-
-export class Socket {
-  constructor() {
-    1
-  }
-}
-
-export class Port {
-  id: PortId
-  socket?: Socket
-
-  constructor() {
-    this.id = getUID()
-  }
-}
-
-export class Input extends Port {
-
-}
-
-export class Output extends Port {
-
-}
-
-export class Control {
-
-}
-
-export class Node implements NodeBase {
-  id: NodeId
-  ports: Port[] = []
-  controls: Control[] = []
-
-  constructor() {
-    this.id = getUID()
-  }
-}
-
-export class Connection implements ConnectionBase {
-  id: ConnectionId
-  source: NodeId
-  target: NodeId
-  sourcePort?: Port
-  targetPort?: Port
-
-  constructor(source: Node, target: Node) {
-    this.id = getUID()
-    this.source = source.id
-    this.target = target.id
-  }
-}
-
-export type GetSchemes<NodeData, ConnectionData> = { Node: NodeData, Connection: ConnectionData }
-export type BaseSchemes = GetSchemes<NodeBase, ConnectionBase>
 
 export type Root<Scheme extends BaseSchemes> =
   | { type: 'nodecreate', data: Scheme['Node'] }
   | { type: 'nodecreated', data: Scheme['Node'] }
-  | { type: 'noderemove', data: Scheme['Node'] }
-  | { type: 'noderemoved', data: Scheme['Node'] }
+  | { type: 'noderemove', data: Scheme['Node']['id'] }
+  | { type: 'noderemoved', data: Scheme['Node']['id'] }
   | { type: 'connectioncreate', data: Scheme['Connection'] }
   | { type: 'connectioncreated', data: Scheme['Connection'] }
   | { type: 'connectionremove', data: Scheme['Connection']['id'] }
   | { type: 'connectionremoved', data: Scheme['Connection']['id'] }
-  | { type: 'import' }
-  | { type: 'imported' }
-  | { type: 'export' }
-  | { type: 'exported' }
+  | { type: 'clear' }
+  | { type: 'cleared' }
+  | { type: 'import', data: NodeEditorData<Scheme> }
+  | { type: 'imported', data: NodeEditorData<Scheme> }
+  | { type: 'export', data: NodeEditorData<Scheme> }
+  | { type: 'exported', data: NodeEditorData<Scheme> }
 
 export * from './scope'
 
 export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> {
-  public nodes: Scheme['Node'][] = []
-  public connections: Scheme['Connection'][] = []
+  private nodes: Scheme['Node'][] = []
+  private connections: Scheme['Connection'][] = []
 
   constructor(container: HTMLElement) {
     super('NodeEditor')
@@ -111,31 +47,66 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
     return true
   }
 
-  async removeNode(idOrData: NodeId | Scheme['Node']) {
-    const id = typeof idOrData === 'string' ? idOrData : idOrData.id
+  async removeNode(id: Scheme['Node']['id']) {
     const index = this.nodes.findIndex(n => n.id === id)
 
     if (index < 0) throw new Error('cannot find node')
 
-    if (!await this.emit({ type: 'connectionremove', data: id })) return false
+    if (!await this.emit({ type: 'noderemove', data: id })) return false
 
     this.nodes.splice(index, 1)
+
+    await this.emit({ type: 'noderemoved', data: id })
+    return true
+  }
+
+  async removeConnection(id: Scheme['Connection']['id']) {
+    const index = this.connections.findIndex(n => n.id === id)
+
+    if (index < 0) throw new Error('cannot find connection')
+
+    if (!await this.emit({ type: 'connectionremove', data: id })) return false
+
+    this.connections.splice(index, 1)
 
     await this.emit({ type: 'connectionremoved', data: id })
     return true
   }
 
-  async import() {
-    if (!await this.emit({ type: 'import' })) return false
-    1
-    await this.emit({ type: 'imported' })
+  async clear() {
+    if (!await this.emit({ type: 'clear' })) return false
+
+    await Promise.all(this.connections.map(connection => this.removeConnection(connection.id)))
+    await Promise.all(this.nodes.map(node => this.removeNode(node.id)))
+
+    await this.emit({ type: 'cleared' })
     return true
   }
 
-  async export() {
-    if (!await this.emit({ type: 'export' })) return false
-    1
-    await this.emit({ type: 'exported' })
-    return false
+  async import(data: NodeEditorData<Scheme>): Promise<boolean> {
+    if (!await this.emit({ type: 'import', data })) return false
+
+    await Promise.all(data.nodes.map(node => this.addNode(node)))
+    await Promise.all(data.connections.map(connection => this.addConnection(connection)))
+
+    await this.emit({ type: 'imported', data })
+
+    return true
+  }
+
+  async export(): Promise<NodeEditorData<Scheme> | false> {
+    const data: NodeEditorData<Scheme> = { nodes: [], connections: [] }
+
+    if (!await this.emit({ type: 'export', data })) return false
+
+    data.nodes.push(...this.nodes)
+    data.connections.push(...this.connections)
+
+    await this.emit({ type: 'exported', data })
+
+    return data
   }
 }
+
+export * as ClassicPreset from './presets/classic'
+export * from './types'
