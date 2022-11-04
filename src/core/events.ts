@@ -1,18 +1,18 @@
-import { Component } from '../engine/component';
+import { Component } from '../engine/component'
 
 export class Events {
 
-    handlers: {};
+  handlers: {}
 
-    constructor(handlers: {}) {
-        this.handlers = {
-            warn: [console.warn],
-            error: [console.error],
-            componentregister: [],
-            destroy: [],
-            ...handlers
-        }
+  constructor(handlers: {}) {
+    this.handlers = {
+      warn: [console.warn],
+      error: [console.error],
+      componentregister: [],
+      destroy: [],
+      ...handlers
     }
+  }
 }
 
 export interface EventsTypes {

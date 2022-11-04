@@ -1,6 +1,7 @@
-export function getUID() {
-  const typedArray = new Uint8Array(10)
-  const randomValues = window.crypto.getRandomValues(typedArray)
+export function getUID(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(8))
+  const array = Array.from(bytes)
+  const hexPairs = array.map(b => b.toString(16).padStart(2, '0'))
 
-  return randomValues.join('');
+  return hexPairs.join('')
 }

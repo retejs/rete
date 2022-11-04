@@ -1,15 +1,15 @@
-import { Engine } from './index';
-import { NodeData, WorkerInputs, WorkerOutputs } from '../core/data';
+import { NodeData, WorkerInputs, WorkerOutputs } from '../core/data'
+import { Engine } from './index'
 
 export abstract class Component {
 
-    name: string;
-    data: unknown = {};
-    engine: Engine | null = null;
+  name: string
+  data: unknown = {}
+  engine: Engine | null = null
 
-    constructor(name: string) {
-        this.name = name;
-    }
+  constructor(name: string) {
+    this.name = name
+  }
 
     abstract worker(node: NodeData, inputs: WorkerInputs, outputs: WorkerOutputs, ...args: unknown[]): void;
 }
