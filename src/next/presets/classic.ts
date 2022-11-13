@@ -12,14 +12,9 @@ export class Socket {
 export class Port {
   id: PortId
 
-  constructor(public socket: Socket, public label?: string) {
+  constructor(public socket: Socket, public label?: string, public multipleConnections?: boolean) {
     this.id = getUID()
   }
-}
-
-export class Control {
-  component: any
-
 }
 
 export class Input extends Port {
@@ -37,16 +32,38 @@ export class Input extends Port {
 }
 
 export class Output extends Port {
-
+  constructor(socket: Socket, label?: string, multipleConnections?: boolean) {
+    super(socket, label, multipleConnections !== false)
+  }
 }
 
+export class Control {
+  id: string
 
-export class Node<Inputs extends string = string, Outputs extends string = string, Controls extends string = string> implements NodeBase {
+  constructor() {
+    this.id = getUID()
+  }
+}
+
+export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? string : number> extends Control {
+  value?: N
+
+  constructor(public type: T, public readonly = false) {
+    super()
+    this.id = getUID()
+  }
+
+  setValue(value?: N) {
+    this.value = value
+  }
+}
+
+export class Node<Inputs extends string = string, Outputs extends string = string, Controls extends { [key in string]?: Control } = { [key in string]?: Control }> implements NodeBase {
   id: NodeBase['id']
   inputs: {[key in Inputs]?: Input} = {}
   outputs: {[key in Outputs]?: Output} = {}
-  controls: {[key in Controls]?: Control} = {}
-  preset = 'classic' as const
+  controls: Controls = {} as Controls
+  selected?: boolean
 
   constructor(public label: string) {
     this.id = getUID()
@@ -72,31 +89,30 @@ export class Node<Inputs extends string = string, Outputs extends string = strin
     delete this.outputs[key]
   }
 
-  addControl(key: Controls, control: Control) {
-    if (this.controls[key]) throw new Error(`control with key '${key}' already added`)
+  addControl<K extends keyof Controls>(key: K, control: Controls[K]) {
+    if (this.controls[key]) throw new Error(`control with key '${String(key)}' already added`)
 
     this.controls[key] = control
   }
 
-  removeControl(key: Controls) {
+  removeControl(key: keyof Controls) {
     delete this.controls[key]
   }
 }
 
 export class Connection<
-  Source extends Node<string, string, string>,
-  Target extends Node<string, string, string>
+  Source extends Node<string, string, {}>,
+  Target extends Node<string, string, {}>
 > implements ConnectionBase {
   id: ConnectionBase['id']
   source: NodeBase['id']
   target: NodeBase['id']
-  preset = 'classic' as const
 
   constructor(
     source: Source,
-    public sourceOutput: Source extends Node<string, infer T, string> ? T : never,
+    public sourceOutput: Source extends Node<string, infer T, {}> ? T : never,
     target: Target,
-    public targetInput: Target extends Node<infer T, string, string> ? T : never
+    public targetInput: Target extends Node<infer T, string, {}> ? T : never
   ) {
     if (!source.outputs[sourceOutput]) throw new Error(`source node doesn't have output with a key ${sourceOutput}`)
     if (!target.inputs[targetInput]) throw new Error(`target node doesn't have input with a key ${targetInput}`)

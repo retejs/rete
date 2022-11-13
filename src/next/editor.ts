@@ -4,12 +4,12 @@ import { BaseSchemes, NodeEditorData } from './types'
 export type Root<Scheme extends BaseSchemes> =
   | { type: 'nodecreate', data: Scheme['Node'] }
   | { type: 'nodecreated', data: Scheme['Node'] }
-  | { type: 'noderemove', data: Scheme['Node']['id'] }
-  | { type: 'noderemoved', data: Scheme['Node']['id'] }
+  | { type: 'noderemove', data: Scheme['Node'] }
+  | { type: 'noderemoved', data: Scheme['Node'] }
   | { type: 'connectioncreate', data: Scheme['Connection'] }
   | { type: 'connectioncreated', data: Scheme['Connection'] }
-  | { type: 'connectionremove', data: Scheme['Connection']['id'] }
-  | { type: 'connectionremoved', data: Scheme['Connection']['id'] }
+  | { type: 'connectionremove', data: Scheme['Connection'] }
+  | { type: 'connectionremoved', data: Scheme['Connection'] }
   | { type: 'clear' }
   | { type: 'cleared' }
   | { type: 'import', data: NodeEditorData<Scheme> }
@@ -61,27 +61,29 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
 
   async removeNode(id: Scheme['Node']['id']) {
     const index = this.nodes.findIndex(n => n.id === id)
+    const node = this.nodes[index]
 
     if (index < 0) throw new Error('cannot find node')
 
-    if (!await this.emit({ type: 'noderemove', data: id })) return false
+    if (!await this.emit({ type: 'noderemove', data: node })) return false
 
     this.nodes.splice(index, 1)
 
-    await this.emit({ type: 'noderemoved', data: id })
+    await this.emit({ type: 'noderemoved', data: node })
     return true
   }
 
   async removeConnection(id: Scheme['Connection']['id']) {
     const index = this.connections.findIndex(n => n.id === id)
+    const connection = this.connections[index]
 
     if (index < 0) throw new Error('cannot find connection')
 
-    if (!await this.emit({ type: 'connectionremove', data: id })) return false
+    if (!await this.emit({ type: 'connectionremove', data: connection })) return false
 
     this.connections.splice(index, 1)
 
-    await this.emit({ type: 'connectionremoved', data: id })
+    await this.emit({ type: 'connectionremoved', data: connection })
     return true
   }
 
