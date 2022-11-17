@@ -11,6 +11,7 @@ export class Socket {
 
 export class Port<S extends Socket> {
   id: PortId
+  index?: number
 
   constructor(public socket: S, public label?: string, public multipleConnections?: boolean) {
     this.id = getUID()
@@ -39,6 +40,7 @@ export class Output<S extends Socket> extends Port<S> {
 
 export class Control {
   id: string
+  index?: number
 
   constructor() {
     this.id = getUID()
