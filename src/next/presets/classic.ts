@@ -116,12 +116,12 @@ export class Connection<
 
   constructor(
     source: Source,
-    public sourceOutput: Source extends Node<{}, infer T, {}> ? keyof T : never,
+    public sourceOutput: keyof Source['outputs'],
     target: Target,
-    public targetInput: Target extends Node<infer T, {}, {}> ? keyof T : never
+    public targetInput: keyof Target['inputs']
   ) {
-    if (!source.outputs[sourceOutput]) throw new Error(`source node doesn't have output with a key ${sourceOutput}`)
-    if (!target.inputs[targetInput]) throw new Error(`target node doesn't have input with a key ${targetInput}`)
+    if (!source.outputs[sourceOutput as string]) throw new Error(`source node doesn't have output with a key ${String(sourceOutput)}`)
+    if (!target.inputs[targetInput as string]) throw new Error(`target node doesn't have input with a key ${String(targetInput)}`)
 
     this.id = getUID()
     this.source = source.id
