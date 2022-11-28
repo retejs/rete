@@ -1,4 +1,4 @@
-import { AcceptPartialUnion/*, Tail*/ } from './utility-types'
+import { AcceptPartialUnion, Tail } from './utility-types'
 
 export type Pipe<T> = (data: T) => Promise<undefined | T> | undefined | T
 
@@ -21,40 +21,9 @@ export class Signal<T> {
   }
 }
 
-// type UseScopeErrorMessage = 'Subscope argument type cannot be derived from parent scope'
-
-// type ExcludeFromObject<A extends object, B> = {
-//   [Key in keyof A]: (B extends {[k in Key]: any} ? Exclude<A[Key], B[Key]> : A[Key])
-// }
-
-// type SoftExcludeDeeply<A, B> = A extends object
-//   ? ExcludeFromObject<Exclude<A, B>, B>
-//   : Exclude<A, B>
-
-// copied from type-plus package
-
-// type IsEmptyObject<T> = T extends {} ? {} extends T ? true : false : false
-
-// type CanAssign<A, B, Then = true, Else = false> =
-//   IsEmptyObject<A> extends true
-//   ? Record<string, unknown> extends B ? Then : Else
-//   : boolean extends A
-//   ? (boolean extends B ? Then : Else)
-//   : A extends B ? Then : Else
-
-// export type CanAssignSignals<A, B> = CanAssign<SoftExcludeDeeply<A, SoftExcludeDeeply<A, B>>, B>
-
-// type ValidateNestedScope<Plugin extends Scope<any, unknown[]>, Produces, Parents extends unknown[]> =
-//   CanAssignSignals<[Produces, ...Parents], Plugin['__emitsParents']> extends true ? Plugin : { __error: UseScopeErrorMessage }
-
 export class Scope<Produces, Parents extends unknown[] = []> {
   signal = new Signal<AcceptPartialUnion<Produces | Parents[number]>>()
   parent?: any//Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>
-
-  // workaround for type inference if Scope is inherited
-  // https://github.com/microsoft/TypeScript/issues/36456
-  // __emitsParents!: Parents
-  // __emitsAll!: [Produces, ...Parents]
 
   constructor(public name: string) {}
 
@@ -62,19 +31,31 @@ export class Scope<Produces, Parents extends unknown[] = []> {
     this.signal.addPipe(middleware)
   }
 
-  use<T>(plugin: Scope<T, [Produces, ...Parents]>) {
-    // if ('__error' in plugin) throw new Error('for internal use only')
-    plugin.parent = this
+  use<T>(scope: Scope<T, [Produces, ...Parents]>) {
+    scope.setParent(this)
     this.addPipe(context => {
-      return plugin.signal.emit(context)
+      return scope.signal.emit(context)
     })
+  }
+
+  setParent(scope: Scope<Parents[0], Tail<Parents>>) {
+    this.parent = scope
   }
 
   emit(context: Produces) {
     return this.signal.emit(context)
   }
 
-  parentScope() {
-    return this.parent || null
+  hasParent(): boolean {
+    return Boolean(this.parent)
+  }
+
+  parentScope<T extends Parents[0], P extends Tail<Parents>>(): Scope<T, P>
+  parentScope<T>(type: { new(...args: any[]): T }): T
+  parentScope<T>(type?: { new(...args: any[]): T }): T {
+    if (!this.parent) throw new Error('cannot find parent')
+    if (type && this.parent instanceof type) return this.parent
+    if (type) throw new Error('actual parent is not instance of type')
+    return this.parent
   }
 }
