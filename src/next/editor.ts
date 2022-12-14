@@ -11,6 +11,7 @@ export type Root<Scheme extends BaseSchemes> =
   | { type: 'connectionremove', data: Scheme['Connection'] }
   | { type: 'connectionremoved', data: Scheme['Connection'] }
   | { type: 'clear' }
+  | { type: 'clearcancelled' }
   | { type: 'cleared' }
   | { type: 'import', data: NodeEditorData<Scheme> }
   | { type: 'imported', data: NodeEditorData<Scheme> }
@@ -88,7 +89,10 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
   }
 
   async clear() {
-    if (!await this.emit({ type: 'clear' })) return false
+    if (!await this.emit({ type: 'clear' })) {
+      await this.emit({ type: 'clearcancelled' })
+      return false
+    }
 
     await Promise.all(this.connections.map(connection => this.removeConnection(connection.id)))
     await Promise.all(this.nodes.map(node => this.removeNode(node.id)))
