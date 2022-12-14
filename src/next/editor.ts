@@ -94,8 +94,8 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
       return false
     }
 
-    await Promise.all(this.connections.map(connection => this.removeConnection(connection.id)))
-    await Promise.all(this.nodes.map(node => this.removeNode(node.id)))
+    for (const connection of this.connections.slice()) await this.removeConnection(connection.id)
+    for (const node of this.nodes.slice()) await this.removeNode(node.id)
 
     await this.emit({ type: 'cleared' })
     return true
@@ -104,8 +104,8 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
   async import(data: NodeEditorData<Scheme>): Promise<boolean> {
     if (!await this.emit({ type: 'import', data })) return false
 
-    await Promise.all(data.nodes.map(node => this.addNode(node)))
-    await Promise.all(data.connections.map(connection => this.addConnection(connection)))
+    for (const node of data.nodes) await this.addNode(node)
+    for (const connection of data.connections) await this.addConnection(connection)
 
     await this.emit({ type: 'imported', data })
 
