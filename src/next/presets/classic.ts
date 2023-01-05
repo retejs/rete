@@ -75,30 +75,42 @@ export class Node<
     this.id = getUID()
   }
 
-  addInput<K extends keyof Inputs>(key: K, input: Input<Exclude<Inputs[K], undefined>>) {
-    if (this.inputs[key]) throw new Error(`input with key '${String(key)}' already added`)
+  hasInput<K extends keyof Inputs>(key: K) {
+    return Object.prototype.hasOwnProperty.call(this.inputs, key)
+  }
 
-    this.inputs[key] = input
+  addInput<K extends keyof Inputs>(key: K, input: Input<Exclude<Inputs[K], undefined>>) {
+    if (this.hasInput(key)) throw new Error(`input with key '${String(key)}' already added`)
+
+    Object.defineProperty(this.inputs, key, { value: input, enumerable: true, configurable: true })
   }
 
   removeInput(key: keyof Inputs) {
     delete this.inputs[key]
   }
 
-  addOutput<K extends keyof Outputs>(key: K, output: Output<Exclude<Outputs[K], undefined>>) {
-    if (this.outputs[key]) throw new Error(`output with key '${String(key)}' already added`)
+  hasOutput<K extends keyof Outputs>(key: K) {
+    return Object.prototype.hasOwnProperty.call(this.outputs, key)
+  }
 
-    this.outputs[key] = output
+  addOutput<K extends keyof Outputs>(key: K, output: Output<Exclude<Outputs[K], undefined>>) {
+    if (this.hasOutput(key)) throw new Error(`output with key '${String(key)}' already added`)
+
+    Object.defineProperty(this.outputs, key, { value: output, enumerable: true, configurable: true })
   }
 
   removeOutput(key: keyof Outputs) {
     delete this.outputs[key]
   }
 
-  addControl<K extends keyof Controls>(key: K, control: Controls[K]) {
-    if (this.controls[key]) throw new Error(`control with key '${String(key)}' already added`)
+  hasControl<K extends keyof Controls>(key: K) {
+    return Object.prototype.hasOwnProperty.call(this.controls, key)
+  }
 
-    this.controls[key] = control
+  addControl<K extends keyof Controls>(key: K, control: Controls[K]) {
+    if (this.hasControl(key)) throw new Error(`control with key '${String(key)}' already added`)
+
+    Object.defineProperty(this.controls, key, { value: control, enumerable: true, configurable: true })
   }
 
   removeControl(key: keyof Controls) {
@@ -120,8 +132,12 @@ export class Connection<
     target: Target,
     public targetInput: keyof Target['inputs']
   ) {
-    if (!source.outputs[sourceOutput as string]) throw new Error(`source node doesn't have output with a key ${String(sourceOutput)}`)
-    if (!target.inputs[targetInput as string]) throw new Error(`target node doesn't have input with a key ${String(targetInput)}`)
+    if (!source.outputs[sourceOutput as string]) {
+      throw new Error(`source node doesn't have output with a key ${String(sourceOutput)}`)
+    }
+    if (!target.inputs[targetInput as string]) {
+      throw new Error(`target node doesn't have input with a key ${String(targetInput)}`)
+    }
 
     this.id = getUID()
     this.source = source.id
