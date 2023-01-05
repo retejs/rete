@@ -43,6 +43,8 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
   }
 
   async addNode(data: Scheme['Node']) {
+    if (this.getNode(data.id)) throw new Error('node has already been added')
+
     if (!await this.emit({ type: 'nodecreate', data })) return false
 
     this.nodes.push(data)
@@ -52,6 +54,8 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
   }
 
   async addConnection(data: Scheme['Connection']) {
+    if (this.getConnection(data.id)) throw new Error('connection has already been added')
+
     if (!await this.emit({ type: 'connectioncreate', data })) return false
 
     this.connections.push(data)
