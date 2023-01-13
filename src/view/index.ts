@@ -31,12 +31,12 @@ export class EditorView extends Emitter<EventsTypes> {
         emitter.on('destroy', () => this.nodes.forEach(view => view.destroy()));
 
         this.on('nodetranslated', this.updateConnections.bind(this));
-        this.on('rendersocket', ({ socket }) => {
+        this.on('rendersocket', ({ input, output }) => {
             const connections = Array.from(this.connections.entries())
             const relatedConnections = connections.filter(([connection]) => {
-                const { input, output } = connection
+                const io = input || output
 
-                return [input.socket, output.socket].includes(socket)
+                return io && [connection.input, connection.output].includes(io)
             })
 
             relatedConnections.forEach(([_, view]) => requestAnimationFrame(() => view.update()))
