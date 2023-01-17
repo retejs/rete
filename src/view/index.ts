@@ -34,9 +34,7 @@ export class EditorView extends Emitter<EventsTypes> {
         this.on('rendersocket', ({ input, output }) => {
             const connections = Array.from(this.connections.entries())
             const relatedConnections = connections.filter(([connection]) => {
-                const io = input || output
-
-                return io && [connection.input, connection.output].includes(io)
+                return connection.input === input || connection.output === output
             })
 
             relatedConnections.forEach(([_, view]) => requestAnimationFrame(() => view.update()))
