@@ -50,7 +50,7 @@ export class EditorEvents extends Events {
       process: [],
       clear: []
     })
-  }    
+  }
 }
 
 export interface EventsTypes extends DefaultEventsTypes {
