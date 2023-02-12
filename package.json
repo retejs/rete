@@ -2,13 +2,9 @@
   "name": "rete",
   "version": "2.0.0-beta.1",
   "description": "JavaScript framework",
-  "main": "build/rete.common.js",
-  "module": "build/rete.esm.js",
-  "types": "types/index.d.ts",
   "scripts": {
     "build": "rete build -c rete.config.ts",
     "build:dev": "rete build -c rete.config.ts --watch",
-    "build:inject": "rete build -c rete.config.ts --watch --output ../playground/node_modules/rete",
     "prepublishOnly": "npm run lint && npm run build",
     "postinstall": "node postinstall.js",
     "lint": "rete lint",
@@ -16,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/retejs/rete.git"
+    "url": "https://github.com/retejs/rete.git"
   },
   "keywords": [
     "dataflow",
@@ -32,7 +28,7 @@
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "^1.0.0-beta.11",
+    "rete-cli": "^1.0.0-beta.18",
     "typescript": "4.8.4"
   }
 }
