@@ -23,7 +23,7 @@ export class Signal<T> {
 
 export class Scope<Produces, Parents extends unknown[] = []> {
   signal = new Signal<AcceptPartialUnion<Produces | Parents[number]>>()
-  parent?: any//Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>
+  parent?: any // Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>
 
   constructor(public name: string) {}
 

@@ -1,4 +1,4 @@
-/*global globalThis*/
+/* global globalThis*/
 
 const nodeCrypto = () => import('node:crypto')
 

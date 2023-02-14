@@ -4,5 +4,3 @@ export * from './scope'
 export * from './types'
 export * from './utility-types'
 export * from './utils'
-
-console.log('rete')
