@@ -4,8 +4,6 @@
   "description": "JavaScript framework",
   "scripts": {
     "build": "rete build -c rete.config.ts",
-    "build:dev": "rete build -c rete.config.ts --watch",
-    "prepublishOnly": "npm run lint && npm run build",
     "postinstall": "node postinstall.js",
     "lint": "rete lint",
     "test": "rete test"
@@ -28,7 +26,7 @@
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "^1.0.0-beta.18",
+    "rete-cli": "^1.0.0-beta.24",
     "typescript": "4.8.4"
   }
 }
