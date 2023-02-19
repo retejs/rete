@@ -47,16 +47,27 @@ export class Control {
   }
 }
 
+type InputControlOptions<N> = {
+    readonly?: boolean,
+    initial?: N,
+    change?: (value: N) => void
+  }
+
 export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? string : number> extends Control {
   value?: N
+  readonly: boolean
 
-  constructor(public type: T, public readonly = false) {
+  constructor(public type: T, public options?: InputControlOptions<N>) {
     super()
     this.id = getUID()
+    this.readonly = options.readonly
+
+    if (options.initial) this.value = options.initial
   }
 
   setValue(value?: N) {
     this.value = value
+    if (this.options.change) this.options.change(value)
   }
 }
 
