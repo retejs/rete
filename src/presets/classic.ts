@@ -62,7 +62,7 @@ export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? st
     this.id = getUID()
     this.readonly = options.readonly
 
-    if (options.initial) this.value = options.initial
+    if (typeof options.initial !== 'undefined') this.value = options.initial
   }
 
   setValue(value?: N) {
