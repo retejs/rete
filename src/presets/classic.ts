@@ -60,9 +60,9 @@ export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? st
   constructor(public type: T, public options?: InputControlOptions<N>) {
     super()
     this.id = getUID()
-    this.readonly = options.readonly
+    this.readonly = options?.readonly
 
-    if (typeof options.initial !== 'undefined') this.value = options.initial
+    if (typeof options?.initial !== 'undefined') this.value = options.initial
   }
 
   setValue(value?: N) {
