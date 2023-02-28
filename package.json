@@ -26,7 +26,7 @@
   "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "^1.0.0-beta.24",
+    "rete-cli": "^1.0.0-beta.25",
     "typescript": "4.8.4"
   }
 }
