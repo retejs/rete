@@ -67,7 +67,7 @@ export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? st
 
   setValue(value?: N) {
     this.value = value
-    if (this.options.change) this.options.change(value)
+    if (this.options?.change) this.options.change(value)
   }
 }
 
