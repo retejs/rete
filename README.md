@@ -1,12 +1,13 @@
-Rete.js  [![Build Status](https://app.travis-ci.com/retejs/rete.svg?branch=master)](https://app.travis-ci.com/retejs/rete)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=retejs_rete&metric=alert_status)](https://sonarcloud.io/dashboard?id=retejs_rete)
-[![Join the chat at https://gitter.im/retejs/Lobby](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/retejs/Lobby)
+Rete.js
 ====
-#### JavaScript framework for visual programming
+[![Made in Ukraine](https://img.shields.io/badge/made_in-ukraine-ffd700.svg?labelColor=0057b7)](https://stand-with-ukraine.pp.ua)
+[![Discord](https://img.shields.io/discord/1081223198055604244?color=%237289da&label=Discord)](https://discord.gg/cxSFkPZdsV)
 
-![rete logo](https://i.imgur.com/rydGu6B.png)
+**JavaScript framework for visual programming**
 
-#StandWithUkraine 💛💙
+![rete logo](https://raw.githubusercontent.com/retejs/rete/assets/preview.svg)
+
+#StandWithUkraine 💙💛
 ----
 
 #RussiaInvadedUkraine on 24 of February 2022, at 5.00 AM the armed forces of the Russian Federation  attacked Ukraine. Please, Stand with Ukraine, stay tuned for updates on Ukraine’s official sources and channels in English and support Ukraine in its fight for freedom and democracy in Europe.
@@ -18,27 +19,36 @@ Help to defend Ukraine — donate to the [fund of the National Bank of Ukraine](
 
 Introduction
 ----
-**Rete** is a modular framework for visual programming. **Rete** allows you to create node-based editor directly in the browser. You can define nodes and workers that allow users to create instructions for processing data in your editor without a single line of code.
 
-Documentation
+**Rete.js** is a framework for creating visual interfaces and workflows. It provides out-of-the-box solutions for visualization using various libraries and frameworks, as well as solutions for processing graphs based on dataflow and control flow approaches.
+
+Getting Started
 ----
-Check the [docs](https://rete.js.org/#/docs) and learn about the components and capabilities.
 
-Examples
-----
-[Flow-based programming](https://codepen.io/Ni55aN/pen/xzgQYq)
+- [Concepts](https://retejs.org/docs/concepts/plugin-system)
+- [Guides](https://retejs.org/docs/guides/basic)
+- [FAQ](https://retejs.org/docs/faq)
+- [Examples](https://retejs.org/examples)
 
-[Events (tasks)](https://codepen.io/Ni55aN/pen/MOYPEz)
+## Sponsors
 
-[Modules](https://codepen.io/Ni55aN/pen/QOEbEW)
+Thank you to all our sponsors! [Become a sponsor](https://opencollective.com/rete#sponsor)
 
-[Programming a Messenger Bot](https://codepen.io/Ni55aN/pen/rpOKNb)
+<a href="https://opencollective.com/rete#sponsors" target="_blank"><img src="https://opencollective.com/rete/sponsors.svg?width=890"></a>
 
-[3D Car configurator](https://codesandbox.io/embed/9jp88p1jpy?view=preview)
+## Backers
 
-License
-----
-[MIT](http://opensource.org/licenses/MIT)
+Thank you to all our backers! [Become a backer](https://opencollective.com/rete#backer)
 
-[Donate](http://rete.js.org/#support)
----
+<a href="https://opencollective.com/rete#backers" target="_blank"><img src="https://opencollective.com/rete/backers.svg?width=890"></a>
+
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [Contribute](https://retejs.org/docs/contribution).
+
+<a href="https://github.com/retejs/rete/graphs/contributors"><img src="https://opencollective.com/rete/contributors.svg?width=890" /></a>
+
+## License
+
+[MIT](https://github.com/retejs/rete/blob/master/LICENSE)
