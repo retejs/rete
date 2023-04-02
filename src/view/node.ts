@@ -55,7 +55,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     bindSocket(el: HTMLElement, type: string, io: IO) {
         this.clearSockets();
-        this.sockets.set(io, new SocketView(el, type, io, this.node, this, this.el));
+        this.sockets.set(io, new SocketView(el, type, io, this.node, this));
     }
 
     bindControl(el: HTMLElement, control: Control) {
@@ -71,7 +71,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
         if (!socket) throw new Error(`Socket not found for ${io.name} with key ${io.key}`);
 
-        return socket.getPosition(this.node);
+        return socket.getPosition(this.node, this.el);
     }
 
     onSelect(e: MouseEvent) {

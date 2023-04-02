@@ -21,7 +21,7 @@ export class SocketView extends Emitter<EventsTypes> {
         this.trigger('rendersocket', { el, [type]: this.io, socket: io.socket });
     }
 
-    getPosition({ position, el: nodeViewEl }: { position: number[], el: HTMLElement }): [number, number] {
+    getPosition({ position }: { position: number[] }, nodeViewEl: HTMLElement): [number, number] {
         const { el } = this;
         const { x, y } = getOffset(el, nodeViewEl);
 
