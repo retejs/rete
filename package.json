@@ -42,7 +42,7 @@
     "eslint": "8.24.0",
     "jsdom": "13.2.0",
     "jsdom-global": "3.0.2",
-    "mocha": "5.2.0",
+    "mocha": "10.2.0",
     "nyc": "14.1.1",
     "rete-cli": "0.6.1",
     "terminal-kit": "2.4.0",
