@@ -2,6 +2,7 @@ import { Emitter } from '../core/emitter';
 import { EventsTypes } from '../events';
 import { IO } from '../io';
 import { Node } from '../node';
+import { getOffset } from './utils';
 
 export class SocketView extends Emitter<EventsTypes> {
 
@@ -20,12 +21,10 @@ export class SocketView extends Emitter<EventsTypes> {
         this.trigger('rendersocket', { el, [type]: this.io, socket: io.socket });
     }
 
-    getPosition({ position }: { position: number[] }): [number, number] {
-        const el = this.el;
+    getPosition({ position }: { position: number[] }, nodeViewEl: HTMLElement): [number, number] {
+        const { el } = this;
+        const { x, y } = getOffset(el, nodeViewEl);
 
-        return [
-            position[0] + el.offsetLeft + el.offsetWidth / 2,
-            position[1] + el.offsetTop + el.offsetHeight / 2
-        ]
+        return [position[0] + x + el.offsetWidth / 2, position[1] + y + el.offsetHeight / 2];
     }
 }

@@ -71,7 +71,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
         if (!socket) throw new Error(`Socket not found for ${io.name} with key ${io.key}`);
 
-        return socket.getPosition(this.node);
+        return socket.getPosition(this.node, this.el);
     }
 
     onSelect(e: MouseEvent) {
