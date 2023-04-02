@@ -55,7 +55,7 @@ export class NodeView extends Emitter<EventsTypes> {
 
     bindSocket(el: HTMLElement, type: string, io: IO) {
         this.clearSockets();
-        this.sockets.set(io, new SocketView(el, type, io, this.node, this));
+        this.sockets.set(io, new SocketView(el, type, io, this.node, this, this.el));
     }
 
     bindControl(el: HTMLElement, control: Control) {
