@@ -8,22 +8,23 @@
     "lint": "rete lint",
     "test": "rete test"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/retejs/rete.git"
-  },
+  "author": "Vitaliy Stoliarov",
+  "license": "MIT",
   "keywords": [
     "dataflow",
     "visual programming",
     "node editor",
-    "js"
+    "rete",
+    "Rete.js"
   ],
-  "author": "Vitaliy Stoliarov",
-  "license": "MIT",
+  "homepage": "https://retejs.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/retejs/rete.git"
+  },
   "bugs": {
     "url": "https://github.com/retejs/rete/issues"
   },
-  "homepage": "https://github.com/retejs/rete#readme",
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
     "rete-cli": "^1.0.0-beta.25",
