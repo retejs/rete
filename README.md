@@ -25,6 +25,8 @@ Introduction
 Getting Started
 ----
 
+- [Introduction](https://retejs.org/docs)
+- [Getting Started](https://retejs.org/docs/getting-started)
 - [Concepts](https://retejs.org/docs/concepts/plugin-system)
 - [Guides](https://retejs.org/docs/guides/basic)
 - [FAQ](https://retejs.org/docs/faq)
