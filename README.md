@@ -22,7 +22,7 @@ Introduction
 
 **Rete.js** is a framework for creating visual interfaces and workflows. It provides out-of-the-box solutions for visualization using various libraries and frameworks, as well as solutions for processing graphs based on dataflow and control flow approaches.
 
-Getting Started
+Documentation
 ----
 
 - [Introduction](https://retejs.org/docs)
