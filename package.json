@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "2.0.0-beta.4",
+  "version": "2.0.0-beta.6",
   "description": "JavaScript framework",
   "scripts": {
     "build": "rete build -c rete.config.ts",
@@ -27,7 +27,10 @@
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "^1.0.0-beta.27",
+    "rete-cli": "file:../rete-cli/rete-cli-1.0.0-beta.28.tgz",
     "typescript": "4.8.4"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.21.0"
   }
 }
