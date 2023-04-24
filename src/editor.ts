@@ -1,5 +1,5 @@
 import { Scope } from './scope'
-import { BaseSchemes, NodeEditorData } from './types'
+import { BaseSchemes } from './types'
 
 export type Root<Scheme extends BaseSchemes> =
   | { type: 'nodecreate', data: Scheme['Node'] }
@@ -13,10 +13,6 @@ export type Root<Scheme extends BaseSchemes> =
   | { type: 'clear' }
   | { type: 'clearcancelled' }
   | { type: 'cleared' }
-  | { type: 'import', data: NodeEditorData<Scheme> }
-  | { type: 'imported', data: NodeEditorData<Scheme> }
-  | { type: 'export', data: NodeEditorData<Scheme> }
-  | { type: 'exported', data: NodeEditorData<Scheme> }
 
 export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> {
   private nodes: Scheme['Node'][] = []
@@ -103,29 +99,5 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
 
     await this.emit({ type: 'cleared' })
     return true
-  }
-
-  async import(data: NodeEditorData<Scheme>): Promise<boolean> {
-    if (!await this.emit({ type: 'import', data })) return false
-
-    for (const node of data.nodes) await this.addNode(node)
-    for (const connection of data.connections) await this.addConnection(connection)
-
-    await this.emit({ type: 'imported', data })
-
-    return true
-  }
-
-  async export(): Promise<NodeEditorData<Scheme> | false> {
-    const data: NodeEditorData<Scheme> = { nodes: [], connections: [] }
-
-    if (!await this.emit({ type: 'export', data })) return false
-
-    data.nodes.push(...this.nodes)
-    data.connections.push(...this.connections)
-
-    await this.emit({ type: 'exported', data })
-
-    return data
   }
 }
