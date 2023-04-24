@@ -1,6 +1,6 @@
 {
   "name": "rete",
-  "version": "2.0.0-beta.6",
+  "version": "2.0.0-beta.7",
   "description": "JavaScript framework",
   "scripts": {
     "build": "rete build -c rete.config.ts",
