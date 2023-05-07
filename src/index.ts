@@ -1,5 +1,6 @@
 export * from './editor'
 export * as ClassicPreset from './presets/classic'
+export type { ScopeAsParameter } from './scope'
 export * from './scope'
 export * from './types'
 export * from './utility-types'

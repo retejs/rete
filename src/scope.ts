@@ -1,6 +1,42 @@
-import { AcceptPartialUnion, Tail } from './utility-types'
+/* eslint-disable @typescript-eslint/naming-convention */
+import {
+  AcceptPartialUnion, CanAssignSignal, GetAssignmentReferences, GetNonAssignableElements, Tail
+} from './utility-types'
 
 export type Pipe<T> = (data: T) => Promise<undefined | T> | undefined | T
+
+export type CanAssignEach<D extends any[], F extends any[]> = D extends [infer H1, ...infer Tail1]
+  ? (
+    F extends [infer H2, ...infer Tail2] ?
+      [CanAssignSignal<H1, H2>, ...CanAssignEach<Tail1, Tail2>]
+    : []
+  ): []
+
+export type ScopeAsParameter<S extends Scope<any, any[]>, Current extends any[]> = (CanAssignEach<[S['__scope']['produces'], ...S['__scope']['parents']], Current>[number] extends true
+  ? S
+  : 'Argument Scope does not provide expected signals'
+)
+
+/**
+ * Validate the Scope signals and replace the parameter type with an error message if they are not assignable
+ */
+export type NestedScope<S extends Scope<any, any[]>, Current extends any[]> = (CanAssignEach<Current, S['__scope']['parents']>[number] extends true
+    ? S
+    : 'Parent signals do not satisfy the connected scope. Please use `.debug($ => $) for detailed assignment error'
+  )
+
+/**
+ * Provides 'debug' method to check the detailed assignment error message
+ * @example .debug($ => $)
+ */
+export function useHelper<S extends Scope<any, any[]>, Signals>() {
+  type T1 = S['__scope']['parents'][number]
+  return {
+    debug<T extends GetNonAssignableElements<T1, Signals>>(f: (p: GetAssignmentReferences<T, Signals>) => T) {
+      f
+    }
+  }
+}
 
 export class Signal<T> {
   pipes: Pipe<T>[] = []
@@ -24,6 +60,10 @@ export class Signal<T> {
 export class Scope<Produces, Parents extends unknown[] = []> {
   signal = new Signal<AcceptPartialUnion<Produces | Parents[number]>>()
   parent?: any // Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>
+  __scope: {
+    produces: Produces
+    parents: Parents
+  }
 
   constructor(public name: string) {}
 
@@ -31,19 +71,23 @@ export class Scope<Produces, Parents extends unknown[] = []> {
     this.signal.addPipe(middleware)
   }
 
-  use<T>(scope: Scope<T, [Produces, ...Parents]>) {
+  use<S extends Scope<any, any[]>>(scope: NestedScope<S, [Produces, ...Parents]>) {
+    if (!(scope instanceof Scope)) throw new Error('cannot use non-Scope instance')
+
     scope.setParent(this)
     this.addPipe(context => {
       return scope.signal.emit(context)
     })
+
+    return useHelper<S, Produces | Parents[number]>()
   }
 
   setParent(scope: Scope<Parents[0], Tail<Parents>>) {
     this.parent = scope
   }
 
-  emit(context: Produces) {
-    return this.signal.emit(context)
+  emit<C extends Produces>(context: C): Promise<Extract<Produces, C>> {
+    return this.signal.emit(context) as Promise<Extract<Produces, C>>
   }
 
   hasParent(): boolean {
