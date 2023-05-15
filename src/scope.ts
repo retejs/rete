@@ -8,9 +8,9 @@ export type Pipe<T> = (data: T) => Promise<undefined | T> | undefined | T
 export type CanAssignEach<D extends any[], F extends any[]> = D extends [infer H1, ...infer Tail1]
   ? (
     F extends [infer H2, ...infer Tail2] ?
-      [CanAssignSignal<H1, H2>, ...CanAssignEach<Tail1, Tail2>]
+    [CanAssignSignal<H1, H2>, ...CanAssignEach<Tail1, Tail2>]
     : []
-  ): []
+  ) : []
 
 export type ScopeAsParameter<S extends Scope<any, any[]>, Current extends any[]> = (CanAssignEach<[S['__scope']['produces'], ...S['__scope']['parents']], Current>[number] extends true
   ? S
@@ -21,9 +21,9 @@ export type ScopeAsParameter<S extends Scope<any, any[]>, Current extends any[]>
  * Validate the Scope signals and replace the parameter type with an error message if they are not assignable
  */
 export type NestedScope<S extends Scope<any, any[]>, Current extends any[]> = (CanAssignEach<Current, S['__scope']['parents']>[number] extends true
-    ? S
-    : 'Parent signals do not satisfy the connected scope. Please use `.debug($ => $) for detailed assignment error'
-  )
+  ? S
+  : 'Parent signals do not satisfy the connected scope. Please use `.debug($ => $) for detailed assignment error'
+)
 
 /**
  * Provides 'debug' method to check the detailed assignment error message
@@ -65,7 +65,7 @@ export class Scope<Produces, Parents extends unknown[] = []> {
     parents: Parents
   }
 
-  constructor(public name: string) {}
+  constructor(public name: string) { }
 
   addPipe(middleware: Pipe<Produces | Parents[number]>) {
     this.signal.addPipe(middleware)
@@ -86,7 +86,7 @@ export class Scope<Produces, Parents extends unknown[] = []> {
     this.parent = scope
   }
 
-  emit<C extends Produces>(context: C): Promise<Extract<Produces, C>> {
+  emit<C extends Produces>(context: C): Promise<Extract<Produces, C> | undefined> {
     return this.signal.emit(context) as Promise<Extract<Produces, C>>
   }
 
