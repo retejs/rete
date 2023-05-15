@@ -57,6 +57,10 @@ export class Signal<T> {
   }
 }
 
+type Type<T> = {
+  new(...args: any[]): T;
+} | (abstract new (...args: any[]) => T)
+
 export class Scope<Produces, Parents extends unknown[] = []> {
   signal = new Signal<AcceptPartialUnion<Produces | Parents[number]>>()
   parent?: any // Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>
@@ -95,8 +99,8 @@ export class Scope<Produces, Parents extends unknown[] = []> {
   }
 
   parentScope<T extends Parents[0], P extends Tail<Parents>>(): Scope<T, P>
-  parentScope<T>(type: { new(...args: any[]): T }): T
-  parentScope<T>(type?: { new(...args: any[]): T }): T {
+  parentScope<T>(type: Type<T>): T
+  parentScope<T>(type?: Type<T>): T {
     if (!this.parent) throw new Error('cannot find parent')
     if (type && this.parent instanceof type) return this.parent
     if (type) throw new Error('actual parent is not instance of type')
