@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "file:../rete-cli/rete-cli-1.0.0-beta.28.tgz",
+    "rete-cli": "^1.0.0-beta.29",
     "typescript": "4.8.4"
   },
   "dependencies": {
