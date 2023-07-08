@@ -40,7 +40,7 @@
     "@typescript-eslint/parser": "5.38.1",
     "babel-eslint": "10.1.0",
     "eslint": "8.24.0",
-    "jsdom": "13.2.0",
+    "jsdom": "22.1.0",
     "jsdom-global": "3.0.2",
     "mocha": "5.2.0",
     "nyc": "14.1.1",
