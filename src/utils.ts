@@ -4,6 +4,9 @@ const nodeCrypto = () => import('node:crypto')
 
 const crypto = globalThis.crypto as (typeof globalThis.crypto | Awaited<ReturnType<typeof nodeCrypto>>)
 
+/**
+ * @returns A unique id
+ */
 export function getUID(): string {
   if ('randomBytes' in crypto) {
     return crypto.randomBytes(8).toString('hex')

@@ -3,6 +3,15 @@ import {
   AcceptPartialUnion, CanAssignSignal, GetAssignmentReferences, GetNonAssignableElements, Tail
 } from './utility-types'
 
+/**
+ * A middleware type that can modify the data
+ * @typeParam T - The data type
+ * @param data - The data to be modified
+ * @returns The modified data or undefined
+ * @example (data) => data + 1
+ * @example (data) => undefined // will stop the execution
+ * @internal
+ */
 export type Pipe<T> = (data: T) => Promise<undefined | T> | undefined | T
 
 export type CanAssignEach<D extends any[], F extends any[]> = D extends [infer H1, ...infer Tail1]
@@ -19,6 +28,7 @@ export type ScopeAsParameter<S extends Scope<any, any[]>, Current extends any[]>
 
 /**
  * Validate the Scope signals and replace the parameter type with an error message if they are not assignable
+ * @internal
  */
 export type NestedScope<S extends Scope<any, any[]>, Current extends any[]> = (CanAssignEach<Current, S['__scope']['parents']>[number] extends true
   ? S
@@ -28,6 +38,7 @@ export type NestedScope<S extends Scope<any, any[]>, Current extends any[]> = (C
 /**
  * Provides 'debug' method to check the detailed assignment error message
  * @example .debug($ => $)
+ * @internal
  */
 export function useHelper<S extends Scope<any, any[]>, Signals>() {
   type T1 = S['__scope']['parents'][number]
@@ -38,6 +49,11 @@ export function useHelper<S extends Scope<any, any[]>, Signals>() {
   }
 }
 
+/**
+ * A signal is a middleware chain that can be used to modify the data
+ * @typeParam T - The data type
+ * @internal
+ */
 export class Signal<T> {
   pipes: Pipe<T>[] = []
 
@@ -61,6 +77,9 @@ type Type<T> = {
   new(...args: any[]): T;
 } | (abstract new (...args: any[]) => T)
 
+/**
+ * Base class for all plugins and the core. Provides a signals mechanism to modify the data
+ */
 export class Scope<Produces, Parents extends unknown[] = []> {
   signal = new Signal<AcceptPartialUnion<Produces | Parents[number]>>()
   parent?: any // Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>

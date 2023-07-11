@@ -1,14 +1,26 @@
+/**
+ * Contains classes for classic scheme such as Node, Input, Output, Control, Socket, Connection
+ * @module
+ * @group Primary
+ */
+
 import { ConnectionBase, NodeBase } from '../types'
 import { getUID } from '../utils'
 
 type PortId = string
 
+/**
+ * The socket class
+ */
 export class Socket {
   constructor(public name: string) {
 
   }
 }
 
+/**
+ * General port class
+ */
 export class Port<S extends Socket> {
   id: PortId
   index?: number
@@ -18,6 +30,9 @@ export class Port<S extends Socket> {
   }
 }
 
+/**
+ * The input port class
+ */
 export class Input<S extends Socket> extends Port<S> {
   control: Control | null = null
   showControl = true
@@ -32,12 +47,18 @@ export class Input<S extends Socket> extends Port<S> {
   }
 }
 
+/**
+ * The output port class
+ */
 export class Output<S extends Socket> extends Port<S> {
   constructor(socket: S, label?: string, multipleConnections?: boolean) {
     super(socket, label, multipleConnections !== false)
   }
 }
 
+/**
+ * General control class
+ */
 export class Control {
   id: string
   index?: number
@@ -48,11 +69,14 @@ export class Control {
 }
 
 type InputControlOptions<N> = {
-    readonly?: boolean,
-    initial?: N,
-    change?: (value: N) => void
-  }
-
+  readonly?: boolean,
+  initial?: N,
+  change?: (value: N) => void
+}
+/**
+ * The input control class
+ * @example new InputControl('text', { readonly: true, initial: 'hello' })
+ */
 export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? string : number> extends Control {
   value?: N
   readonly: boolean
@@ -71,14 +95,21 @@ export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? st
   }
 }
 
+/**
+ * The node class
+ * @typeParam Inputs - The inputs type
+ * @typeParam Outputs - The outputs type
+ * @typeParam Controls - The controls type
+ * @example new Node('math')
+ */
 export class Node<
   Inputs extends { [key in string]?: Socket } = { [key in string]?: Socket },
   Outputs extends { [key in string]?: Socket } = { [key in string]?: Socket },
   Controls extends { [key in string]?: Control } = { [key in string]?: Control }
 > implements NodeBase {
   id: NodeBase['id']
-  inputs: {[key in keyof Inputs]?: Input<Exclude<Inputs[key], undefined>>} = {}
-  outputs: {[key in keyof Outputs]?: Output<Exclude<Outputs[key], undefined>>} = {}
+  inputs: { [key in keyof Inputs]?: Input<Exclude<Inputs[key], undefined>> } = {}
+  outputs: { [key in keyof Outputs]?: Output<Exclude<Outputs[key], undefined>> } = {}
   controls: Controls = {} as Controls
   selected?: boolean
 

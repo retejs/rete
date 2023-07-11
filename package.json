@@ -5,6 +5,7 @@
   "scripts": {
     "build": "rete build -c rete.config.ts",
     "postinstall": "node postinstall.js",
+    "doc": "rete doc",
     "lint": "rete lint",
     "test": "rete test"
   },
@@ -27,7 +28,7 @@
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "^1.0.0-beta.29",
+    "rete-cli": "^1.0.0-beta.31",
     "typescript": "4.8.4"
   },
   "dependencies": {
