@@ -3,6 +3,8 @@ import {
   AcceptPartialUnion, CanAssignSignal, GetAssignmentReferences, GetNonAssignableElements, Tail
 } from './utility-types'
 
+export type { CanAssignSignal }
+
 /**
  * A middleware type that can modify the data
  * @typeParam T - The data type
