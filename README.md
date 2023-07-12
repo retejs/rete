@@ -17,19 +17,28 @@ Help to defend Ukraine — donate to [Ukraine’s main charity fund](https://sav
 Help to defend Ukraine — donate to the [fund of the National Bank of Ukraine](https://ukraine.ua/news/donate-to-the-nbu-fund/)
 
 
-Introduction
+Introduction [🎥](https://youtu.be/xqPLa6P194A)
 ----
 
 **Rete.js** is a framework for creating visual interfaces and workflows. It provides out-of-the-box solutions for visualization using various libraries and frameworks, as well as solutions for processing graphs based on dataflow and control flow approaches.
+
+
+Getting started
+----
+
+Use [Rete Kit](https://retejs.org/docs/development/rete-kit) to quickly set up a Rete.js application. It lets you select a stack (React.js, Vue.js or Angular, Svelte) and the set of features
+
+```bash
+npx rete-kit app --next
+```
+
+Alternatively, you can follow the [complete guide](https://retejs.org/docs/getting-started/)
 
 Documentation
 ----
 
 - [Introduction](https://retejs.org/docs)
-- [Getting Started](https://retejs.org/docs/getting-started)
-- [Concepts](https://retejs.org/docs/concepts/plugin-system)
 - [Guides](https://retejs.org/docs/guides/basic)
-- [FAQ](https://retejs.org/docs/faq)
 - [Examples](https://retejs.org/examples)
 
 ## Sponsors
@@ -53,4 +62,4 @@ This project exists thanks to all the people who contribute. [Contribute](https:
 
 ## License
 
-[MIT](https://github.com/retejs/rete/blob/master/LICENSE)
+[MIT](https://github.com/retejs/rete/blob/main/LICENSE)
