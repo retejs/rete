@@ -1,0 +1,9 @@
+name: Commit linter
+
+on:
+  pull_request:
+    branches: [ "main", "beta" ]
+
+jobs:
+  lint:
+    uses: retejs/.github/.github/workflows/commit-linter.yml@main
