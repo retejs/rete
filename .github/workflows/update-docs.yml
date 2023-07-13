@@ -11,3 +11,4 @@ jobs:
     secrets: inherit
     with:
       filename: '1.rete'
+      package: rete
