@@ -6,6 +6,6 @@ on:
     - cron: '30 1 * * *'
 
 jobs:
-  codeql:
+  stale:
     uses: retejs/.github/.github/workflows/stale.yml@main
     secrets: inherit
