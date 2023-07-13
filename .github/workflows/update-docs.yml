@@ -9,3 +9,5 @@ jobs:
   pull:
     uses: retejs/.github/.github/workflows/update-docs.yml@main
     secrets: inherit
+    with:
+      filename: '1.rete'
