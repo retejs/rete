@@ -1,0 +1,12 @@
+name: CodeQL
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "beta" ]
+  pull_request:
+    branches: [ "main", "beta" ]
+
+jobs:
+  codeql:
+    uses: retejs/.github/.github/workflows/codeql.yml@main
