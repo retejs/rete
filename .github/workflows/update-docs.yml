@@ -1,0 +1,11 @@
+name: Update docs
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  pull:
+    uses: retejs/.github/.github/workflows/update-docs.yml@main
+    secrets: inherit
