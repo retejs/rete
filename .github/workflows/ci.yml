@@ -1,0 +1,10 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [ "main", "beta" ]
+
+jobs:
+  ci:
+    uses: retejs/.github/.github/workflows/ci.yml@main
