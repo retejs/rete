@@ -1,0 +1,11 @@
+name: test release
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "beta" ]
+
+jobs:
+  ci:
+    uses: retejs/.github/.github/workflows/release.yml@main
+    secrets: inherit
