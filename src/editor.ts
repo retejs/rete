@@ -45,18 +45,18 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
 
   /**
    * Get all nodes
-   * @returns All nodes
+   * @returns Copy of array with nodes
    */
   public getNodes() {
-    return this.nodes
+    return this.nodes.slice()
   }
 
   /**
    * Get all connections
-   * @returns All connections
+   * @returns Copy of array with onnections
    */
   public getConnections() {
-    return this.connections
+    return this.connections.slice()
   }
 
   /**
