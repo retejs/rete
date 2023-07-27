@@ -3,7 +3,7 @@ name: Close stale issues and PRs
 on:
   workflow_dispatch:
   schedule:
-    - cron: '30 1 * * *'
+    - cron: '30 1 * * 0'
 
 jobs:
   stale:
