@@ -243,6 +243,8 @@ export class Node<
   }
 }
 
+type StringKeyof<T> = Extract<keyof T, string>;
+
 /**
  * The connection class
  * @priority 9
@@ -273,9 +275,9 @@ export class Connection<
    */
   constructor(
     source: Source,
-    public sourceOutput: keyof Source['outputs'],
+    public sourceOutput: StringKeyof<Source['outputs']>,
     target: Target,
-    public targetInput: keyof Target['inputs']
+    public targetInput: StringKeyof<Target['inputs']>
   ) {
     if (!source.outputs[sourceOutput as string]) {
       throw new Error(`source node doesn't have output with a key ${String(sourceOutput)}`)
