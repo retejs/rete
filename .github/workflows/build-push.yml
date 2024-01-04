@@ -1,0 +1,61 @@
+name: Build and Push
+run-name: Build and Push to dist/${{ github.ref_name }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Build
+      run: npm run build
+
+    - uses: actions/upload-artifact@v3
+      with:
+        name: tmp
+        path: dist
+  push:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Prepare
+      run: |
+        git checkout --orphan dist/${{ github.ref_name }}
+        git config --local user.email rete-js[bot]@users.noreply.github.com
+        git config --local user.name rete-js[bot]
+        git rm -rf .
+
+    - name: Download artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: tmp
+        path: .
+
+    - name: Commit changes
+      run: |
+        git add .
+        git commit -m "dist"
+
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: dist/${{ github.ref_name }}
