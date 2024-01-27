@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/retejs/rete/compare/v2.0.2...v2.0.3) (2024-01-27)
+
+
+### Bug Fixes
+
+* **build:** source maps ([121775c](https://github.com/retejs/rete/commit/121775c90aac1db449b30284ba996eed1da1a03c))
+
 ## [2.0.2](https://github.com/retejs/rete/compare/v2.0.1...v2.0.2) (2023-07-24)
 
 
