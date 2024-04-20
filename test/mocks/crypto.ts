@@ -3,7 +3,10 @@ import { Buffer } from 'buffer'
 
 export function mockCrypto(object: Record<string, unknown>) {
   // eslint-disable-next-line no-undef
-  globalThis.crypto = object as unknown as Crypto
+  Object.defineProperty(globalThis, 'crypto', {
+    value: object,
+    writable: true
+  })
 }
 
 export function mockCryptoFromArray(array: Uint8Array) {
@@ -19,6 +22,10 @@ export function mockCryptoFromBuffer(buffer: Buffer) {
 }
 
 export function resetCrypto() {
-  // eslint-disable-next-line no-undef, no-undefined
-  globalThis.crypto = undefined as unknown as Crypto
+  // eslint-disable-next-line no-undef
+  Object.defineProperty(globalThis, 'crypto', {
+    // eslint-disable-next-line no-undefined
+    value: undefined,
+    writable: true
+  })
 }
