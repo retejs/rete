@@ -1,4 +1,3 @@
-// import jest globals
 import { describe, expect, it } from '@jest/globals'
 
 import { NodeEditor } from '../src/editor'
@@ -51,6 +50,44 @@ describe('NodeEditor', () => {
     await editor.addConnection(connectionData)
 
     await expect(() => editor.addConnection(connectionData)).rejects.toThrowError()
+  })
+
+  it('removeNode should remove a node', async () => {
+    const editor = new NodeEditor()
+    const nodeData = { id: '1', label: 'Node 1' }
+
+    await editor.addNode(nodeData)
+    await editor.removeNode('1')
+    const nodes = editor.getNodes()
+
+    expect(nodes).toHaveLength(0)
+  })
+
+  it('removeConnection should remove a connection', async () => {
+    const editor = new NodeEditor()
+    const connectionData = { id: '1', source: '1', target: '2' }
+
+    await editor.addNode({ id: '1' })
+    await editor.addNode({ id: '2' })
+    await editor.addConnection(connectionData)
+    await editor.removeConnection('1')
+    const connections = editor.getConnections()
+
+    expect(connections).toHaveLength(0)
+  })
+
+  it('should clear all nodes and connections', async () => {
+    const editor = new NodeEditor()
+
+    await editor.addNode({ id: '1' })
+    await editor.addNode({ id: '2' })
+    await editor.addConnection({ id: '1', source: '1', target: '2' })
+    await editor.clear()
+    const nodes = editor.getNodes()
+    const connections = editor.getConnections()
+
+    expect(nodes).toHaveLength(0)
+    expect(connections).toHaveLength(0)
   })
 })
 
