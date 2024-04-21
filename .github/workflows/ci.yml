@@ -8,3 +8,4 @@ on:
 jobs:
   ci:
     uses: retejs/.github/.github/workflows/ci.yml@main
+    secrets: inherit
