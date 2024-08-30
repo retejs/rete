@@ -1,3 +1,10 @@
+## [2.0.5](https://github.com/retejs/rete/compare/v2.0.4...v2.0.5) (2024-08-30)
+
+
+### Bug Fixes
+
+* build ([1f852d9](https://github.com/retejs/rete/commit/1f852d9e491522264d97de396a30d5f0faf2a681))
+
 ## [2.0.4](https://github.com/retejs/rete/compare/v2.0.3...v2.0.4) (2024-08-30)
 
 
