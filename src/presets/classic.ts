@@ -128,9 +128,9 @@ export class Control {
  */
 type InputControlOptions<N> = {
   /** Whether the control is readonly. Default is `false` */
-  readonly?: boolean,
+  readonly?: boolean
   /** Initial value of the control */
-  initial?: N,
+  initial?: N
   /** Callback function that is called when the control value changes */
   change?: (value: N) => void
 }
@@ -150,7 +150,7 @@ export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? st
   constructor(public type: T, public options?: InputControlOptions<N>) {
     super()
     this.id = getUID()
-    this.readonly = options?.readonly
+    this.readonly = options?.readonly ?? false
 
     if (typeof options?.initial !== 'undefined') this.value = options.initial
   }
@@ -161,7 +161,7 @@ export class InputControl<T extends 'text' | 'number', N = T extends 'text' ? st
    */
   setValue(value?: N) {
     this.value = value
-    if (this.options?.change) this.options.change(value)
+    if (this.options?.change) this.options.change(value!)
   }
 }
 

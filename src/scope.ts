@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
   AcceptPartialUnion, CanAssignSignal, GetAssignmentReferences, GetNonAssignableElements, Tail
@@ -19,8 +20,8 @@ export type Pipe<T> = (data: T) => Promise<undefined | T> | undefined | T
 export type CanAssignEach<D extends any[], F extends any[]> = D extends [infer H1, ...infer Tail1]
   ? (
     F extends [infer H2, ...infer Tail2] ?
-    [CanAssignSignal<H1, H2>, ...CanAssignEach<Tail1, Tail2>]
-    : []
+      [CanAssignSignal<H1, H2>, ...CanAssignEach<Tail1, Tail2>]
+      : []
   ) : []
 
 export type ScopeAsParameter<S extends Scope<any, any[]>, Current extends any[]> = (CanAssignEach<[S['__scope']['produces'], ...S['__scope']['parents']], Current>[number] extends true
@@ -45,8 +46,8 @@ export type NestedScope<S extends Scope<any, any[]>, Current extends any[]> = (C
 export function useHelper<S extends Scope<any, any[]>, Signals>() {
   type T1 = S['__scope']['parents'][number]
   return {
-    debug<T extends GetNonAssignableElements<T1, Signals>>(f: (p: GetAssignmentReferences<T, Signals>) => T) {
-      f
+    debug<T extends GetNonAssignableElements<T1, Signals>>(_f: (p: GetAssignmentReferences<T, Signals>) => T) {
+      /* placeholder */
     }
   }
 }
@@ -75,9 +76,7 @@ export class Signal<T> {
   }
 }
 
-type Type<T> = {
-  new(...args: any[]): T;
-} | (abstract new (...args: any[]) => T)
+type Type<T> = (new(...args: any[]) => T) | (abstract new (...args: any[]) => T)
 
 /**
  * Base class for all plugins and the core. Provides a signals mechanism to modify the data
@@ -85,7 +84,7 @@ type Type<T> = {
 export class Scope<Produces, Parents extends unknown[] = []> {
   signal = new Signal<AcceptPartialUnion<Produces | Parents[number]>>()
   parent?: any // Parents['length'] extends 0 ? undefined : Scope<Parents[0], Tail<Parents>>
-  __scope: {
+  __scope!: {
     produces: Produces
     parents: Parents
   }

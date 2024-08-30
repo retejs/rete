@@ -1,8 +1,4 @@
-/* global globalThis*/
-
-const nodeCrypto = () => import('node:crypto')
-
-const crypto = globalThis.crypto as (typeof globalThis.crypto | Awaited<ReturnType<typeof nodeCrypto>>)
+const crypto = globalThis.crypto as (typeof globalThis.crypto | typeof import('node:crypto'))
 
 /**
  * @returns A unique id

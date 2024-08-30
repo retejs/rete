@@ -1,4 +1,4 @@
-import { describe, expect, it } from '@jest/globals'
+import { afterEach, beforeEach, describe, expect, it } from '@jest/globals'
 
 import { mockCryptoFromArray, resetCrypto } from '../mocks/crypto'
 
@@ -39,7 +39,7 @@ describe('ClassicPreset', () => {
       node.addInput('a', input)
 
       expect(node.hasInput('a')).toBeTruthy()
-      expect(node.inputs['a']).toBe(input)
+      expect(node.inputs.a).toBe(input)
     })
 
     it('throws error if Input already exists', () => {
@@ -66,7 +66,7 @@ describe('ClassicPreset', () => {
       node.addOutput('a', output)
 
       expect(node.hasOutput('a')).toBeTruthy()
-      expect(node.outputs['a']).toBe(output)
+      expect(node.outputs.a).toBe(output)
     })
 
     it('throws error if Output already exists', () => {
