@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/retejs/rete/compare/v2.0.3...v2.0.4) (2024-08-30)
+
+
+### Bug Fixes
+
+* update cli and fix linting errors ([d219f95](https://github.com/retejs/rete/commit/d219f95cb0d46f79e8d7f5d70e4afcd578f35455))
+
 ## [2.0.3](https://github.com/retejs/rete/compare/v2.0.2...v2.0.3) (2024-01-27)
 
 
