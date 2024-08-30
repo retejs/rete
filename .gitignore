@@ -4,7 +4,9 @@ node_modules
 .sonarlint
 .scannerwork
 .nyc_output
-coverage
+/coverage
 npm-debug.log
 /dist
 docs
+.rete-cli
+.sonar

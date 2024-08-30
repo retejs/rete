@@ -72,7 +72,7 @@ describe('Scope', () => {
       expect(pipe).toHaveBeenCalledWith({ parent: 'test' })
     })
 
-    it('should return a promise from emit', async () => {
+    it('should return a promise from emit', () => {
       const scope = new Scope<Parent>('test')
       const signal = jest.fn<() => Parent>()
 
