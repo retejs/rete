@@ -28,7 +28,7 @@
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "~2.0.0"
+    "rete-cli": "~2.0.1"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0"
