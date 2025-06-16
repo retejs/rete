@@ -115,14 +115,13 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
    * @emits noderemoved
    */
   async removeNode(id: Scheme['Node']['id']) {
-    const index = this.nodes.findIndex(n => n.id === id)
-    const node = this.nodes[index]
+    const node = this.nodes.find(n => n.id === id)
 
-    if (index < 0) throw new Error('cannot find node')
+    if (!node) throw new Error('cannot find node')
 
     if (!await this.emit({ type: 'noderemove', data: node })) return false
 
-    this.nodes.splice(index, 1)
+    this.nodes = this.nodes.filter(n => n !== node)
 
     await this.emit({ type: 'noderemoved', data: node })
     return true
@@ -137,14 +136,13 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
    * @emits connectionremoved
    */
   async removeConnection(id: Scheme['Connection']['id']) {
-    const index = this.connections.findIndex(n => n.id === id)
-    const connection = this.connections[index]
+    const connection = this.connections.find(c => c.id === id)
 
-    if (index < 0) throw new Error('cannot find connection')
+    if (!connection) throw new Error('cannot find connection')
 
     if (!await this.emit({ type: 'connectionremove', data: connection })) return false
 
-    this.connections.splice(index, 1)
+    this.connections = this.connections.filter(c => c !== connection)
 
     await this.emit({ type: 'connectionremoved', data: connection })
     return true
