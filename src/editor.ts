@@ -121,7 +121,9 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
 
     if (!await this.emit({ type: 'noderemove', data: node })) return false
 
-    this.nodes = this.nodes.filter(n => n !== node)
+    const index = this.nodes.indexOf(node)
+
+    this.nodes.splice(index, 1)
 
     await this.emit({ type: 'noderemoved', data: node })
     return true
@@ -142,7 +144,9 @@ export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> 
 
     if (!await this.emit({ type: 'connectionremove', data: connection })) return false
 
-    this.connections = this.connections.filter(c => c !== connection)
+    const index = this.connections.indexOf(connection)
+
+    this.connections.splice(index, 1)
 
     await this.emit({ type: 'connectionremoved', data: connection })
     return true
