@@ -7,7 +7,8 @@
     "postinstall": "node postinstall.js",
     "doc": "rete doc",
     "lint": "rete lint",
-    "test": "rete test"
+    "test": "rete test",
+    "perf": "rete perf"
   },
   "author": "Vitaliy Stoliarov",
   "license": "MIT",
@@ -28,7 +29,7 @@
   },
   "devDependencies": {
     "jest-environment-jsdom": "^29.1.2",
-    "rete-cli": "~2.0.2"
+    "rete-cli": "^2.1.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.21.0"
