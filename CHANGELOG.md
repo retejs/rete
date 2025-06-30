@@ -1,3 +1,11 @@
+## [2.0.6](https://github.com/retejs/rete/compare/v2.0.5...v2.0.6) (2025-06-30)
+
+
+### Bug Fixes
+
+* improve concurrent behavior of removeNode and removeConnection ([4229f1f](https://github.com/retejs/rete/commit/4229f1f0772a581bce7174080fb05870109bdd62))
+* optimize node and connection removal logic ([0696cba](https://github.com/retejs/rete/commit/0696cbaa1a1b3fd2a14cc6dd0312a783300d0fe7))
+
 ## [2.0.5](https://github.com/retejs/rete/compare/v2.0.4...v2.0.5) (2024-08-30)
 
 
