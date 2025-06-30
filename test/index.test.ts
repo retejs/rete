@@ -63,6 +63,24 @@ describe('NodeEditor', () => {
     expect(nodes).toHaveLength(0)
   })
 
+  it('removeNode should remove specified nodes', async () => {
+    const editor = new NodeEditor()
+
+    const ids = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+    await Promise.all(ids.map(id => editor.addNode({ id: id })))
+
+    const removeIds = ['1', '2', '3', '4', '5']
+
+    await Promise.all(removeIds.map(id => editor.removeNode(id)))
+
+    const remainIds = editor.getNodes().map(n => n.id)
+
+    await editor.clear()
+
+    expect(remainIds).toEqual(['6', '7', '8', '9', '10'])
+  })
+
   it('removeConnection should remove a connection', async () => {
     const editor = new NodeEditor()
     const connectionData = { id: '1', source: '1', target: '2' }
@@ -74,6 +92,26 @@ describe('NodeEditor', () => {
     const connections = editor.getConnections()
 
     expect(connections).toHaveLength(0)
+  })
+
+  it('removeConnection should remove specified connections', async () => {
+    const editor = new NodeEditor()
+
+    const ids = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
+
+    await Promise.all(ids.map(id => editor.addNode({ id: `s${id}` })))
+    await Promise.all(ids.map(id => editor.addNode({ id: `t${id}` })))
+    await Promise.all(ids.map(id => editor.addConnection({ id: id, source: `s${id}`, target: `t${id}` })))
+
+    const removeIds = ['1', '2', '3', '4', '5']
+
+    await Promise.all(removeIds.map(id => editor.removeConnection(id)))
+
+    const remainIds = editor.getConnections().map(c => c.id)
+
+    await editor.clear()
+
+    expect(remainIds).toEqual(['6', '7', '8', '9', '10'])
   })
 
   it('should clear all nodes and connections', async () => {
