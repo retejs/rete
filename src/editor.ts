@@ -27,8 +27,8 @@ export type Root<Scheme extends BaseSchemes> =
  * @group Primary
  */
 export class NodeEditor<Scheme extends BaseSchemes> extends Scope<Root<Scheme>> {
-  private nodes: Scheme['Node'][] = []
-  private connections: Scheme['Connection'][] = []
+  protected nodes: Scheme['Node'][] = []
+  protected connections: Scheme['Connection'][] = []
 
   constructor() {
     super('NodeEditor')
