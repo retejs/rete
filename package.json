@@ -28,7 +28,7 @@
     "url": "https://github.com/retejs/rete/issues"
   },
   "devDependencies": {
-    "jest-environment-jsdom": "^29.1.2",
+    "jest-environment-jsdom": "^30.4.1",
     "rete-cli": "^2.1.0"
   },
   "dependencies": {
